@@ -1,0 +1,275 @@
+from datetime import datetime
+import pandas as pd
+from history import History
+from position import PositionType, Position, Stock, Option
+from money import Money
+
+class Transaction(pd.core.series.Series):
+    """a single entry from the transaction history"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+  
+
+    def getYear(self) -> str:
+        """returns the year as string from a csv entry
+
+
+        >>> Transaction(t.iloc[-1]).getYear()
+        2018
+        """
+        temp = self.loc["Date/Time"].year
+        if temp < 2010:
+            raise ValueError("Date is less than the year 2010. That's very improbable")
+        if temp > 2100:
+            raise ValueError("Date is bigger than 2100. That's very improbable")
+        return temp
+
+    def getDate(self) -> str:
+        """returns 2018-04-02 date format
+
+
+        >>> print(Transaction(t.iloc[-1]).getDate())
+        2018-03-08
+        """
+        temp = self.loc["Date/Time"].date()
+        return str(temp)
+
+    def getDateTime(self) -> str:
+        """returns the exact date
+
+
+        >>> print(Transaction(t.iloc[-1]).getDateTime())
+        2018-03-08 23:00:00
+        """
+        temp = self.loc["Date/Time"]
+        return str(temp)
+
+    def isOption(self) -> bool:
+        """returns true if the transaction is an option
+
+        >>> Transaction(t.iloc[0]).isOption()
+        True
+
+        # is an assignment
+        >>> Transaction(t.iloc[13]).isOption()
+        False
+        >>> Transaction(t.iloc[20]).isOption()
+        True
+
+        """
+        option = self.loc["Call/Put"]
+        subcode = self.loc["Transaction Subcode"]
+        if (option == "P" or option == "C") and (
+            subcode == "Sell to Open"
+            or subcode == "Buy to Open"
+            or subcode == "Sell to Close"
+            or subcode == "Buy to Close"
+        ):
+            return True
+        else:
+            return False
+
+    def isStock(self) -> bool:
+        """returns true if the symbol is a stock ticker
+
+        >>> Transaction(t.iloc[13]).isStock()
+        False
+        >>> #Transaction(t.iloc[14]).isStock()
+        True
+        >>> Transaction(t.iloc[10]).isStock()
+        True
+        """
+        return not (self["Quantity"] %100 )and not not self.getSymbol() and pd.isnull(self["Strike"])
+
+    def getSymbol(self) -> str:
+        """returns the Ticker symbol
+
+        >>> Transaction(t.iloc[13]).getSymbol()
+        'PCG'
+
+        # Receive Deliver
+        >>> Transaction(t.iloc[330]).getSymbol()
+        'LFIN'
+        >>> Transaction(t.iloc[12]).getSymbol()
+        Traceback (most recent call last):
+        ...
+        ValueError: This transaction doesn't have a symbol. That's wrong
+        """
+        symbol: str = str(self.loc["Symbol"])
+        if 'nan' ==  symbol or symbol == '':
+            raise ValueError("This transaction doesn't have a symbol. That's wrong")
+        
+        return symbol
+
+    def getType(self) -> PositionType:
+        """returns put, call or stock
+        
+        >>> Transaction(t.iloc[10]).getType().name
+        'stock'
+        >>> Transaction(t.iloc[13]).getType().name
+        'call'
+        >>> Transaction(t.iloc[12]).getType().name
+        Traceback (most recent call last):
+        ...
+        ValueError: This transaction doesn't have a symbol. That's wrong
+        >>> Transaction(t.iloc[329]).getType().name
+        'call'
+        >>> Transaction(t.iloc[328]).getType()
+        <call>
+        >>> Transaction(t.iloc[333]).getType()
+        <call>
+        """
+        callOrPut = self.loc["Call/Put"]
+        
+        if self.isStock():
+            return PositionType.stock
+        elif callOrPut == "C":
+            return PositionType.call
+        elif callOrPut == "P":
+            return PositionType.put
+        else:
+            raise ValueError("Couldn't identify if it is stock, call or put")
+
+    def getQuantity(self) -> int:
+        """ returns the size of the transaction if applicable
+
+        >>> Transaction(t.iloc[11]).getSymbol()
+        'NKLA'
+        >>> Transaction(t.iloc[11]).getQuantity()
+        -1
+        >>> Transaction(t.iloc[10]).getQuantity()
+        200
+        >>> Transaction(t.iloc[123]).getQuantity()
+        300
+        >>> Transaction(t.iloc[270]).getQuantity()
+        -100
+        >>> Transaction(t.iloc[330]).getQuantity()
+        -200
+        >>> Transaction(t.iloc[329]).getQuantity()
+        2
+        """       
+        if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
+            raise KeyError("Transaction Code is not 'Trade', but: " + self.loc["Transaction Code"])
+        subcode = self.loc["Transaction Subcode"]
+
+        sign = 1
+        if subcode == "Buy to Open" or subcode == "Buy to Close":
+            sign = 1
+        elif subcode == "Sell to Open" or subcode == "Sell to Close":
+            sign = -1
+        elif subcode == "Assignment":
+            sign = +1
+        else:
+            raise KeyError("Transaction Subcode is invalid")
+
+        q = self.loc["Quantity"]
+
+        size = sign * q
+        return size
+
+    def setQuantity(self, quantity: int):
+        """ beware, the sign is ignored. Signage is decided with the subcode
+        >>> t = Transaction(t.iloc[270])
+        >>> t.getQuantity()
+        -100
+        >>> t.setQuantity(200)
+        >>> t.getQuantity()
+        -200
+        """       
+        self.loc["Quantity"] = quantity
+
+
+    def getValue(self) -> Money:
+        """ returns the value of the transaction at that specific point of time
+        
+        >>> print(Transaction(t.iloc[10]).getValue())
+        {'usd': -2720.0, 'eur': -2240.527182866557}
+        """
+        v = Money(row = self)
+        return v
+
+    def setValue(self, money: Money):
+        """ sets the individual values for euro in AmountEuro and usd in Amount
+        
+        >>> print(Transaction(t.iloc[10]).getValue())
+        {'usd': -2720.0, 'eur': -2240.527182866557}
+
+        >>> t =  Transaction(t.iloc[10])
+        >>> t.setValue(Money(usd=45, eur=20))
+        >>> print(t.getValue())
+        {'usd': 45, 'eur': 20}
+        """
+        self["Amount"] = money.usd
+        self["AmountEuro"] = money.eur
+
+    def getFees(self) -> Money:
+        """ returns the feets of the transaction at that specific point of time
+        
+        >>> print(Transaction(t.iloc[10]).getFees())
+        {'usd': 0.16, 'eur': 0.13179571663920922}
+        """
+        v = Money()
+        v.usd = self["Fees"]
+        v.eur = self["FeesEuro"]
+        return v
+
+    def setFees(self, money: Money):
+        """ sets the individual values for euro in FeesEuro and usd 
+        
+        >>> t =  Transaction(t.iloc[10])
+        >>> t.setFees(Money(usd=45, eur=20))
+        >>> print(t.getFees())
+        {'usd': 45, 'eur': 20}
+        """
+        self["Fees"] = money.usd
+        self["FeesEuro"] = money.eur
+
+    def getExpiry(self) -> datetime:
+        """ returns the expiry date if it exists
+
+        >>> print(Transaction(t.iloc[0]).getExpiry())
+        2021-01-15 00:00:00
+        """
+
+        d = self.loc["Expiration Date"]
+        return d
+
+    def getStrike(self) -> float:
+        """ returns the strike of the option
+
+
+        >>> print(Transaction(t.iloc[0]).getStrike())
+        26.0
+        """
+        strike = self.loc["Strike"]
+        return strike
+    
+
+    # def toPosition(self):
+    #     """ returns a valid Position
+
+        
+
+    #     >>> print(Transaction(t.iloc[0]).toPosition())
+    #     {'symbol': 'PLTR', 'size': -1, 'value': {'usd': 246.0, 'eur': 200.66889632107024}, 'type': <put>, 'strike': 26.0, 'expiry': Timestamp('2021-01-15 00:00:00')}
+    #     >>> print(Transaction(t.iloc[10]).toPosition())
+    #     {'symbol': 'THCB', 'size': 200, 'value': {'usd': -2720.0, 'eur': -2240.527182866557}, 'type': <stock>}
+    #     """
+    #     t = self.getType()
+
+    #     if t == PositionType.stock:
+    #         s = Stock(self.getSymbol(), self.getQuantity(), self.getValue())
+    #         return s
+    #     elif t == PositionType.call or t == PositionType.put:
+    #         o = Option(self.getSymbol(), self.getQuantity(), self.getValue(), self.getType(), self.getStrike(), self.getExpiry())
+    #         return o
+    #     else:
+    #         raise ValueError("Couldn't convert to position")
+
+
+
+if __name__ == "__main__":
+    import doctest
+
+    doctest.testmod(extraglobs={"t": History.fromFile("test/merged.csv")})
