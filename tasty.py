@@ -12,8 +12,9 @@ class Values:
     """store all data here"""
     withdrawal: Money = Money()
     transfer: Money = Money()
-    option: Money = Money()
-    stock: Money = Money()
+    balanceAdjustment: Money = Money()
+    fee: Money = Money()
+    deposit: Money = Money()
 
     def __str__(self):
         """pretty prints all the contained Values"""
@@ -23,10 +24,12 @@ class Values:
             out += "Withdrawal: " + str(self.withdrawal) + "\n"
         if self.transfer:
             out += "Transfer: " + str(self.transfer) + "\n"
-        if self.option:
-            out += "Option: " + str(self.option) + "\n"
-        if self.stock:
-            out += "Stock: " + str(self.stock) + "\n"
+        if self.balanceAdjustment:
+            out += "Balance Adjustment: " + str(self.balanceAdjustment) + "\n"
+        if self.fee:
+            out += "Fee: " + str(self.fee) + "\n"
+        if self.deposit:
+            out += "Deposit: " + str(self.deposit) + "\n"
         return out
 
 
@@ -74,14 +77,37 @@ class Tasty(object):
         >>> str(t.year(2018).transfer)
         "{'eur': 966.10578858385, 'usd': 1200.0}"
 
+        # balance adjustment
+        >>> t.moneyMovement(t.history.iloc[322])
+        >>> str(t.year(2018).balanceAdjustment)
+        "{'eur': -0.008085599547206425, 'usd': -0.01}"
+
+        # fee
+        >>> t.moneyMovement(t.history.iloc[323])
+        >>> str(t.year(2018).fee)
+        "{'eur': -35.02348938927588, 'usd': -43.24}"
+
+        # deposit
+        >>> t.moneyMovement(t.history.iloc[262])
+        >>> str(t.year(2019).deposit)
+        "{'eur': 0.009070294784580499, 'usd': 0.01}"
+
         """
         t = Transaction(row)
         m = Money(row=row)
         if t.loc["Transaction Subcode"] == "Transfer":
             self.year(t.getYear()).transfer += m
-
-        if t.loc["Transaction Subcode"] == "Withdrawal":
+        elif t.loc["Transaction Subcode"] == "Withdrawal":
             self.year(t.getYear()).withdrawal += m
+        elif t.loc["Transaction Subcode"] == "Balance Adjustment":
+            self.year(t.getYear()).balanceAdjustment += m
+        elif t.loc["Transaction Subcode"] == "Fee":
+            self.year(t.getYear()).fee += m
+        elif t.loc["Transaction Subcode"] == "Deposit" and t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
+            self.year(t.getYear()).deposit += m
+        else:
+            raise KeyError("Found unkonwn money movement subcode: '{}'".format(
+                t.loc["Transaction Subcode"]))
 
     def receiveDelivery(self, row):
         """ sub function to process the column namend "Receive Deliver" in the csv file
@@ -105,6 +131,17 @@ class Tasty(object):
         >>> t.positions.size
         0
 
+        # Expiration
+        >>> t = Tasty("test/merged.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[315]))
+        >>> t.addPosition(Transaction(t.history.iloc[304]))
+        >>> len(t.closedTrades.index)
+        1
+        >>> len(t.closedTrades)
+        1
+        >>> t.positions.size
+        0
+
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -117,8 +154,11 @@ class Tasty(object):
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Assignment":
             self.addPosition(t)
+        elif t.loc["Transaction Subcode"] == "Expiration":
+            self.addPosition(t)
         else:
-            raise ValueError("unknown subcode for receive deliver")
+            raise ValueError("unknown subcode for receive deliver: {}".format(
+                t.loc["Transaction Subcode"]))
 
     def trade(self, row):
         t = Transaction(row)
@@ -131,7 +171,8 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Sell to Open":
             self.addPosition(t)
         else:
-            raise ValueError("unknown subcode for Trade")
+            raise ValueError("unknown subcode for Trade:{}".format(
+                t.loc["Transaction Subcode"]))
 
     def addPosition(self, transaction):
         """ adds a position to the internal ledger. If it resolves against a previous position, profit and loss is calculated and recorded
