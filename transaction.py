@@ -148,6 +148,10 @@ class Transaction(pd.core.series.Series):
         -200
         >>> Transaction(t.iloc[329]).getQuantity()
         2
+
+        # expiration
+        >>> Transaction(t.iloc[304]).getQuantity()
+        -1
         """       
         if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
             raise KeyError("Transaction Code is not 'Trade', but: " + self.loc["Transaction Code"])
@@ -160,8 +164,11 @@ class Transaction(pd.core.series.Series):
             sign = -1
         elif subcode == "Assignment":
             sign = +1
+        elif subcode == "Expiration":
+            sign = -1
         else:
-            raise KeyError("Transaction Subcode is invalid")
+            raise KeyError(
+                "Transaction Subcode is invalid: '{}'".format(subcode))
 
         q = self.loc["Quantity"]
 
