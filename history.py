@@ -39,7 +39,8 @@ class History(pd.DataFrame):
         >>> "FeesEuro" in t.columns
         True
         """
-        c = CurrencyConverter(fallback_on_missing_rate=True)
+        c = CurrencyConverter(fallback_on_missing_rate=True,
+                              fallback_on_wrong_date=True)
         self['AmountEuro'] = self.apply(lambda x: c.convert(
             x['Amount'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
         self['FeesEuro'] = self.apply(lambda x: c.convert(
