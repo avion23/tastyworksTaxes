@@ -15,7 +15,7 @@ class Values:
     balanceAdjustment: Money = Money()
     fee: Money = Money()
     deposit: Money = Money()
-
+    interest: Money = Money()
     def __str__(self):
         """pretty prints all the contained Values"""
 
@@ -30,6 +30,8 @@ class Values:
             out += "Fee: " + str(self.fee) + "\n"
         if self.deposit:
             out += "Deposit: " + str(self.deposit) + "\n"
+        if self.interest:
+            out += "Credit Interest: " + str(self.interest) + "\n"
         return out
 
 
@@ -92,6 +94,11 @@ class Tasty(object):
         >>> str(t.year(2019).deposit)
         "{'eur': 0.009070294784580499, 'usd': 0.01}"
 
+        # credit interest
+        >>> t.moneyMovement(t.history.iloc[8])
+        >>> str(t.year(2020).interest)
+        "{'eur': 0.02461235540241201, 'usd': 0.03}"
+
         """
         t = Transaction(row)
         m = Money(row=row)
@@ -105,6 +112,8 @@ class Tasty(object):
             self.year(t.getYear()).fee += m
         elif t.loc["Transaction Subcode"] == "Deposit" and t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
             self.year(t.getYear()).deposit += m
+        elif t.loc["Transaction Subcode"] == "Credit Interest":
+            self.year(t.getYear()).interest += m
         else:
             raise KeyError("Found unkonwn money movement subcode: '{}'".format(
                 t.loc["Transaction Subcode"]))
@@ -239,9 +248,9 @@ class Tasty(object):
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0:
-                logging.info("found a previous position for " +
-                             transaction.getSymbol())
                 trade = Transaction()
+                logging.info("{} found a previous position: {} {} ".format(
+                             transaction.getDateTime(), transaction.getQuantity(), transaction.getSymbol()))
                 trade["Symbol"] = transaction.getSymbol()
                 trade["callPutStock"] = transaction.getType()
                 trade["Opening Date"] = entry.getDateTime()
@@ -283,14 +292,15 @@ class Tasty(object):
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
 
-                # logging.info(
-                #     "closing a trade: {}".format(trade)
-                # )
+                logging.info(
+                    "{} - {} closing {} {}".format(
+                        trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
+                )
         if transaction.getQuantity() != 0:
             if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment":
                 raise ValueError(
-                    "Tried to close a position but no previous position found for {}".format(transaction))
-            logging.info("No previous position found or transaction has not been used fully to close a trade. Appending '{}' of '{}'".format(
+                    "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
+            logging.info("{} Appending '{}' of '{}'".format(transaction.getDateTime(),
                 transaction.getQuantity(), transaction.getSymbol()))
             self.positions = self.positions.append(
                 transaction, ignore_index=True)
@@ -303,6 +313,8 @@ class Tasty(object):
 
     def processTransactionHistory(self):
         """does everything
+
+        >>> t = Tasty("test/merged.csv")
         >>> #t.processTransactionHistory()
         >>> #t.print()
 
