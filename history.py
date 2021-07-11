@@ -56,8 +56,8 @@ class History(pd.DataFrame):
         """ 
         some test code to assemble test data. Merges multiple tastyworks csv files into one and keeps order 
 
-        >>> merged = History._merge([Path(p) for p in glob(str(Path('test/transaction*.csv').expanduser()))])
-        >>> merged.to_csv("test/temp.csv", index=None, date_format='%m/%d/%Y %I:%M %p')
+        >>> merged = History._merge([Path(p) for p in glob(str(Path('test/transaction*.csv').expanduser()))]) # doctest: +SKIP
+        >>> merged.to_csv("test/temp.csv", index=None, date_format='%m/%d/%Y %I:%M %p') # doctest: +SKIP
         """
         h = []
         for csvfile in pathIn:
