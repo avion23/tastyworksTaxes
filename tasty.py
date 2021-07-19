@@ -151,6 +151,10 @@ class Tasty(object):
         >>> t.positions.size
         0
 
+        # reverse split
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[485]))
+
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -164,6 +168,8 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Assignment":
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Expiration":
+            self.addPosition(t)
+        elif t.loc["Transaction Subcode"] == "Reverse Split":
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
@@ -243,6 +249,18 @@ class Tasty(object):
         >>> t.closedTrades.iloc[0].Quantity
         2.0
 
+        # this gme trade had a bug when closing
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[307]))
+        >>> transaction = Transaction(t.history.iloc[302])
+        >>> transaction.setQuantity(500)
+        >>> transaction["Transaction Subcode"] = "Sell to Open"
+        >>> t.addPosition(transaction)
+        >>> t.positions.iloc[0].Quantity
+        -498.0
+        >>> t.closedTrades.iloc[0].Quantity
+        2.0
+
         """
 
         for index, row in self.positions.iterrows():
@@ -297,7 +315,7 @@ class Tasty(object):
                         trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
                 )
         if transaction.getQuantity() != 0:
-            if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment":
+            if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment" or transaction["Transaction Subcode"] == "Reverse Split" and transaction["Open/Close"] == "Close":
                 raise ValueError(
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
             logging.info("{} Appending '{}' of '{}'".format(transaction.getDateTime(),
@@ -314,14 +332,17 @@ class Tasty(object):
     def processTransactionHistory(self):
         """does everything
 
-        >>> t = Tasty("test/merged.csv")
-        >>> #t.processTransactionHistory()
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.processTransactionHistory()
         >>> #t.print()
 
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
+            if row.loc["Symbol"] != "GME":
+                continue
+            logging.info(row)
             if row.loc["Transaction Code"] == "Money Movement":
                 self.moneyMovement(row)
             if row.loc["Transaction Code"] == "Receive Deliver":
