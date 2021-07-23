@@ -1,25 +1,5 @@
 Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-05/19/2020 3:30 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.05,0.852,30,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,Individual...60
-05/19/2020 3:30 PM,Trade,Buy to Close,USO,Buy,Close,6,07/17/2020,3.5,P,0.63,0.83,-378,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,Individual...60
-05/18/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...60
-05/16/2020 5:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/15/2020 5:42 PM,Trade,Buy to Open,PCG,Buy,Open,2,05/29/2020,14,C,0.5,2.28,-100,Bought 2 PCG 05/29/20 Call 14.00 @ 0.50,Individual...60
-05/15/2020 5:00 PM,Trade,Buy to Open,PCG,Buy,Open,2,06/19/2020,15,C,0.64,2.28,-128,Bought 2 PCG 06/19/20 Call 15.00 @ 0.64,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/09/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-05/08/2020 9:02 PM,Trade,Sell to Close,SPX,Sell,Close,2,06/19/2020,2915,P,98.66,1.584,19732,Sold 2 SPX 06/19/20 Put 2915.00 @ 98.66,Individual...60
-05/08/2020 9:02 PM,Trade,Buy to Close,SPX,Buy,Close,2,06/19/2020,2920,P,100.56,1.58,-20112,Bought 2 SPX 06/19/20 Put 2920.00 @ 100.56,Individual...60
-05/08/2020 5:24 PM,Trade,Sell to Close,SVXY,Sell,Close,3,06/19/2020,30,P,0.81,0.436,243,Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81,Individual...60
-05/08/2020 5:24 PM,Trade,Buy to Close,SVXY,Buy,Close,3,06/19/2020,35,P,2.63,0.42,-789,Bought 3 SVXY 06/19/20 Put 35.00 @ 2.63,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/06/2020 8:49 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/17/2020,690,P,57.51,0.272,5751,Sold 1 TSLA 07/17/20 Put 690.00 @ 57.51,Individual...60
-05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...60
+5/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...60
 05/01/2020 6:31 PM,Trade,Buy to Open,TSLA,Buy,Open,1,07/17/2020,690,P,93.66,1.14,-9366,Bought 1 TSLA 07/17/20 Put 690.00 @ 93.66,Individual...60
 05/01/2020 6:31 PM,Trade,Sell to Open,TSLA,Sell,Open,1,07/17/2020,705,P,101.2,1.372,10120,Sold 1 TSLA 07/17/20 Put 705.00 @ 101.20,Individual...60
 05/01/2020 3:30 PM,Trade,Buy to Open,SPX,Buy,Open,2,06/19/2020,2915,P,162.17,3.58,-32434,Bought 2 SPX 06/19/20 Put 2915.00 @ 162.17,Individual...60

@@ -1,4 +1,0 @@
-Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-04/30/2020 6:55 PM,Trade,Buy to Open,SVXY,Buy,Open,3,06/19/2020,30,P,1.17,3.42,-351,Bought 3 SVXY 06/19/20 Put 30.00 @ 1.17,Individual...60
-04/30/2020 6:55 PM,Trade,Sell to Open,SVXY,Sell,Open,3,06/19/2020,35,P,3.45,3.456,1035,Sold 3 SVXY 06/19/20 Put 35.00 @ 3.45,Individual...60
-
