@@ -1,675 +1,675 @@
 Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-07/07/2021 7:24 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,23,C,0.79,0.54,-316,Bought 4 CLF 07/23/21 Call 23.00 @ 0.79,Individual...60
-07/07/2021 4:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.15,1.142,315,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.15,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,289,,,,4.81,0.276,1390.09,Sold 289 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,51,,,,4.81,0.057,245.31,Sold 51 SPRT @ 4.81,Individual...60
-07/07/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,2.57,1.142,257,Sold 1 PLTR 08/20/21 Put 25.00 @ 2.57,Individual...60
-07/07/2021 3:43 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,23,C,0.88,4.558,352,Sold 4 CLF 07/23/21 Call 23.00 @ 0.88,Individual...60
-07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,20,UWM HOLDINGS CORPORATION,Individual...60
-07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,-3,UWM HOLDINGS CORPORATION,Individual...60
-07/06/2021 4:13 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,24,C,0.64,0.54,-256,Bought 4 CLF 07/23/21 Call 24.00 @ 0.64,Individual...60
-07/06/2021 3:43 PM,Trade,Buy to Close,PLTR,Buy,Close,3,07/16/2021,23,C,1.78,0.40,-534,Bought 3 PLTR 07/16/21 Call 23.00 @ 1.78,Individual...60
-07/03/2021 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,55,,,,3.87,0.044,-212.85,Bought 55 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,1,,,,3.87,0.001,-3.87,Bought 1 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,44,,,,3.87,0.036,-170.28,Bought 44 SPRT @ 3.87,Individual...60
-07/01/2021 8:57 PM,Trade,Buy to Open,SPRT,Buy,Open,200,,,,3.87,0.16,-774,Bought 200 SPRT @ 3.87,Individual...60
-07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,1,07/16/2021,12.5,P,1.09,0.13,-109,Bought 1 BB 07/16/21 Put 12.50 @ 1.09,Individual...60
-07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,2,07/16/2021,12.5,P,1.09,0.27,-218,Bought 2 BB 07/16/21 Put 12.50 @ 1.09,Individual...60
-06/30/2021 4:17 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...60
-06/30/2021 4:13 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...60
-06/29/2021 4:23 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,24,C,0.83,4.558,332,Sold 4 CLF 07/23/21 Call 24.00 @ 0.83,Individual...60
-06/28/2021 3:41 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/23/2021,24,C,0.82,0.27,-164,Bought 2 CLF 07/23/21 Call 24.00 @ 0.82,Individual...60
-06/26/2021 5:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-06/25/2021 9:59 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/30/2021,24,C,1.07,0.27,-214,Bought 2 CLF 07/30/21 Call 24.00 @ 1.07,Individual...60
-06/25/2021 4:12 PM,Trade,Buy to Close,BB,Buy,Close,1,07/30/2021,14.5,C,0.77,0.13,-77,Bought 1 BB 07/30/21 Call 14.50 @ 0.77,Individual...60
-06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,2,07/16/2021,12.5,P,1.49,2.284,298,Sold 2 BB 07/16/21 Put 12.50 @ 1.49,Individual...60
-06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,07/16/2021,12.5,P,1.49,1.142,149,Sold 1 BB 07/16/21 Put 12.50 @ 1.49,Individual...60
-06/22/2021 5:23 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/23/2021,24,C,1.04,2.284,208,Sold 2 CLF 07/23/21 Call 24.00 @ 1.04,Individual...60
-06/22/2021 4:19 PM,Trade,Sell to Open,CLNE,Sell,Open,1,07/16/2021,14,C,0.8,1.142,80,Sold 1 CLNE 07/16/21 Call 14.00 @ 0.80,Individual...60
-06/22/2021 4:18 PM,Trade,Sell to Open,BB,Sell,Open,1,07/30/2021,14.5,C,1.21,1.142,121,Sold 1 BB 07/30/21 Call 14.50 @ 1.21,Individual...60
-06/22/2021 3:30 PM,Trade,Sell to Close,DKNG,Sell,Close,2,07/30/2021,40,P,0.83,0.284,166,Sold 2 DKNG 07/30/21 Put 40.00 @ 0.83,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Assignment,BB,,,5,06/18/2021,9,C,,0.00,0,Removal of option due to assignment,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Sell to Close,BB,Sell,Close,500,,,,9,5.09,4500,Sell to Close 500 BB @ 9.00,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Assignment,ME,,,1,06/18/2021,10,C,,0.00,0,Removal of option due to assignment,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Sell to Close,ME,Sell,Close,100,,,,10,5.022,1000,Sell to Close 100 ME @ 10.00,Individual...60
-06/18/2021 10:00 PM,Receive Deliver,Expiration,CLNE,,,1,06/18/2021,14,C,,0.00,0,Removal of 1.0 CLNE 06/18/21 Call 14.00 due to expiration.,Individual...60
-06/18/2021 10:00 PM,Receive Deliver,Expiration,CLF,,,2,06/18/2021,23,C,,0.00,0,Removal of 2.0 CLF 06/18/21 Call 23.00 due to expiration.,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Sell,Open,1,06/18/2021,10,C,,0.00,45,Symbol change:  Open 1.0 ME    210618C00010000,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Buy,Close,1,06/18/2021,10,C,,0.00,-45,Symbol change:  Close 1.0 VGAC  210618C00010000,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Buy,Open,100,,,,,0.00,-1750,Symbol change:  Open 100.0 ME,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Sell,Close,100,,,,,0.00,1750,Symbol change:  Close 100.0 VGAC,Individual...60
-06/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...60
-06/16/2021 4:44 PM,Trade,Buy to Close,CLOV,Buy,Close,2,06/18/2021,15.5,P,2.5,0.27,-500,Bought 2 CLOV 06/18/21 Put 15.50 @ 2.50,Individual...60
-06/15/2021 3:35 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/30/2021,24,C,2.1,2.284,420,Sold 2 CLF 07/30/21 Call 24.00 @ 2.10,Individual...60
-06/15/2021 3:32 PM,Trade,Buy to Open,DKNG,Buy,Open,2,07/30/2021,40,P,1.7,2.27,-340,Bought 2 DKNG 07/30/21 Put 40.00 @ 1.70,Individual...60
-06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...60
-06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...60
-06/14/2021 3:38 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/02/2021,24.5,C,1.4,0.27,-280,Bought 2 CLF 07/02/21 Call 24.50 @ 1.40,Individual...60
-06/14/2021 3:32 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,14,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 14.00 @ 0.70,Individual...60
-06/12/2021 4:01 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...60
-06/11/2021 6:34 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,0.3,0.13,-30,Bought 1 CLNE 06/18/21 Call 15.00 @ 0.30,Individual...60
-06/10/2021 7:27 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/02/2021,24.5,C,1.66,2.284,332,Sold 2 CLF 07/02/21 Call 24.50 @ 1.66,Individual...60
-06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...60
-06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...60
-06/10/2021 3:49 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 15.00 @ 0.70,Individual...60
-06/10/2021 3:41 PM,Trade,Buy to Open,CLF,Buy,Open,2,01/21/2022,24,C,6.55,2.27,-1310,Bought 2 CLF 01/21/22 Call 24.00 @ 6.55,Individual...60
-06/10/2021 3:35 PM,Trade,Buy to Close,CLF,Buy,Close,3,07/23/2021,21,C,4.75,0.40,-1425,Bought 3 CLF 07/23/21 Call 21.00 @ 4.75,Individual...60
-06/09/2021 7:37 PM,Trade,Buy to Open,CLF,Buy,Open,200,,,,22.4884,0.16,-4497.68,Bought 200 CLF @ 22.49,Individual...60
-06/09/2021 7:34 PM,Trade,Sell to Open,CLF,Sell,Open,3,07/23/2021,21,C,4.15,3.416,1245,Sold 3 CLF 07/23/21 Call 21.00 @ 4.15,Individual...60
-06/09/2021 6:28 PM,Trade,Sell to Close,WISH,Sell,Close,100,,,,11.07,0.102,1107,Sold 100 WISH @ 11.07,Individual...60
-06/09/2021 4:16 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,2.2,0.13,-220,Bought 1 CLNE 06/18/21 Call 15.00 @ 2.20,Individual...60
-06/09/2021 4:15 PM,Trade,Buy to Close,WISH,Buy,Close,1,06/18/2021,20,C,1.5,0.13,-150,Bought 1 WISH 06/18/21 Call 20.00 @ 1.50,Individual...60
-06/09/2021 4:02 PM,Trade,Sell to Close,WISH,Sell,Close,2,07/16/2021,10,C,4.8,0.284,960,Sold 2 WISH 07/16/21 Call 10.00 @ 4.80,Individual...60
-06/09/2021 3:56 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,2.55,1.142,255,Sold 1 CLNE 06/18/21 Call 15.00 @ 2.55,Individual...60
-06/09/2021 3:49 PM,Trade,Buy to Open,CLNE,Buy,Open,100,,,,12.81,0.08,-1281,Bought 100 CLNE @ 12.81,Individual...60
-06/09/2021 3:46 PM,Trade,Sell to Open,WISH,Sell,Open,1,06/18/2021,20,C,2.2,1.142,220,Sold 1 WISH 06/18/21 Call 20.00 @ 2.20,Individual...60
-06/08/2021 8:11 PM,Trade,Buy to Open,WISH,Buy,Open,100,,,,9.48,0.08,-948,Bought 100 WISH @ 9.48,Individual...60
-06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,4,09/17/2021,10,C,2.85,0.558,1140,Sold 4 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...60
-06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,1,09/17/2021,10,C,2.85,0.142,285,Sold 1 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...60
-06/08/2021 7:57 PM,Trade,Buy to Open,WISH,Buy,Open,2,07/16/2021,10,C,2.5,2.27,-500,Bought 2 WISH 07/16/21 Call 10.00 @ 2.50,Individual...60
-06/08/2021 6:13 PM,Trade,Sell to Close,CLOV,Sell,Close,2,11/19/2021,10,C,11.1,0.294,2220,Sold 2 CLOV 11/19/21 Call 10.00 @ 11.10,Individual...60
-06/08/2021 6:08 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,17,C,1.96,0.13,-196,Bought 1 BB 06/18/21 Call 17.00 @ 1.96,Individual...60
-06/07/2021 4:21 PM,Trade,Buy to Open,CLOV,Buy,Open,2,11/19/2021,10,C,2.65,2.27,-530,Bought 2 CLOV 11/19/21 Call 10.00 @ 2.65,Individual...60
-06/07/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,17,C,2.45,1.142,245,Sold 1 BB 06/18/21 Call 17.00 @ 2.45,Individual...60
-06/05/2021 2:10 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...60
-06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,30,P,4.7,0.13,-470,Bought 1 AMC 06/18/21 Put 30.00 @ 4.70,Individual...60
-06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/11/2021,30,P,2.51,0.13,-251,Bought 1 AMC 06/11/21 Put 30.00 @ 2.51,Individual...60
-06/03/2021 3:41 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,30,P,5.65,1.142,565,Sold 1 AMC 06/18/21 Put 30.00 @ 5.65,Individual...60
-06/03/2021 3:38 PM,Trade,Buy to Open,BB,Buy,Open,100,,,,17.9,0.08,-1790,Bought 100 BB @ 17.90,Individual...60
-06/03/2021 3:30 PM,Trade,Buy to Open,CLNE,Buy,Open,5,09/17/2021,10,C,1.25,5.67,-625,Bought 5 CLNE 09/17/21 Call 10.00 @ 1.25,Individual...60
-06/02/2021 5:49 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/11/2021,30,P,3.3,1.142,330,Sold 1 AMC 06/11/21 Put 30.00 @ 3.30,Individual...60
-06/02/2021 5:19 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,40,P,10.3,0.13,-1030,Bought 1 AMC 06/18/21 Put 40.00 @ 10.30,Individual...60
-06/02/2021 5:04 PM,Trade,Sell to Open,PLTR,Sell,Open,3,07/16/2021,23,C,1.99,3.416,597,Sold 3 PLTR 07/16/21 Call 23.00 @ 1.99,Individual...60
-06/02/2021 4:59 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,10,C,0.4,2.284,80,Sold 2 UWMC 07/16/21 Call 10.00 @ 0.40,Individual...60
-06/02/2021 4:48 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,40,P,11,1.142,1100,Sold 1 AMC 06/18/21 Put 40.00 @ 11.00,Individual...60
-06/01/2021 6:07 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,9,C,2.28,1.142,228,Sold 1 BB 06/18/21 Call 9.00 @ 2.28,Individual...60
-05/28/2021 3:39 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...60
-05/28/2021 3:33 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...60
-05/27/2021 7:57 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,9,C,0.85,2.284,170,Sold 2 UWMC 07/16/21 Call 9.00 @ 0.85,Individual...60
-05/22/2021 4:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,05/21/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Assignment,PLTR,,,2,05/21/2021,24,P,,0.00,0,Removal of option due to assignment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,200,,,,24,5.00,-4800,Buy to Open 200 PLTR @ 24.00,Individual...60
-05/21/2021 6:10 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.69,0.27,-138,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.69,Individual...60
-05/20/2021 3:41 PM,Trade,Buy to Close,VIAC,Buy,Close,1,05/21/2021,45,P,3.6,0.13,-360,Bought 1 VIAC 05/21/21 Put 45.00 @ 3.60,Individual...60
-05/19/2021 4:34 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,22,C,0.9,0.13,-90,Bought 1 PLTR 06/18/21 Call 22.00 @ 0.90,Individual...60
-05/18/2021 9:04 PM,Trade,Buy to Close,PLTR,Buy,Close,2,06/18/2021,23,P,2.54,0.27,-508,Bought 2 PLTR 06/18/21 Put 23.00 @ 2.54,Individual...60
-05/18/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,22,C,1.25,1.142,125,Sold 1 PLTR 06/18/21 Call 22.00 @ 1.25,Individual...60
-05/18/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.58,4.558,232,Sold 4 BB 06/18/21 Call 9.00 @ 0.58,Individual...60
-05/17/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.08,INTEREST ON CREDIT BALANCE,Individual...60
-05/17/2021 3:31 PM,Trade,Sell to Open,UWMC,Sell,Open,2,06/18/2021,8,C,0.95,2.284,190,Sold 2 UWMC 06/18/21 Call 8.00 @ 0.95,Individual...60
-05/15/2021 3:42 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/13/2021 4:11 PM,Trade,Sell to Open,VGAC,Sell,Open,1,06/18/2021,10,C,0.45,1.142,45,Sold 1 VGAC 06/18/21 Call 10.00 @ 0.45,Individual...60
-05/11/2021 3:54 PM,Trade,Buy to Close,WY,Buy,Close,1,05/21/2021,39,P,0.57,0.13,-57,Bought 1 WY 05/21/21 Put 39.00 @ 0.57,Individual...60
-05/08/2021 3:28 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-05/06/2021 9:50 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.9,1.142,390,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.90,Individual...60
-05/06/2021 4:22 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.45,0.27,-90,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.45,Individual...60
-05/06/2021 3:59 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.45,1.142,345,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.45,Individual...60
-05/04/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,2,05/21/2021,24,P,2.85,2.284,570,Sold 2 PLTR 05/21/21 Put 24.00 @ 2.85,Individual...60
-05/04/2021 3:41 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,24,C,1.04,0.13,-104,Bought 1 PLTR 06/18/21 Call 24.00 @ 1.04,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,2,06/18/2021,9,C,0.57,0.27,-114,Bought 2 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/01/2021 3:53 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/30/2021 4:14 PM,Trade,Sell to Open,WY,Sell,Open,1,05/21/2021,39,P,2.1,1.142,210,Sold 1 WY 05/21/21 Put 39.00 @ 2.10,Individual...60
-04/29/2021 8:17 PM,Trade,Buy to Close,MVIS,Buy,Close,1,05/21/2021,12,P,0.68,0.13,-68,Bought 1 MVIS 05/21/21 Put 12.00 @ 0.68,Individual...60
-04/29/2021 3:30 PM,Trade,Sell to Close,NOK,Sell,Close,1,01/21/2022,4,C,1.1,0.142,110,Sold 1 NOK 01/21/22 Call 4.00 @ 1.10,Individual...60
-04/26/2021 4:09 PM,Trade,Sell to Open,MVIS,Sell,Open,1,05/21/2021,12,P,0.86,1.142,86,Sold 1 MVIS 05/21/21 Put 12.00 @ 0.86,Individual...60
-04/24/2021 3:56 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-04/22/2021 4:54 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,24,P,2.02,0.13,-202,Bought 1 PLTR 05/21/21 Put 24.00 @ 2.02,Individual...60
-04/22/2021 4:05 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.65,1.142,65,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.65,Individual...60
-04/22/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,27,P,4.65,0.13,-465,Bought 1 PLTR 05/21/21 Put 27.00 @ 4.65,Individual...60
-04/21/2021 9:47 PM,Trade,Sell to Close,BB,Sell,Close,1,01/21/2022,12.5,C,0.94,0.142,94,Sold 1 BB 01/21/22 Call 12.50 @ 0.94,Individual...60
-04/21/2021 7:43 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.61,1.142,61,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.61,Individual...60
-04/21/2021 5:57 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.62,4.558,248,Sold 4 BB 06/18/21 Call 9.00 @ 0.62,Individual...60
-04/21/2021 5:55 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,22.5,P,1.67,0.13,-167,Bought 1 PLTR 05/21/21 Put 22.50 @ 1.67,Individual...60
-04/21/2021 5:14 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,24,C,1.56,1.142,156,Sold 1 PLTR 06/18/21 Call 24.00 @ 1.56,Individual...60
-04/20/2021 5:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,22.5,P,2.35,1.142,235,Sold 1 PLTR 05/21/21 Put 22.50 @ 2.35,Individual...60
-04/19/2021 3:50 PM,Trade,Buy to Close,VGAC,Buy,Close,1,05/21/2021,10,C,0.1,0.13,-10,Bought 1 VGAC 05/21/21 Call 10.00 @ 0.10,Individual...60
-04/17/2021 5:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/16/2021 11:00 PM,Receive Deliver,Assignment,UWMC,,,2,04/16/2021,12.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-04/16/2021 11:00 PM,Receive Deliver,Buy to Open,UWMC,Buy,Open,200,,,,12.5,5.00,-2500,Buy to Open 200 UWMC @ 12.50,Individual...60
-04/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...60
-04/16/2021 10:00 PM,Receive Deliver,Expiration,BB,,,3,04/16/2021,12,C,,0.00,0,Removal of 3.0 BB 04/16/21 Call 12.00 due to expiration.,Individual...60
-04/16/2021 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,24,P,2.52,1.142,252,Sold 1 PLTR 05/21/21 Put 24.00 @ 2.52,Individual...60
-04/14/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,04/16/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...60
-04/14/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...60
-04/14/2021 5:41 PM,Trade,Buy to Close,PSTH,Buy,Close,1,04/16/2021,30,P,5.2,0.13,-520,Bought 1 PSTH 04/16/21 Put 30.00 @ 5.20,Individual...60
-04/13/2021 7:52 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,23,P,1.46,0.13,-146,Bought 1 PLTR 05/21/21 Put 23.00 @ 1.46,Individual...60
-04/12/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,23,P,2.18,1.142,218,Sold 1 PLTR 05/21/21 Put 23.00 @ 2.18,Individual...60
-04/10/2021 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/09/2021 3:41 PM,Trade,Sell to Close,RIDE,Sell,Close,1,07/16/2021,15,P,4.95,0.142,495,Sold 1 RIDE 07/16/21 Put 15.00 @ 4.95,Individual...60
-04/07/2021 4:23 PM,Trade,Buy to Close,PSFE,Buy,Close,1,04/16/2021,15,P,0.8,0.13,-80,Bought 1 PSFE 04/16/21 Put 15.00 @ 0.80,Individual...60
-04/06/2021 9:50 PM,Trade,Sell to Open,VIAC,Sell,Open,1,05/21/2021,45,P,4.85,1.142,485,Sold 1 VIAC 05/21/21 Put 45.00 @ 4.85,Individual...60
-04/06/2021 7:20 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,24,C,0.7,0.13,-70,Bought 1 PLTR 04/16/21 Call 24.00 @ 0.70,Individual...60
-03/31/2021 9:51 PM,Trade,Sell to Open,VGAC,Sell,Open,1,05/21/2021,10,C,0.5,1.152,50,Sold 1 VGAC 05/21/21 Call 10.00 @ 0.50,Individual...60
-03/31/2021 3:48 PM,Trade,Buy to Close,KMPH,Buy,Close,1,04/16/2021,17.5,P,8.05,0.14,-805,Bought 1 KMPH 04/16/21 Put 17.50 @ 8.05,Individual...60
-03/31/2021 12:46 PM,Receive Deliver,Symbol Change,PSFE,Sell,Open,1,04/16/2021,15,P,,0.00,132,Symbol change:  Open 1.0 PSFE  210416P00015000,Individual...60
-03/31/2021 12:46 PM,Receive Deliver,Symbol Change,BFT,Buy,Close,1,04/16/2021,15,P,,0.00,-132,Symbol change:  Close 1.0 BFT   210416P00015000,Individual...60
-03/30/2021 3:43 PM,Trade,Buy to Close,MT,Buy,Close,1,04/16/2021,28,P,1.2,0.14,-120,Bought 1 MT 04/16/21 Put 28.00 @ 1.20,Individual...60
-03/27/2021 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-03/26/2021 8:11 PM,Trade,Sell to Open,BB,Sell,Open,3,04/16/2021,12,C,0.38,3.426,114,Sold 3 BB 04/16/21 Call 12.00 @ 0.38,Individual...60
-03/26/2021 2:32 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,24,C,1.13,1.152,113,Sold 1 PLTR 04/16/21 Call 24.00 @ 1.13,Individual...60
-03/23/2021 6:52 PM,Trade,Sell to Open,BB,Sell,Open,1,05/21/2021,12,P,2.58,1.152,258,Sold 1 BB 05/21/21 Put 12.00 @ 2.58,Individual...60
-03/20/2021 4:44 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Assignment,PLTR,,,1,03/19/2021,34,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,100,,,,34,5.00,-3400,Buy to Open 100 PLTR @ 34.00,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Assignment,VGAC,,,1,03/19/2021,17.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Buy to Open,VGAC,Buy,Open,100,,,,17.5,5.00,-1750,Buy to Open 100 VGAC @ 17.50,Individual...60
-03/19/2021 4:25 PM,Trade,Sell to Close,BB,Sell,Close,3,03/19/2021,16,P,5,0.426,1500,Sold 3 BB 03/19/21 Put 16.00 @ 5.00,Individual...60
-03/19/2021 3:44 PM,Trade,Buy to Open,BB,Buy,Open,3,03/19/2021,16,P,4.95,3.41,-1485,Bought 3 BB 03/19/21 Put 16.00 @ 4.95,Individual...60
-03/19/2021 2:57 PM,Trade,Buy to Open,RIDE,Buy,Open,1,07/16/2021,15,P,4.75,1.14,-475,Bought 1 RIDE 07/16/21 Put 15.00 @ 4.75,Individual...60
-03/18/2021 10:00 PM,Receive Deliver,Assignment,BB,,,3,03/19/2021,16,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/18/2021 10:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,300,,,,16,5.00,-4800,Buy to Open 300 BB @ 16.00,Individual...60
-03/18/2021 8:32 PM,Trade,Sell to Open,PSTH,Sell,Open,1,04/16/2021,30,P,5.4,1.152,540,Sold 1 PSTH 04/16/21 Put 30.00 @ 5.40,Individual...60
-03/18/2021 8:24 PM,Trade,Sell to Open,MT,Sell,Open,1,04/16/2021,28,P,1.9,1.152,190,Sold 1 MT 04/16/21 Put 28.00 @ 1.90,Individual...60
-03/18/2021 8:19 PM,Trade,Sell to Open,BFT,Sell,Open,1,04/16/2021,15,P,1.32,1.152,132,Sold 1 BFT 04/16/21 Put 15.00 @ 1.32,Individual...60
-03/18/2021 4:09 PM,Trade,Sell to Close,MT,Sell,Close,1,06/18/2021,25,C,4,0.152,400,Sold 1 MT 06/18/21 Call 25.00 @ 4.00,Individual...60
-03/17/2021 6:46 PM,Trade,Sell to Close,UWMC,Sell,Close,4,04/16/2021,11,C,0.64,0.558,256,Sold 4 UWMC 04/16/21 Call 11.00 @ 0.64,Individual...60
-03/17/2021 2:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,27,P,5.25,1.152,525,Sold 1 PLTR 05/21/21 Put 27.00 @ 5.25,Individual...60
-03/17/2021 2:30 PM,Trade,Sell to Open,KMPH,Sell,Open,1,04/16/2021,17.5,P,8.35,1.152,835,Sold 1 KMPH 04/16/21 Put 17.50 @ 8.35,Individual...60
-03/16/2021 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...60
-03/16/2021 4:44 PM,Trade,Buy to Open,NOK,Buy,Open,1,01/21/2022,4,C,0.97,1.14,-97,Bought 1 NOK 01/21/22 Call 4.00 @ 0.97,Individual...60
-03/10/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,2.97,0.14,-297,Bought 1 PLTR 04/16/21 Put 25.00 @ 2.97,Individual...60
-03/05/2021 9:14 PM,Trade,Buy to Close,PSTH,Buy,Close,1,03/19/2021,30,P,3.95,0.14,-395,Bought 1 PSTH 03/19/21 Put 30.00 @ 3.95,Individual...60
-03/04/2021 6:55 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,15.72,0.204,3144,Sold 200 SQQQ @ 15.72,Individual...60
-03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...60
-03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...60
-03/04/2021 4:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,3.85,1.152,385,Sold 1 PLTR 04/16/21 Put 25.00 @ 3.85,Individual...60
-03/04/2021 4:03 PM,Trade,Sell to Open,UWMC,Sell,Open,2,04/16/2021,12.5,P,4.35,2.284,870,Sold 2 UWMC 04/16/21 Put 12.50 @ 4.35,Individual...60
-03/04/2021 3:57 PM,Trade,Buy to Open,UWMC,Buy,Open,4,04/16/2021,11,C,1.48,4.54,-592,Bought 4 UWMC 04/16/21 Call 11.00 @ 1.48,Individual...60
-03/03/2021 3:32 PM,Trade,Sell to Close,KT,Sell,Close,200,,,,11.68,0.204,2336,Sold 200 KT @ 11.68,Individual...60
-03/01/2021 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4770.4,Wire Funds Received,Individual...60
-03/01/2021 7:28 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,3.2,0.14,-320,Bought 1 PLTR 04/16/21 Put 25.00 @ 3.20,Individual...60
-02/27/2021 5:52 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-02/26/2021 4:00 PM,Trade,Buy to Close,KT,Buy,Close,2,03/19/2021,12.5,C,0.2,0.27,-40,Bought 2 KT 03/19/21 Call 12.50 @ 0.20,Individual...60
-02/25/2021 6:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,4.25,1.152,425,Sold 1 PLTR 04/16/21 Put 25.00 @ 4.25,Individual...60
-02/18/2021 3:31 PM,Trade,Buy to Close,APHA,Buy,Close,1,03/19/2021,26,P,7.25,0.14,-725,Bought 1 APHA 03/19/21 Put 26.00 @ 7.25,Individual...60
-02/18/2021 3:30 PM,Trade,Sell to Open,PSTH,Sell,Open,1,03/19/2021,30,P,4.5,1.152,450,Sold 1 PSTH 03/19/21 Put 30.00 @ 4.50,Individual...60
-02/18/2021 3:30 PM,Trade,Sell to Open,BB,Sell,Open,1,04/16/2021,12,P,2.45,1.152,245,Sold 1 BB 04/16/21 Put 12.00 @ 2.45,Individual...60
-02/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...60
-02/16/2021 3:32 PM,Trade,Sell to Open,KT,Sell,Open,2,03/19/2021,12.5,C,0.45,2.284,90,Sold 2 KT 03/19/21 Call 12.50 @ 0.45,Individual...60
-02/13/2021 4:47 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.06,Regulatory fee adjustment,Individual...60
-02/12/2021 3:43 PM,Trade,Buy to Open,KT,Buy,Open,170,,,,11.11,0.136,-1888.7,Bought 170 KT @ 11.11,Individual...60
-02/12/2021 3:41 PM,Trade,Buy to Open,KT,Buy,Open,30,,,,11.11,0.024,-333.3,Bought 30 KT @ 11.11,Individual...60
-02/12/2021 3:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...60
-02/11/2021 3:33 PM,Trade,Sell to Open,APHA,Sell,Open,1,03/19/2021,26,P,10.25,1.172,1025,Sold 1 APHA 03/19/21 Put 26.00 @ 10.25,Individual...60
-02/08/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.4,0.14,-940,Bought 1 GME 03/19/21 Put 40.00 @ 9.40,Individual...60
-02/08/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,03/19/2021,34,P,4.3,0.14,-430,Bought 1 PLTR 03/19/21 Put 34.00 @ 4.30,Individual...60
-02/05/2021 7:38 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.05,1.172,1205,Sold 1 GME 03/19/21 Put 40.00 @ 12.05,Individual...60
-02/05/2021 4:01 PM,Trade,Sell to Open,VGAC,Sell,Open,1,03/19/2021,17.5,P,3.7,1.152,370,Sold 1 VGAC 03/19/21 Put 17.50 @ 3.70,Individual...60
-02/04/2021 9:47 PM,Trade,Sell to Close,CLOV,Sell,Close,10,02/19/2021,10,P,0.53,1.40,530,Sold 10 CLOV 02/19/21 Put 10.00 @ 0.53,Individual...60
-02/04/2021 8:33 PM,Trade,Sell to Close,CLOV,Sell,Close,1,03/19/2021,20,C,0.91,0.152,91,Sold 1 CLOV 03/19/21 Call 20.00 @ 0.91,Individual...60
-02/04/2021 8:33 PM,Trade,Buy to Close,CLOV,Buy,Close,1,03/19/2021,2.5,C,9.91,0.14,-991,Bought 1 CLOV 03/19/21 Call 2.50 @ 9.91,Individual...60
-02/04/2021 3:57 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,2,02/19/2021,10,P,0.45,2.27,-90,Bought 2 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,1,03/19/2021,20,C,0.87,1.14,-87,Bought 1 CLOV 03/19/21 Call 20.00 @ 0.87,Individual...60
-02/04/2021 3:47 PM,Trade,Sell to Open,CLOV,Sell,Open,1,03/19/2021,2.5,C,9.92,1.172,992,Sold 1 CLOV 03/19/21 Call 2.50 @ 9.92,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,8,02/19/2021,10,P,0.45,9.09,-360,Bought 8 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...60
-02/03/2021 4:42 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.55,0.14,-955,Bought 1 GME 03/19/21 Put 40.00 @ 9.55,Individual...60
-02/02/2021 8:32 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...60
-02/02/2021 5:34 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...60
-02/02/2021 3:44 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...60
-02/01/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...60
-01/31/2021 12:11 AM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...60
-01/29/2021 7:51 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,13.3,1.172,1330,Sold 1 GME 03/19/21 Put 40.00 @ 13.30,Individual...60
-01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...60
-01/27/2021 7:52 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...60
-01/27/2021 6:50 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...60
-01/27/2021 3:58 PM,Trade,Buy to Close,MT,Buy,Close,1,02/19/2021,26,P,5.4,0.14,-540,Bought 1 MT 02/19/21 Put 26.00 @ 5.40,Individual...60
-01/25/2021 6:04 PM,Trade,Buy to Open,BB,Buy,Open,1,01/21/2022,12.5,C,11.5,1.14,-1150,Bought 1 BB 01/21/22 Call 12.50 @ 11.50,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,THCB,Sell,Close,200,,,,15.13,0.254,3026,Sold 200 THCB @ 15.13,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...60
-01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/20/2021 6:55 PM,Trade,Sell to Close,THCBW,Sell,Close,100,,,,4.17,0.102,417,Sold 100 THCBW @ 4.17,Individual...60
-01/20/2021 6:18 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,10.65,1.172,1065,Sold 1 GME 02/19/21 Put 42.00 @ 10.65,Individual...60
-01/19/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-01/19/2021 8:16 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,11,1.172,1100,Sold 1 GME 02/19/21 Put 42.00 @ 11.00,Individual...60
-01/19/2021 3:38 PM,Trade,Buy to Close,MGNI,Buy,Close,2,02/19/2021,30,P,2.98,0.27,-596,Bought 2 MGNI 02/19/21 Put 30.00 @ 2.98,Individual...60
-01/16/2021 4:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-01/15/2021 3:48 PM,Trade,Sell to Close,GME,Sell,Close,1,01/15/2021,32,P,0.48,0.152,48,Sold 1 GME 01/15/21 Put 32.00 @ 0.48,Individual...60
-01/13/2021 9:42 PM,Trade,Sell to Close,TLRY,Sell,Close,200,,,,14.96,0.254,2992,Sold 200 TLRY @ 14.96,Individual...60
-01/13/2021 5:58 PM,Trade,Buy to Open,GME,Buy,Open,1,01/15/2021,32,P,3.95,1.14,-395,Bought 1 GME 01/15/21 Put 32.00 @ 3.95,Individual...60
-01/12/2021 9:50 PM,Trade,Buy to Open,UVXY,Buy,Open,100,,,,10.52,0.08,-1052,Bought 100 UVXY @ 10.52,Individual...60
-01/11/2021 5:51 PM,Trade,Sell to Close,BB,Sell,Close,5,02/19/2021,7,C,1.09,0.71,545,Sold 5 BB 02/19/21 Call 7.00 @ 1.09,Individual...60
-12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...60
-12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...60
-12/25/2020 3:21 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/24/2020 4:10 PM,Trade,Sell to Close,LOOP,Sell,Close,1,01/15/2021,7.5,P,0.68,0.152,68,Sold 1 LOOP 01/15/21 Put 7.50 @ 0.68,Individual...60
-12/23/2020 3:45 PM,Trade,Buy to Open,BB,Buy,Open,5,02/19/2021,7,C,1,5.68,-500,Bought 5 BB 02/19/21 Call 7.00 @ 1.00,Individual...60
-12/19/2020 6:24 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/17/2020 8:57 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,27,P,3.2,0.14,-320,Bought 1 PLTR 01/15/21 Put 27.00 @ 3.20,Individual...60
-12/17/2020 5:44 PM,Trade,Buy to Close,GME,Buy,Close,2,01/15/2021,14,P,1.79,0.27,-358,Bought 2 GME 01/15/21 Put 14.00 @ 1.79,Individual...60
-12/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-12/15/2020 9:24 PM,Trade,Buy to Open,LOOP,Buy,Open,1,01/15/2021,7.5,P,1.3,1.14,-130,Bought 1 LOOP 01/15/21 Put 7.50 @ 1.30,Individual...60
-12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...60
-12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...60
-12/12/2020 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...60
-12/11/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,300,,,,10.5,5.106,3150,Sell to Close 300 PCG @ 10.50,Individual...60
-12/11/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,27,P,4,1.152,400,Sold 1 PLTR 01/15/21 Put 27.00 @ 4.00,Individual...60
-12/10/2020 5:56 PM,Trade,Buy to Open,BCRX,Buy,Open,3,03/19/2021,8,C,1.75,3.41,-525,Bought 3 BCRX 03/19/21 Call 8.00 @ 1.75,Individual...60
-12/09/2020 4:14 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,20,P,4,1.14,-400,Bought 1 NKLA 01/15/21 Put 20.00 @ 4.00,Individual...60
-12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,29,,,,2.956,0.024,-85.724,Bought 29 THCBW @ 2.96,Individual...60
-12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,71,,,,2.96,0.057,-210.16,Bought 71 THCBW @ 2.96,Individual...60
-12/09/2020 3:44 PM,Trade,Sell to Open,GME,Sell,Open,2,01/15/2021,14,P,2.56,2.294,512,Sold 2 GME 01/15/21 Put 14.00 @ 2.56,Individual...60
-12/07/2020 7:03 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,40,C,0.27,0.152,27,Sold 1 NKLA 01/15/21 Call 40.00 @ 0.27,Individual...60
-12/07/2020 7:03 PM,Trade,Buy to Close,NKLA,Buy,Close,1,01/15/2021,30,C,0.77,0.14,-77,Bought 1 NKLA 01/15/21 Call 30.00 @ 0.77,Individual...60
-12/07/2020 6:46 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/08/2021,28.5,P,10.4,0.172,1040,Sold 1 NKLA 01/08/21 Put 28.50 @ 10.40,Individual...60
-12/05/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/04/2020 4:12 PM,Trade,Sell to Close,KNDI,Sell,Close,3,01/15/2021,9,P,2.55,0.436,765,Sold 3 KNDI 01/15/21 Put 9.00 @ 2.55,Individual...60
-12/03/2020 3:42 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,23,P,3.55,0.14,-355,Bought 1 PLTR 01/15/21 Put 23.00 @ 3.55,Individual...60
-12/02/2020 9:38 PM,Trade,Buy to Close,GME,Buy,Close,1,12/18/2020,17,P,2.96,0.14,-296,Bought 1 GME 12/18/20 Put 17.00 @ 2.96,Individual...60
-12/02/2020 7:38 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,23,P,5,1.162,500,Sold 1 PLTR 01/15/21 Put 23.00 @ 5.00,Individual...60
-11/30/2020 4:46 PM,Trade,Buy to Open,KNDI,Buy,Open,3,01/15/2021,9,P,2.16,3.41,-648,Bought 3 KNDI 01/15/21 Put 9.00 @ 2.16,Individual...60
-11/28/2020 2:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-11/27/2020 5:00 PM,Trade,Sell to Open,GME,Sell,Open,1,12/18/2020,17,P,3.55,1.152,355,Sold 1 GME 12/18/20 Put 17.00 @ 3.55,Individual...60
-11/27/2020 3:37 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,40,C,2.9,1.14,-290,Bought 1 NKLA 01/15/21 Call 40.00 @ 2.90,Individual...60
-11/27/2020 3:37 PM,Trade,Sell to Open,NKLA,Sell,Open,1,01/15/2021,30,C,6.5,1.162,650,Sold 1 NKLA 01/15/21 Call 30.00 @ 6.50,Individual...60
-11/27/2020 3:32 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/08/2021,28.5,P,5.45,1.14,-545,Bought 1 NKLA 01/08/21 Put 28.50 @ 5.45,Individual...60
-11/25/2020 6:33 PM,Trade,Buy to Close,AHT,Buy,Close,2,12/18/2020,5,P,2.4,0.27,-480,Bought 2 AHT 12/18/20 Put 5.00 @ 2.40,Individual...60
-11/23/2020 8:14 PM,Trade,Buy to Close,PLTR,Buy,Close,2,12/04/2020,19,P,0.96,0.27,-192,Bought 2 PLTR 12/04/20 Put 19.00 @ 0.96,Individual...60
-11/23/2020 4:12 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...60
-11/23/2020 4:08 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...60
-11/23/2020 3:30 PM,Trade,Sell to Close,TSLA,Sell,Close,1,12/31/2020,435,P,17.17,0.182,1717,Sold 1 TSLA 12/31/20 Put 435.00 @ 17.17,Individual...60
-11/23/2020 3:30 PM,Trade,Buy to Close,TSLA,Buy,Close,1,12/31/2020,455,P,24.13,0.14,-2413,Bought 1 TSLA 12/31/20 Put 455.00 @ 24.13,Individual...60
-11/21/2020 3:54 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-11/20/2020 6:33 PM,Trade,Sell to Open,PLTR,Sell,Open,2,12/04/2020,19,P,1.92,2.284,384,Sold 2 PLTR 12/04/20 Put 19.00 @ 1.92,Individual...60
-11/17/2020 7:24 PM,Trade,Sell to Close,PLTR,Sell,Close,2,12/04/2020,19,C,1.8,0.284,360,Sold 2 PLTR 12/04/20 Call 19.00 @ 1.80,Individual...60
-11/17/2020 5:01 PM,Trade,Buy to Open,PLTR,Buy,Open,2,12/04/2020,19,C,1.19,2.27,-238,Bought 2 PLTR 12/04/20 Call 19.00 @ 1.19,Individual...60
-11/17/2020 4:45 PM,Trade,Buy to Open,TSLA,Buy,Open,1,12/31/2020,435,P,34.81,1.14,-3481,Bought 1 TSLA 12/31/20 Put 435.00 @ 34.81,Individual...60
-11/17/2020 4:45 PM,Trade,Sell to Open,TSLA,Sell,Open,1,12/31/2020,455,P,45.9,1.252,4590,Sold 1 TSLA 12/31/20 Put 455.00 @ 45.90,Individual...60
-11/17/2020 4:02 PM,Trade,Buy to Close,KODK,Buy,Close,1,11/20/2020,10,P,3,0.14,-300,Bought 1 KODK 11/20/20 Put 10.00 @ 3.00,Individual...60
-11/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-11/16/2020 9:21 PM,Trade,Buy to Close,PLTR,Buy,Close,1,11/20/2020,15.5,P,0.5,0.14,-50,Bought 1 PLTR 11/20/20 Put 15.50 @ 0.50,Individual...60
-11/16/2020 3:37 PM,Trade,Sell to Open,PLTR,Sell,Open,1,11/20/2020,15.5,P,1,1.152,100,Sold 1 PLTR 11/20/20 Put 15.50 @ 1.00,Individual...60
-11/10/2020 5:12 PM,Trade,Sell to Close,RKT,Sell,Close,1,11/13/2020,23,C,0.91,0.152,91,Sold 1 RKT 11/13/20 Call 23.00 @ 0.91,Individual...60
-11/09/2020 7:42 PM,Trade,Buy to Open,RKT,Buy,Open,1,11/13/2020,23,C,1.03,1.14,-103,Bought 1 RKT 11/13/20 Call 23.00 @ 1.03,Individual...60
-11/09/2020 3:31 PM,Trade,Buy to Close,NKLA,Buy,Close,1,11/20/2020,22.5,P,3.3,0.14,-330,Bought 1 NKLA 11/20/20 Put 22.50 @ 3.30,Individual...60
-11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,12/11/2020,10.5,C,0.41,1.152,41,Sold 1 PCG 12/11/20 Call 10.50 @ 0.41,Individual...60
-11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,12/11/2020,10.5,C,0.41,2.284,82,Sold 2 PCG 12/11/20 Call 10.50 @ 0.41,Individual...60
-10/30/2020 10:00 PM,Receive Deliver,Assignment,PCG,,,3,10/30/2020,11,P,,0.00,0,Removal of option due to assignment,Individual...60
-10/30/2020 10:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,300,,,,11,5.00,-3300,Buy to Open 300 PCG @ 11.00,Individual...60
-10/22/2020 3:33 PM,Trade,Sell to Open,PCG,Sell,Open,3,10/30/2020,11,P,0.74,3.426,222,Sold 3 PCG 10/30/20 Put 11.00 @ 0.74,Individual...60
-10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...60
-10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...60
-10/17/2020 4:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-10/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-10/15/2020 4:45 PM,Trade,Sell to Close,LOOP,Sell,Close,1,10/16/2020,7.5,P,0.4,0.152,40,Sold 1 LOOP 10/16/20 Put 7.50 @ 0.40,Individual...60
-10/15/2020 4:33 PM,Trade,Sell to Open,NKLA,Sell,Open,1,11/20/2020,22.5,P,3.7,1.152,370,Sold 1 NKLA 11/20/20 Put 22.50 @ 3.70,Individual...60
-10/15/2020 4:29 PM,Trade,Sell to Close,NKLA,Sell,Close,1,11/13/2020,24,P,4.16,0.152,416,Sold 1 NKLA 11/13/20 Put 24.00 @ 4.16,Individual...60
-10/15/2020 3:44 PM,Trade,Buy to Close,GME,Buy,Close,2,11/20/2020,13,P,2.02,0.27,-404,Bought 2 GME 11/20/20 Put 13.00 @ 2.02,Individual...60
-10/13/2020 3:39 PM,Trade,Buy to Open,LOOP,Buy,Open,1,10/16/2020,7.5,P,1.35,1.14,-135,Bought 1 LOOP 10/16/20 Put 7.50 @ 1.35,Individual...60
-10/12/2020 4:39 PM,Trade,Sell to Open,KODK,Sell,Open,1,11/20/2020,10,P,2.25,1.152,225,Sold 1 KODK 11/20/20 Put 10.00 @ 2.25,Individual...60
-10/12/2020 4:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/23/2020,10.5,P,0.46,2.284,92,Sold 2 PCG 10/23/20 Put 10.50 @ 0.46,Individual...60
-10/10/2020 4:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...60
-10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...60
-10/09/2020 5:10 PM,Trade,Buy to Close,KODK,Buy,Close,1,10/16/2020,8.5,P,0.43,0.14,-43,Bought 1 KODK 10/16/20 Put 8.50 @ 0.43,Individual...60
-10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/16/2020,27.5,C,0.61,0.284,122,Sold 2 NKLA 10/16/20 Call 27.50 @ 0.61,Individual...60
-10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,2,10/16/2020,19.5,C,4.94,0.27,-988,Bought 2 NKLA 10/16/20 Call 19.50 @ 4.94,Individual...60
-10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/16/2020,27.5,C,0.6,0.152,60,Sold 1 NKLA 10/16/20 Call 27.50 @ 0.60,Individual...60
-10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/16/2020,19.5,C,4.93,0.14,-493,Bought 1 NKLA 10/16/20 Call 19.50 @ 4.93,Individual...60
-10/06/2020 6:02 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/09/2020,9,C,1.19,0.27,-238,Bought 2 PCG 10/09/20 Call 9.00 @ 1.19,Individual...60
-10/06/2020 6:02 PM,Trade,Sell to Close,PCG,Sell,Close,200,,,,10.17,0.234,2034,Sold 200 PCG @ 10.17,Individual...60
-10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 7:06 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:06 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 5:30 PM,Trade,Sell to Open,KODK,Sell,Open,1,10/16/2020,8.5,P,0.86,1.152,86,Sold 1 KODK 10/16/20 Put 8.50 @ 0.86,Individual...60
-10/05/2020 3:55 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/30/2020,9.5,C,1.15,0.426,345,Sold 3 KODK 10/30/20 Call 9.50 @ 1.15,Individual...60
-10/05/2020 3:55 PM,Trade,Buy to Close,KODK,Buy,Close,3,10/30/2020,5,C,3.83,0.41,-1149,Bought 3 KODK 10/30/20 Call 5.00 @ 3.83,Individual...60
-10/03/2020 3:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-10/01/2020 5:52 PM,Trade,Buy to Open,NKLA,Buy,Open,1,11/13/2020,24,P,5.95,1.14,-595,Bought 1 NKLA 11/13/20 Put 24.00 @ 5.95,Individual...60
-10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,23.5,C,2.63,1.14,-263,Bought 1 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,22,C,3.49,0.152,349,Sold 1 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...60
-10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,23.5,C,2.63,2.27,-526,Bought 2 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/09/2020,22,C,3.49,0.294,698,Sold 2 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/09/2020,9,C,0.62,2.284,124,Sold 2 PCG 10/09/20 Call 9.00 @ 0.62,Individual...60
-09/30/2020 5:11 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/16/2020,27.5,C,0.69,3.41,-207,Bought 3 NKLA 10/16/20 Call 27.50 @ 0.69,Individual...60
-09/30/2020 5:11 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/16/2020,19.5,C,3.01,3.436,903,Sold 3 NKLA 10/16/20 Call 19.50 @ 3.01,Individual...60
-09/29/2020 5:26 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...60
-09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,2,10/09/2020,17,C,3.01,2.294,602,Sold 2 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...60
-09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,22,C,0.85,2.27,-170,Bought 2 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...60
-09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,1,10/09/2020,17,C,3.01,1.152,301,Sold 1 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...60
-09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,22,C,0.85,1.14,-85,Bought 1 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...60
-09/29/2020 4:06 PM,Trade,Sell to Close,NKLA,Sell,Close,3,10/02/2020,25,C,0.04,0.426,12,Sold 3 NKLA 10/02/20 Call 25.00 @ 0.04,Individual...60
-09/29/2020 4:06 PM,Trade,Buy to Close,NKLA,Buy,Close,3,10/02/2020,19.5,C,0.86,0.41,-258,Bought 3 NKLA 10/02/20 Call 19.50 @ 0.86,Individual...60
-09/29/2020 4:04 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...60
-09/28/2020 7:26 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/02/2020,9.5,C,0.11,0.27,-22,Bought 2 PCG 10/02/20 Call 9.50 @ 0.11,Individual...60
-09/28/2020 6:47 PM,Trade,Sell to Open,GME,Sell,Open,2,10/09/2020,10,P,1.08,2.284,216,Sold 2 GME 10/09/20 Put 10.00 @ 1.08,Individual...60
-09/28/2020 3:32 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...60
-09/28/2020 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...60
-09/26/2020 3:59 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...60
-09/25/2020 5:17 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/02/2020,19.5,C,2.61,3.436,783,Sold 3 NKLA 10/02/20 Call 19.50 @ 2.61,Individual...60
-09/25/2020 5:17 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/02/2020,25,C,0.45,3.41,-135,Bought 3 NKLA 10/02/20 Call 25.00 @ 0.45,Individual...60
-09/24/2020 5:30 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.6,1.152,60,Sold 1 GME 10/02/20 Put 9.00 @ 0.60,Individual...60
-09/24/2020 5:28 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.59,1.152,59,Sold 1 GME 10/02/20 Put 9.00 @ 0.59,Individual...60
-09/24/2020 5:01 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,27,P,10.05,0.172,1005,Sold 1 NKLA 10/09/20 Put 27.00 @ 10.05,Individual...60
-09/23/2020 11:00 PM,Money Movement,Fee,KODK,,,0,,,,,0.00,-3.32,EASTMAN KODAK COMPANY,Individual...60
-09/23/2020 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,2315.31,Wire Funds Received a/o 9/22,Individual...60
-09/22/2020 7:51 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/02/2020,9.5,C,0.41,2.284,82,Sold 2 PCG 10/02/20 Call 9.50 @ 0.41,Individual...60
-09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...60
-09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...60
-09/21/2020 3:45 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,27,P,4.79,1.14,-479,Bought 1 NKLA 10/09/20 Put 27.00 @ 4.79,Individual...60
-09/21/2020 3:34 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/16/2020,10,C,2.15,0.436,645,Sold 3 KODK 10/16/20 Call 10.00 @ 2.15,Individual...60
-09/21/2020 3:34 PM,Trade,Buy to Close,KODK,Buy,Close,300,,,,10.07,0.24,-3021,Bought 300 KODK @ 10.07,Individual...60
-09/19/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/17/2020 11:00 PM,Receive Deliver,Assignment,KODK,,,3,10/16/2020,2.5,C,,0.00,0,Removal of option due to assignment,Individual...60
-09/17/2020 11:00 PM,Receive Deliver,Sell to Open,KODK,Sell,Open,300,,,,2.5,5.056,750,Sell to Open 300 KODK @ 2.50,Individual...60
-09/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-09/16/2020 8:42 PM,Trade,Sell to Close,VIX,Sell,Close,2,09/30/2020,28,C,2.17,1.574,434,Sold 2 VIX 09/30/20 Call 28.00 @ 2.17,Individual...60
-09/16/2020 8:42 PM,Trade,Buy to Close,VIX,Buy,Close,2,09/30/2020,23,C,4.47,1.57,-894,Bought 2 VIX 09/30/20 Call 23.00 @ 4.47,Individual...60
-09/16/2020 4:56 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/30/2020,5,C,4.37,3.446,1311,Sold 3 KODK 10/30/20 Call 5.00 @ 4.37,Individual...60
-09/16/2020 4:56 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/30/2020,9.5,C,2.27,3.41,-681,Bought 3 KODK 10/30/20 Call 9.50 @ 2.27,Individual...60
-09/15/2020 6:22 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/25/2020,9.5,C,0.45,2.284,90,Sold 2 PCG 09/25/20 Call 9.50 @ 0.45,Individual...60
-09/14/2020 6:42 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/18/2020,10,P,0.56,0.14,-56,Bought 1 PCG 09/18/20 Put 10.00 @ 0.56,Individual...60
-09/12/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/11/2020 7:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/18/2020,10,P,1.11,1.152,111,Sold 1 PCG 09/18/20 Put 10.00 @ 1.11,Individual...60
-09/11/2020 6:57 PM,Trade,Buy to Close,PCG,Buy,Close,2,09/18/2020,9,C,0.14,0.27,-28,Bought 2 PCG 09/18/20 Call 9.00 @ 0.14,Individual...60
-09/05/2020 4:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/04/2020 6:11 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/18/2020,9,C,0.39,2.284,78,Sold 2 PCG 09/18/20 Call 9.00 @ 0.39,Individual...60
-09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,P,0.03,0.14,-3,Bought 1 PCG 09/04/20 Put 9.00 @ 0.03,Individual...60
-09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,C,0.23,0.14,-23,Bought 1 PCG 09/04/20 Call 9.00 @ 0.23,Individual...60
-08/31/2020 5:21 PM,Trade,Buy to Open,VIX,Buy,Open,2,09/30/2020,28,C,3.81,3.57,-762,Bought 2 VIX 09/30/20 Call 28.00 @ 3.81,Individual...60
-08/31/2020 5:21 PM,Trade,Sell to Open,VIX,Sell,Open,2,09/30/2020,23,C,6.16,3.574,1232,Sold 2 VIX 09/30/20 Call 23.00 @ 6.16,Individual...60
-08/31/2020 4:19 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/16/2020,2.5,C,3.68,3.446,1104,Sold 3 KODK 10/16/20 Call 2.50 @ 3.68,Individual...60
-08/31/2020 4:19 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/16/2020,10,C,0.77,3.41,-231,Bought 3 KODK 10/16/20 Call 10.00 @ 0.77,Individual...60
-08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,C,0.3,1.152,30,Sold 1 PCG 09/04/20 Call 9.00 @ 0.30,Individual...60
-08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,P,0.05,1.152,5,Sold 1 PCG 09/04/20 Put 9.00 @ 0.05,Individual...60
-08/28/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,08/28/2020,9.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-08/28/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,9.5,5.00,-950,Buy to Open 100 PCG @ 9.50,Individual...60
-08/28/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,1,08/28/2020,9.5,C,,0.00,0,Removal of 1 PCG 08/28/20 Call 9.50 due to expiration.,Individual...60
-08/25/2020 3:39 PM,Trade,Sell to Close,VIX,Sell,Close,2,10/21/2020,21,P,0.3,1.574,60,Sold 2 VIX 10/21/20 Put 21.00 @ 0.30,Individual...60
-08/25/2020 3:39 PM,Trade,Buy to Close,VIX,Buy,Close,2,10/21/2020,26,P,2.05,1.57,-410,Bought 2 VIX 10/21/20 Put 26.00 @ 2.05,Individual...60
-08/22/2020 3:19 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,C,0.05,0.152,5,Sold 1 PCG 08/28/20 Call 9.50 @ 0.05,Individual...60
-08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,P,0.37,0.152,37,Sold 1 PCG 08/28/20 Put 9.50 @ 0.37,Individual...60
-08/17/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-08/15/2020 9:13 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-08/14/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,2,08/14/2020,9,C,,0.00,0,Removal of option due to assignment,Individual...60
-08/14/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,200,,,,9,5.064,1800,Sell to Close 200 PCG @ 9.00,Individual...60
-08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,P,0.08,0.14,-8,Bought 1 PCG 08/14/20 Put 9.50 @ 0.08,Individual...60
-08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,C,0.04,0.14,-4,Bought 1 PCG 08/14/20 Call 9.50 @ 0.04,Individual...60
-08/12/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,2,08/14/2020,9,C,0.31,2.284,62,Sold 2 PCG 08/14/20 Call 9.00 @ 0.31,Individual...60
-08/12/2020 4:04 PM,Trade,Sell to Close,KODK,Sell,Close,1,09/18/2020,17.5,C,0.92,0.152,92,Sold 1 KODK 09/18/20 Call 17.50 @ 0.92,Individual...60
-08/12/2020 4:04 PM,Trade,Buy to Close,KODK,Buy,Close,1,09/18/2020,7.5,C,3.56,0.14,-356,Bought 1 KODK 09/18/20 Call 7.50 @ 3.56,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,C,0.03,1.152,3,Sold 1 PCG 08/14/20 Call 9.50 @ 0.03,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/14/20 Put 9.50 @ 0.45,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,VIX,Sell,Open,2,10/21/2020,26,P,2.3,3.574,460,Sold 2 VIX 10/21/20 Put 26.00 @ 2.30,Individual...60
-08/10/2020 3:30 PM,Trade,Buy to Open,VIX,Buy,Open,2,10/21/2020,21,P,0.5,3.57,-100,Bought 2 VIX 10/21/20 Put 21.00 @ 0.50,Individual...60
-08/08/2020 3:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,P,0.36,0.14,-36,Bought 1 PCG 08/07/20 Put 9.50 @ 0.36,Individual...60
-08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,C,0.03,0.14,-3,Bought 1 PCG 08/07/20 Call 9.50 @ 0.03,Individual...60
-08/05/2020 7:22 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,8.91,0.08,-891,Bought 100 PCG @ 8.91,Individual...60
-08/04/2020 8:54 PM,Trade,Sell to Open,KODK,Sell,Open,1,09/18/2020,7.5,C,7.04,1.162,704,Sold 1 KODK 09/18/20 Call 7.50 @ 7.04,Individual...60
-08/04/2020 8:54 PM,Trade,Buy to Open,KODK,Buy,Open,1,09/18/2020,17.5,C,2.99,1.14,-299,Bought 1 KODK 09/18/20 Call 17.50 @ 2.99,Individual...60
-07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/07/20 Put 9.50 @ 0.45,Individual...60
-07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,C,0.08,1.152,8,Sold 1 PCG 08/07/20 Call 9.50 @ 0.08,Individual...60
-07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,10,P,0.76,0.14,-76,Bought 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...60
-07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.28,0.14,-28,Bought 1 PCG 07/31/20 Call 9.00 @ 0.28,Individual...60
-07/27/2020 4:12 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.36,0.14,-36,Bought 1 PCG 07/31/20 Call 9.00 @ 0.36,Individual...60
-07/25/2020 3:23 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,10,P,0.76,1.152,76,Sold 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...60
-07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.55,1.152,55,Sold 1 PCG 07/31/20 Call 9.00 @ 0.55,Individual...60
-07/20/2020 5:04 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.39,1.152,39,Sold 1 PCG 07/31/20 Call 9.00 @ 0.39,Individual...60
-07/17/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,07/17/2020,10,P,,0.00,0,Removal of option due to assignment,Individual...60
-07/17/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,10,5.00,-1000,Buy to Open 100 PCG @ 10.00,Individual...60
-07/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-07/08/2020 5:18 PM,Trade,Sell to Close,VIX,Sell,Close,1,09/16/2020,25,P,1.9,0.792,190,Sold 1 VIX 09/16/20 Put 25.00 @ 1.90,Individual...60
-07/08/2020 5:18 PM,Trade,Buy to Close,VIX,Buy,Close,1,09/16/2020,28,P,3.45,0.79,-345,Bought 1 VIX 09/16/20 Put 28.00 @ 3.45,Individual...60
-07/06/2020 4:02 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/17/2020,10,P,0.77,1.152,77,Sold 1 PCG 07/17/20 Put 10.00 @ 0.77,Individual...60
-07/02/2020 8:38 PM,Trade,Buy to Open,VIX,Buy,Open,1,09/16/2020,25,P,2.45,1.79,-245,Bought 1 VIX 09/16/20 Put 25.00 @ 2.45,Individual...60
-07/02/2020 8:38 PM,Trade,Sell to Open,VIX,Sell,Open,1,09/16/2020,28,P,4.09,1.792,409,Sold 1 VIX 09/16/20 Put 28.00 @ 4.09,Individual...60
-07/02/2020 6:58 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,9.405,0.08,-940.5,Bought 100 PCG @ 9.40,Individual...60
-07/02/2020 3:34 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,28,C,3.22,0.792,322,Sold 1 VIX 07/22/20 Call 28.00 @ 3.22,Individual...60
-07/02/2020 3:34 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,24,C,5.07,0.79,-507,Bought 1 VIX 07/22/20 Call 24.00 @ 5.07,Individual...60
-07/02/2020 3:30 PM,Trade,Sell to Close,VIX,Sell,Close,1,08/19/2020,40,C,2.33,0.792,233,Sold 1 VIX 08/19/20 Call 40.00 @ 2.33,Individual...60
-07/02/2020 3:30 PM,Trade,Buy to Close,VIX,Buy,Close,1,08/19/2020,32.5,C,3.98,0.79,-398,Bought 1 VIX 08/19/20 Call 32.50 @ 3.98,Individual...60
-06/22/2020 10:12 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,35,C,3.93,0.792,393,Sold 1 VIX 07/22/20 Call 35.00 @ 3.93,Individual...60
-06/22/2020 10:12 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,30,C,5.53,0.79,-553,Bought 1 VIX 07/22/20 Call 30.00 @ 5.53,Individual...60
-06/20/2020 3:46 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-06/18/2020 4:18 PM,Trade,Sell to Close,CAR,Sell,Close,1,07/17/2020,21,P,1.31,0.152,131,Sold 1 CAR 07/17/20 Put 21.00 @ 1.31,Individual...60
-06/18/2020 4:18 PM,Trade,Buy to Close,CAR,Buy,Close,1,07/17/2020,25,P,2.67,0.14,-267,Bought 1 CAR 07/17/20 Put 25.00 @ 2.67,Individual...60
-06/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...60
-06/13/2020 4:11 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-06/12/2020 6:12 PM,Trade,Sell to Close,PCG,Sell,Close,2,06/19/2020,15,C,0.05,0.294,10,Sold 2 PCG 06/19/20 Call 15.00 @ 0.05,Individual...60
-06/11/2020 8:36 PM,Trade,Sell to Open,VIX,Sell,Open,1,08/19/2020,32.5,C,6.04,1.792,604,Sold 1 VIX 08/19/20 Call 32.50 @ 6.04,Individual...60
-06/11/2020 8:36 PM,Trade,Buy to Open,VIX,Buy,Open,1,08/19/2020,40,C,3.84,1.79,-384,Bought 1 VIX 08/19/20 Call 40.00 @ 3.84,Individual...60
-06/11/2020 8:33 PM,Trade,Buy to Open,CAR,Buy,Open,1,07/17/2020,21,P,2.32,1.14,-232,Bought 1 CAR 07/17/20 Put 21.00 @ 2.32,Individual...60
-06/11/2020 8:33 PM,Trade,Sell to Open,CAR,Sell,Open,1,07/17/2020,25,P,4.27,1.152,427,Sold 1 CAR 07/17/20 Put 25.00 @ 4.27,Individual...60
-06/11/2020 8:00 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,35,C,4.78,1.79,-478,Bought 1 VIX 07/22/20 Call 35.00 @ 4.78,Individual...60
-06/11/2020 8:00 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,30,C,6.83,1.792,683,Sold 1 VIX 07/22/20 Call 30.00 @ 6.83,Individual...60
-06/06/2020 3:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,34,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 34.00 due to expiration.,Individual...60
-06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,35,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 35.00 due to expiration.,Individual...60
-06/04/2020 6:40 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,28,C,4.6,1.79,-460,Bought 1 VIX 07/22/20 Call 28.00 @ 4.60,Individual...60
-06/04/2020 6:40 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,24,C,6.5,1.792,650,Sold 1 VIX 07/22/20 Call 24.00 @ 6.50,Individual...60
-05/30/2020 4:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/29/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,2,05/29/2020,14,C,,0.00,0,Removal of 2 PCG 05/29/20 Call 14.00 due to expiration.,Individual...60
-05/29/2020 6:04 PM,Trade,Sell to Close,EWG,Sell,Close,7,10/16/2020,22,C,4.13,1.054,2891,Sold 7 EWG 10/16/20 Call 22.00 @ 4.13,Individual...60
-05/29/2020 6:04 PM,Trade,Buy to Close,EWG,Buy,Close,7,10/16/2020,19,C,6.82,0.97,-4774,Bought 7 EWG 10/16/20 Call 19.00 @ 6.82,Individual...60
-05/27/2020 4:19 PM,Trade,Sell to Close,EWG,Sell,Close,8,07/17/2020,22,C,3.72,1.196,2976,Sold 8 EWG 07/17/20 Call 22.00 @ 3.72,Individual...60
-05/27/2020 4:19 PM,Trade,Buy to Close,EWG,Buy,Close,800,,,,25.63,0.64,-20504,Bought 800 EWG @ 25.63,Individual...60
-05/26/2020 11:00 PM,Receive Deliver,Assignment,EWG,,,8,07/17/2020,17,C,,0.00,0,Removal of option due to assignment,Individual...60
-05/26/2020 11:00 PM,Receive Deliver,Sell to Open,EWG,Sell,Open,800,,,,17,5.405,13600,Sell to Open 800 EWG @ 17.00,Individual...60
-05/26/2020 3:38 PM,Trade,Sell to Close,EWG,Sell,Close,4,07/17/2020,21,C,4.28,0.608,1712,Sold 4 EWG 07/17/20 Call 21.00 @ 4.28,Individual...60
-05/26/2020 3:38 PM,Trade,Buy to Close,EWG,Buy,Close,4,07/17/2020,18,C,7.24,0.56,-2896,Bought 4 EWG 07/17/20 Call 18.00 @ 7.24,Individual...60
-05/20/2020 3:31 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,34,P,0.85,1.14,-85,Bought 1 DOW 06/05/20 Put 34.00 @ 0.85,Individual...60
-05/20/2020 3:30 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,35,P,1.4,1.14,-140,Bought 1 DOW 06/05/20 Put 35.00 @ 1.40,Individual...60
-05/19/2020 3:30 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.05,0.852,30,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,Individual...60
-05/19/2020 3:30 PM,Trade,Buy to Close,USO,Buy,Close,6,07/17/2020,3.5,P,0.63,0.83,-378,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,Individual...60
-05/18/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...60
-05/16/2020 5:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/15/2020 5:42 PM,Trade,Buy to Open,PCG,Buy,Open,2,05/29/2020,14,C,0.5,2.28,-100,Bought 2 PCG 05/29/20 Call 14.00 @ 0.50,Individual...60
-05/15/2020 5:00 PM,Trade,Buy to Open,PCG,Buy,Open,2,06/19/2020,15,C,0.64,2.28,-128,Bought 2 PCG 06/19/20 Call 15.00 @ 0.64,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/09/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-05/08/2020 9:02 PM,Trade,Sell to Close,SPX,Sell,Close,2,06/19/2020,2915,P,98.66,1.584,19732,Sold 2 SPX 06/19/20 Put 2915.00 @ 98.66,Individual...60
-05/08/2020 9:02 PM,Trade,Buy to Close,SPX,Buy,Close,2,06/19/2020,2920,P,100.56,1.58,-20112,Bought 2 SPX 06/19/20 Put 2920.00 @ 100.56,Individual...60
-05/08/2020 5:24 PM,Trade,Sell to Close,SVXY,Sell,Close,3,06/19/2020,30,P,0.81,0.436,243,Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81,Individual...60
-05/08/2020 5:24 PM,Trade,Buy to Close,SVXY,Buy,Close,3,06/19/2020,35,P,2.63,0.42,-789,Bought 3 SVXY 06/19/20 Put 35.00 @ 2.63,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/06/2020 8:49 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/17/2020,690,P,57.51,0.272,5751,Sold 1 TSLA 07/17/20 Put 690.00 @ 57.51,Individual...60
-05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...60
-05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...60
-05/01/2020 6:31 PM,Trade,Buy to Open,TSLA,Buy,Open,1,07/17/2020,690,P,93.66,1.14,-9366,Bought 1 TSLA 07/17/20 Put 690.00 @ 93.66,Individual...60
-05/01/2020 6:31 PM,Trade,Sell to Open,TSLA,Sell,Open,1,07/17/2020,705,P,101.2,1.372,10120,Sold 1 TSLA 07/17/20 Put 705.00 @ 101.20,Individual...60
-05/01/2020 3:30 PM,Trade,Buy to Open,SPX,Buy,Open,2,06/19/2020,2915,P,162.17,3.58,-32434,Bought 2 SPX 06/19/20 Put 2915.00 @ 162.17,Individual...60
-05/01/2020 3:30 PM,Trade,Sell to Open,SPX,Sell,Open,2,06/19/2020,2920,P,164.37,3.584,32874,Sold 2 SPX 06/19/20 Put 2920.00 @ 164.37,Individual...60
-04/30/2020 6:55 PM,Trade,Buy to Open,SVXY,Buy,Open,3,06/19/2020,30,P,1.17,3.42,-351,Bought 3 SVXY 06/19/20 Put 30.00 @ 1.17,Individual...60
-04/30/2020 6:55 PM,Trade,Sell to Open,SVXY,Sell,Open,3,06/19/2020,35,P,3.45,3.456,1035,Sold 3 SVXY 06/19/20 Put 35.00 @ 3.45,Individual...60
-04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Buy,Open,6,07/17/2020,2,P,,0.00,-174,Reverse split: Open 6 USO1  200717P00002000,Individual...60
-04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Sell,Close,6,07/17/2020,2,P,,0.00,174,Reverse split: Close 6 USO   200717P00002000,Individual...60
-04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Sell,Open,6,07/17/2020,3.5,P,,0.00,648,Reverse split: Open 6 USO1  200717P00003500,Individual...60
-04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Buy,Close,6,07/17/2020,3.5,P,,0.00,-648,Reverse split: Close 6 USO   200717P00003500,Individual...60
-04/28/2020 5:25 PM,Trade,Sell to Close,EWG,Sell,Close,3,07/17/2020,20,P,0.55,0.436,165,Sold 3 EWG 07/17/20 Put 20.00 @ 0.55,Individual...60
-04/25/2020 3:24 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-04/23/2020 7:30 PM,Trade,Sell to Open,USO,Sell,Open,6,07/17/2020,3.5,P,1.08,6.862,648,Sold 6 USO 07/17/20 Put 3.50 @ 1.08,Individual...60
-04/23/2020 7:30 PM,Trade,Buy to Open,USO,Buy,Open,6,07/17/2020,2,P,0.29,6.83,-174,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...60
-04/22/2020 3:31 PM,Trade,Sell to Close,GILD,Sell,Close,1,05/15/2020,80,P,6.05,0.162,605,Sold 1 GILD 05/15/20 Put 80.00 @ 6.05,Individual...60
-04/18/2020 3:03 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-04/17/2020 6:58 PM,Trade,Buy to Open,GILD,Buy,Open,1,05/15/2020,80,P,5.35,1.14,-535,Bought 1 GILD 05/15/20 Put 80.00 @ 5.35,Individual...60
-04/16/2020 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...60
-04/13/2020 9:47 PM,Trade,Sell to Close,SVXY,Sell,Close,7,06/19/2020,29,P,1.37,1.014,959,Sold 7 SVXY 06/19/20 Put 29.00 @ 1.37,Individual...60
-04/13/2020 9:47 PM,Trade,Buy to Close,SVXY,Buy,Close,7,06/19/2020,32,P,2.46,0.97,-1722,Bought 7 SVXY 06/19/20 Put 32.00 @ 2.46,Individual...60
-04/10/2020 2:23 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/06/2020 3:30 PM,Trade,Sell to Open,EWG,Sell,Open,5,10/16/2020,19,C,3.32,5.74,1660,Sold 5 EWG 10/16/20 Call 19.00 @ 3.32,Individual...60
-04/06/2020 3:30 PM,Trade,Buy to Open,EWG,Buy,Open,2,10/16/2020,22,C,1.49,2.28,-298,Bought 2 EWG 10/16/20 Call 22.00 @ 1.49,Individual...60
-04/06/2020 3:30 PM,Trade,Buy to Open,EWG,Buy,Open,5,10/16/2020,22,C,1.49,5.69,-745,Bought 5 EWG 10/16/20 Call 22.00 @ 1.49,Individual...60
-04/06/2020 3:30 PM,Trade,Sell to Open,EWG,Sell,Open,2,10/16/2020,19,C,3.32,2.304,664,Sold 2 EWG 10/16/20 Call 19.00 @ 3.32,Individual...60
-03/26/2020 3:15 PM,Trade,Sell to Open,SVXY,Sell,Open,7,06/19/2020,32,P,4.74,8.064,3318,Sold 7 SVXY 06/19/20 Put 32.00 @ 4.74,Individual...60
-03/26/2020 3:15 PM,Trade,Buy to Open,SVXY,Buy,Open,7,06/19/2020,29,P,3.22,7.97,-2254,Bought 7 SVXY 06/19/20 Put 29.00 @ 3.22,Individual...60
-03/23/2020 6:56 PM,Trade,Sell to Close,RUT,Sell,Close,2,06/19/2020,1045,C,69.92,0.644,13984,Sold 2 RUT 06/19/20 Call 1045.00 @ 69.92,Individual...60
-03/23/2020 6:56 PM,Trade,Buy to Close,RUT,Buy,Close,2,06/19/2020,1030,C,77.55,0.64,-15510,Bought 2 RUT 06/19/20 Call 1030.00 @ 77.55,Individual...60
-03/23/2020 2:32 PM,Trade,Sell to Close,EWW,Sell,Close,5,06/19/2020,34,C,0.7,0.71,350,Sold 5 EWW 06/19/20 Call 34.00 @ 0.70,Individual...60
-03/23/2020 2:32 PM,Trade,Buy to Close,EWW,Buy,Close,5,06/19/2020,29,C,2.23,0.69,-1115,Bought 5 EWW 06/19/20 Call 29.00 @ 2.23,Individual...60
-03/20/2020 9:00 PM,Receive Deliver,Expiration,EWG,,,3,03/20/2020,18,P,,0.00,0,Removal of 3 EWG 03/20/20 Put 18.00 due to expiration.,Individual...60
-03/20/2020 3:42 PM,Trade,Sell to Close,AAL,Sell,Close,2,06/19/2020,16,C,2.43,0.304,486,Sold 2 AAL 06/19/20 Call 16.00 @ 2.43,Individual...60
-03/20/2020 3:42 PM,Trade,Buy to Close,AAL,Buy,Close,2,06/19/2020,13,C,3.47,0.28,-694,Bought 2 AAL 06/19/20 Call 13.00 @ 3.47,Individual...60
-03/20/2020 3:42 PM,Trade,Sell to Close,AAL,Sell,Close,2,06/19/2020,16,C,2.43,0.304,486,Sold 2 AAL 06/19/20 Call 16.00 @ 2.43,Individual...60
-03/20/2020 3:42 PM,Trade,Buy to Close,AAL,Buy,Close,2,06/19/2020,13,C,3.47,0.28,-694,Bought 2 AAL 06/19/20 Call 13.00 @ 3.47,Individual...60
-03/18/2020 4:08 PM,Trade,Buy to Open,EWG,Buy,Open,3,03/20/2020,18,P,0.51,3.42,-153,Bought 3 EWG 03/20/20 Put 18.00 @ 0.51,Individual...60
-03/18/2020 3:54 PM,Trade,Buy to Open,RUT,Buy,Open,2,06/19/2020,1045,C,118.79,2.64,-23758,Bought 2 RUT 06/19/20 Call 1045.00 @ 118.79,Individual...60
-03/18/2020 3:54 PM,Trade,Sell to Open,RUT,Sell,Open,2,06/19/2020,1030,C,127.14,2.644,25428,Sold 2 RUT 06/19/20 Call 1030.00 @ 127.14,Individual...60
-03/17/2020 6:44 PM,Trade,Buy to Open,EWG,Buy,Open,1,07/17/2020,20,P,2.94,1.14,-294,Bought 1 EWG 07/17/20 Put 20.00 @ 2.94,Individual...60
-03/17/2020 6:44 PM,Trade,Buy to Open,EWG,Buy,Open,2,07/17/2020,20,P,2.94,2.28,-588,Bought 2 EWG 07/17/20 Put 20.00 @ 2.94,Individual...60
-03/17/2020 6:16 PM,Trade,Sell to Open,AAL,Sell,Open,2,06/19/2020,13,C,6.17,2.314,1234,Sold 2 AAL 06/19/20 Call 13.00 @ 6.17,Individual...60
-03/17/2020 6:16 PM,Trade,Buy to Open,AAL,Buy,Open,2,06/19/2020,16,C,4.65,2.28,-930,Bought 2 AAL 06/19/20 Call 16.00 @ 4.65,Individual...60
-03/17/2020 6:16 PM,Trade,Sell to Open,AAL,Sell,Open,2,06/19/2020,13,C,6.17,2.314,1234,Sold 2 AAL 06/19/20 Call 13.00 @ 6.17,Individual...60
-03/17/2020 6:16 PM,Trade,Buy to Open,AAL,Buy,Open,2,06/19/2020,16,C,4.65,2.28,-930,Bought 2 AAL 06/19/20 Call 16.00 @ 4.65,Individual...60
-03/17/2020 4:19 PM,Trade,Buy to Open,EWG,Buy,Open,8,07/17/2020,22,C,1.02,9.11,-816,Bought 8 EWG 07/17/20 Call 22.00 @ 1.02,Individual...60
-03/17/2020 4:19 PM,Trade,Sell to Open,EWG,Sell,Open,8,07/17/2020,17,C,3.7,9.196,2960,Sold 8 EWG 07/17/20 Call 17.00 @ 3.70,Individual...60
-03/16/2020 10:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-03/16/2020 10:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4441.2,Wire Funds Received,Individual...60
-03/16/2020 7:00 PM,Trade,Sell to Close,EWG,Sell,Close,2,03/20/2020,20,P,1.46,0.294,292,Sold 2 EWG 03/20/20 Put 20.00 @ 1.46,Individual...60
-03/13/2020 5:55 PM,Trade,Buy to Open,EWG,Buy,Open,4,07/17/2020,21,C,1.95,4.56,-780,Bought 4 EWG 07/17/20 Call 21.00 @ 1.95,Individual...60
-03/13/2020 5:55 PM,Trade,Sell to Open,EWG,Sell,Open,4,07/17/2020,18,C,3.76,4.608,1504,Sold 4 EWG 07/17/20 Call 18.00 @ 3.76,Individual...60
-03/13/2020 5:03 PM,Trade,Sell to Open,EWW,Sell,Open,5,06/19/2020,29,C,6.81,5.78,3405,Sold 5 EWW 06/19/20 Call 29.00 @ 6.81,Individual...60
-03/13/2020 5:03 PM,Trade,Buy to Open,EWW,Buy,Open,5,06/19/2020,34,C,3.77,5.69,-1885,Bought 5 EWW 06/19/20 Call 34.00 @ 3.77,Individual...60
-03/12/2020 6:54 PM,Trade,Sell to Close,VSLR,Sell,Close,1,04/17/2020,13,C,0.05,0.152,5,Sold 1 VSLR 04/17/20 Call 13.00 @ 0.05,Individual...60
-03/12/2020 3:52 PM,Trade,Buy to Open,EWG,Buy,Open,2,03/20/2020,20,P,0.67,2.28,-134,Bought 2 EWG 03/20/20 Put 20.00 @ 0.67,Individual...60
-03/10/2020 8:33 PM,Trade,Sell to Close,TSM,Sell,Close,1,04/17/2020,60,P,7.2,0.162,720,Sold 1 TSM 04/17/20 Put 60.00 @ 7.20,Individual...60
-03/10/2020 8:33 PM,Trade,Buy to Close,TSM,Buy,Close,1,04/17/2020,65,P,11.56,0.14,-1156,Bought 1 TSM 04/17/20 Put 65.00 @ 11.56,Individual...60
-03/09/2020 5:35 PM,Trade,Sell to Close,LYFT,Sell,Close,1,04/17/2020,35,C,3.41,0.152,341,Sold 1 LYFT 04/17/20 Call 35.00 @ 3.41,Individual...60
-03/09/2020 5:35 PM,Trade,Buy to Close,LYFT,Buy,Close,1,04/17/2020,32.5,C,4.7,0.14,-470,Bought 1 LYFT 04/17/20 Call 32.50 @ 4.70,Individual...60
-03/06/2020 3:30 PM,Trade,Buy to Close,EWG,Buy,Close,14,04/17/2020,26,C,1.3,1.94,-1820,Bought 14 EWG 04/17/20 Call 26.00 @ 1.30,Individual...60
-03/06/2020 3:30 PM,Trade,Sell to Close,EWG,Sell,Close,14,04/17/2020,27,C,0.73,1.998,1022,Sold 14 EWG 04/17/20 Call 27.00 @ 0.73,Individual...60
-02/29/2020 4:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-02/28/2020 9:07 PM,Trade,Sell to Close,VIX,Sell,Close,1,04/15/2020,30,P,7.1,0.792,710,Sold 1 VIX 04/15/20 Put 30.00 @ 7.10,Individual...60
-02/28/2020 9:07 PM,Trade,Buy to Close,VIX,Buy,Close,1,04/15/2020,32.5,P,9.1,0.79,-910,Bought 1 VIX 04/15/20 Put 32.50 @ 9.10,Individual...60
-02/27/2020 6:49 PM,Trade,Sell to Open,EWG,Sell,Open,14,04/17/2020,26,C,1.82,12.028,2548,Sold 14 EWG 04/17/20 Call 26.00 @ 1.82,Individual...60
-02/27/2020 6:49 PM,Trade,Buy to Open,EWG,Buy,Open,14,04/17/2020,27,C,1.13,11.94,-1582,Bought 14 EWG 04/17/20 Call 27.00 @ 1.13,Individual...60
-02/27/2020 4:34 PM,Trade,Buy to Open,VIX,Buy,Open,1,04/15/2020,30,P,8.49,1.79,-849,Bought 1 VIX 04/15/20 Put 30.00 @ 8.49,Individual...60
-02/27/2020 4:34 PM,Trade,Sell to Open,VIX,Sell,Open,1,04/15/2020,32.5,P,10.62,1.792,1062,Sold 1 VIX 04/15/20 Put 32.50 @ 10.62,Individual...60
-02/27/2020 4:32 PM,Trade,Sell to Open,LYFT,Sell,Open,1,04/17/2020,32.5,C,4.95,1.162,495,Sold 1 LYFT 04/17/20 Call 32.50 @ 4.95,Individual...60
-02/27/2020 4:32 PM,Trade,Buy to Open,LYFT,Buy,Open,1,04/17/2020,35,C,3.46,1.14,-346,Bought 1 LYFT 04/17/20 Call 35.00 @ 3.46,Individual...60
-02/24/2020 3:30 PM,Trade,Buy to Close,AAL,Buy,Close,3,05/15/2020,28,C,1.5,0.42,-450,Bought 3 AAL 05/15/20 Call 28.00 @ 1.50,Individual...60
-02/24/2020 3:30 PM,Trade,Sell to Close,AAL,Sell,Close,3,05/15/2020,31,C,0.66,0.436,198,Sold 3 AAL 05/15/20 Call 31.00 @ 0.66,Individual...60
-02/22/2020 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-02/21/2020 3:39 PM,Trade,Buy to Open,VSLR,Buy,Open,1,04/17/2020,13,C,1.53,1.14,-153,Bought 1 VSLR 04/17/20 Call 13.00 @ 1.53,Individual...60
-02/20/2020 5:07 PM,Trade,Sell to Open,TSM,Sell,Open,1,04/17/2020,65,P,9.12,1.172,912,Sold 1 TSM 04/17/20 Put 65.00 @ 9.12,Individual...60
-02/20/2020 5:07 PM,Trade,Buy to Open,TSM,Buy,Open,1,04/17/2020,60,P,4.91,1.14,-491,Bought 1 TSM 04/17/20 Put 60.00 @ 4.91,Individual...60
-02/18/2020 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...60
-02/14/2020 3:32 PM,Trade,Buy to Open,AAL,Buy,Open,3,05/15/2020,31,C,1.93,3.42,-579,Bought 3 AAL 05/15/20 Call 31.00 @ 1.93,Individual...60
-02/14/2020 3:32 PM,Trade,Sell to Open,AAL,Sell,Open,3,05/15/2020,28,C,3.6,3.456,1080,Sold 3 AAL 05/15/20 Call 28.00 @ 3.60,Individual...60
-02/08/2020 3:02 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...60
-02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...60
-02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...60
-02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...60
-02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...60
-02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...60
-02/04/2020 3:31 PM,Trade,Buy to Open,F,Buy,Open,3,03/20/2020,9,C,0.45,3.42,-135,Bought 3 F 03/20/20 Call 9.00 @ 0.45,Individual...60
-02/04/2020 3:31 PM,Trade,Sell to Open,F,Sell,Open,3,03/20/2020,8,C,1.18,3.436,354,Sold 3 F 03/20/20 Call 8.00 @ 1.18,Individual...60
-12/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...60
-11/30/2019 3:51 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-11/26/2019 8:12 PM,Trade,Sell to Close,TXN,Sell,Close,1,06/19/2020,115,P,7,0.162,700,Sold 1 TXN 06/19/20 Put 115.00 @ 7.00,Individual...60
-11/26/2019 8:12 PM,Trade,Buy to Close,TXN,Buy,Close,1,06/19/2020,120,P,9.3,0.14,-930,Bought 1 TXN 06/19/20 Put 120.00 @ 9.30,Individual...60
-11/18/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...60
-10/26/2019 2:02 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-10/24/2019 4:48 PM,Trade,Sell to Open,TXN,Sell,Open,1,06/19/2020,120,P,10.99,1.172,1099,Sold 1 TXN 06/19/20 Put 120.00 @ 10.99,Individual...60
-10/24/2019 4:48 PM,Trade,Buy to Open,TXN,Buy,Open,1,06/19/2020,115,P,8.56,1.14,-856,Bought 1 TXN 06/19/20 Put 115.00 @ 8.56,Individual...60
-10/24/2019 3:30 PM,Trade,Sell to Close,MU,Sell,Close,1,04/17/2020,41,P,2.83,0.152,283,Sold 1 MU 04/17/20 Put 41.00 @ 2.83,Individual...60
-10/24/2019 3:30 PM,Trade,Buy to Close,MU,Buy,Close,1,04/17/2020,45,P,4.57,0.14,-457,Bought 1 MU 04/17/20 Put 45.00 @ 4.57,Individual...60
-10/24/2019 3:30 PM,Trade,Sell to Close,MU,Sell,Close,1,04/17/2020,41,P,2.83,0.152,283,Sold 1 MU 04/17/20 Put 41.00 @ 2.83,Individual...60
-10/24/2019 3:30 PM,Trade,Buy to Close,MU,Buy,Close,1,04/17/2020,45,P,4.57,0.14,-457,Bought 1 MU 04/17/20 Put 45.00 @ 4.57,Individual...60
-10/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...60
-10/05/2019 2:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/30/2019 4:45 PM,Trade,Sell to Open,MU,Sell,Open,2,04/17/2020,45,P,6.42,2.314,1284,Sold 2 MU 04/17/20 Put 45.00 @ 6.42,Individual...60
-09/30/2019 4:45 PM,Trade,Buy to Open,MU,Buy,Open,2,04/17/2020,41,P,4.4,2.28,-880,Bought 2 MU 04/17/20 Put 41.00 @ 4.40,Individual...60
-09/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...60
-08/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-08/16/2019 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-9.81,FROM 07/16 THRU 08/15 @ 8    %,Individual...60
-08/10/2019 3:25 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,100,,,,160.73,0.432,16073,Sold 100 BABA @ 160.73,Individual...60
-08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,1,08/16/2019,185,P,24.25,0.202,2425,Sold 1 BABA 08/16/19 Put 185.00 @ 24.25,Individual...60
-08/07/2019 11:00 PM,Receive Deliver,Assignment,BABA,,,1,08/16/2019,190,P,,0.00,0,Removal of option due to assignment,Individual...60
-08/07/2019 11:00 PM,Receive Deliver,Buy to Open,BABA,Buy,Open,100,,,,190,5.00,-19000,Buy to Open 100 BABA @ 190.00,Individual...60
-08/06/2019 6:27 PM,Trade,Sell to Close,SBUX,Sell,Close,1,09/20/2019,92.5,C,4.62,0.152,462,Sold 1 SBUX 09/20/19 Call 92.50 @ 4.62,Individual...60
-08/06/2019 6:27 PM,Trade,Buy to Close,SBUX,Buy,Close,1,09/20/2019,90,C,6.45,0.14,-645,Bought 1 SBUX 09/20/19 Call 90.00 @ 6.45,Individual...60
-07/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-07/06/2019 3:59 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-07/03/2019 5:52 PM,Trade,Sell to Open,SBUX,Sell,Open,1,09/20/2019,90,C,1.96,1.152,196,Sold 1 SBUX 09/20/19 Call 90.00 @ 1.96,Individual...60
-07/03/2019 5:52 PM,Trade,Buy to Open,SBUX,Buy,Open,1,09/20/2019,92.5,C,1.15,1.14,-115,Bought 1 SBUX 09/20/19 Call 92.50 @ 1.15,Individual...60
-06/22/2019 11:49 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-06/21/2019 6:02 PM,Trade,Sell to Close,SVXY,Sell,Close,1,06/21/2019,54,C,0.12,0.152,12,Sold 1 SVXY 06/21/19 Call 54.00 @ 0.12,Individual...60
-06/11/2019 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,1101.7,Wire Funds Received A/O 6/10,Individual...60
-05/18/2019 4:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/15/2019 7:35 PM,Trade,Sell to Close,SVXY,Sell,Close,1,05/17/2019,50.5,C,0.81,0.152,81,Sold 1 SVXY 05/17/19 Call 50.50 @ 0.81,Individual...60
-05/13/2019 5:51 PM,Trade,Buy to Open,SVXY,Buy,Open,1,05/17/2019,50.5,C,0.55,1.14,-55,Bought 1 SVXY 05/17/19 Call 50.50 @ 0.55,Individual...60
-05/07/2019 5:03 PM,Trade,Buy to Open,SVXY,Buy,Open,1,06/21/2019,54,C,1.3,1.14,-130,Bought 1 SVXY 06/21/19 Call 54.00 @ 1.30,Individual...60
-05/07/2019 4:02 PM,Trade,Sell to Open,BABA,Sell,Open,1,08/16/2019,190,P,15.65,1.182,1565,Sold 1 BABA 08/16/19 Put 190.00 @ 15.65,Individual...60
-05/07/2019 4:02 PM,Trade,Buy to Open,BABA,Buy,Open,1,08/16/2019,185,P,12.95,1.14,-1295,Bought 1 BABA 08/16/19 Put 185.00 @ 12.95,Individual...60
-05/04/2019 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/03/2019 4:34 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/19/2019,245,P,17.98,0.182,1798,Sold 1 TSLA 07/19/19 Put 245.00 @ 17.98,Individual...60
-05/03/2019 4:34 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/19/2019,250,P,20.12,0.14,-2012,Bought 1 TSLA 07/19/19 Put 250.00 @ 20.12,Individual...60
-05/02/2019 4:08 PM,Trade,Buy to Open,TSLA,Buy,Open,1,07/19/2019,245,P,25.52,1.14,-2552,Bought 1 TSLA 07/19/19 Put 245.00 @ 25.52,Individual...60
-05/02/2019 4:08 PM,Trade,Sell to Open,TSLA,Sell,Open,1,07/19/2019,250,P,28.18,1.202,2818,Sold 1 TSLA 07/19/19 Put 250.00 @ 28.18,Individual...60
-04/27/2019 3:21 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-04/26/2019 3:37 PM,Trade,Sell to Close,DB,Sell,Close,1,07/19/2019,9,P,1.2,0.152,120,Sold 1 DB 07/19/19 Put 9.00 @ 1.20,Individual...60
-04/18/2019 5:56 PM,Trade,Buy to Open,DB,Buy,Open,1,07/19/2019,9,P,0.97,1.14,-97,Bought 1 DB 07/19/19 Put 9.00 @ 0.97,Individual...60
-03/03/2019 6:10 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-02/27/2019 4:16 PM,Trade,Sell to Close,NBEV,Sell,Close,1,04/18/2019,5,P,0.7,0.152,70,Sold 1 NBEV 04/18/19 Put 5.00 @ 0.70,Individual...60
-02/07/2019 6:32 PM,Trade,Buy to Open,NBEV,Buy,Open,1,04/18/2019,5,P,0.6,1.14,-60,Bought 1 NBEV 04/18/19 Put 5.00 @ 0.60,Individual...60
-08/30/2018 7:44 PM,Trade,Sell to Close,MU,Sell,Close,1,09/21/2018,52.5,P,2.13,0.142,213,Sold 1 MU 09/21/18 Put 52.50 @ 2.13,Individual...60
-08/30/2018 7:44 PM,Trade,Buy to Close,MU,Buy,Close,1,09/21/2018,57.5,P,5.13,0.13,-513,Bought 1 MU 09/21/18 Put 57.50 @ 5.13,Individual...60
-08/17/2018 10:00 PM,Receive Deliver,Expiration,MU,,,1,08/17/2018,67.5,C,,0.00,0,Removal of 1 MU 08/17/18 Call 67.50 due to expiration.,Individual...60
-07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...60
-07/20/2018 10:00 PM,Receive Deliver,Expiration,MU,,,1,07/20/2018,70,C,,0.00,0,Removal of 1 MU 07/20/18 Call 70.00 due to expiration.,Individual...60
-07/14/2018 1:58 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-07/11/2018 6:17 PM,Trade,Sell to Close,DERM,Sell,Close,2,07/20/2018,10,C,1.32,0.294,264,Sold 2 DERM 07/20/18 Call 10.00 @ 1.32,Individual...60
-06/30/2018 4:51 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-06/26/2018 3:54 PM,Trade,Sell to Open,MU,Sell,Open,1,09/21/2018,57.5,P,6.56,1.152,656,Sold 1 MU 09/21/18 Put 57.50 @ 6.56,Individual...60
-06/26/2018 3:54 PM,Trade,Buy to Open,MU,Buy,Open,1,09/21/2018,52.5,P,3.82,1.14,-382,Bought 1 MU 09/21/18 Put 52.50 @ 3.82,Individual...60
-06/26/2018 3:36 PM,Trade,Sell to Close,SVXY,Sell,Close,1,08/17/2018,15,C,0.14,0.152,14,Sold 1 SVXY 08/17/18 Call 15.00 @ 0.14,Individual...60
-06/26/2018 3:36 PM,Trade,Buy to Close,SVXY,Buy,Close,1,08/17/2018,12,C,1.3,0.14,-130,Bought 1 SVXY 08/17/18 Call 12.00 @ 1.30,Individual...60
-06/20/2018 3:30 PM,Trade,Sell to Open,SVXY,Sell,Open,1,08/17/2018,12,C,2.13,1.152,213,Sold 1 SVXY 08/17/18 Call 12.00 @ 2.13,Individual...60
-06/20/2018 3:30 PM,Trade,Buy to Open,SVXY,Buy,Open,1,08/17/2018,15,C,0.34,1.14,-34,Bought 1 SVXY 08/17/18 Call 15.00 @ 0.34,Individual...60
-05/31/2018 4:43 PM,Trade,Buy to Open,MU,Buy,Open,1,08/17/2018,67.5,C,2.52,1.14,-252,Bought 1 MU 08/17/18 Call 67.50 @ 2.52,Individual...60
-05/30/2018 6:24 PM,Trade,Buy to Open,MU,Buy,Open,1,07/20/2018,70,C,2.4,1.14,-240,Bought 1 MU 07/20/18 Call 70.00 @ 2.40,Individual...60
-05/24/2018 4:49 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,10,C,1.2,2.28,-240,Bought 2 DERM 07/20/18 Call 10.00 @ 1.20,Individual...60
-05/22/2018 5:36 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,11,C,1.05,2.28,-210,Bought 2 DERM 07/20/18 Call 11.00 @ 1.05,Individual...60
-05/19/2018 6:25 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/18/2018 11:00 PM,Money Movement,Transfer,,,,0,,,,,0.00,1149.5,Wire Funds Received,Individual...60
-05/18/2018 4:24 PM,Trade,Sell to Close,SVXY,Sell,Close,1,05/18/2018,13,C,0.36,0.152,36,Sold 1 SVXY 05/18/18 Call 13.00 @ 0.36,Individual...60
-04/16/2018 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-1.24,FROM 03/16 THRU 04/15 @ 8    %,Individual...60
-03/24/2018 3:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-03/23/2018 10:00 PM,Money Movement,Fee,LFIN,,,0,,,,,0.00,-43.24,LONGFIN CORP,Individual...60
-03/22/2018 2:54 PM,Trade,Buy to Open,SVXY,Buy,Open,1,05/18/2018,13,C,0.4,1.14,-40,Bought 1 SVXY 05/18/18 Call 13.00 @ 0.40,Individual...60
-03/21/2018 7:59 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,17.15,0.182,1715,Sold 1 LFIN 06/15/18 Call 40.00 @ 17.15,Individual...60
-03/21/2018 7:59 PM,Trade,Buy to Close,LFIN,Buy,Close,100,,,,57.2,0.08,-5720,Bought 100 LFIN @ 57.20,Individual...60
-03/21/2018 6:42 PM,Trade,Buy to Close,LFIN,Buy,Close,100,,,,56.76,0.08,-5676,Bought 100 LFIN @ 56.76,Individual...60
-03/21/2018 6:42 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,16.78,0.182,1678,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.78,Individual...60
-03/19/2018 10:00 PM,Receive Deliver,Assignment,LFIN,,,2,06/15/2018,30,C,,0.00,0,Removal of option due to assignment,Individual...60
-03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...60
-03/17/2018 3:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-03/12/2018 5:08 PM,Trade,Sell to Open,LFIN,Sell,Open,2,06/15/2018,30,C,7.1,2.324,1420,Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10,Individual...60
-03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...60
-03/08/2018 11:00 PM,Money Movement,Transfer,,,,0,,,,,0.00,1200,Wire Funds Received,Individual...60
+07/07/2021 7:24 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,23,C,0.79,0.54,-316,Bought 4 CLF 07/23/21 Call 23.00 @ 0.79,Individual...39
+07/07/2021 4:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.15,1.142,315,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.15,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,289,,,,4.81,0.276,1390.09,Sold 289 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39
+07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,51,,,,4.81,0.057,245.31,Sold 51 SPRT @ 4.81,Individual...39
+07/07/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,2.57,1.142,257,Sold 1 PLTR 08/20/21 Put 25.00 @ 2.57,Individual...39
+07/07/2021 3:43 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,23,C,0.88,4.558,352,Sold 4 CLF 07/23/21 Call 23.00 @ 0.88,Individual...39
+07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,20,UWM HOLDINGS CORPORATION,Individual...39
+07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,-3,UWM HOLDINGS CORPORATION,Individual...39
+07/06/2021 4:13 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,24,C,0.64,0.54,-256,Bought 4 CLF 07/23/21 Call 24.00 @ 0.64,Individual...39
+07/06/2021 3:43 PM,Trade,Buy to Close,PLTR,Buy,Close,3,07/16/2021,23,C,1.78,0.40,-534,Bought 3 PLTR 07/16/21 Call 23.00 @ 1.78,Individual...39
+07/03/2021 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,55,,,,3.87,0.044,-212.85,Bought 55 SPRT @ 3.87,Individual...39
+07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...39
+07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,1,,,,3.87,0.001,-3.87,Bought 1 SPRT @ 3.87,Individual...39
+07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...39
+07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,44,,,,3.87,0.036,-170.28,Bought 44 SPRT @ 3.87,Individual...39
+07/01/2021 8:57 PM,Trade,Buy to Open,SPRT,Buy,Open,200,,,,3.87,0.16,-774,Bought 200 SPRT @ 3.87,Individual...39
+07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,1,07/16/2021,12.5,P,1.09,0.13,-109,Bought 1 BB 07/16/21 Put 12.50 @ 1.09,Individual...39
+07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,2,07/16/2021,12.5,P,1.09,0.27,-218,Bought 2 BB 07/16/21 Put 12.50 @ 1.09,Individual...39
+06/30/2021 4:17 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...39
+06/30/2021 4:13 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...39
+06/29/2021 4:23 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,24,C,0.83,4.558,332,Sold 4 CLF 07/23/21 Call 24.00 @ 0.83,Individual...39
+06/28/2021 3:41 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/23/2021,24,C,0.82,0.27,-164,Bought 2 CLF 07/23/21 Call 24.00 @ 0.82,Individual...39
+06/26/2021 5:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...39
+06/25/2021 9:59 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/30/2021,24,C,1.07,0.27,-214,Bought 2 CLF 07/30/21 Call 24.00 @ 1.07,Individual...39
+06/25/2021 4:12 PM,Trade,Buy to Close,BB,Buy,Close,1,07/30/2021,14.5,C,0.77,0.13,-77,Bought 1 BB 07/30/21 Call 14.50 @ 0.77,Individual...39
+06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,2,07/16/2021,12.5,P,1.49,2.284,298,Sold 2 BB 07/16/21 Put 12.50 @ 1.49,Individual...39
+06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,07/16/2021,12.5,P,1.49,1.142,149,Sold 1 BB 07/16/21 Put 12.50 @ 1.49,Individual...39
+06/22/2021 5:23 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/23/2021,24,C,1.04,2.284,208,Sold 2 CLF 07/23/21 Call 24.00 @ 1.04,Individual...39
+06/22/2021 4:19 PM,Trade,Sell to Open,CLNE,Sell,Open,1,07/16/2021,14,C,0.8,1.142,80,Sold 1 CLNE 07/16/21 Call 14.00 @ 0.80,Individual...39
+06/22/2021 4:18 PM,Trade,Sell to Open,BB,Sell,Open,1,07/30/2021,14.5,C,1.21,1.142,121,Sold 1 BB 07/30/21 Call 14.50 @ 1.21,Individual...39
+06/22/2021 3:30 PM,Trade,Sell to Close,DKNG,Sell,Close,2,07/30/2021,40,P,0.83,0.284,166,Sold 2 DKNG 07/30/21 Put 40.00 @ 0.83,Individual...39
+06/18/2021 11:00 PM,Receive Deliver,Assignment,BB,,,5,06/18/2021,9,C,,0.00,0,Removal of option due to assignment,Individual...39
+06/18/2021 11:00 PM,Receive Deliver,Sell to Close,BB,Sell,Close,500,,,,9,5.09,4500,Sell to Close 500 BB @ 9.00,Individual...39
+06/18/2021 11:00 PM,Receive Deliver,Assignment,ME,,,1,06/18/2021,10,C,,0.00,0,Removal of option due to assignment,Individual...39
+06/18/2021 11:00 PM,Receive Deliver,Sell to Close,ME,Sell,Close,100,,,,10,5.022,1000,Sell to Close 100 ME @ 10.00,Individual...39
+06/18/2021 10:00 PM,Receive Deliver,Expiration,CLNE,,,1,06/18/2021,14,C,,0.00,0,Removal of 1.0 CLNE 06/18/21 Call 14.00 due to expiration.,Individual...39
+06/18/2021 10:00 PM,Receive Deliver,Expiration,CLF,,,2,06/18/2021,23,C,,0.00,0,Removal of 2.0 CLF 06/18/21 Call 23.00 due to expiration.,Individual...39
+06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Sell,Open,1,06/18/2021,10,C,,0.00,45,Symbol change:  Open 1.0 ME    210618C00010000,Individual...39
+06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Buy,Close,1,06/18/2021,10,C,,0.00,-45,Symbol change:  Close 1.0 VGAC  210618C00010000,Individual...39
+06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Buy,Open,100,,,,,0.00,-1750,Symbol change:  Open 100.0 ME,Individual...39
+06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Sell,Close,100,,,,,0.00,1750,Symbol change:  Close 100.0 VGAC,Individual...39
+06/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...39
+06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...39
+06/16/2021 4:44 PM,Trade,Buy to Close,CLOV,Buy,Close,2,06/18/2021,15.5,P,2.5,0.27,-500,Bought 2 CLOV 06/18/21 Put 15.50 @ 2.50,Individual...39
+06/15/2021 3:35 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/30/2021,24,C,2.1,2.284,420,Sold 2 CLF 07/30/21 Call 24.00 @ 2.10,Individual...39
+06/15/2021 3:32 PM,Trade,Buy to Open,DKNG,Buy,Open,2,07/30/2021,40,P,1.7,2.27,-340,Bought 2 DKNG 07/30/21 Put 40.00 @ 1.70,Individual...39
+06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...39
+06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...39
+06/14/2021 3:38 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/02/2021,24.5,C,1.4,0.27,-280,Bought 2 CLF 07/02/21 Call 24.50 @ 1.40,Individual...39
+06/14/2021 3:32 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,14,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 14.00 @ 0.70,Individual...39
+06/12/2021 4:01 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...39
+06/11/2021 6:34 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,0.3,0.13,-30,Bought 1 CLNE 06/18/21 Call 15.00 @ 0.30,Individual...39
+06/10/2021 7:27 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/02/2021,24.5,C,1.66,2.284,332,Sold 2 CLF 07/02/21 Call 24.50 @ 1.66,Individual...39
+06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...39
+06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...39
+06/10/2021 3:49 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 15.00 @ 0.70,Individual...39
+06/10/2021 3:41 PM,Trade,Buy to Open,CLF,Buy,Open,2,01/21/2022,24,C,6.55,2.27,-1310,Bought 2 CLF 01/21/22 Call 24.00 @ 6.55,Individual...39
+06/10/2021 3:35 PM,Trade,Buy to Close,CLF,Buy,Close,3,07/23/2021,21,C,4.75,0.40,-1425,Bought 3 CLF 07/23/21 Call 21.00 @ 4.75,Individual...39
+06/09/2021 7:37 PM,Trade,Buy to Open,CLF,Buy,Open,200,,,,22.4884,0.16,-4497.68,Bought 200 CLF @ 22.49,Individual...39
+06/09/2021 7:34 PM,Trade,Sell to Open,CLF,Sell,Open,3,07/23/2021,21,C,4.15,3.416,1245,Sold 3 CLF 07/23/21 Call 21.00 @ 4.15,Individual...39
+06/09/2021 6:28 PM,Trade,Sell to Close,WISH,Sell,Close,100,,,,11.07,0.102,1107,Sold 100 WISH @ 11.07,Individual...39
+06/09/2021 4:16 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,2.2,0.13,-220,Bought 1 CLNE 06/18/21 Call 15.00 @ 2.20,Individual...39
+06/09/2021 4:15 PM,Trade,Buy to Close,WISH,Buy,Close,1,06/18/2021,20,C,1.5,0.13,-150,Bought 1 WISH 06/18/21 Call 20.00 @ 1.50,Individual...39
+06/09/2021 4:02 PM,Trade,Sell to Close,WISH,Sell,Close,2,07/16/2021,10,C,4.8,0.284,960,Sold 2 WISH 07/16/21 Call 10.00 @ 4.80,Individual...39
+06/09/2021 3:56 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,2.55,1.142,255,Sold 1 CLNE 06/18/21 Call 15.00 @ 2.55,Individual...39
+06/09/2021 3:49 PM,Trade,Buy to Open,CLNE,Buy,Open,100,,,,12.81,0.08,-1281,Bought 100 CLNE @ 12.81,Individual...39
+06/09/2021 3:46 PM,Trade,Sell to Open,WISH,Sell,Open,1,06/18/2021,20,C,2.2,1.142,220,Sold 1 WISH 06/18/21 Call 20.00 @ 2.20,Individual...39
+06/08/2021 8:11 PM,Trade,Buy to Open,WISH,Buy,Open,100,,,,9.48,0.08,-948,Bought 100 WISH @ 9.48,Individual...39
+06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,4,09/17/2021,10,C,2.85,0.558,1140,Sold 4 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...39
+06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,1,09/17/2021,10,C,2.85,0.142,285,Sold 1 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...39
+06/08/2021 7:57 PM,Trade,Buy to Open,WISH,Buy,Open,2,07/16/2021,10,C,2.5,2.27,-500,Bought 2 WISH 07/16/21 Call 10.00 @ 2.50,Individual...39
+06/08/2021 6:13 PM,Trade,Sell to Close,CLOV,Sell,Close,2,11/19/2021,10,C,11.1,0.294,2220,Sold 2 CLOV 11/19/21 Call 10.00 @ 11.10,Individual...39
+06/08/2021 6:08 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,17,C,1.96,0.13,-196,Bought 1 BB 06/18/21 Call 17.00 @ 1.96,Individual...39
+06/07/2021 4:21 PM,Trade,Buy to Open,CLOV,Buy,Open,2,11/19/2021,10,C,2.65,2.27,-530,Bought 2 CLOV 11/19/21 Call 10.00 @ 2.65,Individual...39
+06/07/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,17,C,2.45,1.142,245,Sold 1 BB 06/18/21 Call 17.00 @ 2.45,Individual...39
+06/05/2021 2:10 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...39
+06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,30,P,4.7,0.13,-470,Bought 1 AMC 06/18/21 Put 30.00 @ 4.70,Individual...39
+06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/11/2021,30,P,2.51,0.13,-251,Bought 1 AMC 06/11/21 Put 30.00 @ 2.51,Individual...39
+06/03/2021 3:41 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,30,P,5.65,1.142,565,Sold 1 AMC 06/18/21 Put 30.00 @ 5.65,Individual...39
+06/03/2021 3:38 PM,Trade,Buy to Open,BB,Buy,Open,100,,,,17.9,0.08,-1790,Bought 100 BB @ 17.90,Individual...39
+06/03/2021 3:30 PM,Trade,Buy to Open,CLNE,Buy,Open,5,09/17/2021,10,C,1.25,5.67,-625,Bought 5 CLNE 09/17/21 Call 10.00 @ 1.25,Individual...39
+06/02/2021 5:49 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/11/2021,30,P,3.3,1.142,330,Sold 1 AMC 06/11/21 Put 30.00 @ 3.30,Individual...39
+06/02/2021 5:19 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,40,P,10.3,0.13,-1030,Bought 1 AMC 06/18/21 Put 40.00 @ 10.30,Individual...39
+06/02/2021 5:04 PM,Trade,Sell to Open,PLTR,Sell,Open,3,07/16/2021,23,C,1.99,3.416,597,Sold 3 PLTR 07/16/21 Call 23.00 @ 1.99,Individual...39
+06/02/2021 4:59 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,10,C,0.4,2.284,80,Sold 2 UWMC 07/16/21 Call 10.00 @ 0.40,Individual...39
+06/02/2021 4:48 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,40,P,11,1.142,1100,Sold 1 AMC 06/18/21 Put 40.00 @ 11.00,Individual...39
+06/01/2021 6:07 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,9,C,2.28,1.142,228,Sold 1 BB 06/18/21 Call 9.00 @ 2.28,Individual...39
+05/28/2021 3:39 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...39
+05/28/2021 3:33 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...39
+05/27/2021 7:57 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,9,C,0.85,2.284,170,Sold 2 UWMC 07/16/21 Call 9.00 @ 0.85,Individual...39
+05/22/2021 4:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/21/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,05/21/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...39
+05/21/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...39
+05/21/2021 11:00 PM,Receive Deliver,Assignment,PLTR,,,2,05/21/2021,24,P,,0.00,0,Removal of option due to assignment,Individual...39
+05/21/2021 11:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,200,,,,24,5.00,-4800,Buy to Open 200 PLTR @ 24.00,Individual...39
+05/21/2021 6:10 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.69,0.27,-138,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.69,Individual...39
+05/20/2021 3:41 PM,Trade,Buy to Close,VIAC,Buy,Close,1,05/21/2021,45,P,3.6,0.13,-360,Bought 1 VIAC 05/21/21 Put 45.00 @ 3.60,Individual...39
+05/19/2021 4:34 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,22,C,0.9,0.13,-90,Bought 1 PLTR 06/18/21 Call 22.00 @ 0.90,Individual...39
+05/18/2021 9:04 PM,Trade,Buy to Close,PLTR,Buy,Close,2,06/18/2021,23,P,2.54,0.27,-508,Bought 2 PLTR 06/18/21 Put 23.00 @ 2.54,Individual...39
+05/18/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,22,C,1.25,1.142,125,Sold 1 PLTR 06/18/21 Call 22.00 @ 1.25,Individual...39
+05/18/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.58,4.558,232,Sold 4 BB 06/18/21 Call 9.00 @ 0.58,Individual...39
+05/17/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.08,INTEREST ON CREDIT BALANCE,Individual...39
+05/17/2021 3:31 PM,Trade,Sell to Open,UWMC,Sell,Open,2,06/18/2021,8,C,0.95,2.284,190,Sold 2 UWMC 06/18/21 Call 8.00 @ 0.95,Individual...39
+05/15/2021 3:42 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/13/2021 4:11 PM,Trade,Sell to Open,VGAC,Sell,Open,1,06/18/2021,10,C,0.45,1.142,45,Sold 1 VGAC 06/18/21 Call 10.00 @ 0.45,Individual...39
+05/11/2021 3:54 PM,Trade,Buy to Close,WY,Buy,Close,1,05/21/2021,39,P,0.57,0.13,-57,Bought 1 WY 05/21/21 Put 39.00 @ 0.57,Individual...39
+05/08/2021 3:28 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+05/06/2021 9:50 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.9,1.142,390,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.90,Individual...39
+05/06/2021 4:22 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.45,0.27,-90,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.45,Individual...39
+05/06/2021 3:59 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.45,1.142,345,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.45,Individual...39
+05/04/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,2,05/21/2021,24,P,2.85,2.284,570,Sold 2 PLTR 05/21/21 Put 24.00 @ 2.85,Individual...39
+05/04/2021 3:41 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,24,C,1.04,0.13,-104,Bought 1 PLTR 06/18/21 Call 24.00 @ 1.04,Individual...39
+05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...39
+05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...39
+05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,2,06/18/2021,9,C,0.57,0.27,-114,Bought 2 BB 06/18/21 Call 9.00 @ 0.57,Individual...39
+05/01/2021 3:53 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+04/30/2021 4:14 PM,Trade,Sell to Open,WY,Sell,Open,1,05/21/2021,39,P,2.1,1.142,210,Sold 1 WY 05/21/21 Put 39.00 @ 2.10,Individual...39
+04/29/2021 8:17 PM,Trade,Buy to Close,MVIS,Buy,Close,1,05/21/2021,12,P,0.68,0.13,-68,Bought 1 MVIS 05/21/21 Put 12.00 @ 0.68,Individual...39
+04/29/2021 3:30 PM,Trade,Sell to Close,NOK,Sell,Close,1,01/21/2022,4,C,1.1,0.142,110,Sold 1 NOK 01/21/22 Call 4.00 @ 1.10,Individual...39
+04/26/2021 4:09 PM,Trade,Sell to Open,MVIS,Sell,Open,1,05/21/2021,12,P,0.86,1.142,86,Sold 1 MVIS 05/21/21 Put 12.00 @ 0.86,Individual...39
+04/24/2021 3:56 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...39
+04/22/2021 4:54 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,24,P,2.02,0.13,-202,Bought 1 PLTR 05/21/21 Put 24.00 @ 2.02,Individual...39
+04/22/2021 4:05 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.65,1.142,65,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.65,Individual...39
+04/22/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,27,P,4.65,0.13,-465,Bought 1 PLTR 05/21/21 Put 27.00 @ 4.65,Individual...39
+04/21/2021 9:47 PM,Trade,Sell to Close,BB,Sell,Close,1,01/21/2022,12.5,C,0.94,0.142,94,Sold 1 BB 01/21/22 Call 12.50 @ 0.94,Individual...39
+04/21/2021 7:43 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.61,1.142,61,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.61,Individual...39
+04/21/2021 5:57 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.62,4.558,248,Sold 4 BB 06/18/21 Call 9.00 @ 0.62,Individual...39
+04/21/2021 5:55 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,22.5,P,1.67,0.13,-167,Bought 1 PLTR 05/21/21 Put 22.50 @ 1.67,Individual...39
+04/21/2021 5:14 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,24,C,1.56,1.142,156,Sold 1 PLTR 06/18/21 Call 24.00 @ 1.56,Individual...39
+04/20/2021 5:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,22.5,P,2.35,1.142,235,Sold 1 PLTR 05/21/21 Put 22.50 @ 2.35,Individual...39
+04/19/2021 3:50 PM,Trade,Buy to Close,VGAC,Buy,Close,1,05/21/2021,10,C,0.1,0.13,-10,Bought 1 VGAC 05/21/21 Call 10.00 @ 0.10,Individual...39
+04/17/2021 5:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+04/16/2021 11:00 PM,Receive Deliver,Assignment,UWMC,,,2,04/16/2021,12.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+04/16/2021 11:00 PM,Receive Deliver,Buy to Open,UWMC,Buy,Open,200,,,,12.5,5.00,-2500,Buy to Open 200 UWMC @ 12.50,Individual...39
+04/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...39
+04/16/2021 10:00 PM,Receive Deliver,Expiration,BB,,,3,04/16/2021,12,C,,0.00,0,Removal of 3.0 BB 04/16/21 Call 12.00 due to expiration.,Individual...39
+04/16/2021 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,24,P,2.52,1.142,252,Sold 1 PLTR 05/21/21 Put 24.00 @ 2.52,Individual...39
+04/14/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,04/16/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...39
+04/14/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...39
+04/14/2021 5:41 PM,Trade,Buy to Close,PSTH,Buy,Close,1,04/16/2021,30,P,5.2,0.13,-520,Bought 1 PSTH 04/16/21 Put 30.00 @ 5.20,Individual...39
+04/13/2021 7:52 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,23,P,1.46,0.13,-146,Bought 1 PLTR 05/21/21 Put 23.00 @ 1.46,Individual...39
+04/12/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,23,P,2.18,1.142,218,Sold 1 PLTR 05/21/21 Put 23.00 @ 2.18,Individual...39
+04/10/2021 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+04/09/2021 3:41 PM,Trade,Sell to Close,RIDE,Sell,Close,1,07/16/2021,15,P,4.95,0.142,495,Sold 1 RIDE 07/16/21 Put 15.00 @ 4.95,Individual...39
+04/07/2021 4:23 PM,Trade,Buy to Close,PSFE,Buy,Close,1,04/16/2021,15,P,0.8,0.13,-80,Bought 1 PSFE 04/16/21 Put 15.00 @ 0.80,Individual...39
+04/06/2021 9:50 PM,Trade,Sell to Open,VIAC,Sell,Open,1,05/21/2021,45,P,4.85,1.142,485,Sold 1 VIAC 05/21/21 Put 45.00 @ 4.85,Individual...39
+04/06/2021 7:20 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,24,C,0.7,0.13,-70,Bought 1 PLTR 04/16/21 Call 24.00 @ 0.70,Individual...39
+03/31/2021 9:51 PM,Trade,Sell to Open,VGAC,Sell,Open,1,05/21/2021,10,C,0.5,1.152,50,Sold 1 VGAC 05/21/21 Call 10.00 @ 0.50,Individual...39
+03/31/2021 3:48 PM,Trade,Buy to Close,KMPH,Buy,Close,1,04/16/2021,17.5,P,8.05,0.14,-805,Bought 1 KMPH 04/16/21 Put 17.50 @ 8.05,Individual...39
+03/31/2021 12:46 PM,Receive Deliver,Symbol Change,PSFE,Sell,Open,1,04/16/2021,15,P,,0.00,132,Symbol change:  Open 1.0 PSFE  210416P00015000,Individual...39
+03/31/2021 12:46 PM,Receive Deliver,Symbol Change,BFT,Buy,Close,1,04/16/2021,15,P,,0.00,-132,Symbol change:  Close 1.0 BFT   210416P00015000,Individual...39
+03/30/2021 3:43 PM,Trade,Buy to Close,MT,Buy,Close,1,04/16/2021,28,P,1.2,0.14,-120,Bought 1 MT 04/16/21 Put 28.00 @ 1.20,Individual...39
+03/27/2021 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+03/26/2021 8:11 PM,Trade,Sell to Open,BB,Sell,Open,3,04/16/2021,12,C,0.38,3.426,114,Sold 3 BB 04/16/21 Call 12.00 @ 0.38,Individual...39
+03/26/2021 2:32 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,24,C,1.13,1.152,113,Sold 1 PLTR 04/16/21 Call 24.00 @ 1.13,Individual...39
+03/23/2021 6:52 PM,Trade,Sell to Open,BB,Sell,Open,1,05/21/2021,12,P,2.58,1.152,258,Sold 1 BB 05/21/21 Put 12.00 @ 2.58,Individual...39
+03/20/2021 4:44 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...39
+03/19/2021 10:00 PM,Receive Deliver,Assignment,PLTR,,,1,03/19/2021,34,P,,0.00,0,Removal of option due to assignment,Individual...39
+03/19/2021 10:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,100,,,,34,5.00,-3400,Buy to Open 100 PLTR @ 34.00,Individual...39
+03/19/2021 10:00 PM,Receive Deliver,Assignment,VGAC,,,1,03/19/2021,17.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+03/19/2021 10:00 PM,Receive Deliver,Buy to Open,VGAC,Buy,Open,100,,,,17.5,5.00,-1750,Buy to Open 100 VGAC @ 17.50,Individual...39
+03/19/2021 4:25 PM,Trade,Sell to Close,BB,Sell,Close,3,03/19/2021,16,P,5,0.426,1500,Sold 3 BB 03/19/21 Put 16.00 @ 5.00,Individual...39
+03/19/2021 3:44 PM,Trade,Buy to Open,BB,Buy,Open,3,03/19/2021,16,P,4.95,3.41,-1485,Bought 3 BB 03/19/21 Put 16.00 @ 4.95,Individual...39
+03/19/2021 2:57 PM,Trade,Buy to Open,RIDE,Buy,Open,1,07/16/2021,15,P,4.75,1.14,-475,Bought 1 RIDE 07/16/21 Put 15.00 @ 4.75,Individual...39
+03/18/2021 10:00 PM,Receive Deliver,Assignment,BB,,,3,03/19/2021,16,P,,0.00,0,Removal of option due to assignment,Individual...39
+03/18/2021 10:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,300,,,,16,5.00,-4800,Buy to Open 300 BB @ 16.00,Individual...39
+03/18/2021 8:32 PM,Trade,Sell to Open,PSTH,Sell,Open,1,04/16/2021,30,P,5.4,1.152,540,Sold 1 PSTH 04/16/21 Put 30.00 @ 5.40,Individual...39
+03/18/2021 8:24 PM,Trade,Sell to Open,MT,Sell,Open,1,04/16/2021,28,P,1.9,1.152,190,Sold 1 MT 04/16/21 Put 28.00 @ 1.90,Individual...39
+03/18/2021 8:19 PM,Trade,Sell to Open,BFT,Sell,Open,1,04/16/2021,15,P,1.32,1.152,132,Sold 1 BFT 04/16/21 Put 15.00 @ 1.32,Individual...39
+03/18/2021 4:09 PM,Trade,Sell to Close,MT,Sell,Close,1,06/18/2021,25,C,4,0.152,400,Sold 1 MT 06/18/21 Call 25.00 @ 4.00,Individual...39
+03/17/2021 6:46 PM,Trade,Sell to Close,UWMC,Sell,Close,4,04/16/2021,11,C,0.64,0.558,256,Sold 4 UWMC 04/16/21 Call 11.00 @ 0.64,Individual...39
+03/17/2021 2:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,27,P,5.25,1.152,525,Sold 1 PLTR 05/21/21 Put 27.00 @ 5.25,Individual...39
+03/17/2021 2:30 PM,Trade,Sell to Open,KMPH,Sell,Open,1,04/16/2021,17.5,P,8.35,1.152,835,Sold 1 KMPH 04/16/21 Put 17.50 @ 8.35,Individual...39
+03/16/2021 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...39
+03/16/2021 4:44 PM,Trade,Buy to Open,NOK,Buy,Open,1,01/21/2022,4,C,0.97,1.14,-97,Bought 1 NOK 01/21/22 Call 4.00 @ 0.97,Individual...39
+03/10/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,2.97,0.14,-297,Bought 1 PLTR 04/16/21 Put 25.00 @ 2.97,Individual...39
+03/05/2021 9:14 PM,Trade,Buy to Close,PSTH,Buy,Close,1,03/19/2021,30,P,3.95,0.14,-395,Bought 1 PSTH 03/19/21 Put 30.00 @ 3.95,Individual...39
+03/04/2021 6:55 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,15.72,0.204,3144,Sold 200 SQQQ @ 15.72,Individual...39
+03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...39
+03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...39
+03/04/2021 4:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,3.85,1.152,385,Sold 1 PLTR 04/16/21 Put 25.00 @ 3.85,Individual...39
+03/04/2021 4:03 PM,Trade,Sell to Open,UWMC,Sell,Open,2,04/16/2021,12.5,P,4.35,2.284,870,Sold 2 UWMC 04/16/21 Put 12.50 @ 4.35,Individual...39
+03/04/2021 3:57 PM,Trade,Buy to Open,UWMC,Buy,Open,4,04/16/2021,11,C,1.48,4.54,-592,Bought 4 UWMC 04/16/21 Call 11.00 @ 1.48,Individual...39
+03/03/2021 3:32 PM,Trade,Sell to Close,KT,Sell,Close,200,,,,11.68,0.204,2336,Sold 200 KT @ 11.68,Individual...39
+03/01/2021 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4770.4,Wire Funds Received,Individual...39
+03/01/2021 7:28 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,3.2,0.14,-320,Bought 1 PLTR 04/16/21 Put 25.00 @ 3.20,Individual...39
+02/27/2021 5:52 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...39
+02/26/2021 4:00 PM,Trade,Buy to Close,KT,Buy,Close,2,03/19/2021,12.5,C,0.2,0.27,-40,Bought 2 KT 03/19/21 Call 12.50 @ 0.20,Individual...39
+02/25/2021 6:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,4.25,1.152,425,Sold 1 PLTR 04/16/21 Put 25.00 @ 4.25,Individual...39
+02/18/2021 3:31 PM,Trade,Buy to Close,APHA,Buy,Close,1,03/19/2021,26,P,7.25,0.14,-725,Bought 1 APHA 03/19/21 Put 26.00 @ 7.25,Individual...39
+02/18/2021 3:30 PM,Trade,Sell to Open,PSTH,Sell,Open,1,03/19/2021,30,P,4.5,1.152,450,Sold 1 PSTH 03/19/21 Put 30.00 @ 4.50,Individual...39
+02/18/2021 3:30 PM,Trade,Sell to Open,BB,Sell,Open,1,04/16/2021,12,P,2.45,1.152,245,Sold 1 BB 04/16/21 Put 12.00 @ 2.45,Individual...39
+02/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...39
+02/16/2021 3:32 PM,Trade,Sell to Open,KT,Sell,Open,2,03/19/2021,12.5,C,0.45,2.284,90,Sold 2 KT 03/19/21 Call 12.50 @ 0.45,Individual...39
+02/13/2021 4:47 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.06,Regulatory fee adjustment,Individual...39
+02/12/2021 3:43 PM,Trade,Buy to Open,KT,Buy,Open,170,,,,11.11,0.136,-1888.7,Bought 170 KT @ 11.11,Individual...39
+02/12/2021 3:41 PM,Trade,Buy to Open,KT,Buy,Open,30,,,,11.11,0.024,-333.3,Bought 30 KT @ 11.11,Individual...39
+02/12/2021 3:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...39
+02/11/2021 3:33 PM,Trade,Sell to Open,APHA,Sell,Open,1,03/19/2021,26,P,10.25,1.172,1025,Sold 1 APHA 03/19/21 Put 26.00 @ 10.25,Individual...39
+02/08/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.4,0.14,-940,Bought 1 GME 03/19/21 Put 40.00 @ 9.40,Individual...39
+02/08/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,03/19/2021,34,P,4.3,0.14,-430,Bought 1 PLTR 03/19/21 Put 34.00 @ 4.30,Individual...39
+02/05/2021 7:38 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.05,1.172,1205,Sold 1 GME 03/19/21 Put 40.00 @ 12.05,Individual...39
+02/05/2021 4:01 PM,Trade,Sell to Open,VGAC,Sell,Open,1,03/19/2021,17.5,P,3.7,1.152,370,Sold 1 VGAC 03/19/21 Put 17.50 @ 3.70,Individual...39
+02/04/2021 9:47 PM,Trade,Sell to Close,CLOV,Sell,Close,10,02/19/2021,10,P,0.53,1.40,530,Sold 10 CLOV 02/19/21 Put 10.00 @ 0.53,Individual...39
+02/04/2021 8:33 PM,Trade,Sell to Close,CLOV,Sell,Close,1,03/19/2021,20,C,0.91,0.152,91,Sold 1 CLOV 03/19/21 Call 20.00 @ 0.91,Individual...39
+02/04/2021 8:33 PM,Trade,Buy to Close,CLOV,Buy,Close,1,03/19/2021,2.5,C,9.91,0.14,-991,Bought 1 CLOV 03/19/21 Call 2.50 @ 9.91,Individual...39
+02/04/2021 3:57 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...39
+02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,2,02/19/2021,10,P,0.45,2.27,-90,Bought 2 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...39
+02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,1,03/19/2021,20,C,0.87,1.14,-87,Bought 1 CLOV 03/19/21 Call 20.00 @ 0.87,Individual...39
+02/04/2021 3:47 PM,Trade,Sell to Open,CLOV,Sell,Open,1,03/19/2021,2.5,C,9.92,1.172,992,Sold 1 CLOV 03/19/21 Call 2.50 @ 9.92,Individual...39
+02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,8,02/19/2021,10,P,0.45,9.09,-360,Bought 8 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...39
+02/03/2021 4:42 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.55,0.14,-955,Bought 1 GME 03/19/21 Put 40.00 @ 9.55,Individual...39
+02/02/2021 8:32 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...39
+02/02/2021 5:34 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...39
+02/02/2021 3:44 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...39
+02/01/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...39
+01/31/2021 12:11 AM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39
+01/29/2021 7:51 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,13.3,1.172,1330,Sold 1 GME 03/19/21 Put 40.00 @ 13.30,Individual...39
+01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39
+01/27/2021 7:52 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...39
+01/27/2021 6:50 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...39
+01/27/2021 3:58 PM,Trade,Buy to Close,MT,Buy,Close,1,02/19/2021,26,P,5.4,0.14,-540,Bought 1 MT 02/19/21 Put 26.00 @ 5.40,Individual...39
+01/25/2021 6:04 PM,Trade,Buy to Open,BB,Buy,Open,1,01/21/2022,12.5,C,11.5,1.14,-1150,Bought 1 BB 01/21/22 Call 12.50 @ 11.50,Individual...39
+01/22/2021 3:30 PM,Trade,Sell to Close,THCB,Sell,Close,200,,,,15.13,0.254,3026,Sold 200 THCB @ 15.13,Individual...39
+01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...39
+01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...39
+01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...39
+01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...39
+01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...39
+01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39
+01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39
+01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39
+01/20/2021 6:55 PM,Trade,Sell to Close,THCBW,Sell,Close,100,,,,4.17,0.102,417,Sold 100 THCBW @ 4.17,Individual...39
+01/20/2021 6:18 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,10.65,1.172,1065,Sold 1 GME 02/19/21 Put 42.00 @ 10.65,Individual...39
+01/19/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+01/19/2021 8:16 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,11,1.172,1100,Sold 1 GME 02/19/21 Put 42.00 @ 11.00,Individual...39
+01/19/2021 3:38 PM,Trade,Buy to Close,MGNI,Buy,Close,2,02/19/2021,30,P,2.98,0.27,-596,Bought 2 MGNI 02/19/21 Put 30.00 @ 2.98,Individual...39
+01/16/2021 4:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+01/15/2021 3:48 PM,Trade,Sell to Close,GME,Sell,Close,1,01/15/2021,32,P,0.48,0.152,48,Sold 1 GME 01/15/21 Put 32.00 @ 0.48,Individual...39
+01/13/2021 9:42 PM,Trade,Sell to Close,TLRY,Sell,Close,200,,,,14.96,0.254,2992,Sold 200 TLRY @ 14.96,Individual...39
+01/13/2021 5:58 PM,Trade,Buy to Open,GME,Buy,Open,1,01/15/2021,32,P,3.95,1.14,-395,Bought 1 GME 01/15/21 Put 32.00 @ 3.95,Individual...39
+01/12/2021 9:50 PM,Trade,Buy to Open,UVXY,Buy,Open,100,,,,10.52,0.08,-1052,Bought 100 UVXY @ 10.52,Individual...39
+01/11/2021 5:51 PM,Trade,Sell to Close,BB,Sell,Close,5,02/19/2021,7,C,1.09,0.71,545,Sold 5 BB 02/19/21 Call 7.00 @ 1.09,Individual...39
+12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39
+12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39
+12/25/2020 3:21 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/24/2020 4:10 PM,Trade,Sell to Close,LOOP,Sell,Close,1,01/15/2021,7.5,P,0.68,0.152,68,Sold 1 LOOP 01/15/21 Put 7.50 @ 0.68,Individual...39
+12/23/2020 3:45 PM,Trade,Buy to Open,BB,Buy,Open,5,02/19/2021,7,C,1,5.68,-500,Bought 5 BB 02/19/21 Call 7.00 @ 1.00,Individual...39
+12/19/2020 6:24 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/17/2020 8:57 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,27,P,3.2,0.14,-320,Bought 1 PLTR 01/15/21 Put 27.00 @ 3.20,Individual...39
+12/17/2020 5:44 PM,Trade,Buy to Close,GME,Buy,Close,2,01/15/2021,14,P,1.79,0.27,-358,Bought 2 GME 01/15/21 Put 14.00 @ 1.79,Individual...39
+12/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...39
+12/15/2020 9:24 PM,Trade,Buy to Open,LOOP,Buy,Open,1,01/15/2021,7.5,P,1.3,1.14,-130,Bought 1 LOOP 01/15/21 Put 7.50 @ 1.30,Individual...39
+12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39
+12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...39
+12/12/2020 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...39
+12/11/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,300,,,,10.5,5.106,3150,Sell to Close 300 PCG @ 10.50,Individual...39
+12/11/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,27,P,4,1.152,400,Sold 1 PLTR 01/15/21 Put 27.00 @ 4.00,Individual...39
+12/10/2020 5:56 PM,Trade,Buy to Open,BCRX,Buy,Open,3,03/19/2021,8,C,1.75,3.41,-525,Bought 3 BCRX 03/19/21 Call 8.00 @ 1.75,Individual...39
+12/09/2020 4:14 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,20,P,4,1.14,-400,Bought 1 NKLA 01/15/21 Put 20.00 @ 4.00,Individual...39
+12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,29,,,,2.956,0.024,-85.724,Bought 29 THCBW @ 2.96,Individual...39
+12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,71,,,,2.96,0.057,-210.16,Bought 71 THCBW @ 2.96,Individual...39
+12/09/2020 3:44 PM,Trade,Sell to Open,GME,Sell,Open,2,01/15/2021,14,P,2.56,2.294,512,Sold 2 GME 01/15/21 Put 14.00 @ 2.56,Individual...39
+12/07/2020 7:03 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,40,C,0.27,0.152,27,Sold 1 NKLA 01/15/21 Call 40.00 @ 0.27,Individual...39
+12/07/2020 7:03 PM,Trade,Buy to Close,NKLA,Buy,Close,1,01/15/2021,30,C,0.77,0.14,-77,Bought 1 NKLA 01/15/21 Call 30.00 @ 0.77,Individual...39
+12/07/2020 6:46 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/08/2021,28.5,P,10.4,0.172,1040,Sold 1 NKLA 01/08/21 Put 28.50 @ 10.40,Individual...39
+12/05/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/04/2020 4:12 PM,Trade,Sell to Close,KNDI,Sell,Close,3,01/15/2021,9,P,2.55,0.436,765,Sold 3 KNDI 01/15/21 Put 9.00 @ 2.55,Individual...39
+12/03/2020 3:42 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,23,P,3.55,0.14,-355,Bought 1 PLTR 01/15/21 Put 23.00 @ 3.55,Individual...39
+12/02/2020 9:38 PM,Trade,Buy to Close,GME,Buy,Close,1,12/18/2020,17,P,2.96,0.14,-296,Bought 1 GME 12/18/20 Put 17.00 @ 2.96,Individual...39
+12/02/2020 7:38 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,23,P,5,1.162,500,Sold 1 PLTR 01/15/21 Put 23.00 @ 5.00,Individual...39
+11/30/2020 4:46 PM,Trade,Buy to Open,KNDI,Buy,Open,3,01/15/2021,9,P,2.16,3.41,-648,Bought 3 KNDI 01/15/21 Put 9.00 @ 2.16,Individual...39
+11/28/2020 2:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+11/27/2020 5:00 PM,Trade,Sell to Open,GME,Sell,Open,1,12/18/2020,17,P,3.55,1.152,355,Sold 1 GME 12/18/20 Put 17.00 @ 3.55,Individual...39
+11/27/2020 3:37 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,40,C,2.9,1.14,-290,Bought 1 NKLA 01/15/21 Call 40.00 @ 2.90,Individual...39
+11/27/2020 3:37 PM,Trade,Sell to Open,NKLA,Sell,Open,1,01/15/2021,30,C,6.5,1.162,650,Sold 1 NKLA 01/15/21 Call 30.00 @ 6.50,Individual...39
+11/27/2020 3:32 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/08/2021,28.5,P,5.45,1.14,-545,Bought 1 NKLA 01/08/21 Put 28.50 @ 5.45,Individual...39
+11/25/2020 6:33 PM,Trade,Buy to Close,AHT,Buy,Close,2,12/18/2020,5,P,2.4,0.27,-480,Bought 2 AHT 12/18/20 Put 5.00 @ 2.40,Individual...39
+11/23/2020 8:14 PM,Trade,Buy to Close,PLTR,Buy,Close,2,12/04/2020,19,P,0.96,0.27,-192,Bought 2 PLTR 12/04/20 Put 19.00 @ 0.96,Individual...39
+11/23/2020 4:12 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...39
+11/23/2020 4:08 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...39
+11/23/2020 3:30 PM,Trade,Sell to Close,TSLA,Sell,Close,1,12/31/2020,435,P,17.17,0.182,1717,Sold 1 TSLA 12/31/20 Put 435.00 @ 17.17,Individual...39
+11/23/2020 3:30 PM,Trade,Buy to Close,TSLA,Buy,Close,1,12/31/2020,455,P,24.13,0.14,-2413,Bought 1 TSLA 12/31/20 Put 455.00 @ 24.13,Individual...39
+11/21/2020 3:54 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...39
+11/20/2020 6:33 PM,Trade,Sell to Open,PLTR,Sell,Open,2,12/04/2020,19,P,1.92,2.284,384,Sold 2 PLTR 12/04/20 Put 19.00 @ 1.92,Individual...39
+11/17/2020 7:24 PM,Trade,Sell to Close,PLTR,Sell,Close,2,12/04/2020,19,C,1.8,0.284,360,Sold 2 PLTR 12/04/20 Call 19.00 @ 1.80,Individual...39
+11/17/2020 5:01 PM,Trade,Buy to Open,PLTR,Buy,Open,2,12/04/2020,19,C,1.19,2.27,-238,Bought 2 PLTR 12/04/20 Call 19.00 @ 1.19,Individual...39
+11/17/2020 4:45 PM,Trade,Buy to Open,TSLA,Buy,Open,1,12/31/2020,435,P,34.81,1.14,-3481,Bought 1 TSLA 12/31/20 Put 435.00 @ 34.81,Individual...39
+11/17/2020 4:45 PM,Trade,Sell to Open,TSLA,Sell,Open,1,12/31/2020,455,P,45.9,1.252,4590,Sold 1 TSLA 12/31/20 Put 455.00 @ 45.90,Individual...39
+11/17/2020 4:02 PM,Trade,Buy to Close,KODK,Buy,Close,1,11/20/2020,10,P,3,0.14,-300,Bought 1 KODK 11/20/20 Put 10.00 @ 3.00,Individual...39
+11/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...39
+11/16/2020 9:21 PM,Trade,Buy to Close,PLTR,Buy,Close,1,11/20/2020,15.5,P,0.5,0.14,-50,Bought 1 PLTR 11/20/20 Put 15.50 @ 0.50,Individual...39
+11/16/2020 3:37 PM,Trade,Sell to Open,PLTR,Sell,Open,1,11/20/2020,15.5,P,1,1.152,100,Sold 1 PLTR 11/20/20 Put 15.50 @ 1.00,Individual...39
+11/10/2020 5:12 PM,Trade,Sell to Close,RKT,Sell,Close,1,11/13/2020,23,C,0.91,0.152,91,Sold 1 RKT 11/13/20 Call 23.00 @ 0.91,Individual...39
+11/09/2020 7:42 PM,Trade,Buy to Open,RKT,Buy,Open,1,11/13/2020,23,C,1.03,1.14,-103,Bought 1 RKT 11/13/20 Call 23.00 @ 1.03,Individual...39
+11/09/2020 3:31 PM,Trade,Buy to Close,NKLA,Buy,Close,1,11/20/2020,22.5,P,3.3,0.14,-330,Bought 1 NKLA 11/20/20 Put 22.50 @ 3.30,Individual...39
+11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,12/11/2020,10.5,C,0.41,1.152,41,Sold 1 PCG 12/11/20 Call 10.50 @ 0.41,Individual...39
+11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,12/11/2020,10.5,C,0.41,2.284,82,Sold 2 PCG 12/11/20 Call 10.50 @ 0.41,Individual...39
+10/30/2020 10:00 PM,Receive Deliver,Assignment,PCG,,,3,10/30/2020,11,P,,0.00,0,Removal of option due to assignment,Individual...39
+10/30/2020 10:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,300,,,,11,5.00,-3300,Buy to Open 300 PCG @ 11.00,Individual...39
+10/22/2020 3:33 PM,Trade,Sell to Open,PCG,Sell,Open,3,10/30/2020,11,P,0.74,3.426,222,Sold 3 PCG 10/30/20 Put 11.00 @ 0.74,Individual...39
+10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...39
+10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...39
+10/17/2020 4:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+10/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...39
+10/15/2020 4:45 PM,Trade,Sell to Close,LOOP,Sell,Close,1,10/16/2020,7.5,P,0.4,0.152,40,Sold 1 LOOP 10/16/20 Put 7.50 @ 0.40,Individual...39
+10/15/2020 4:33 PM,Trade,Sell to Open,NKLA,Sell,Open,1,11/20/2020,22.5,P,3.7,1.152,370,Sold 1 NKLA 11/20/20 Put 22.50 @ 3.70,Individual...39
+10/15/2020 4:29 PM,Trade,Sell to Close,NKLA,Sell,Close,1,11/13/2020,24,P,4.16,0.152,416,Sold 1 NKLA 11/13/20 Put 24.00 @ 4.16,Individual...39
+10/15/2020 3:44 PM,Trade,Buy to Close,GME,Buy,Close,2,11/20/2020,13,P,2.02,0.27,-404,Bought 2 GME 11/20/20 Put 13.00 @ 2.02,Individual...39
+10/13/2020 3:39 PM,Trade,Buy to Open,LOOP,Buy,Open,1,10/16/2020,7.5,P,1.35,1.14,-135,Bought 1 LOOP 10/16/20 Put 7.50 @ 1.35,Individual...39
+10/12/2020 4:39 PM,Trade,Sell to Open,KODK,Sell,Open,1,11/20/2020,10,P,2.25,1.152,225,Sold 1 KODK 11/20/20 Put 10.00 @ 2.25,Individual...39
+10/12/2020 4:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/23/2020,10.5,P,0.46,2.284,92,Sold 2 PCG 10/23/20 Put 10.50 @ 0.46,Individual...39
+10/10/2020 4:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...39
+10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...39
+10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...39
+10/09/2020 5:10 PM,Trade,Buy to Close,KODK,Buy,Close,1,10/16/2020,8.5,P,0.43,0.14,-43,Bought 1 KODK 10/16/20 Put 8.50 @ 0.43,Individual...39
+10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/16/2020,27.5,C,0.61,0.284,122,Sold 2 NKLA 10/16/20 Call 27.50 @ 0.61,Individual...39
+10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,2,10/16/2020,19.5,C,4.94,0.27,-988,Bought 2 NKLA 10/16/20 Call 19.50 @ 4.94,Individual...39
+10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/16/2020,27.5,C,0.6,0.152,60,Sold 1 NKLA 10/16/20 Call 27.50 @ 0.60,Individual...39
+10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/16/2020,19.5,C,4.93,0.14,-493,Bought 1 NKLA 10/16/20 Call 19.50 @ 4.93,Individual...39
+10/06/2020 6:02 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/09/2020,9,C,1.19,0.27,-238,Bought 2 PCG 10/09/20 Call 9.00 @ 1.19,Individual...39
+10/06/2020 6:02 PM,Trade,Sell to Close,PCG,Sell,Close,200,,,,10.17,0.234,2034,Sold 200 PCG @ 10.17,Individual...39
+10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...39
+10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...39
+10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...39
+10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...39
+10/05/2020 7:06 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...39
+10/05/2020 7:06 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...39
+10/05/2020 5:30 PM,Trade,Sell to Open,KODK,Sell,Open,1,10/16/2020,8.5,P,0.86,1.152,86,Sold 1 KODK 10/16/20 Put 8.50 @ 0.86,Individual...39
+10/05/2020 3:55 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/30/2020,9.5,C,1.15,0.426,345,Sold 3 KODK 10/30/20 Call 9.50 @ 1.15,Individual...39
+10/05/2020 3:55 PM,Trade,Buy to Close,KODK,Buy,Close,3,10/30/2020,5,C,3.83,0.41,-1149,Bought 3 KODK 10/30/20 Call 5.00 @ 3.83,Individual...39
+10/03/2020 3:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+10/01/2020 5:52 PM,Trade,Buy to Open,NKLA,Buy,Open,1,11/13/2020,24,P,5.95,1.14,-595,Bought 1 NKLA 11/13/20 Put 24.00 @ 5.95,Individual...39
+10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,23.5,C,2.63,1.14,-263,Bought 1 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...39
+10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,22,C,3.49,0.152,349,Sold 1 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...39
+10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,23.5,C,2.63,2.27,-526,Bought 2 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...39
+10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/09/2020,22,C,3.49,0.294,698,Sold 2 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...39
+10/01/2020 4:24 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/09/2020,9,C,0.62,2.284,124,Sold 2 PCG 10/09/20 Call 9.00 @ 0.62,Individual...39
+09/30/2020 5:11 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/16/2020,27.5,C,0.69,3.41,-207,Bought 3 NKLA 10/16/20 Call 27.50 @ 0.69,Individual...39
+09/30/2020 5:11 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/16/2020,19.5,C,3.01,3.436,903,Sold 3 NKLA 10/16/20 Call 19.50 @ 3.01,Individual...39
+09/29/2020 5:26 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...39
+09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,2,10/09/2020,17,C,3.01,2.294,602,Sold 2 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...39
+09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,22,C,0.85,2.27,-170,Bought 2 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...39
+09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,1,10/09/2020,17,C,3.01,1.152,301,Sold 1 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...39
+09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,22,C,0.85,1.14,-85,Bought 1 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...39
+09/29/2020 4:06 PM,Trade,Sell to Close,NKLA,Sell,Close,3,10/02/2020,25,C,0.04,0.426,12,Sold 3 NKLA 10/02/20 Call 25.00 @ 0.04,Individual...39
+09/29/2020 4:06 PM,Trade,Buy to Close,NKLA,Buy,Close,3,10/02/2020,19.5,C,0.86,0.41,-258,Bought 3 NKLA 10/02/20 Call 19.50 @ 0.86,Individual...39
+09/29/2020 4:04 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...39
+09/28/2020 7:26 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/02/2020,9.5,C,0.11,0.27,-22,Bought 2 PCG 10/02/20 Call 9.50 @ 0.11,Individual...39
+09/28/2020 6:47 PM,Trade,Sell to Open,GME,Sell,Open,2,10/09/2020,10,P,1.08,2.284,216,Sold 2 GME 10/09/20 Put 10.00 @ 1.08,Individual...39
+09/28/2020 3:32 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...39
+09/28/2020 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...39
+09/26/2020 3:59 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...39
+09/25/2020 5:17 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/02/2020,19.5,C,2.61,3.436,783,Sold 3 NKLA 10/02/20 Call 19.50 @ 2.61,Individual...39
+09/25/2020 5:17 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/02/2020,25,C,0.45,3.41,-135,Bought 3 NKLA 10/02/20 Call 25.00 @ 0.45,Individual...39
+09/24/2020 5:30 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.6,1.152,60,Sold 1 GME 10/02/20 Put 9.00 @ 0.60,Individual...39
+09/24/2020 5:28 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.59,1.152,59,Sold 1 GME 10/02/20 Put 9.00 @ 0.59,Individual...39
+09/24/2020 5:01 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,27,P,10.05,0.172,1005,Sold 1 NKLA 10/09/20 Put 27.00 @ 10.05,Individual...39
+09/23/2020 11:00 PM,Money Movement,Fee,KODK,,,0,,,,,0.00,-3.32,EASTMAN KODAK COMPANY,Individual...39
+09/23/2020 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,2315.31,Wire Funds Received a/o 9/22,Individual...39
+09/22/2020 7:51 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/02/2020,9.5,C,0.41,2.284,82,Sold 2 PCG 10/02/20 Call 9.50 @ 0.41,Individual...39
+09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...39
+09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...39
+09/21/2020 3:45 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,27,P,4.79,1.14,-479,Bought 1 NKLA 10/09/20 Put 27.00 @ 4.79,Individual...39
+09/21/2020 3:34 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/16/2020,10,C,2.15,0.436,645,Sold 3 KODK 10/16/20 Call 10.00 @ 2.15,Individual...39
+09/21/2020 3:34 PM,Trade,Buy to Close,KODK,Buy,Close,300,,,,10.07,0.24,-3021,Bought 300 KODK @ 10.07,Individual...39
+09/19/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+09/17/2020 11:00 PM,Receive Deliver,Assignment,KODK,,,3,10/16/2020,2.5,C,,0.00,0,Removal of option due to assignment,Individual...39
+09/17/2020 11:00 PM,Receive Deliver,Sell to Open,KODK,Sell,Open,300,,,,2.5,5.056,750,Sell to Open 300 KODK @ 2.50,Individual...39
+09/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...39
+09/16/2020 8:42 PM,Trade,Sell to Close,VIX,Sell,Close,2,09/30/2020,28,C,2.17,1.574,434,Sold 2 VIX 09/30/20 Call 28.00 @ 2.17,Individual...39
+09/16/2020 8:42 PM,Trade,Buy to Close,VIX,Buy,Close,2,09/30/2020,23,C,4.47,1.57,-894,Bought 2 VIX 09/30/20 Call 23.00 @ 4.47,Individual...39
+09/16/2020 4:56 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/30/2020,5,C,4.37,3.446,1311,Sold 3 KODK 10/30/20 Call 5.00 @ 4.37,Individual...39
+09/16/2020 4:56 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/30/2020,9.5,C,2.27,3.41,-681,Bought 3 KODK 10/30/20 Call 9.50 @ 2.27,Individual...39
+09/15/2020 6:22 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/25/2020,9.5,C,0.45,2.284,90,Sold 2 PCG 09/25/20 Call 9.50 @ 0.45,Individual...39
+09/14/2020 6:42 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/18/2020,10,P,0.56,0.14,-56,Bought 1 PCG 09/18/20 Put 10.00 @ 0.56,Individual...39
+09/12/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+09/11/2020 7:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/18/2020,10,P,1.11,1.152,111,Sold 1 PCG 09/18/20 Put 10.00 @ 1.11,Individual...39
+09/11/2020 6:57 PM,Trade,Buy to Close,PCG,Buy,Close,2,09/18/2020,9,C,0.14,0.27,-28,Bought 2 PCG 09/18/20 Call 9.00 @ 0.14,Individual...39
+09/05/2020 4:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+09/04/2020 6:11 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/18/2020,9,C,0.39,2.284,78,Sold 2 PCG 09/18/20 Call 9.00 @ 0.39,Individual...39
+09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,P,0.03,0.14,-3,Bought 1 PCG 09/04/20 Put 9.00 @ 0.03,Individual...39
+09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,C,0.23,0.14,-23,Bought 1 PCG 09/04/20 Call 9.00 @ 0.23,Individual...39
+08/31/2020 5:21 PM,Trade,Buy to Open,VIX,Buy,Open,2,09/30/2020,28,C,3.81,3.57,-762,Bought 2 VIX 09/30/20 Call 28.00 @ 3.81,Individual...39
+08/31/2020 5:21 PM,Trade,Sell to Open,VIX,Sell,Open,2,09/30/2020,23,C,6.16,3.574,1232,Sold 2 VIX 09/30/20 Call 23.00 @ 6.16,Individual...39
+08/31/2020 4:19 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/16/2020,2.5,C,3.68,3.446,1104,Sold 3 KODK 10/16/20 Call 2.50 @ 3.68,Individual...39
+08/31/2020 4:19 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/16/2020,10,C,0.77,3.41,-231,Bought 3 KODK 10/16/20 Call 10.00 @ 0.77,Individual...39
+08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,C,0.3,1.152,30,Sold 1 PCG 09/04/20 Call 9.00 @ 0.30,Individual...39
+08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,P,0.05,1.152,5,Sold 1 PCG 09/04/20 Put 9.00 @ 0.05,Individual...39
+08/28/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,08/28/2020,9.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+08/28/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,9.5,5.00,-950,Buy to Open 100 PCG @ 9.50,Individual...39
+08/28/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,1,08/28/2020,9.5,C,,0.00,0,Removal of 1 PCG 08/28/20 Call 9.50 due to expiration.,Individual...39
+08/25/2020 3:39 PM,Trade,Sell to Close,VIX,Sell,Close,2,10/21/2020,21,P,0.3,1.574,60,Sold 2 VIX 10/21/20 Put 21.00 @ 0.30,Individual...39
+08/25/2020 3:39 PM,Trade,Buy to Close,VIX,Buy,Close,2,10/21/2020,26,P,2.05,1.57,-410,Bought 2 VIX 10/21/20 Put 26.00 @ 2.05,Individual...39
+08/22/2020 3:19 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,C,0.05,0.152,5,Sold 1 PCG 08/28/20 Call 9.50 @ 0.05,Individual...39
+08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,P,0.37,0.152,37,Sold 1 PCG 08/28/20 Put 9.50 @ 0.37,Individual...39
+08/17/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+08/15/2020 9:13 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+08/14/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,2,08/14/2020,9,C,,0.00,0,Removal of option due to assignment,Individual...39
+08/14/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,200,,,,9,5.064,1800,Sell to Close 200 PCG @ 9.00,Individual...39
+08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,P,0.08,0.14,-8,Bought 1 PCG 08/14/20 Put 9.50 @ 0.08,Individual...39
+08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,C,0.04,0.14,-4,Bought 1 PCG 08/14/20 Call 9.50 @ 0.04,Individual...39
+08/12/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,2,08/14/2020,9,C,0.31,2.284,62,Sold 2 PCG 08/14/20 Call 9.00 @ 0.31,Individual...39
+08/12/2020 4:04 PM,Trade,Sell to Close,KODK,Sell,Close,1,09/18/2020,17.5,C,0.92,0.152,92,Sold 1 KODK 09/18/20 Call 17.50 @ 0.92,Individual...39
+08/12/2020 4:04 PM,Trade,Buy to Close,KODK,Buy,Close,1,09/18/2020,7.5,C,3.56,0.14,-356,Bought 1 KODK 09/18/20 Call 7.50 @ 3.56,Individual...39
+08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,C,0.03,1.152,3,Sold 1 PCG 08/14/20 Call 9.50 @ 0.03,Individual...39
+08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/14/20 Put 9.50 @ 0.45,Individual...39
+08/10/2020 3:30 PM,Trade,Sell to Open,VIX,Sell,Open,2,10/21/2020,26,P,2.3,3.574,460,Sold 2 VIX 10/21/20 Put 26.00 @ 2.30,Individual...39
+08/10/2020 3:30 PM,Trade,Buy to Open,VIX,Buy,Open,2,10/21/2020,21,P,0.5,3.57,-100,Bought 2 VIX 10/21/20 Put 21.00 @ 0.50,Individual...39
+08/08/2020 3:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,P,0.36,0.14,-36,Bought 1 PCG 08/07/20 Put 9.50 @ 0.36,Individual...39
+08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,C,0.03,0.14,-3,Bought 1 PCG 08/07/20 Call 9.50 @ 0.03,Individual...39
+08/05/2020 7:22 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,8.91,0.08,-891,Bought 100 PCG @ 8.91,Individual...39
+08/04/2020 8:54 PM,Trade,Sell to Open,KODK,Sell,Open,1,09/18/2020,7.5,C,7.04,1.162,704,Sold 1 KODK 09/18/20 Call 7.50 @ 7.04,Individual...39
+08/04/2020 8:54 PM,Trade,Buy to Open,KODK,Buy,Open,1,09/18/2020,17.5,C,2.99,1.14,-299,Bought 1 KODK 09/18/20 Call 17.50 @ 2.99,Individual...39
+07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/07/20 Put 9.50 @ 0.45,Individual...39
+07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,C,0.08,1.152,8,Sold 1 PCG 08/07/20 Call 9.50 @ 0.08,Individual...39
+07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,10,P,0.76,0.14,-76,Bought 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...39
+07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.28,0.14,-28,Bought 1 PCG 07/31/20 Call 9.00 @ 0.28,Individual...39
+07/27/2020 4:12 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.36,0.14,-36,Bought 1 PCG 07/31/20 Call 9.00 @ 0.36,Individual...39
+07/25/2020 3:23 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,10,P,0.76,1.152,76,Sold 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...39
+07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.55,1.152,55,Sold 1 PCG 07/31/20 Call 9.00 @ 0.55,Individual...39
+07/20/2020 5:04 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.39,1.152,39,Sold 1 PCG 07/31/20 Call 9.00 @ 0.39,Individual...39
+07/17/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,07/17/2020,10,P,,0.00,0,Removal of option due to assignment,Individual...39
+07/17/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,10,5.00,-1000,Buy to Open 100 PCG @ 10.00,Individual...39
+07/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...39
+07/08/2020 5:18 PM,Trade,Sell to Close,VIX,Sell,Close,1,09/16/2020,25,P,1.9,0.792,190,Sold 1 VIX 09/16/20 Put 25.00 @ 1.90,Individual...39
+07/08/2020 5:18 PM,Trade,Buy to Close,VIX,Buy,Close,1,09/16/2020,28,P,3.45,0.79,-345,Bought 1 VIX 09/16/20 Put 28.00 @ 3.45,Individual...39
+07/06/2020 4:02 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/17/2020,10,P,0.77,1.152,77,Sold 1 PCG 07/17/20 Put 10.00 @ 0.77,Individual...39
+07/02/2020 8:38 PM,Trade,Buy to Open,VIX,Buy,Open,1,09/16/2020,25,P,2.45,1.79,-245,Bought 1 VIX 09/16/20 Put 25.00 @ 2.45,Individual...39
+07/02/2020 8:38 PM,Trade,Sell to Open,VIX,Sell,Open,1,09/16/2020,28,P,4.09,1.792,409,Sold 1 VIX 09/16/20 Put 28.00 @ 4.09,Individual...39
+07/02/2020 6:58 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,9.405,0.08,-940.5,Bought 100 PCG @ 9.40,Individual...39
+07/02/2020 3:34 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,28,C,3.22,0.792,322,Sold 1 VIX 07/22/20 Call 28.00 @ 3.22,Individual...39
+07/02/2020 3:34 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,24,C,5.07,0.79,-507,Bought 1 VIX 07/22/20 Call 24.00 @ 5.07,Individual...39
+07/02/2020 3:30 PM,Trade,Sell to Close,VIX,Sell,Close,1,08/19/2020,40,C,2.33,0.792,233,Sold 1 VIX 08/19/20 Call 40.00 @ 2.33,Individual...39
+07/02/2020 3:30 PM,Trade,Buy to Close,VIX,Buy,Close,1,08/19/2020,32.5,C,3.98,0.79,-398,Bought 1 VIX 08/19/20 Call 32.50 @ 3.98,Individual...39
+06/22/2020 10:12 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,35,C,3.93,0.792,393,Sold 1 VIX 07/22/20 Call 35.00 @ 3.93,Individual...39
+06/22/2020 10:12 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,30,C,5.53,0.79,-553,Bought 1 VIX 07/22/20 Call 30.00 @ 5.53,Individual...39
+06/20/2020 3:46 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+06/18/2020 4:18 PM,Trade,Sell to Close,CAR,Sell,Close,1,07/17/2020,21,P,1.31,0.152,131,Sold 1 CAR 07/17/20 Put 21.00 @ 1.31,Individual...39
+06/18/2020 4:18 PM,Trade,Buy to Close,CAR,Buy,Close,1,07/17/2020,25,P,2.67,0.14,-267,Bought 1 CAR 07/17/20 Put 25.00 @ 2.67,Individual...39
+06/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...39
+06/13/2020 4:11 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+06/12/2020 6:12 PM,Trade,Sell to Close,PCG,Sell,Close,2,06/19/2020,15,C,0.05,0.294,10,Sold 2 PCG 06/19/20 Call 15.00 @ 0.05,Individual...39
+06/11/2020 8:36 PM,Trade,Sell to Open,VIX,Sell,Open,1,08/19/2020,32.5,C,6.04,1.792,604,Sold 1 VIX 08/19/20 Call 32.50 @ 6.04,Individual...39
+06/11/2020 8:36 PM,Trade,Buy to Open,VIX,Buy,Open,1,08/19/2020,40,C,3.84,1.79,-384,Bought 1 VIX 08/19/20 Call 40.00 @ 3.84,Individual...39
+06/11/2020 8:33 PM,Trade,Buy to Open,CAR,Buy,Open,1,07/17/2020,21,P,2.32,1.14,-232,Bought 1 CAR 07/17/20 Put 21.00 @ 2.32,Individual...39
+06/11/2020 8:33 PM,Trade,Sell to Open,CAR,Sell,Open,1,07/17/2020,25,P,4.27,1.152,427,Sold 1 CAR 07/17/20 Put 25.00 @ 4.27,Individual...39
+06/11/2020 8:00 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,35,C,4.78,1.79,-478,Bought 1 VIX 07/22/20 Call 35.00 @ 4.78,Individual...39
+06/11/2020 8:00 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,30,C,6.83,1.792,683,Sold 1 VIX 07/22/20 Call 30.00 @ 6.83,Individual...39
+06/06/2020 3:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,34,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 34.00 due to expiration.,Individual...39
+06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,35,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 35.00 due to expiration.,Individual...39
+06/04/2020 6:40 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,28,C,4.6,1.79,-460,Bought 1 VIX 07/22/20 Call 28.00 @ 4.60,Individual...39
+06/04/2020 6:40 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,24,C,6.5,1.792,650,Sold 1 VIX 07/22/20 Call 24.00 @ 6.50,Individual...39
+05/30/2020 4:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/29/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,2,05/29/2020,14,C,,0.00,0,Removal of 2 PCG 05/29/20 Call 14.00 due to expiration.,Individual...39
+05/29/2020 6:04 PM,Trade,Sell to Close,EWG,Sell,Close,7,10/16/2020,22,C,4.13,1.054,2891,Sold 7 EWG 10/16/20 Call 22.00 @ 4.13,Individual...39
+05/29/2020 6:04 PM,Trade,Buy to Close,EWG,Buy,Close,7,10/16/2020,19,C,6.82,0.97,-4774,Bought 7 EWG 10/16/20 Call 19.00 @ 6.82,Individual...39
+05/27/2020 4:19 PM,Trade,Sell to Close,EWG,Sell,Close,8,07/17/2020,22,C,3.72,1.196,2976,Sold 8 EWG 07/17/20 Call 22.00 @ 3.72,Individual...39
+05/27/2020 4:19 PM,Trade,Buy to Close,EWG,Buy,Close,800,,,,25.63,0.64,-20504,Bought 800 EWG @ 25.63,Individual...39
+05/26/2020 11:00 PM,Receive Deliver,Assignment,EWG,,,8,07/17/2020,17,C,,0.00,0,Removal of option due to assignment,Individual...39
+05/26/2020 11:00 PM,Receive Deliver,Sell to Open,EWG,Sell,Open,800,,,,17,5.405,13600,Sell to Open 800 EWG @ 17.00,Individual...39
+05/26/2020 3:38 PM,Trade,Sell to Close,EWG,Sell,Close,4,07/17/2020,21,C,4.28,0.608,1712,Sold 4 EWG 07/17/20 Call 21.00 @ 4.28,Individual...39
+05/26/2020 3:38 PM,Trade,Buy to Close,EWG,Buy,Close,4,07/17/2020,18,C,7.24,0.56,-2896,Bought 4 EWG 07/17/20 Call 18.00 @ 7.24,Individual...39
+05/20/2020 3:31 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,34,P,0.85,1.14,-85,Bought 1 DOW 06/05/20 Put 34.00 @ 0.85,Individual...39
+05/20/2020 3:30 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,35,P,1.4,1.14,-140,Bought 1 DOW 06/05/20 Put 35.00 @ 1.40,Individual...39
+05/19/2020 3:30 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.05,0.852,30,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,Individual...39
+05/19/2020 3:30 PM,Trade,Buy to Close,USO,Buy,Close,6,07/17/2020,3.5,P,0.63,0.83,-378,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,Individual...39
+05/18/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...39
+05/16/2020 5:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/15/2020 5:42 PM,Trade,Buy to Open,PCG,Buy,Open,2,05/29/2020,14,C,0.5,2.28,-100,Bought 2 PCG 05/29/20 Call 14.00 @ 0.50,Individual...39
+05/15/2020 5:00 PM,Trade,Buy to Open,PCG,Buy,Open,2,06/19/2020,15,C,0.64,2.28,-128,Bought 2 PCG 06/19/20 Call 15.00 @ 0.64,Individual...39
+05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...39
+05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...39
+05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...39
+05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...39
+05/09/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+05/08/2020 9:02 PM,Trade,Sell to Close,SPX,Sell,Close,2,06/19/2020,2915,P,98.66,1.584,19732,Sold 2 SPX 06/19/20 Put 2915.00 @ 98.66,Individual...39
+05/08/2020 9:02 PM,Trade,Buy to Close,SPX,Buy,Close,2,06/19/2020,2920,P,100.56,1.58,-20112,Bought 2 SPX 06/19/20 Put 2920.00 @ 100.56,Individual...39
+05/08/2020 5:24 PM,Trade,Sell to Close,SVXY,Sell,Close,3,06/19/2020,30,P,0.81,0.436,243,Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81,Individual...39
+05/08/2020 5:24 PM,Trade,Buy to Close,SVXY,Buy,Close,3,06/19/2020,35,P,2.63,0.42,-789,Bought 3 SVXY 06/19/20 Put 35.00 @ 2.63,Individual...39
+05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...39
+05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...39
+05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...39
+05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...39
+05/06/2020 8:49 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/17/2020,690,P,57.51,0.272,5751,Sold 1 TSLA 07/17/20 Put 690.00 @ 57.51,Individual...39
+05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...39
+05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...39
+05/01/2020 6:31 PM,Trade,Buy to Open,TSLA,Buy,Open,1,07/17/2020,690,P,93.66,1.14,-9366,Bought 1 TSLA 07/17/20 Put 690.00 @ 93.66,Individual...39
+05/01/2020 6:31 PM,Trade,Sell to Open,TSLA,Sell,Open,1,07/17/2020,705,P,101.2,1.372,10120,Sold 1 TSLA 07/17/20 Put 705.00 @ 101.20,Individual...39
+05/01/2020 3:30 PM,Trade,Buy to Open,SPX,Buy,Open,2,06/19/2020,2915,P,162.17,3.58,-32434,Bought 2 SPX 06/19/20 Put 2915.00 @ 162.17,Individual...39
+05/01/2020 3:30 PM,Trade,Sell to Open,SPX,Sell,Open,2,06/19/2020,2920,P,164.37,3.584,32874,Sold 2 SPX 06/19/20 Put 2920.00 @ 164.37,Individual...39
+04/30/2020 6:55 PM,Trade,Buy to Open,SVXY,Buy,Open,3,06/19/2020,30,P,1.17,3.42,-351,Bought 3 SVXY 06/19/20 Put 30.00 @ 1.17,Individual...39
+04/30/2020 6:55 PM,Trade,Sell to Open,SVXY,Sell,Open,3,06/19/2020,35,P,3.45,3.456,1035,Sold 3 SVXY 06/19/20 Put 35.00 @ 3.45,Individual...39
+04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Buy,Open,6,07/17/2020,2,P,,0.00,-174,Reverse split: Open 6 USO1  200717P00002000,Individual...39
+04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Sell,Close,6,07/17/2020,2,P,,0.00,174,Reverse split: Close 6 USO   200717P00002000,Individual...39
+04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Sell,Open,6,07/17/2020,3.5,P,,0.00,648,Reverse split: Open 6 USO1  200717P00003500,Individual...39
+04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Buy,Close,6,07/17/2020,3.5,P,,0.00,-648,Reverse split: Close 6 USO   200717P00003500,Individual...39
+04/28/2020 5:25 PM,Trade,Sell to Close,EWG,Sell,Close,3,07/17/2020,20,P,0.55,0.436,165,Sold 3 EWG 07/17/20 Put 20.00 @ 0.55,Individual...39
+04/25/2020 3:24 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+04/23/2020 7:30 PM,Trade,Sell to Open,USO,Sell,Open,6,07/17/2020,3.5,P,1.08,6.862,648,Sold 6 USO 07/17/20 Put 3.50 @ 1.08,Individual...39
+04/23/2020 7:30 PM,Trade,Buy to Open,USO,Buy,Open,6,07/17/2020,2,P,0.29,6.83,-174,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...39
+04/22/2020 3:31 PM,Trade,Sell to Close,GILD,Sell,Close,1,05/15/2020,80,P,6.05,0.162,605,Sold 1 GILD 05/15/20 Put 80.00 @ 6.05,Individual...39
+04/18/2020 3:03 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+04/17/2020 6:58 PM,Trade,Buy to Open,GILD,Buy,Open,1,05/15/2020,80,P,5.35,1.14,-535,Bought 1 GILD 05/15/20 Put 80.00 @ 5.35,Individual...39
+04/16/2020 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...39
+04/13/2020 9:47 PM,Trade,Sell to Close,SVXY,Sell,Close,7,06/19/2020,29,P,1.37,1.014,959,Sold 7 SVXY 06/19/20 Put 29.00 @ 1.37,Individual...39
+04/13/2020 9:47 PM,Trade,Buy to Close,SVXY,Buy,Close,7,06/19/2020,32,P,2.46,0.97,-1722,Bought 7 SVXY 06/19/20 Put 32.00 @ 2.46,Individual...39
+04/10/2020 2:23 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+04/06/2020 3:30 PM,Trade,Sell to Open,EWG,Sell,Open,5,10/16/2020,19,C,3.32,5.74,1660,Sold 5 EWG 10/16/20 Call 19.00 @ 3.32,Individual...39
+04/06/2020 3:30 PM,Trade,Buy to Open,EWG,Buy,Open,2,10/16/2020,22,C,1.49,2.28,-298,Bought 2 EWG 10/16/20 Call 22.00 @ 1.49,Individual...39
+04/06/2020 3:30 PM,Trade,Buy to Open,EWG,Buy,Open,5,10/16/2020,22,C,1.49,5.69,-745,Bought 5 EWG 10/16/20 Call 22.00 @ 1.49,Individual...39
+04/06/2020 3:30 PM,Trade,Sell to Open,EWG,Sell,Open,2,10/16/2020,19,C,3.32,2.304,664,Sold 2 EWG 10/16/20 Call 19.00 @ 3.32,Individual...39
+03/26/2020 3:15 PM,Trade,Sell to Open,SVXY,Sell,Open,7,06/19/2020,32,P,4.74,8.064,3318,Sold 7 SVXY 06/19/20 Put 32.00 @ 4.74,Individual...39
+03/26/2020 3:15 PM,Trade,Buy to Open,SVXY,Buy,Open,7,06/19/2020,29,P,3.22,7.97,-2254,Bought 7 SVXY 06/19/20 Put 29.00 @ 3.22,Individual...39
+03/23/2020 6:56 PM,Trade,Sell to Close,RUT,Sell,Close,2,06/19/2020,1045,C,69.92,0.644,13984,Sold 2 RUT 06/19/20 Call 1045.00 @ 69.92,Individual...39
+03/23/2020 6:56 PM,Trade,Buy to Close,RUT,Buy,Close,2,06/19/2020,1030,C,77.55,0.64,-15510,Bought 2 RUT 06/19/20 Call 1030.00 @ 77.55,Individual...39
+03/23/2020 2:32 PM,Trade,Sell to Close,EWW,Sell,Close,5,06/19/2020,34,C,0.7,0.71,350,Sold 5 EWW 06/19/20 Call 34.00 @ 0.70,Individual...39
+03/23/2020 2:32 PM,Trade,Buy to Close,EWW,Buy,Close,5,06/19/2020,29,C,2.23,0.69,-1115,Bought 5 EWW 06/19/20 Call 29.00 @ 2.23,Individual...39
+03/20/2020 9:00 PM,Receive Deliver,Expiration,EWG,,,3,03/20/2020,18,P,,0.00,0,Removal of 3 EWG 03/20/20 Put 18.00 due to expiration.,Individual...39
+03/20/2020 3:42 PM,Trade,Sell to Close,AAL,Sell,Close,2,06/19/2020,16,C,2.43,0.304,486,Sold 2 AAL 06/19/20 Call 16.00 @ 2.43,Individual...39
+03/20/2020 3:42 PM,Trade,Buy to Close,AAL,Buy,Close,2,06/19/2020,13,C,3.47,0.28,-694,Bought 2 AAL 06/19/20 Call 13.00 @ 3.47,Individual...39
+03/20/2020 3:42 PM,Trade,Sell to Close,AAL,Sell,Close,2,06/19/2020,16,C,2.43,0.304,486,Sold 2 AAL 06/19/20 Call 16.00 @ 2.43,Individual...39
+03/20/2020 3:42 PM,Trade,Buy to Close,AAL,Buy,Close,2,06/19/2020,13,C,3.47,0.28,-694,Bought 2 AAL 06/19/20 Call 13.00 @ 3.47,Individual...39
+03/18/2020 4:08 PM,Trade,Buy to Open,EWG,Buy,Open,3,03/20/2020,18,P,0.51,3.42,-153,Bought 3 EWG 03/20/20 Put 18.00 @ 0.51,Individual...39
+03/18/2020 3:54 PM,Trade,Buy to Open,RUT,Buy,Open,2,06/19/2020,1045,C,118.79,2.64,-23758,Bought 2 RUT 06/19/20 Call 1045.00 @ 118.79,Individual...39
+03/18/2020 3:54 PM,Trade,Sell to Open,RUT,Sell,Open,2,06/19/2020,1030,C,127.14,2.644,25428,Sold 2 RUT 06/19/20 Call 1030.00 @ 127.14,Individual...39
+03/17/2020 6:44 PM,Trade,Buy to Open,EWG,Buy,Open,1,07/17/2020,20,P,2.94,1.14,-294,Bought 1 EWG 07/17/20 Put 20.00 @ 2.94,Individual...39
+03/17/2020 6:44 PM,Trade,Buy to Open,EWG,Buy,Open,2,07/17/2020,20,P,2.94,2.28,-588,Bought 2 EWG 07/17/20 Put 20.00 @ 2.94,Individual...39
+03/17/2020 6:16 PM,Trade,Sell to Open,AAL,Sell,Open,2,06/19/2020,13,C,6.17,2.314,1234,Sold 2 AAL 06/19/20 Call 13.00 @ 6.17,Individual...39
+03/17/2020 6:16 PM,Trade,Buy to Open,AAL,Buy,Open,2,06/19/2020,16,C,4.65,2.28,-930,Bought 2 AAL 06/19/20 Call 16.00 @ 4.65,Individual...39
+03/17/2020 6:16 PM,Trade,Sell to Open,AAL,Sell,Open,2,06/19/2020,13,C,6.17,2.314,1234,Sold 2 AAL 06/19/20 Call 13.00 @ 6.17,Individual...39
+03/17/2020 6:16 PM,Trade,Buy to Open,AAL,Buy,Open,2,06/19/2020,16,C,4.65,2.28,-930,Bought 2 AAL 06/19/20 Call 16.00 @ 4.65,Individual...39
+03/17/2020 4:19 PM,Trade,Buy to Open,EWG,Buy,Open,8,07/17/2020,22,C,1.02,9.11,-816,Bought 8 EWG 07/17/20 Call 22.00 @ 1.02,Individual...39
+03/17/2020 4:19 PM,Trade,Sell to Open,EWG,Sell,Open,8,07/17/2020,17,C,3.7,9.196,2960,Sold 8 EWG 07/17/20 Call 17.00 @ 3.70,Individual...39
+03/16/2020 10:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+03/16/2020 10:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4441.2,Wire Funds Received,Individual...39
+03/16/2020 7:00 PM,Trade,Sell to Close,EWG,Sell,Close,2,03/20/2020,20,P,1.46,0.294,292,Sold 2 EWG 03/20/20 Put 20.00 @ 1.46,Individual...39
+03/13/2020 5:55 PM,Trade,Buy to Open,EWG,Buy,Open,4,07/17/2020,21,C,1.95,4.56,-780,Bought 4 EWG 07/17/20 Call 21.00 @ 1.95,Individual...39
+03/13/2020 5:55 PM,Trade,Sell to Open,EWG,Sell,Open,4,07/17/2020,18,C,3.76,4.608,1504,Sold 4 EWG 07/17/20 Call 18.00 @ 3.76,Individual...39
+03/13/2020 5:03 PM,Trade,Sell to Open,EWW,Sell,Open,5,06/19/2020,29,C,6.81,5.78,3405,Sold 5 EWW 06/19/20 Call 29.00 @ 6.81,Individual...39
+03/13/2020 5:03 PM,Trade,Buy to Open,EWW,Buy,Open,5,06/19/2020,34,C,3.77,5.69,-1885,Bought 5 EWW 06/19/20 Call 34.00 @ 3.77,Individual...39
+03/12/2020 6:54 PM,Trade,Sell to Close,VSLR,Sell,Close,1,04/17/2020,13,C,0.05,0.152,5,Sold 1 VSLR 04/17/20 Call 13.00 @ 0.05,Individual...39
+03/12/2020 3:52 PM,Trade,Buy to Open,EWG,Buy,Open,2,03/20/2020,20,P,0.67,2.28,-134,Bought 2 EWG 03/20/20 Put 20.00 @ 0.67,Individual...39
+03/10/2020 8:33 PM,Trade,Sell to Close,TSM,Sell,Close,1,04/17/2020,60,P,7.2,0.162,720,Sold 1 TSM 04/17/20 Put 60.00 @ 7.20,Individual...39
+03/10/2020 8:33 PM,Trade,Buy to Close,TSM,Buy,Close,1,04/17/2020,65,P,11.56,0.14,-1156,Bought 1 TSM 04/17/20 Put 65.00 @ 11.56,Individual...39
+03/09/2020 5:35 PM,Trade,Sell to Close,LYFT,Sell,Close,1,04/17/2020,35,C,3.41,0.152,341,Sold 1 LYFT 04/17/20 Call 35.00 @ 3.41,Individual...39
+03/09/2020 5:35 PM,Trade,Buy to Close,LYFT,Buy,Close,1,04/17/2020,32.5,C,4.7,0.14,-470,Bought 1 LYFT 04/17/20 Call 32.50 @ 4.70,Individual...39
+03/06/2020 3:30 PM,Trade,Buy to Close,EWG,Buy,Close,14,04/17/2020,26,C,1.3,1.94,-1820,Bought 14 EWG 04/17/20 Call 26.00 @ 1.30,Individual...39
+03/06/2020 3:30 PM,Trade,Sell to Close,EWG,Sell,Close,14,04/17/2020,27,C,0.73,1.998,1022,Sold 14 EWG 04/17/20 Call 27.00 @ 0.73,Individual...39
+02/29/2020 4:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+02/28/2020 9:07 PM,Trade,Sell to Close,VIX,Sell,Close,1,04/15/2020,30,P,7.1,0.792,710,Sold 1 VIX 04/15/20 Put 30.00 @ 7.10,Individual...39
+02/28/2020 9:07 PM,Trade,Buy to Close,VIX,Buy,Close,1,04/15/2020,32.5,P,9.1,0.79,-910,Bought 1 VIX 04/15/20 Put 32.50 @ 9.10,Individual...39
+02/27/2020 6:49 PM,Trade,Sell to Open,EWG,Sell,Open,14,04/17/2020,26,C,1.82,12.028,2548,Sold 14 EWG 04/17/20 Call 26.00 @ 1.82,Individual...39
+02/27/2020 6:49 PM,Trade,Buy to Open,EWG,Buy,Open,14,04/17/2020,27,C,1.13,11.94,-1582,Bought 14 EWG 04/17/20 Call 27.00 @ 1.13,Individual...39
+02/27/2020 4:34 PM,Trade,Buy to Open,VIX,Buy,Open,1,04/15/2020,30,P,8.49,1.79,-849,Bought 1 VIX 04/15/20 Put 30.00 @ 8.49,Individual...39
+02/27/2020 4:34 PM,Trade,Sell to Open,VIX,Sell,Open,1,04/15/2020,32.5,P,10.62,1.792,1062,Sold 1 VIX 04/15/20 Put 32.50 @ 10.62,Individual...39
+02/27/2020 4:32 PM,Trade,Sell to Open,LYFT,Sell,Open,1,04/17/2020,32.5,C,4.95,1.162,495,Sold 1 LYFT 04/17/20 Call 32.50 @ 4.95,Individual...39
+02/27/2020 4:32 PM,Trade,Buy to Open,LYFT,Buy,Open,1,04/17/2020,35,C,3.46,1.14,-346,Bought 1 LYFT 04/17/20 Call 35.00 @ 3.46,Individual...39
+02/24/2020 3:30 PM,Trade,Buy to Close,AAL,Buy,Close,3,05/15/2020,28,C,1.5,0.42,-450,Bought 3 AAL 05/15/20 Call 28.00 @ 1.50,Individual...39
+02/24/2020 3:30 PM,Trade,Sell to Close,AAL,Sell,Close,3,05/15/2020,31,C,0.66,0.436,198,Sold 3 AAL 05/15/20 Call 31.00 @ 0.66,Individual...39
+02/22/2020 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+02/21/2020 3:39 PM,Trade,Buy to Open,VSLR,Buy,Open,1,04/17/2020,13,C,1.53,1.14,-153,Bought 1 VSLR 04/17/20 Call 13.00 @ 1.53,Individual...39
+02/20/2020 5:07 PM,Trade,Sell to Open,TSM,Sell,Open,1,04/17/2020,65,P,9.12,1.172,912,Sold 1 TSM 04/17/20 Put 65.00 @ 9.12,Individual...39
+02/20/2020 5:07 PM,Trade,Buy to Open,TSM,Buy,Open,1,04/17/2020,60,P,4.91,1.14,-491,Bought 1 TSM 04/17/20 Put 60.00 @ 4.91,Individual...39
+02/18/2020 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+02/14/2020 3:32 PM,Trade,Buy to Open,AAL,Buy,Open,3,05/15/2020,31,C,1.93,3.42,-579,Bought 3 AAL 05/15/20 Call 31.00 @ 1.93,Individual...39
+02/14/2020 3:32 PM,Trade,Sell to Open,AAL,Sell,Open,3,05/15/2020,28,C,3.6,3.456,1080,Sold 3 AAL 05/15/20 Call 28.00 @ 3.60,Individual...39
+02/08/2020 3:02 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...39
+02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...39
+02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...39
+02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...39
+02/07/2020 3:31 PM,Trade,Sell to Close,F,Sell,Close,1,03/20/2020,9,C,0.08,0.152,8,Sold 1 F 03/20/20 Call 9.00 @ 0.08,Individual...39
+02/07/2020 3:31 PM,Trade,Buy to Close,F,Buy,Close,1,03/20/2020,8,C,0.45,0.14,-45,Bought 1 F 03/20/20 Call 8.00 @ 0.45,Individual...39
+02/04/2020 3:31 PM,Trade,Buy to Open,F,Buy,Open,3,03/20/2020,9,C,0.45,3.42,-135,Bought 3 F 03/20/20 Call 9.00 @ 0.45,Individual...39
+02/04/2020 3:31 PM,Trade,Sell to Open,F,Sell,Open,3,03/20/2020,8,C,1.18,3.436,354,Sold 3 F 03/20/20 Call 8.00 @ 1.18,Individual...39
+12/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+11/30/2019 3:51 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+11/26/2019 8:12 PM,Trade,Sell to Close,TXN,Sell,Close,1,06/19/2020,115,P,7,0.162,700,Sold 1 TXN 06/19/20 Put 115.00 @ 7.00,Individual...39
+11/26/2019 8:12 PM,Trade,Buy to Close,TXN,Buy,Close,1,06/19/2020,120,P,9.3,0.14,-930,Bought 1 TXN 06/19/20 Put 120.00 @ 9.30,Individual...39
+11/18/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+10/26/2019 2:02 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+10/24/2019 4:48 PM,Trade,Sell to Open,TXN,Sell,Open,1,06/19/2020,120,P,10.99,1.172,1099,Sold 1 TXN 06/19/20 Put 120.00 @ 10.99,Individual...39
+10/24/2019 4:48 PM,Trade,Buy to Open,TXN,Buy,Open,1,06/19/2020,115,P,8.56,1.14,-856,Bought 1 TXN 06/19/20 Put 115.00 @ 8.56,Individual...39
+10/24/2019 3:30 PM,Trade,Sell to Close,MU,Sell,Close,1,04/17/2020,41,P,2.83,0.152,283,Sold 1 MU 04/17/20 Put 41.00 @ 2.83,Individual...39
+10/24/2019 3:30 PM,Trade,Buy to Close,MU,Buy,Close,1,04/17/2020,45,P,4.57,0.14,-457,Bought 1 MU 04/17/20 Put 45.00 @ 4.57,Individual...39
+10/24/2019 3:30 PM,Trade,Sell to Close,MU,Sell,Close,1,04/17/2020,41,P,2.83,0.152,283,Sold 1 MU 04/17/20 Put 41.00 @ 2.83,Individual...39
+10/24/2019 3:30 PM,Trade,Buy to Close,MU,Buy,Close,1,04/17/2020,45,P,4.57,0.14,-457,Bought 1 MU 04/17/20 Put 45.00 @ 4.57,Individual...39
+10/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+10/05/2019 2:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+09/30/2019 4:45 PM,Trade,Sell to Open,MU,Sell,Open,2,04/17/2020,45,P,6.42,2.314,1284,Sold 2 MU 04/17/20 Put 45.00 @ 6.42,Individual...39
+09/30/2019 4:45 PM,Trade,Buy to Open,MU,Buy,Open,2,04/17/2020,41,P,4.4,2.28,-880,Bought 2 MU 04/17/20 Put 41.00 @ 4.40,Individual...39
+09/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+08/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+08/16/2019 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-9.81,FROM 07/16 THRU 08/15 @ 8    %,Individual...39
+08/10/2019 3:25 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,100,,,,160.73,0.432,16073,Sold 100 BABA @ 160.73,Individual...39
+08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,1,08/16/2019,185,P,24.25,0.202,2425,Sold 1 BABA 08/16/19 Put 185.00 @ 24.25,Individual...39
+08/07/2019 11:00 PM,Receive Deliver,Assignment,BABA,,,1,08/16/2019,190,P,,0.00,0,Removal of option due to assignment,Individual...39
+08/07/2019 11:00 PM,Receive Deliver,Buy to Open,BABA,Buy,Open,100,,,,190,5.00,-19000,Buy to Open 100 BABA @ 190.00,Individual...39
+08/06/2019 6:27 PM,Trade,Sell to Close,SBUX,Sell,Close,1,09/20/2019,92.5,C,4.62,0.152,462,Sold 1 SBUX 09/20/19 Call 92.50 @ 4.62,Individual...39
+08/06/2019 6:27 PM,Trade,Buy to Close,SBUX,Buy,Close,1,09/20/2019,90,C,6.45,0.14,-645,Bought 1 SBUX 09/20/19 Call 90.00 @ 6.45,Individual...39
+07/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+07/06/2019 3:59 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/03/2019 5:52 PM,Trade,Sell to Open,SBUX,Sell,Open,1,09/20/2019,90,C,1.96,1.152,196,Sold 1 SBUX 09/20/19 Call 90.00 @ 1.96,Individual...39
+07/03/2019 5:52 PM,Trade,Buy to Open,SBUX,Buy,Open,1,09/20/2019,92.5,C,1.15,1.14,-115,Bought 1 SBUX 09/20/19 Call 92.50 @ 1.15,Individual...39
+06/22/2019 11:49 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+06/21/2019 6:02 PM,Trade,Sell to Close,SVXY,Sell,Close,1,06/21/2019,54,C,0.12,0.152,12,Sold 1 SVXY 06/21/19 Call 54.00 @ 0.12,Individual...39
+06/11/2019 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,1101.7,Wire Funds Received A/O 6/10,Individual...39
+05/18/2019 4:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/15/2019 7:35 PM,Trade,Sell to Close,SVXY,Sell,Close,1,05/17/2019,50.5,C,0.81,0.152,81,Sold 1 SVXY 05/17/19 Call 50.50 @ 0.81,Individual...39
+05/13/2019 5:51 PM,Trade,Buy to Open,SVXY,Buy,Open,1,05/17/2019,50.5,C,0.55,1.14,-55,Bought 1 SVXY 05/17/19 Call 50.50 @ 0.55,Individual...39
+05/07/2019 5:03 PM,Trade,Buy to Open,SVXY,Buy,Open,1,06/21/2019,54,C,1.3,1.14,-130,Bought 1 SVXY 06/21/19 Call 54.00 @ 1.30,Individual...39
+05/07/2019 4:02 PM,Trade,Sell to Open,BABA,Sell,Open,1,08/16/2019,190,P,15.65,1.182,1565,Sold 1 BABA 08/16/19 Put 190.00 @ 15.65,Individual...39
+05/07/2019 4:02 PM,Trade,Buy to Open,BABA,Buy,Open,1,08/16/2019,185,P,12.95,1.14,-1295,Bought 1 BABA 08/16/19 Put 185.00 @ 12.95,Individual...39
+05/04/2019 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/03/2019 4:34 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/19/2019,245,P,17.98,0.182,1798,Sold 1 TSLA 07/19/19 Put 245.00 @ 17.98,Individual...39
+05/03/2019 4:34 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/19/2019,250,P,20.12,0.14,-2012,Bought 1 TSLA 07/19/19 Put 250.00 @ 20.12,Individual...39
+05/02/2019 4:08 PM,Trade,Buy to Open,TSLA,Buy,Open,1,07/19/2019,245,P,25.52,1.14,-2552,Bought 1 TSLA 07/19/19 Put 245.00 @ 25.52,Individual...39
+05/02/2019 4:08 PM,Trade,Sell to Open,TSLA,Sell,Open,1,07/19/2019,250,P,28.18,1.202,2818,Sold 1 TSLA 07/19/19 Put 250.00 @ 28.18,Individual...39
+04/27/2019 3:21 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+04/26/2019 3:37 PM,Trade,Sell to Close,DB,Sell,Close,1,07/19/2019,9,P,1.2,0.152,120,Sold 1 DB 07/19/19 Put 9.00 @ 1.20,Individual...39
+04/18/2019 5:56 PM,Trade,Buy to Open,DB,Buy,Open,1,07/19/2019,9,P,0.97,1.14,-97,Bought 1 DB 07/19/19 Put 9.00 @ 0.97,Individual...39
+03/03/2019 6:10 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+02/27/2019 4:16 PM,Trade,Sell to Close,NBEV,Sell,Close,1,04/18/2019,5,P,0.7,0.152,70,Sold 1 NBEV 04/18/19 Put 5.00 @ 0.70,Individual...39
+02/07/2019 6:32 PM,Trade,Buy to Open,NBEV,Buy,Open,1,04/18/2019,5,P,0.6,1.14,-60,Bought 1 NBEV 04/18/19 Put 5.00 @ 0.60,Individual...39
+08/30/2018 7:44 PM,Trade,Sell to Close,MU,Sell,Close,1,09/21/2018,52.5,P,2.13,0.142,213,Sold 1 MU 09/21/18 Put 52.50 @ 2.13,Individual...39
+08/30/2018 7:44 PM,Trade,Buy to Close,MU,Buy,Close,1,09/21/2018,57.5,P,5.13,0.13,-513,Bought 1 MU 09/21/18 Put 57.50 @ 5.13,Individual...39
+08/17/2018 10:00 PM,Receive Deliver,Expiration,MU,,,1,08/17/2018,67.5,C,,0.00,0,Removal of 1 MU 08/17/18 Call 67.50 due to expiration.,Individual...39
+07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...39
+07/20/2018 10:00 PM,Receive Deliver,Expiration,MU,,,1,07/20/2018,70,C,,0.00,0,Removal of 1 MU 07/20/18 Call 70.00 due to expiration.,Individual...39
+07/14/2018 1:58 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/11/2018 6:17 PM,Trade,Sell to Close,DERM,Sell,Close,2,07/20/2018,10,C,1.32,0.294,264,Sold 2 DERM 07/20/18 Call 10.00 @ 1.32,Individual...39
+06/30/2018 4:51 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+06/26/2018 3:54 PM,Trade,Sell to Open,MU,Sell,Open,1,09/21/2018,57.5,P,6.56,1.152,656,Sold 1 MU 09/21/18 Put 57.50 @ 6.56,Individual...39
+06/26/2018 3:54 PM,Trade,Buy to Open,MU,Buy,Open,1,09/21/2018,52.5,P,3.82,1.14,-382,Bought 1 MU 09/21/18 Put 52.50 @ 3.82,Individual...39
+06/26/2018 3:36 PM,Trade,Sell to Close,SVXY,Sell,Close,1,08/17/2018,15,C,0.14,0.152,14,Sold 1 SVXY 08/17/18 Call 15.00 @ 0.14,Individual...39
+06/26/2018 3:36 PM,Trade,Buy to Close,SVXY,Buy,Close,1,08/17/2018,12,C,1.3,0.14,-130,Bought 1 SVXY 08/17/18 Call 12.00 @ 1.30,Individual...39
+06/20/2018 3:30 PM,Trade,Sell to Open,SVXY,Sell,Open,1,08/17/2018,12,C,2.13,1.152,213,Sold 1 SVXY 08/17/18 Call 12.00 @ 2.13,Individual...39
+06/20/2018 3:30 PM,Trade,Buy to Open,SVXY,Buy,Open,1,08/17/2018,15,C,0.34,1.14,-34,Bought 1 SVXY 08/17/18 Call 15.00 @ 0.34,Individual...39
+05/31/2018 4:43 PM,Trade,Buy to Open,MU,Buy,Open,1,08/17/2018,67.5,C,2.52,1.14,-252,Bought 1 MU 08/17/18 Call 67.50 @ 2.52,Individual...39
+05/30/2018 6:24 PM,Trade,Buy to Open,MU,Buy,Open,1,07/20/2018,70,C,2.4,1.14,-240,Bought 1 MU 07/20/18 Call 70.00 @ 2.40,Individual...39
+05/24/2018 4:49 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,10,C,1.2,2.28,-240,Bought 2 DERM 07/20/18 Call 10.00 @ 1.20,Individual...39
+05/22/2018 5:36 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,11,C,1.05,2.28,-210,Bought 2 DERM 07/20/18 Call 11.00 @ 1.05,Individual...39
+05/19/2018 6:25 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/18/2018 11:00 PM,Money Movement,Transfer,,,,0,,,,,0.00,1149.5,Wire Funds Received,Individual...39
+05/18/2018 4:24 PM,Trade,Sell to Close,SVXY,Sell,Close,1,05/18/2018,13,C,0.36,0.152,36,Sold 1 SVXY 05/18/18 Call 13.00 @ 0.36,Individual...39
+04/16/2018 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-1.24,FROM 03/16 THRU 04/15 @ 8    %,Individual...39
+03/24/2018 3:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+03/23/2018 10:00 PM,Money Movement,Fee,LFIN,,,0,,,,,0.00,-43.24,LONGFIN CORP,Individual...39
+03/22/2018 2:54 PM,Trade,Buy to Open,SVXY,Buy,Open,1,05/18/2018,13,C,0.4,1.14,-40,Bought 1 SVXY 05/18/18 Call 13.00 @ 0.40,Individual...39
+03/21/2018 7:59 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,17.15,0.182,1715,Sold 1 LFIN 06/15/18 Call 40.00 @ 17.15,Individual...39
+03/21/2018 7:59 PM,Trade,Buy to Close,LFIN,Buy,Close,100,,,,57.2,0.08,-5720,Bought 100 LFIN @ 57.20,Individual...39
+03/21/2018 6:42 PM,Trade,Buy to Close,LFIN,Buy,Close,100,,,,56.76,0.08,-5676,Bought 100 LFIN @ 56.76,Individual...39
+03/21/2018 6:42 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,16.78,0.182,1678,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.78,Individual...39
+03/19/2018 10:00 PM,Receive Deliver,Assignment,LFIN,,,2,06/15/2018,30,C,,0.00,0,Removal of option due to assignment,Individual...39
+03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39
+03/17/2018 3:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+03/12/2018 5:08 PM,Trade,Sell to Open,LFIN,Sell,Open,2,06/15/2018,30,C,7.1,2.324,1420,Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10,Individual...39
+03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39
+03/08/2018 11:00 PM,Money Movement,Transfer,,,,0,,,,,0.00,1200,Wire Funds Received,Individual...39
 
