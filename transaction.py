@@ -123,9 +123,9 @@ class Transaction(pd.core.series.Series):
 
         # this was a SPAC which resulted in quantity ! % 100
         >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[269]).getSymbol()
+        >>> Transaction(t.iloc[277]).getSymbol()
         'THCBW'
-        >>> Transaction(t.iloc[269]).getType()
+        >>> Transaction(t.iloc[277]).getType()
         <stock>
         """
         callOrPut = self.loc["Call/Put"]
@@ -164,14 +164,9 @@ class Transaction(pd.core.series.Series):
 
         # reverse split
         >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[511]).getQuantity()
+        >>> Transaction(t.iloc[516]).getQuantity()
         6
-        >>> Transaction(t.iloc[510]).getQuantity()
-        -6
-        >>> Transaction(t.iloc[506]).getQuantity()
-        -6
-        >>> Transaction(t.iloc[505]).getQuantity()
-        -6
+
         """
         if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
             raise KeyError(
