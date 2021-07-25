@@ -158,14 +158,14 @@ class Transaction(pd.core.series.Series):
 
         # reverse split
         >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[485]).getQuantity()
-        -6
-        >>> Transaction(t.iloc[484]).getQuantity()
+        >>> Transaction(t.iloc[508]).getQuantity()
         6
-        >>> Transaction(t.iloc[483]).getQuantity()
-        6
-        >>> Transaction(t.iloc[482]).getQuantity()
+        >>> Transaction(t.iloc[507]).getQuantity()
         -6
+        >>> Transaction(t.iloc[506]).getQuantity()
+        -6
+        >>> Transaction(t.iloc[505]).getQuantity()
+        6
         """
         if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
             raise KeyError(
