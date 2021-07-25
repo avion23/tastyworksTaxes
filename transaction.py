@@ -122,6 +122,13 @@ class Transaction(pd.core.series.Series):
         <call>
         >>> Transaction(t.iloc[333]).getType()
         <call>
+
+        # threw an error that the type couldn't be identified
+        >>> t = History.fromFile("test/merged2.csv")
+        >>> Transaction(t.iloc[239]).getSymbol()
+        'THCBW'
+        >>> Transaction(t.iloc[239]).getType()
+        <stock>
         """
         callOrPut = self.loc["Call/Put"]
 
@@ -132,7 +139,8 @@ class Transaction(pd.core.series.Series):
         elif callOrPut == "P":
             return PositionType.put
         else:
-            raise ValueError("Couldn't identify if it is stock, call or put")
+            raise ValueError("Couldn't identify if it is stock, call or put. Symbol is '{}".format(
+                self.loc["Symbol"]))
 
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
@@ -158,14 +166,14 @@ class Transaction(pd.core.series.Series):
 
         # reverse split
         >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[508]).getQuantity()
+        >>> Transaction(t.iloc[511]).getQuantity()
         6
-        >>> Transaction(t.iloc[507]).getQuantity()
+        >>> Transaction(t.iloc[510]).getQuantity()
         -6
         >>> Transaction(t.iloc[506]).getQuantity()
         -6
         >>> Transaction(t.iloc[505]).getQuantity()
-        6
+        -6
         """
         if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
             raise KeyError(
