@@ -77,12 +77,10 @@ class Transaction(pd.core.series.Series):
 
         >>> Transaction(t.iloc[13]).isStock()
         False
-        >>> #Transaction(t.iloc[14]).isStock()
-        True
         >>> Transaction(t.iloc[10]).isStock()
         True
         """
-        return not (self["Quantity"] % 100) and not not self.getSymbol() and pd.isnull(self["Strike"])
+        return not not self.getSymbol() and pd.isnull(self["Strike"])
 
     def getSymbol(self) -> str:
         """returns the Ticker symbol
@@ -123,11 +121,11 @@ class Transaction(pd.core.series.Series):
         >>> Transaction(t.iloc[333]).getType()
         <call>
 
-        # threw an error that the type couldn't be identified
+        # this was a SPAC which resulted in quantity ! % 100
         >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[239]).getSymbol()
+        >>> Transaction(t.iloc[269]).getSymbol()
         'THCBW'
-        >>> Transaction(t.iloc[239]).getType()
+        >>> Transaction(t.iloc[269]).getType()
         <stock>
         """
         callOrPut = self.loc["Call/Put"]
@@ -139,8 +137,8 @@ class Transaction(pd.core.series.Series):
         elif callOrPut == "P":
             return PositionType.put
         else:
-            raise ValueError("Couldn't identify if it is stock, call or put. Symbol is '{}".format(
-                self.loc["Symbol"]))
+            raise ValueError(
+                "Couldn't identify if it is stock, call or put. Entry was '{}".format(self))
 
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
