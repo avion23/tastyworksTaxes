@@ -153,10 +153,10 @@ class Tasty(object):
 
         # reverse split
         >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[512])) # 6 P@2
-        >>> t.addPosition(Transaction(t.history.iloc[511])) # -6 P@3.5
-        >>> t.addPosition(Transaction(t.history.iloc[508])) # 6 P@3.5
-        >>> t.addPosition(Transaction(t.history.iloc[506])) # -6 P@2
+        >>> t.addPosition(Transaction(t.history.iloc[511])) # 6 P@2
+        >>> t.addPosition(Transaction(t.history.iloc[510])) # -6 P@3.5
+        >>> t.addPosition(Transaction(t.history.iloc[507])) # 6 P@3.5
+        >>> t.addPosition(Transaction(t.history.iloc[505])) # -6 P@2
         >>> len(t.closedTrades.index)
         2
         >>> t.positions.size
@@ -337,9 +337,9 @@ class Tasty(object):
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            if row.loc["Symbol"] != "GME":
+            if row.loc["Symbol"] != "TSLA":
                 continue
-            logging.info(row)
+            # logging.info(row)
             if row.loc["Transaction Code"] == "Money Movement":
                 self.moneyMovement(row)
             if row.loc["Transaction Code"] == "Receive Deliver":
