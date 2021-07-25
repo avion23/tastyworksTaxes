@@ -153,7 +153,14 @@ class Tasty(object):
 
         # reverse split
         >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[485]))
+        >>> t.addPosition(Transaction(t.history.iloc[512])) # 6 P@2
+        >>> t.addPosition(Transaction(t.history.iloc[511])) # -6 P@3.5
+        >>> t.addPosition(Transaction(t.history.iloc[508])) # 6 P@3.5
+        >>> t.addPosition(Transaction(t.history.iloc[506])) # -6 P@2
+        >>> len(t.closedTrades.index)
+        2
+        >>> t.positions.size
+        0
 
         """
         t = Transaction(row)
@@ -249,17 +256,7 @@ class Tasty(object):
         >>> t.closedTrades.iloc[0].Quantity
         2.0
 
-        # this gme trade had a bug when closing
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[307]))
-        >>> transaction = Transaction(t.history.iloc[302])
-        >>> transaction.setQuantity(500)
-        >>> transaction["Transaction Subcode"] = "Sell to Open"
-        >>> t.addPosition(transaction)
-        >>> t.positions.iloc[0].Quantity
-        -498.0
-        >>> t.closedTrades.iloc[0].Quantity
-        2.0
+   
 
         """
 
@@ -333,7 +330,7 @@ class Tasty(object):
         """does everything
 
         >>> t = Tasty("test/merged2.csv")
-        >>> t.processTransactionHistory()
+        >>> #t.processTransactionHistory()
         >>> #t.print()
 
 
