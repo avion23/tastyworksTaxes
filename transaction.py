@@ -218,13 +218,22 @@ class Transaction(pd.core.series.Series):
         >>> t.setQuantity(-200)
         >>> t.getQuantity()
         -200
+        >>> t = Transaction(h.iloc[123])
+        >>> t.getQuantity()
+        300
+        >>> t.setQuantity(-200)
+        >>> t.getQuantity()
+        -200
+        >>> t.setQuantity(0)
+        >>> t.getQuantity()
+        0
+
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in ["Trade", "Receive Deliver"]:
             raise KeyError(
                 "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
 
-        subcode = self.loc["Transaction Subcode"]
         self.loc["Quantity"] = abs(quantity)
 
         if quantity < 0:
@@ -247,7 +256,6 @@ class Transaction(pd.core.series.Series):
             else:
                 raise ValueError(
                     "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
-
 
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
