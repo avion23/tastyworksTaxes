@@ -15,7 +15,7 @@ class Transaction(pd.core.series.Series):
         """returns the year as string from a csv entry
 
 
-        >>> Transaction(t.iloc[-1]).getYear()
+        >>> Transaction(h.iloc[-1]).getYear()
         2018
         """
         temp = self.loc["Date/Time"].year
@@ -31,7 +31,7 @@ class Transaction(pd.core.series.Series):
         """returns 2018-04-02 date format
 
 
-        >>> print(Transaction(t.iloc[-1]).getDate())
+        >>> print(Transaction(h.iloc[-1]).getDate())
         2018-03-08
         """
         temp = self.loc["Date/Time"].date()
@@ -41,7 +41,7 @@ class Transaction(pd.core.series.Series):
         """returns the exact date
 
 
-        >>> print(Transaction(t.iloc[-1]).getDateTime())
+        >>> print(Transaction(h.iloc[-1]).getDateTime())
         2018-03-08 23:00:00
         """
         temp = self.loc["Date/Time"]
@@ -50,13 +50,13 @@ class Transaction(pd.core.series.Series):
     def isOption(self) -> bool:
         """returns true if the transaction is an option
 
-        >>> Transaction(t.iloc[0]).isOption()
+        >>> Transaction(h.iloc[0]).isOption()
         True
 
         # is an assignment
-        >>> Transaction(t.iloc[13]).isOption()
+        >>> Transaction(h.iloc[13]).isOption()
         False
-        >>> Transaction(t.iloc[20]).isOption()
+        >>> Transaction(h.iloc[20]).isOption()
         True
 
         """
@@ -75,9 +75,9 @@ class Transaction(pd.core.series.Series):
     def isStock(self) -> bool:
         """returns true if the symbol is a stock ticker
 
-        >>> Transaction(t.iloc[13]).isStock()
+        >>> Transaction(h.iloc[13]).isStock()
         False
-        >>> Transaction(t.iloc[10]).isStock()
+        >>> Transaction(h.iloc[10]).isStock()
         True
         """
         return not not self.getSymbol() and pd.isnull(self["Strike"])
@@ -85,13 +85,13 @@ class Transaction(pd.core.series.Series):
     def getSymbol(self) -> str:
         """returns the Ticker symbol
 
-        >>> Transaction(t.iloc[13]).getSymbol()
+        >>> Transaction(h.iloc[13]).getSymbol()
         'PCG'
 
         # Receive Deliver
-        >>> Transaction(t.iloc[330]).getSymbol()
+        >>> Transaction(h.iloc[330]).getSymbol()
         'LFIN'
-        >>> Transaction(t.iloc[12]).getSymbol()
+        >>> Transaction(h.iloc[12]).getSymbol()
         Traceback (most recent call last):
         ...
         ValueError: This transaction doesn't have a symbol. That's wrong
@@ -106,26 +106,26 @@ class Transaction(pd.core.series.Series):
     def getType(self) -> PositionType:
         """returns put, call or stock
 
-        >>> Transaction(t.iloc[10]).getType().name
+        >>> Transaction(h.iloc[10]).getType().name
         'stock'
-        >>> Transaction(t.iloc[13]).getType().name
+        >>> Transaction(h.iloc[13]).getType().name
         'call'
-        >>> Transaction(t.iloc[12]).getType().name
+        >>> Transaction(h.iloc[12]).getType().name
         Traceback (most recent call last):
         ...
         ValueError: This transaction doesn't have a symbol. That's wrong
-        >>> Transaction(t.iloc[329]).getType().name
+        >>> Transaction(h.iloc[329]).getType().name
         'call'
-        >>> Transaction(t.iloc[328]).getType()
+        >>> Transaction(h.iloc[328]).getType()
         <call>
-        >>> Transaction(t.iloc[333]).getType()
+        >>> Transaction(h.iloc[333]).getType()
         <call>
 
         # this was a SPAC which resulted in quantity ! % 100
-        >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[277]).getSymbol()
+        >>> h = History.fromFile("test/merged2.csv")
+        >>> Transaction(h.iloc[277]).getSymbol()
         'THCBW'
-        >>> Transaction(t.iloc[277]).getType()
+        >>> Transaction(h.iloc[277]).getType()
         <stock>
         """
         callOrPut = self.loc["Call/Put"]
@@ -143,34 +143,36 @@ class Transaction(pd.core.series.Series):
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
 
-        >>> Transaction(t.iloc[11]).getSymbol()
+        >>> Transaction(h.iloc[11]).getSymbol()
         'NKLA'
-        >>> Transaction(t.iloc[11]).getQuantity()
+        >>> Transaction(h.iloc[11]).getQuantity()
         -1
-        >>> Transaction(t.iloc[10]).getQuantity()
+        >>> Transaction(h.iloc[10]).getQuantity()
         200
-        >>> Transaction(t.iloc[123]).getQuantity()
+        >>> Transaction(h.iloc[123]).getQuantity()
         300
-        >>> Transaction(t.iloc[270]).getQuantity()
+        >>> Transaction(h.iloc[270]).getQuantity()
         -100
-        >>> Transaction(t.iloc[330]).getQuantity()
+        >>> Transaction(h.iloc[330]).getQuantity()
         -200
-        >>> Transaction(t.iloc[329]).getQuantity()
+        >>> Transaction(h.iloc[329]).getQuantity()
         2
 
         # expiration
-        >>> Transaction(t.iloc[304]).getQuantity()
+        >>> Transaction(h.iloc[304]).getQuantity()
         -1
 
         # reverse split
-        >>> t = History.fromFile("test/merged2.csv")
-        >>> Transaction(t.iloc[516]).getQuantity()
+        >>> h = History.fromFile("test/merged2.csv")
+        >>> Transaction(h.iloc[516]).getQuantity()
         6
 
         """
-        if self.loc["Transaction Code"] != "Trade" and self.loc["Transaction Code"] != "Receive Deliver":
+        validTransactionCodes = ["Trade", "Receive Deliver"]
+        if self.loc["Transaction Code"] not in validTransactionCodes:
             raise KeyError(
-                "Transaction Code is not 'Trade', but: " + self.loc["Transaction Code"])
+                "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
+
         subcode = self.loc["Transaction Subcode"]
 
         sign = 1
@@ -200,20 +202,57 @@ class Transaction(pd.core.series.Series):
         return size
 
     def setQuantity(self, quantity: int):
-        """ beware, the sign is ignored. Signage is decided with the subcode
-        >>> t = Transaction(t.iloc[270])
+        """ Signage is decided with the subcode
+        >>> t = Transaction(h.iloc[270])
         >>> t.getQuantity()
         -100
         >>> t.setQuantity(200)
         >>> t.getQuantity()
+        200
+        >>> t = Transaction(h.iloc[0])
+        >>> t.getQuantity()
+        -1
+        >>> t.setQuantity(200)
+        >>> t.getQuantity()
+        200
+        >>> t.setQuantity(-200)
+        >>> t.getQuantity()
         -200
         """
-        self.loc["Quantity"] = quantity
+        validTransactionCodes = ["Trade", "Receive Deliver"]
+        if self.loc["Transaction Code"] not in ["Trade", "Receive Deliver"]:
+            raise KeyError(
+                "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
+
+        subcode = self.loc["Transaction Subcode"]
+        self.loc["Quantity"] = abs(quantity)
+
+        if quantity < 0:
+            self.loc["Buy/Sell"] == "Sell"
+
+            if self.loc["Open/Close"] == "Open":
+                self.loc["Transaction Subcode"] = "Sell to Open"
+            elif self.loc["Open/Close"] == "Close":
+                self.loc["Transaction Subcode"] = "Sell to Close"
+            else:
+                raise ValueError(
+                    "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
+        elif quantity >= 0:
+            self.loc["Buy/Sell"] == "Buy"
+
+            if self.loc["Open/Close"] == "Open":
+                self.loc["Transaction Subcode"] = "Buy to Open"
+            elif self.loc["Open/Close"] == "Close":
+                self.loc["Transaction Subcode"] = "Buy to Close"
+            else:
+                raise ValueError(
+                    "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
+
 
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
 
-        >>> print(Transaction(t.iloc[10]).getValue())
+        >>> print(Transaction(h.iloc[10]).getValue())
         {'usd': -2720.0, 'eur': -2240.527182866557}
         """
         v = Money(row=self)
@@ -222,10 +261,10 @@ class Transaction(pd.core.series.Series):
     def setValue(self, money: Money):
         """ sets the individual values for euro in AmountEuro and usd in Amount
 
-        >>> print(Transaction(t.iloc[10]).getValue())
+        >>> print(Transaction(h.iloc[10]).getValue())
         {'usd': -2720.0, 'eur': -2240.527182866557}
 
-        >>> t =  Transaction(t.iloc[10])
+        >>> t =  Transaction(h.iloc[10])
         >>> t.setValue(Money(usd=45, eur=20))
         >>> print(t.getValue())
         {'usd': 45, 'eur': 20}
@@ -236,7 +275,7 @@ class Transaction(pd.core.series.Series):
     def getFees(self) -> Money:
         """ returns the feets of the transaction at that specific point of time
 
-        >>> print(Transaction(t.iloc[10]).getFees())
+        >>> print(Transaction(h.iloc[10]).getFees())
         {'usd': 0.16, 'eur': 0.13179571663920922}
         """
         v = Money()
@@ -247,7 +286,7 @@ class Transaction(pd.core.series.Series):
     def setFees(self, money: Money):
         """ sets the individual values for euro in FeesEuro and usd 
 
-        >>> t =  Transaction(t.iloc[10])
+        >>> t =  Transaction(h.iloc[10])
         >>> t.setFees(Money(usd=45, eur=20))
         >>> print(t.getFees())
         {'usd': 45, 'eur': 20}
@@ -258,7 +297,7 @@ class Transaction(pd.core.series.Series):
     def getExpiry(self) -> datetime:
         """ returns the expiry date if it exists
 
-        >>> print(Transaction(t.iloc[0]).getExpiry())
+        >>> print(Transaction(h.iloc[0]).getExpiry())
         2021-01-15 00:00:00
         """
 
@@ -269,7 +308,7 @@ class Transaction(pd.core.series.Series):
         """ returns the strike of the option
 
 
-        >>> print(Transaction(t.iloc[0]).getStrike())
+        >>> print(Transaction(h.iloc[0]).getStrike())
         26.0
         """
         strike = self.loc["Strike"]
@@ -279,4 +318,4 @@ class Transaction(pd.core.series.Series):
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod(extraglobs={"t": History.fromFile("test/merged.csv")})
+    doctest.testmod(extraglobs={"h": History.fromFile("test/merged.csv")})
