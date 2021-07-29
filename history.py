@@ -26,6 +26,7 @@ class History(pd.DataFrame):
             df['Expiration Date'], format='%m/%d/%Y')
         df.addEuroConversion()
         df._selfTest()
+        df.drop(columns="Account Reference", inplace=True)
         return df
 
     def addEuroConversion(self):
