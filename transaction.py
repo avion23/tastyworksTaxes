@@ -227,7 +227,19 @@ class Transaction(pd.core.series.Series):
         >>> t.setQuantity(0)
         >>> t.getQuantity()
         0
-
+        >>> h = History.fromFile("test/merged2.csv")
+        >>> t = Transaction(h.iloc[170])
+        >>> t.getQuantity()
+        3
+        >>> t.setQuantity(8)
+        >>> t.getQuantity()
+        8
+        >>> t = Transaction(h.iloc[223])
+        >>> t.getQuantity()
+        -1
+        >>> t.setQuantity(8)
+        >>> t.getQuantity()
+        -8
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in ["Trade", "Receive Deliver"]:
@@ -235,6 +247,9 @@ class Transaction(pd.core.series.Series):
                 "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
 
         self.loc["Quantity"] = abs(quantity)
+        
+        if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
+            return # Open/Close and Buy/Sell is unset here
 
         if quantity < 0:
             self.loc["Buy/Sell"] == "Sell"
