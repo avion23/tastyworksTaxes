@@ -15,7 +15,9 @@ class Values:
     balanceAdjustment: Money = Money()
     fee: Money = Money()
     deposit: Money = Money()
-    interest: Money = Money()
+    creditInterest: Money = Money()
+    debitInterest: Money = Money()
+    dividend: Money = Money()
 
     def __str__(self):
         """pretty prints all the contained Values"""
@@ -31,8 +33,12 @@ class Values:
             out += "Fee: " + str(self.fee) + "\n"
         if self.deposit:
             out += "Deposit: " + str(self.deposit) + "\n"
-        if self.interest:
-            out += "Credit Interest: " + str(self.interest) + "\n"
+        if self.creditInterest:
+            out += "Credit Interest: " + str(self.creditInterest) + "\n"
+        if self.creditInterest:
+            out += "Debit Interest: " + str(self.debitInterest) + "\n"
+        if self.dividend:
+            out += "Dividend: " + str(self.dividend) + "\n"
         return out
 
 
@@ -69,7 +75,9 @@ class Tasty(object):
 
     def moneyMovement(self, row: Transaction):
         """handles moneyMovement entries
-
+        
+        >>> t = Tasty("test/merged.csv")
+        
         # known good entry of 2020
         >>> t.moneyMovement(t.history.iloc[117])
         >>> str(t.year(2020).withdrawal)
@@ -97,9 +105,20 @@ class Tasty(object):
 
         # credit interest
         >>> t.moneyMovement(t.history.iloc[8])
-        >>> str(t.year(2020).interest)
+        >>> str(t.year(2020).creditInterest)
         "{'eur': 0.02461235540241201, 'usd': 0.03}"
 
+        # debit interest
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.moneyMovement(t.history.iloc[48])
+        >>> str(t.year(2021).debitInterest)
+        "{'eur': -0.7164621592687145, 'usd': -0.87}"
+
+        # dividend
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.moneyMovement(t.history.iloc[12])
+        >>> str(t.year(2021).debitInterest)
+        "{'eur': -3.187021329160834, 'usd': -3.87}"
         """
         t = Transaction(row)
         m = Money(row=row)
@@ -114,7 +133,11 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Deposit" and t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
             self.year(t.getYear()).deposit += m
         elif t.loc["Transaction Subcode"] == "Credit Interest":
-            self.year(t.getYear()).interest += m
+            self.year(t.getYear()).creditInterest += m
+        elif t.loc["Transaction Subcode"] == "Debit Interest":
+            self.year(t.getYear()).debitInterest += m
+        elif t.loc["Transaction Subcode"] == "Dividend":
+            self.year(t.getYear()).debitInterest += m
         else:
             raise KeyError("Found unkonwn money movement subcode: '{}'".format(
                 t.loc["Transaction Subcode"]))
@@ -162,6 +185,10 @@ class Tasty(object):
         2
         >>> t.positions.size
         0
+
+        # Symbol Change
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[46])) 
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -177,6 +204,8 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Expiration":
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Reverse Split":
+            self.addPosition(t)
+        elif t.loc["Transaction Subcode"] == "Symbol Change": # That's incorrect. It's not really a sale
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
@@ -419,18 +448,18 @@ class Tasty(object):
         """does everything
 
         >>> t = Tasty("test/merged2.csv")
-        >>> #t.processTransactionHistory()
+        >>> t.processTransactionHistory()
         >>> #t.print()
 
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            if row.loc["Symbol"] != "BB":
-                continue
+            # if row.loc["Symbol"] != "BB":
+            #     continue
             # print(
             #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
-            logging.info(row)
+            # logging.info(row)
             if row.loc["Transaction Code"] == "Money Movement":
                 self.moneyMovement(row)
             if row.loc["Transaction Code"] == "Receive Deliver":
@@ -442,5 +471,5 @@ class Tasty(object):
 
 if __name__ == "__main__":
     import doctest
-
     doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
+    # doctest.run_docstring_examples(Tasty.moneyMovement, globals())
