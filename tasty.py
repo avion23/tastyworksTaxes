@@ -113,12 +113,12 @@ class Tasty(object):
         >>> t.moneyMovement(t.history.iloc[48])
         >>> str(t.year(2021).debitInterest)
         "{'eur': -0.7164621592687145, 'usd': -0.87}"
-
+        
         # dividend
         >>> t = Tasty("test/merged2.csv")
         >>> t.moneyMovement(t.history.iloc[12])
-        >>> str(t.year(2021).debitInterest)
-        "{'eur': -3.187021329160834, 'usd': -3.87}"
+        >>> str(t.year(2021).dividend)
+        "{'eur': -2.470559169892119, 'usd': -3.0}"
         """
         t = Transaction(row)
         m = Money(row=row)
@@ -137,7 +137,7 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Debit Interest":
             self.year(t.getYear()).debitInterest += m
         elif t.loc["Transaction Subcode"] == "Dividend":
-            self.year(t.getYear()).debitInterest += m
+            self.year(t.getYear()).dividend += m
         else:
             raise KeyError("Found unkonwn money movement subcode: '{}'".format(
                 t.loc["Transaction Subcode"]))
