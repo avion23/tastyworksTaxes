@@ -449,7 +449,7 @@ class Tasty(object):
 
         >>> t = Tasty("test/merged2.csv")
         >>> t.processTransactionHistory()
-        >>> #t.print()
+        >>> t.print()
 
 
         """
@@ -466,7 +466,7 @@ class Tasty(object):
                 self.receiveDelivery(row)
             if row.loc["Transaction Code"] == "Trade":
                 self.trade(row)
-        pass
+        
 
 
 if __name__ == "__main__":
