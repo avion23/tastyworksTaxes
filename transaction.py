@@ -127,6 +127,8 @@ class Transaction(pd.core.series.Series):
         'THCBW'
         >>> Transaction(h.iloc[277]).getType()
         <stock>
+        >>> Transaction(h.iloc[171]).getType()
+        <stock>
         """
         callOrPut = self.loc["Call/Put"]
 
@@ -199,7 +201,7 @@ class Transaction(pd.core.series.Series):
         q = self.loc["Quantity"]
 
         size = sign * q
-        return size
+        return int(size)
 
     def setQuantity(self, quantity: int):
         """ Signage is decided with the subcode
@@ -247,9 +249,9 @@ class Transaction(pd.core.series.Series):
                 "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
 
         self.loc["Quantity"] = abs(quantity)
-        
+
         if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
-            return # Open/Close and Buy/Sell is unset here
+            return  # Open/Close and Buy/Sell is unset here
 
         if quantity < 0:
             self.loc["Buy/Sell"] == "Sell"
