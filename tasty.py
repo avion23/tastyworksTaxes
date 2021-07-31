@@ -520,11 +520,11 @@ class Tasty(object):
         """ takes the history and calculates the closed trades in self.closedTrades
 
         >>> t = Tasty("test/merged2.csv")
-        # >>> t.processTransactionHistory()
+        >>> t.processTransactionHistory()
+        >>> t.closedTrades.to_csv("test.csv", index=False)
         # >>> t.print()
         # >>> t.closedTrades
 
-        # >>> t.closedTrades.to_csv("test.csv", index=False)
 
         """
         # reverses the order and kills prefetching and caching
