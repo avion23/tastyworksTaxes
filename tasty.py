@@ -373,6 +373,27 @@ class Tasty(object):
         >>> len(t.positions.index)
         0
 
+        # SPRT
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[21]))
+        >>> t.addPosition(Transaction(t.history.iloc[20]))
+        >>> t.addPosition(Transaction(t.history.iloc[19]))
+        >>> t.addPosition(Transaction(t.history.iloc[18]))
+        >>> t.addPosition(Transaction(t.history.iloc[17]))
+        >>> t.addPosition(Transaction(t.history.iloc[16])) # this is the last buy
+        >>> t.positions.iloc[0].Amount
+        -1934.9999999999998
+        >>> t.addPosition(Transaction(t.history.iloc[8]))
+        >>> t.addPosition(Transaction(t.history.iloc[7]))
+        >>> t.addPosition(Transaction(t.history.iloc[6]))
+        >>> t.addPosition(Transaction(t.history.iloc[5]))
+        >>> t.addPosition(Transaction(t.history.iloc[4]))
+        >>> t.addPosition(Transaction(t.history.iloc[3]))
+        >>> t.addPosition(Transaction(t.history.iloc[2]))
+        >>> len(t.positions.index)
+        0
+        >>> t.closedTrades["Amount"].sum()
+        469.99999999999994
         """
 
         for index, row in self.positions.iterrows():
@@ -393,9 +414,6 @@ class Tasty(object):
                 # percentage which is used in a trade
                 # percentage = (entry.getQuantity() / transaction.getQuantity)
                 percentageClosed = abs(tradeQuantity / entry.getQuantity())
-                logging.info("{}, entry {}, transaction {}, percentageClosed {}".format(
-                    (newPositionQuantity, newTransactionQuantity, tradeQuantity), entry.getQuantity(), transaction.getQuantity(), percentageClosed))
-                logging.info("transation fees amount {}".format(transaction["Fees"]))
                 trade["Amount"] = percentageClosed * \
                     entry["Amount"] + transaction["Amount"]
                 trade["AmountEuro"] = percentageClosed * \
@@ -410,15 +428,14 @@ class Tasty(object):
                 trade["Closing Date"] = transaction.getDateTime()
 
                 percentage = (transaction.getQuantity() - tradeQuantity) / transaction.getQuantity()
-                logging.info("percentage {}".format(percentage))
 
-                entry["Amount"] =  percentageClosed* entry["Amount"] + \
+                entry["Amount"] =  (1-percentageClosed)* entry["Amount"] + \
                     percentage * transaction["Amount"]
-                entry["AmountEuro"] = percentageClosed* entry["AmountEuro"] + \
+                entry["AmountEuro"] = (1-percentageClosed)* entry["AmountEuro"] + \
                     percentage * transaction["AmountEuro"]
-                entry["Fees"] = percentageClosed* entry["Fees"] + \
+                entry["Fees"] = (1-percentageClosed)* entry["Fees"] + \
                     percentage * transaction["Fees"]
-                entry["FeesEuro"] = percentageClosed* entry["FeesEuro"] + \
+                entry["FeesEuro"] = (1-percentageClosed)* entry["FeesEuro"] + \
                     percentage * transaction["FeesEuro"]
 
                 # update the old values
@@ -503,20 +520,20 @@ class Tasty(object):
         """ takes the history and calculates the closed trades in self.closedTrades
 
         >>> t = Tasty("test/merged2.csv")
-        >>> t.processTransactionHistory()
+        # >>> t.processTransactionHistory()
         # >>> t.print()
         # >>> t.closedTrades
 
-        >>> t.closedTrades.to_csv("test.csv", index=False)
+        # >>> t.closedTrades.to_csv("test.csv", index=False)
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            if row.loc["Symbol"] != "LFIN":
+            if row.loc["Symbol"] != "SPRT":
                 continue
-            # print(
-            #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
-            # logging.info(row)
+            print(
+                ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
+            logging.info(row)
             if row.loc["Transaction Code"] == "Money Movement":
                 self.moneyMovement(row)
             if row.loc["Transaction Code"] == "Receive Deliver":
