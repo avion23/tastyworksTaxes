@@ -59,6 +59,7 @@ class Tasty(object):
             logger.addHandler(handler)
 
         logger.setLevel(logging.DEBUG)
+        self.yearValues.clear()
         self.history = History.fromFile(path)
         self.closedTrades: pd.DataFrame = pd.DataFrame()
         self.positions = pd.DataFrame()
@@ -75,9 +76,9 @@ class Tasty(object):
 
     def moneyMovement(self, row: Transaction):
         """handles moneyMovement entries
-        
+
         >>> t = Tasty("test/merged.csv")
-        
+
         # known good entry of 2020
         >>> t.moneyMovement(t.history.iloc[117])
         >>> str(t.year(2020).withdrawal)
@@ -113,7 +114,7 @@ class Tasty(object):
         >>> t.moneyMovement(t.history.iloc[48])
         >>> str(t.year(2021).debitInterest)
         "{'eur': -0.7164621592687145, 'usd': -0.87}"
-        
+
         # dividend
         >>> t = Tasty("test/merged2.csv")
         >>> t.moneyMovement(t.history.iloc[12])
@@ -205,7 +206,8 @@ class Tasty(object):
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Reverse Split":
             self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Symbol Change": # That's incorrect. It's not really a sale
+        # That's incorrect. It's not really a sale
+        elif t.loc["Transaction Subcode"] == "Symbol Change":
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
@@ -262,16 +264,7 @@ class Tasty(object):
         1.0
         >>> t.positions.iloc[1].Strike
         5.0
-        >>> Transaction(t.history.iloc[328])["Fees"]
-        0.182
-        >>> Transaction(t.history.iloc[333])["Fees"]
-        2.28
-        >>> t.closedTrades.iloc[0]["Fees"]
-        2.6439999999999997
-        >>> t.closedTrades.iloc[0]["FeesEuro"]
-        2.7582721797167506
 
-   
 
         # multiple options of the same type
         >>> t = Tasty("test/merged2.csv")
@@ -305,7 +298,7 @@ class Tasty(object):
         >>> t.addPosition(Transaction(t.history.iloc[171]))
         >>> t.addPosition(Transaction(t.history.iloc[170]))
 
-        
+
         >>> t.addPosition(Transaction(t.history.iloc[168]))
         >>> t.addPosition(Transaction(t.history.iloc[167]))
         >>> t.addPosition(Transaction(t.history.iloc[161]))
@@ -335,69 +328,131 @@ class Tasty(object):
         >>> t.addPosition(Transaction(t.history.iloc[22]))
         >>> len(t.positions.index)
         2
+
+        # LFIN again
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[679])) # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
+        >>> t.positions.iloc[0].Amount 
+        -440.0
+        >>> t.addPosition(Transaction(t.history.iloc[678])) # Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10
+        >>> t.positions.iloc[1].Amount
+        1420.0
+        >>> t.addPosition(Transaction(t.history.iloc[676])) # Sell to Open 200 LFIN @ 30.00
+        >>> t.positions.iloc[2].Amount
+        6000.0
+        >>> t.addPosition(Transaction(t.history.iloc[675])) # Removal of option due to assignment Call @30
+        >>> len(t.positions.index) #  removed
+        2
+        >>> t.closedTrades.iloc[0]["Amount"]
+        1420.0
+        >>> t.closedTrades.iloc[0]["Fees"]
+        2.324
+        >>> t.addPosition(Transaction(t.history.iloc[674])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 16.78
+        >>> t.positions.iloc[0].Amount # only half the opening value
+        -220.0
+        >>> t.positions.iloc[0].Fees # only half the opening value
+        1.14
+        >>> t.positions.iloc[1].Amount
+        6000.0
+        >>> t.closedTrades.iloc[1]["Fees"]
+        1.3219999999999998
+
+        >>> t.addPosition(Transaction(t.history.iloc[673])) # Bought 100 LFIN @ 56.76
+        >>> t.positions.iloc[1].Amount # half remains open
+        3000.0
+        >>> t.positions.iloc[1].Fees # half remains open
+        2.582
+        >>> t.closedTrades.iloc[2].Amount # -3000 + 5676
+        -2676.0
+        >>> t.closedTrades.iloc[2].Fees # 2.582 + 0.08
+        2.662
+        >>> t.addPosition(Transaction(t.history.iloc[672])) # Bought 100 LFIN @ 57.20
+        >>> t.addPosition(Transaction(t.history.iloc[671])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 17.15
+        >>> t.closedTrades["Amount"].sum()
+        -1023.0
+        >>> len(t.positions.index)
+        0
+
         """
 
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
-                            entry.getExpiry() == transaction.getExpiry()):
+                                                                                                                                                 entry.getExpiry() == transaction.getExpiry()):
                 trade = Transaction()
                 logging.info("{} found an open position: {} {} and adding {}".format(
                              entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
 
                 if (transaction.getType() == PositionType.call or transaction.getType() == PositionType.put):
-                        trade["Expiry"] = transaction.getExpiry()
-                        trade["Strike"] = transaction.getStrike()
+                    trade["Expiry"] = transaction.getExpiry()
+                    trade["Strike"] = transaction.getStrike()
 
-                (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(entry.getQuantity(), transaction.getQuantity())
+                (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
+                    entry.getQuantity(), transaction.getQuantity())
 
-                # take a percentage of the position over to the new position
-                entry["Amount"] = (entry["Amount"] + (newTransactionQuantity - transaction.getQuantity())  * transaction["Amount"])
-                entry["AmountEuro"] = (entry["AmountEuro"] + (newTransactionQuantity - transaction.getQuantity())  * transaction["AmountEuro"])
-                entry["Fees"] = (entry["Fees"] + (newTransactionQuantity - transaction.getQuantity())  * transaction["Fees"])
-                entry["FeesEuro"] = (entry["Fees"] + (newTransactionQuantity - transaction.getQuantity())  * transaction["FeesEuro"])
-                trade["Fees"] = tradeQuantity / transaction.getQuantity() *transaction["Fees"] + entry["Fees"]
-                trade["FeesEuro"] = tradeQuantity / transaction.getQuantity() * transaction["FeesEuro"] + \
-                    entry["FeesEuro"]
+                # percentage which is used in a trade
+                # percentage = (entry.getQuantity() / transaction.getQuantity)
+                percentageClosed = abs(tradeQuantity / entry.getQuantity())
+                logging.info("{}, entry {}, transaction {}, percentageClosed {}".format(
+                    (newPositionQuantity, newTransactionQuantity, tradeQuantity), entry.getQuantity(), transaction.getQuantity(), percentageClosed))
+                logging.info("transation fees amount {}".format(transaction["Fees"]))
+                trade["Amount"] = percentageClosed * \
+                    entry["Amount"] + transaction["Amount"]
+                trade["AmountEuro"] = percentageClosed * \
+                    entry["AmountEuro"] + transaction["AmountEuro"]
+                trade["Fees"] = percentageClosed * \
+                    entry["Fees"] + transaction["Fees"]
+                trade["FeesEuro"] = percentageClosed * \
+                    entry["FeesEuro"] + transaction["FeesEuro"]
                 trade["Symbol"] = transaction.getSymbol()
                 trade["callPutStock"] = transaction.getType()
                 trade["Opening Date"] = entry.getDateTime()
                 trade["Closing Date"] = transaction.getDateTime()
-                
+
+                percentage = (transaction.getQuantity() - tradeQuantity) / transaction.getQuantity()
+                logging.info("percentage {}".format(percentage))
+
+                entry["Amount"] =  percentageClosed* entry["Amount"] + \
+                    percentage * transaction["Amount"]
+                entry["AmountEuro"] = percentageClosed* entry["AmountEuro"] + \
+                    percentage * transaction["AmountEuro"]
+                entry["Fees"] = percentageClosed* entry["Fees"] + \
+                    percentage * transaction["Fees"]
+                entry["FeesEuro"] = percentageClosed* entry["FeesEuro"] + \
+                    percentage * transaction["FeesEuro"]
+
                 # update the old values
                 trade["Quantity"] = int(tradeQuantity)
                 transaction.setQuantity(newTransactionQuantity)
                 entry.setQuantity(newPositionQuantity)
-                
-                oldValue = Money(entry)
-                trade.setValue(oldValue + transaction.getValue())
-                if trade.Quantity != 0:
-                    self.closedTrades = self.closedTrades.append(
-                        trade, ignore_index=True)
+
+     
 
                 # write back
                 self.positions.loc[index] = entry
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
-                
+
                 if trade.Quantity != 0:
+                    self.closedTrades = self.closedTrades.append(
+                        trade, ignore_index=True)
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
-                    )   
+                    )
         if transaction.getQuantity() != 0:
             if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment" or transaction["Transaction Subcode"] == "Reverse Split" and transaction["Open/Close"] == "Close":
                 raise ValueError(
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
             logging.info("{} Adding '{}' of '{}' to the open positions".format(transaction.getDateTime(),
-                                                            transaction.getQuantity(), transaction.getSymbol()))
+                                                                               transaction.getQuantity(), transaction.getSymbol()))
             self.positions = self.positions.append(
                 transaction, ignore_index=True)
 
     @classmethod
     def _updatePosition(cls, oldPositionQuantity, transactionQuantity):
         """ helper method to calculate the resulting size of a position
-        
+
         >>> Tasty._updatePosition(1, 1) # adding 1 to a previous position of 1
         (2, 0, 0)
         >>> Tasty._updatePosition(1, -1) # adding 1 to a previous position of -1
@@ -429,14 +484,14 @@ class Tasty(object):
 
         newPositionQuantity = oldPositionQuantity + transactionQuantity
         tradeQuantity = 0
-        if abs(newPositionQuantity) < abs(oldPositionQuantity):        
-            tradeQuantity = min(abs(transactionQuantity), abs(oldPositionQuantity))
-            tradeQuantity = int(math.copysign(tradeQuantity, transactionQuantity))
-        newTransactionQuantity = transactionQuantity -(newPositionQuantity - oldPositionQuantity)
+        if abs(newPositionQuantity) < abs(oldPositionQuantity):
+            tradeQuantity = min(abs(transactionQuantity),
+                                abs(oldPositionQuantity))
+            tradeQuantity = int(math.copysign(
+                tradeQuantity, transactionQuantity))
+        newTransactionQuantity = transactionQuantity - \
+            (newPositionQuantity - oldPositionQuantity)
         return (newPositionQuantity, newTransactionQuantity, tradeQuantity)
-
-
-
 
     def print(self):
         """pretty prints the status"""
@@ -445,18 +500,20 @@ class Tasty(object):
             print(value)
 
     def processTransactionHistory(self):
-        """does everything
+        """ takes the history and calculates the closed trades in self.closedTrades
 
         >>> t = Tasty("test/merged2.csv")
-        >>> t.processTransactionHistory()
-        >>> t.print()
+        >>> #t.processTransactionHistory()
+        # >>> t.print()
+        # >>> t.closedTrades
 
+        # >>> t.closedTrades.to_csv("test.csv", index=False)
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            # if row.loc["Symbol"] != "BB":
-            #     continue
+            if row.loc["Symbol"] != "LFIN":
+                continue
             # print(
             #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
             # logging.info(row)
@@ -466,10 +523,17 @@ class Tasty(object):
                 self.receiveDelivery(row)
             if row.loc["Transaction Code"] == "Trade":
                 self.trade(row)
-        
+
+    def getYearlyTrades(self) -> pd.DataFrame:
+        """ returns the yearly trades which have been saved so far as pandas dataframe
+
+        """
+        trades = self.closedTrades
+        trades['year'] = trades['Closing Date'].dt.year
+        return [trades[trades['year'] == y] for y in trades['year'].unique()]
 
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    # doctest.run_docstring_examples(Tasty.moneyMovement, globals())
+    # doctest.run_docstring_examples(Tasty.addPosition, globals())
