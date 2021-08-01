@@ -37,7 +37,7 @@ class Values:
     def __str__(self):
         """pretty prints all the contained Values
         >>> values = Values()
-        
+
         """
         j = self.to_json()
         return str(json.dumps(j, indent=4, sort_keys=True))
@@ -574,9 +574,9 @@ class Tasty(object):
         """
         m: Money = Money()
         m.usd = trades.loc[(trades['callPutStock'] ==
-                            'PositionType.stock'), 'Amount'].sum()
+                            PositionType.stock), 'Amount'].sum()
         m.eur = trades.loc[(trades['callPutStock'] ==
-                            'PositionType.stock'), 'AmountEuro'].sum()
+                            PositionType.stock), 'AmountEuro'].sum()
         return m
 
     def getOptionsSum(self, trades: pd.DataFrame) -> Money:
@@ -588,10 +588,10 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put'), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put'), 'AmountEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put), 'AmountEuro'].sum()
         return m
 
     def getOtherLoss(self, trades: pd.DataFrame) -> Money:
@@ -603,10 +603,10 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
-        m.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
         return m
 
     def getOptionsDifferential(self, trades: pd.DataFrame) -> Money:
@@ -625,21 +625,20 @@ class Tasty(object):
         True
         """
         negative: Money = Money()
-        negative.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
-        negative.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        negative.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0), 'Amount'].sum()
+        negative.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
         positive: Money = Money()
-        positive.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] >= 0), 'Amount'].sum()
-        positive.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
-            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
+        positive.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] >= 0), 'Amount'].sum()
+        positive.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
 
         r: Money = Money()
         r.usd = min(abs(negative.usd), abs(positive.usd))
         r.eur = min(abs(negative.eur), abs(positive.eur))
         return r
-
 
     def getStockLoss(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of the negative stock trades
@@ -650,8 +649,10 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['Amount'] < 0), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] == PositionType.stock) & (
+            trades['Amount'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == PositionType.stock) & (
+            trades['AmountEuro'] < 0), 'AmountEuro'].sum()
         return m
 
     def getStockFees(self, trades: pd.DataFrame) -> Money:
@@ -663,8 +664,10 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'Fees'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'FeesEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] ==
+                            PositionType.stock), 'Fees'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] ==
+                            PositionType.stock), 'FeesEuro'].sum()
         return m
 
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
@@ -676,10 +679,12 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] != 'PositionType.stock'), 'Fees'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] != 'PositionType.stock'), 'FeesEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] !=
+                            PositionType.stock), 'Fees'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] !=
+                            PositionType.stock), 'FeesEuro'].sum()
         return m
-        
+
     def getStockProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of the positive stock trades
         >>> t = Tasty("test/merged2.csv")
@@ -689,10 +694,11 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['Amount'] > 0), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['AmountEuro'] > 0), 'AmountEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] == PositionType.stock) & (
+            trades['Amount'] > 0), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == PositionType.stock) & (
+            trades['AmountEuro'] > 0), 'AmountEuro'].sum()
         return m
-
 
     def getFeesSum(self, trades: pd.DataFrame) -> Money:
         """ sums up the yearly fees in the closed trades. So so on a yearly basis. Returns the fees 
