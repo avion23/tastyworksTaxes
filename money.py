@@ -2,7 +2,11 @@
 from currency_converter import CurrencyConverter
 from datetime import date
 import datetime
+from dataclasses import dataclass
+from dataclasses_json import dataclass_json
 
+@dataclass_json
+@dataclass
 class Money:
     """replaces eur and usd"""
 
