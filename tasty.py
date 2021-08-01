@@ -519,9 +519,9 @@ class Tasty(object):
     def processTransactionHistory(self):
         """ takes the history and calculates the closed trades in self.closedTrades
 
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.processTransactionHistory()
-        >>> t.closedTrades.to_csv("test.csv", index=False)
+        # >>> t = Tasty("test/merged2.csv")
+        # >>> t.processTransactionHistory()
+        # >>> t.closedTrades.to_csv("test.csv", index=False)
         # >>> t.print()
         # >>> t.closedTrades
 
@@ -529,11 +529,11 @@ class Tasty(object):
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            if row.loc["Symbol"] != "SPRT":
-                continue
-            print(
-                ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
-            logging.info(row)
+            # if row.loc["Symbol"] != "SPRT":
+            #     continue
+            # print(
+            #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
+            # logging.info(row)
             if row.loc["Transaction Code"] == "Money Movement":
                 self.moneyMovement(row)
             if row.loc["Transaction Code"] == "Receive Deliver":
@@ -541,16 +541,74 @@ class Tasty(object):
             if row.loc["Transaction Code"] == "Trade":
                 self.trade(row)
 
-    def getYearlyTrades(self) -> pd.DataFrame:
+    def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
-
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> len(t.getYearlyTrades())
+        4
         """
         trades = self.closedTrades
+        trades['Closing Date'] = pd.to_datetime(trades['Closing Date'])
         trades['year'] = trades['Closing Date'].dt.year
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
 
 
+    def getStockSum(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all stock trades in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockSum(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'AmountEuro'].sum()
+        return m
+
+    def getOptionsSum(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all option trades in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getOptionsSum(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put'), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put'), 'AmountEuro'].sum()
+        return m
+
+    def getOptionsDifferential(self, trades: pd.DataFrame) -> Money:
+        """ returns the highes difference in options, e.g. how many positive and how many negatives have occured 
+
+        In Germany there is no net taxation for options. Instead, gross is taxed - but only if you are over 20k EUR per year. 
+        I implemented this as follows:
+        - sum the negatives
+        - sum the positives
+        - and take the min from the absolute value of both. That is how much they cancel each other out
+         
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getOptionsDifferential(y) for y in years][0].usd != 0
+        True
+        """
+        negative: Money = Money()
+        negative.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
+        negative.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        positive: Money = Money()
+        positive.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] >= 0), 'Amount'].sum()
+        positive.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
+
+        r: Money = Money()
+        r.usd = min(abs(negative.usd), abs(positive.usd))
+        r.eur = min(abs(negative.eur), abs(positive.eur))
+        return r
+
+
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    # doctest.run_docstring_examples(Tasty.addPosition, globals())
+    # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
+    doctest.run_docstring_examples(Tasty.getOptionsDifferential, globals())
