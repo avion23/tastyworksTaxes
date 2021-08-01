@@ -6,8 +6,14 @@ import math
 from money import Money
 from typing import List
 import logging
+from pathlib import Path
+import pprint
+from dataclasses import dataclass
+from dataclasses_json import dataclass_json
 
 
+@dataclass_json
+@dataclass
 class Values:
     """store all data here"""
     withdrawal: Money = Money()
@@ -18,28 +24,23 @@ class Values:
     creditInterest: Money = Money()
     debitInterest: Money = Money()
     dividend: Money = Money()
+    stockAndOptionsSum: Money = Money()
+    stockSum: Money = Money()
+    optionSum: Money = Money()
+    grossOptionsDifferential: Money = Money()
+    stockProfits: Money = Money()
+    stockLoss: Money = Money()
+    otherLoss: Money = Money()
+    stockFees: Money = Money()
+    otherFees: Money = Money()
 
     def __str__(self):
-        """pretty prints all the contained Values"""
-
-        out: str = ""
-        if self.withdrawal:
-            out += "Withdrawal: " + str(self.withdrawal) + "\n"
-        if self.transfer:
-            out += "Transfer: " + str(self.transfer) + "\n"
-        if self.balanceAdjustment:
-            out += "Balance Adjustment: " + str(self.balanceAdjustment) + "\n"
-        if self.fee:
-            out += "Fee: " + str(self.fee) + "\n"
-        if self.deposit:
-            out += "Deposit: " + str(self.deposit) + "\n"
-        if self.creditInterest:
-            out += "Credit Interest: " + str(self.creditInterest) + "\n"
-        if self.creditInterest:
-            out += "Debit Interest: " + str(self.debitInterest) + "\n"
-        if self.dividend:
-            out += "Dividend: " + str(self.dividend) + "\n"
-        return out
+        """pretty prints all the contained Values
+        >>> values = Values()
+        
+        """
+        j = self.to_json()
+        return str(json.dumps(j, indent=4, sort_keys=True))
 
 
 class Tasty(object):
@@ -67,8 +68,6 @@ class Tasty(object):
     def year(self, year):
         """used to access the dictionary and create the year if it doesn't exist
 
-        >>> type(t.year(2018))
-        <class '__main__.Values'>
         """
         if not year in self.yearValues:
             self.yearValues[year] = Values()
@@ -427,23 +426,22 @@ class Tasty(object):
                 trade["Opening Date"] = entry.getDateTime()
                 trade["Closing Date"] = transaction.getDateTime()
 
-                percentage = (transaction.getQuantity() - tradeQuantity) / transaction.getQuantity()
+                percentage = (transaction.getQuantity() -
+                              tradeQuantity) / transaction.getQuantity()
 
-                entry["Amount"] =  (1-percentageClosed)* entry["Amount"] + \
+                entry["Amount"] = (1-percentageClosed) * entry["Amount"] + \
                     percentage * transaction["Amount"]
-                entry["AmountEuro"] = (1-percentageClosed)* entry["AmountEuro"] + \
+                entry["AmountEuro"] = (1-percentageClosed) * entry["AmountEuro"] + \
                     percentage * transaction["AmountEuro"]
-                entry["Fees"] = (1-percentageClosed)* entry["Fees"] + \
+                entry["Fees"] = (1-percentageClosed) * entry["Fees"] + \
                     percentage * transaction["Fees"]
-                entry["FeesEuro"] = (1-percentageClosed)* entry["FeesEuro"] + \
+                entry["FeesEuro"] = (1-percentageClosed) * entry["FeesEuro"] + \
                     percentage * transaction["FeesEuro"]
 
                 # update the old values
                 trade["Quantity"] = int(tradeQuantity)
                 transaction.setQuantity(newTransactionQuantity)
                 entry.setQuantity(newPositionQuantity)
-
-     
 
                 # write back
                 self.positions.loc[index] = entry
@@ -519,17 +517,17 @@ class Tasty(object):
     def processTransactionHistory(self):
         """ takes the history and calculates the closed trades in self.closedTrades
 
-        # >>> t = Tasty("test/merged2.csv")
-        # >>> t.processTransactionHistory()
-        # >>> t.closedTrades.to_csv("test.csv", index=False)
-        # >>> t.print()
-        # >>> t.closedTrades
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.processTransactionHistory()
+        >>> t.print()
+        >>> t.closedTrades
 
+        # >>> t.closedTrades.to_csv("test.csv", index=False)
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
-            # if row.loc["Symbol"] != "SPRT":
+            # if row.loc["Symbol"] != "PLTR":
             #     continue
             # print(
             #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
@@ -553,6 +551,18 @@ class Tasty(object):
         trades['year'] = trades['Closing Date'].dt.year
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
 
+    def getCombinedSum(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all stock trades in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockSum(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades['Amount'].sum()
+        m.eur = trades['AmountEuro'].sum()
+        return m
 
     def getStockSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
@@ -563,8 +573,10 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'AmountEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] ==
+                            'PositionType.stock'), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] ==
+                            'PositionType.stock'), 'AmountEuro'].sum()
         return m
 
     def getOptionsSum(self, trades: pd.DataFrame) -> Money:
@@ -576,8 +588,25 @@ class Tasty(object):
         True
         """
         m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put'), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put'), 'AmountEuro'].sum()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put'), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put'), 'AmountEuro'].sum()
+        return m
+
+    def getOtherLoss(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all option losses
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getOtherLoss(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
         return m
 
     def getOptionsDifferential(self, trades: pd.DataFrame) -> Money:
@@ -588,7 +617,7 @@ class Tasty(object):
         - sum the negatives
         - sum the positives
         - and take the min from the absolute value of both. That is how much they cancel each other out
-         
+
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
@@ -596,11 +625,15 @@ class Tasty(object):
         True
         """
         negative: Money = Money()
-        negative.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
-        negative.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        negative.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] < 0), 'Amount'].sum()
+        negative.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
         positive: Money = Money()
-        positive.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] >= 0), 'Amount'].sum()
-        positive.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
+        positive.usd = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['Amount'] >= 0), 'Amount'].sum()
+        positive.eur = trades.loc[((trades['callPutStock'] == 'PositionType.call') | (
+            trades['callPutStock'] == 'PositionType.put')) & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
 
         r: Money = Money()
         r.usd = min(abs(negative.usd), abs(positive.usd))
@@ -608,7 +641,111 @@ class Tasty(object):
         return r
 
 
+    def getStockLoss(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of the negative stock trades
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockLoss(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['Amount'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+        return m
+
+    def getStockFees(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all fees on stocks
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockLoss(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'Fees'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock'), 'FeesEuro'].sum()
+        return m
+
+    def getOtherFees(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all fees on stocks
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockLoss(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] != 'PositionType.stock'), 'Fees'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] != 'PositionType.stock'), 'FeesEuro'].sum()
+        return m
+        
+    def getStockProfits(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of the positive stock trades
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getStockProfits(y) for y in years][0].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['Amount'] > 0), 'Amount'].sum()
+        m.eur = trades.loc[(trades['callPutStock'] == 'PositionType.stock') & (trades['AmountEuro'] > 0), 'AmountEuro'].sum()
+        return m
+
+
+    def getFeesSum(self, trades: pd.DataFrame) -> Money:
+        """ sums up the yearly fees in the closed trades. So so on a yearly basis. Returns the fees 
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getFeesSum(y) for y in years][0].usd != 0
+        True
+        >>> [t.getFeesSum(y) for y in years]
+        """
+        m: Money = Money()
+        m.usd = trades['Fees'].sum()
+        m.eur = trades['FeesEuro'].sum()
+        return m
+
+    def run(self):
+        """ runs all functions for all years on the passed transaction file
+
+
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> pprint.PrettyPrinter(indent=True, compact=False)
+        >>> ret = t.run()
+        >>> print(pprint.pformat(ret))
+        """
+        self.processTransactionHistory()
+        trades = self.getYearlyTrades()
+        # add in the fees of the individual trades
+        fees = [self.getFeesSum(y) for y in trades]
+        for index, key in enumerate(self.yearValues):
+            m = Money()
+            m.usd = fees[index].usd
+            m.eur = fees[index].eur
+            self.year(key).fee += m
+
+        ret = dict()
+        for index, key in enumerate(self.yearValues):
+            ret[key] = self.yearValues[key]
+            ret[key].stockAndOptionsSum = self.getCombinedSum(trades[index])
+            ret[key].stockSum = self.getStockSum(trades[index])
+            ret[key].optionSum = self.getOptionsSum(trades[index])
+            ret[key].grossOptionsDifferential = self.getOptionsDifferential(
+                trades[index])
+            ret[key].stockProfits = self.getStockProfits(trades[index])
+            ret[key].stockLoss = self.getStockLoss(trades[index])
+            ret[key].otherLoss = self.getOtherLoss(trades[index])
+            ret[key].stockFees = self.getStockFees(trades[index])
+            ret[key].otherFees = self.getOtherFees(trades[index])
+
+        return ret
+
+
 if __name__ == "__main__":
     import doctest
     # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    doctest.run_docstring_examples(Tasty.getOptionsDifferential, globals())
+    doctest.run_docstring_examples(Tasty.run, globals())
