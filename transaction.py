@@ -9,7 +9,7 @@ class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs, dtype='object')
 
     def getYear(self) -> str:
         """returns the year as string from a csv entry
