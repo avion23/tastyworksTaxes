@@ -449,8 +449,8 @@ class Tasty(object):
                     self.positions.drop(index, inplace=True)
 
                 if trade.Quantity != 0:
-                    self.closedTrades = self.closedTrades.append(
-                        trade, ignore_index=True)
+                    self.closedTrades = pd.concat([self.closedTrades,
+                        trade.to_frame().T])
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
@@ -461,8 +461,8 @@ class Tasty(object):
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
             logging.info("{} Adding '{}' of '{}' to the open positions".format(transaction.getDateTime(),
                                                                                transaction.getQuantity(), transaction.getSymbol()))
-            self.positions = self.positions.append(
-                transaction, ignore_index=True)
+            
+            self.positions =  pd.concat([self.positions, transaction.to_frame().T])
 
     @classmethod
     def _updatePosition(cls, oldPositionQuantity, transactionQuantity):
