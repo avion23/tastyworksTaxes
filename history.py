@@ -1,8 +1,9 @@
 
 from glob import glob
+from pathlib import Path
+
 import pandas as pd
 from currency_converter import CurrencyConverter
-from pathlib import Path
 
 
 class History(pd.DataFrame):

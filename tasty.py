@@ -1,15 +1,17 @@
-from position import PositionType
-import pandas as pd
-from history import History
-from transaction import Transaction
-import math
-from money import Money
-from typing import List
 import logging
-from pathlib import Path
+import math
 import pprint
 from dataclasses import dataclass
+from pathlib import Path
+from typing import List
+
+import pandas as pd
 from dataclasses_json import dataclass_json
+
+from history import History
+from money import Money
+from position import PositionType
+from transaction import Transaction
 
 
 @dataclass_json
@@ -753,5 +755,6 @@ class Tasty(object):
 
 if __name__ == "__main__":
     import doctest
+
     # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
     doctest.run_docstring_examples(Tasty.run, globals())
