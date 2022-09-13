@@ -1,9 +1,11 @@
 
-from currency_converter import CurrencyConverter
-from datetime import date
 import datetime
 from dataclasses import dataclass
+from datetime import date
+
+from currency_converter import CurrencyConverter
 from dataclasses_json import dataclass_json
+
 
 @dataclass_json
 @dataclass

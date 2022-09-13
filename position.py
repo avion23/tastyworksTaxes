@@ -1,7 +1,9 @@
 import doctest
-from money import Money
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+
+from money import Money
+
 
 class PositionType(Enum):
     """put, call, or stock"""

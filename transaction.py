@@ -1,8 +1,10 @@
 from datetime import datetime
+
 import pandas as pd
+
 from history import History
-from position import PositionType, Position, Stock, Option
 from money import Money
+from position import Option, Position, PositionType, Stock
 
 
 class Transaction(pd.core.series.Series):
