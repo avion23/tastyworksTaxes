@@ -213,8 +213,11 @@ class Tasty(object):
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Reverse Split":
             self.addPosition(t)
-        # That's incorrect. It's not really a sale
+        # TODO: That's incorrect. It's not really a sale for tax purposes.
         elif t.loc["Transaction Subcode"] == "Symbol Change":
+            self.addPosition(t)
+        # TODO: That's incorrect. It's not really a sale for tax purposes.
+        elif t.loc["Transaction Subcode"] == "Stock Merger":
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
@@ -340,13 +343,13 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.addPosition(Transaction(t.history.iloc[679])) # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
         >>> t.positions.iloc[0].Amount 
-        -440
+        -440.0
         >>> t.addPosition(Transaction(t.history.iloc[678])) # Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10
         >>> t.positions.iloc[1].Amount
-        1420
+        1420.0
         >>> t.addPosition(Transaction(t.history.iloc[676])) # Sell to Open 200 LFIN @ 30.00
         >>> t.positions.iloc[2].Amount
-        6000
+        6000.0
         >>> t.addPosition(Transaction(t.history.iloc[675])) # Removal of option due to assignment Call @30
         >>> len(t.positions.index) #  removed
         2
@@ -366,11 +369,11 @@ class Tasty(object):
 
         >>> t.addPosition(Transaction(t.history.iloc[673])) # Bought 100 LFIN @ 56.76
         >>> t.positions.iloc[1].Amount # half remains open
-        3000
+        3000.0
         >>> t.positions.iloc[1].Fees # half remains open
         2.582
         >>> t.closedTrades.iloc[2].Amount # -3000 + 5676
-        -2676
+        -2676.0
         >>> t.closedTrades.iloc[2].Fees # 2.582 + 0.08
         2.662
         >>> t.addPosition(Transaction(t.history.iloc[672])) # Bought 100 LFIN @ 57.20
@@ -525,10 +528,10 @@ class Tasty(object):
     def processTransactionHistory(self):
         """ takes the history and calculates the closed trades in self.closedTrades
 
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.processTransactionHistory()
-        >>> t.print()
-        >>> t.closedTrades
+        # >>> t = Tasty("test/merged2.csv")
+        # >>> t.processTransactionHistory()
+        # >>> t.print()
+        # >>> t.closedTrades
 
         # >>> t.closedTrades.to_csv("test.csv", index=False)
 
@@ -726,11 +729,11 @@ class Tasty(object):
         """ runs all functions for all years on the passed transaction file
 
 
-        # >>> t = Tasty("test/merged3.csv")
-        # >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        # >>> pprint.PrettyPrinter(indent=True, compact=False)
-        # >>> ret = t.run()
-        # >>> print(pprint.pformat(ret))
+        >>> t = Tasty("test/merged3.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> pprint.PrettyPrinter(indent=True, compact=False)
+        >>> ret = t.run()
+        >>> print(pprint.pformat(ret))
         """
         self.processTransactionHistory()
         trades = self.getYearlyTrades()
@@ -762,5 +765,5 @@ class Tasty(object):
 if __name__ == "__main__":
     import doctest
 
-    doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    # doctest.run_docstring_examples(Tasty.run, globals())
+    # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
+    doctest.run_docstring_examples(Tasty.run, globals())
