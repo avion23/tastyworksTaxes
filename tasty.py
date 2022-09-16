@@ -12,6 +12,7 @@ from history import History
 from money import Money
 from position import PositionType
 from transaction import Transaction
+import json
 
 
 @dataclass_json
@@ -146,6 +147,7 @@ class Tasty(object):
 
     def receiveDelivery(self, row):
         """ sub function to process the column namend "Receive Deliver" in the csv file
+
         # assigned -200 LFIN stock
         >>> t = Tasty("test/merged.csv")
         >>> t.addPosition(Transaction(t.history.iloc[330]))
@@ -157,7 +159,7 @@ class Tasty(object):
         >>> t.positions.size
         0
         >>> t.closedTrades.iloc[0]["Quantity"]
-        200.0
+        200
         >>> t = Tasty("test/merged.csv")
         >>> t.addPosition(Transaction(t.history.iloc[332]))
         >>> t.addPosition(Transaction(t.history.iloc[329]))
@@ -191,6 +193,10 @@ class Tasty(object):
         # Symbol Change
         >>> t = Tasty("test/merged2.csv")
         >>> t.addPosition(Transaction(t.history.iloc[46])) 
+
+        # Stock merger
+        >>> t = Tasty("test/merged3.csv")
+        >>> t.addPosition(Transaction(t.history.iloc[193]))
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -239,9 +245,9 @@ class Tasty(object):
         # one closing, absolute positions should be 1 afterwards
         >>> t.addPosition(Transaction(t.history.iloc[328]))
         >>> t.positions.iloc[0]["Quantity"]
-        1.0
+        1
         >>> t.closedTrades.iloc[0]["Quantity"]
-        -1.0
+        -1
 
 
         # close this up and check if it's gone from the positions
@@ -249,7 +255,7 @@ class Tasty(object):
         >>> t.positions.size
         0
         >>> t.closedTrades.iloc[1]["Quantity"]
-        -1.0
+        -1
 
         # add nearly equal position but with different strike
         >>> t.addPosition(Transaction(t.history.iloc[333]))
@@ -260,24 +266,24 @@ class Tasty(object):
         1
         >>> t.addPosition(wrongStrike)
         >>> t.positions.iloc[0].Quantity
-        2.0
+        2
         >>> t.positions.iloc[1].Quantity
-        1.0
+        1
         >>> t.positions.iloc[1].Strike
-        5.0
+        5
 
 
         # multiple options of the same type
         >>> t = Tasty("test/merged2.csv")
         >>> t.addPosition(Transaction(t.history.iloc[238]))
         >>> t.positions.iloc[0].Quantity
-        1.0
+        1
         >>> t.addPosition(Transaction(t.history.iloc[237]))
         >>> t.positions.iloc[0].Quantity
-        2.0
+        2
         >>> t.addPosition(Transaction(t.history.iloc[236]))
         >>> t.positions.iloc[0].Quantity
-        3.0
+        3
 
 
         # 2x receive deliver
@@ -285,7 +291,7 @@ class Tasty(object):
         >>> t.addPosition(Transaction(t.history.iloc[171]))
         >>> t.addPosition(Transaction(t.history.iloc[144]))
         >>> t.positions.iloc[0].Quantity
-        400.0
+        400
 
         # blackberry BB
         >>> t = Tasty("test/merged2.csv")
@@ -334,43 +340,43 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.addPosition(Transaction(t.history.iloc[679])) # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
         >>> t.positions.iloc[0].Amount 
-        -440.0
+        -440
         >>> t.addPosition(Transaction(t.history.iloc[678])) # Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10
         >>> t.positions.iloc[1].Amount
-        1420.0
+        1420
         >>> t.addPosition(Transaction(t.history.iloc[676])) # Sell to Open 200 LFIN @ 30.00
         >>> t.positions.iloc[2].Amount
-        6000.0
+        6000
         >>> t.addPosition(Transaction(t.history.iloc[675])) # Removal of option due to assignment Call @30
         >>> len(t.positions.index) #  removed
         2
         >>> t.closedTrades.iloc[0]["Amount"]
-        1420.0
+        1420
         >>> t.closedTrades.iloc[0]["Fees"]
         2.324
         >>> t.addPosition(Transaction(t.history.iloc[674])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 16.78
         >>> t.positions.iloc[0].Amount # only half the opening value
-        -220.0
+        -220
         >>> t.positions.iloc[0].Fees # only half the opening value
         1.14
         >>> t.positions.iloc[1].Amount
-        6000.0
+        6000
         >>> t.closedTrades.iloc[1]["Fees"]
         1.3219999999999998
 
         >>> t.addPosition(Transaction(t.history.iloc[673])) # Bought 100 LFIN @ 56.76
         >>> t.positions.iloc[1].Amount # half remains open
-        3000.0
+        3000
         >>> t.positions.iloc[1].Fees # half remains open
         2.582
         >>> t.closedTrades.iloc[2].Amount # -3000 + 5676
-        -2676.0
+        -2676
         >>> t.closedTrades.iloc[2].Fees # 2.582 + 0.08
         2.662
         >>> t.addPosition(Transaction(t.history.iloc[672])) # Bought 100 LFIN @ 57.20
         >>> t.addPosition(Transaction(t.history.iloc[671])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 17.15
         >>> t.closedTrades["Amount"].sum()
-        -1023.0
+        -1023
         >>> len(t.positions.index)
         0
 
@@ -720,11 +726,11 @@ class Tasty(object):
         """ runs all functions for all years on the passed transaction file
 
 
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> pprint.PrettyPrinter(indent=True, compact=False)
-        >>> ret = t.run()
-        >>> print(pprint.pformat(ret))
+        # >>> t = Tasty("test/merged3.csv")
+        # >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        # >>> pprint.PrettyPrinter(indent=True, compact=False)
+        # >>> ret = t.run()
+        # >>> print(pprint.pformat(ret))
         """
         self.processTransactionHistory()
         trades = self.getYearlyTrades()
@@ -756,5 +762,5 @@ class Tasty(object):
 if __name__ == "__main__":
     import doctest
 
-    # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    doctest.run_docstring_examples(Tasty.run, globals())
+    doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
+    # doctest.run_docstring_examples(Tasty.run, globals())
