@@ -177,6 +177,14 @@ class Transaction(pd.core.series.Series):
         -100
         >>> Transaction(h.iloc[45]).getQuantity()
         100
+
+
+        # Stock merger
+        >>> h = History.fromFile("test/merged3.csv")
+        >>> Transaction(h.iloc[194]).getQuantity()
+        6
+        >>> Transaction(h.iloc[195]).getQuantity()
+        -6
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in validTransactionCodes:
@@ -195,7 +203,7 @@ class Transaction(pd.core.series.Series):
         elif subcode == "Expiration":
             sign = -1  # TODO
         # TODO: Handle this without realizing a trade
-        elif subcode in ["Reverse Split", "Symbol Change"]:
+        elif subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
             if self.loc["Buy/Sell"] == "Buy":
                 sign = 1
             elif self.loc["Buy/Sell"] == "Sell":
