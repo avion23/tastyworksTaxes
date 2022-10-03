@@ -1,8 +1,9 @@
+import json
 import logging
 import math
+import pathlib
 import pprint
 from dataclasses import dataclass
-from pathlib import Path
 from typing import List
 
 import pandas as pd
@@ -12,7 +13,6 @@ from history import History
 from money import Money
 from position import PositionType
 from transaction import Transaction
-import json
 
 
 @dataclass_json
@@ -52,7 +52,7 @@ class Tasty(object):
     positions: pd.DataFrame
     closedTrades:  pd.DataFrame
 
-    def __init__(self, path: str):
+    def __init__(self, path: pathlib.Path):
         logger = logging.getLogger()
         if not logger.handlers:
             handler = logging.StreamHandler()
