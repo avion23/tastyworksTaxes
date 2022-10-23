@@ -1,10 +1,28 @@
 from datetime import datetime
-
+import logging
 import pandas as pd
 
 from history import History
 from money import Money
 from position import Option, Position, PositionType, Stock
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.WARNING,
+    datefmt='%Y-%m-%d %H:%M:%S')
+for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
+    temp = logging.getLogger(key)
+    temp.propagate = True
+    temp.setLevel(logging.INFO)
+    if temp.name == "trade":
+        temp.setLevel(logging.DEBUG)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+
 
 
 class Transaction(pd.core.series.Series):
@@ -314,7 +332,7 @@ class Transaction(pd.core.series.Series):
         self["AmountEuro"] = money.eur
 
     def getFees(self) -> Money:
-        """ returns the feets of the transaction at that specific point of time
+        """ returns the fees of the transaction at that specific point of time
 
         >>> print(Transaction(h.iloc[10]).getFees())
         {'usd': 0.16, 'eur': 0.13179571663920922}
