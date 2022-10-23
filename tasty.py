@@ -15,6 +15,23 @@ from position import PositionType
 from transaction import Transaction
 
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.WARNING,
+    datefmt='%Y-%m-%d %H:%M:%S')
+for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
+    temp = logging.getLogger(key)
+    temp.propagate = True
+    temp.setLevel(logging.INFO)
+    if temp.name == "trade":
+        temp.setLevel(logging.DEBUG)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
+
+
 @dataclass_json
 @dataclass
 class Values:
@@ -53,16 +70,6 @@ class Tasty(object):
     closedTrades:  pd.DataFrame
 
     def __init__(self, path: pathlib.Path):
-        logger = logging.getLogger()
-        if not logger.handlers:
-            handler = logging.StreamHandler()
-            formatter = logging.Formatter(
-                "%(asctime)s %(name)-12s %(levelname)-8s %(message)s")
-            handler.setFormatter(formatter)
-            logger.handlers
-            logger.addHandler(handler)
-
-        logger.setLevel(logging.DEBUG)
         self.yearValues.clear()
         self.history = History.fromFile(path)
         self.closedTrades: pd.DataFrame = pd.DataFrame()
@@ -729,11 +736,11 @@ class Tasty(object):
         """ runs all functions for all years on the passed transaction file
 
 
-        >>> t = Tasty("test/merged3.csv")
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> pprint.PrettyPrinter(indent=True, compact=False)
-        >>> ret = t.run()
-        >>> print(pprint.pformat(ret))
+        # >>> t = Tasty("test/merged3.csv")
+        # >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        # >>> pprint.PrettyPrinter(indent=True, compact=False)
+        # >>> ret = t.run()
+        # >>> print(pprint.pformat(ret))
         """
         self.processTransactionHistory()
         trades = self.getYearlyTrades()
