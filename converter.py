@@ -6,8 +6,6 @@ from unittest.mock import Mock, patch
 from tabulate import tabulate
 
 
-
-
 logger = logging.getLogger(__name__)
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -31,8 +29,8 @@ class GermanTaxReport(object):
     """ represents the german tax report
 
     Sorry for the german variable names. There is also an english version and I've created translation functions
- 
- 
+
+
  Example output:
     Einzahlungen
     Auszahlungen
@@ -93,64 +91,64 @@ class GermanTaxReport(object):
     Cash Balance USD
     Net Liquidating Value
     """
-
-    Einzahlungen: float
-    Auszahlungen: float
-    Brokergebuehren: float
-    Alle_Gebuehren_in_USD: float
-    Alle_Gebuehren_in_Euro: float
-    Waehrungsgewinne_USD: float
-    Waehrungsgewinne_USD_steuerfrei: float
-    Waehrungsgewinne_USD_Gesamt: float
-    Krypto_Gewinne: float
-    Krypto_Verluste: float
-    Anlage_SO: float
-    Anlage_SO_Steuerbetrag: float
-    Anlage_SO_Verlustvortrag: float
-    Investmentfondsgewinne: float
-    Investmentfondsverluste: float
-    Anlage_KAP_INV: float
-    Aktiengewinne_Z20: float
-    Aktienverluste_Z23: float
-    Aktien_Gesamt: float
-    Aktien_Steuerbetrag: float
-    Aktien_Verlustvortrag: float
-    Sonstige_Gewinne: float
-    Sonstige_Verluste: float
-    Sonstige_Gesamt: float
-    Stillhalter_Gewinne: float
-    Stillhalter_Verluste: float
-    Stillhalter_Gesamt: float
-    Durchschnitt_behaltene_Praemien_pro_Tag: float
-    Stillhalter_Gewinne_Calls_FIFO: float
-    Stillhalter_Verluste_Calls_FIFO: float
-    Stillhalter_Calls_Gesamt_FIFO: float
-    Stillhalter_Gewinne_Puts_FIFO: float
-    Stillhalter_Verluste_Puts_FIFO: float
-    Stillhalter_Puts_Gesamt_FIFO: float
-    Stillhalter_Gewinne_FIFO: float
-    Stillhalter_Verluste_FIFO: float
-    Stillhalter_Gesamt_FIFO: float
-    Long_Optionen_Gewinne: float
-    Long_Optionen_Verluste: float
-    Long_Optionen_Gesamt: float
-    Future_Gewinne: float
-    Future_Verluste: float
-    Future_Gesamt: float
-    zusaetzliche_Ordergebuehren: float
-    Dividenden: float
-    bezahlte_Dividenden: float
-    Quellensteuer_Z41: float
-    Zinseinnahmen: float
-    Zinsausgaben: float
-    Zinsausgaben_Steuerbetrag: float
-    Zinsausgaben_Verlustvortrag: float
-    Sonstige_Ausgaben: float
-    Sonstige_Ausgaben_Steuerbetrag: float
-    Sonstige_Ausgaben_Verlustvortrag: float
-    Verlustvortrag: float
-    Verlustvortrag_Steuerbetrag: float
-    Verlustvortrag_Verlustvortrag: float
+    einzahlungen: float = 0
+    auszahlungen: float = 0
+    brokergebuehren: float = 0
+    alle_gebuehren_in_usd: float = 0
+    alle_gebuehren_in_euro: float = 0
+    waehrungsgewinne_usd: float = 0
+    waehrungsgewinne_usd_steuerfrei: float = 0
+    waehrungsgewinne_usd_gesamt: float = 0
+    krypto_gewinne: float = 0
+    krypto_verluste: float = 0
+    anlage_so: float = 0
+    anlage_so_steuerbetrag: float = 0
+    anlage_so_verlustvortrag: float = 0
+    investmentfondsgewinne: float = 0
+    investmentfondsverluste: float = 0
+    anlage_kap_inv: float = 0
+    aktiengewinne_z20: float = 0
+    aktienverluste_z23: float = 0
+    aktien_gesamt: float = 0
+    aktien_steuerbetrag: float = 0
+    aktien_verlustvortrag: float = 0
+    sonstige_gewinne: float = 0
+    sonstige_verluste: float = 0
+    sonstige_gesamt: float = 0
+    stillhalter_gewinne: float = 0
+    stillhalter_verluste: float = 0
+    stillhalter_gesamt: float = 0
+    durchschnitt_behaltene_praemien_pro_tag: float = 0
+    stillhalter_gewinne_calls_fifo: float = 0
+    stillhalter_verluste_calls_fifo: float = 0
+    stillhalter_calls_gesamt_fifo: float = 0
+    stillhalter_gewinne_puts_fifo: float = 0
+    stillhalter_verluste_puts_fifo: float = 0
+    stillhalter_puts_gesamt_fifo: float = 0
+    stillhalter_gewinne_fifo: float = 0
+    stillhalter_verluste_fifo: float = 0
+    stillhalter_gesamt_fifo: float = 0
+    long_optionen_gewinne: float = 0
+    long_optionen_verluste: float = 0
+    long_optionen_gesamt: float = 0
+    future_gewinne: float = 0
+    future_verluste: float = 0
+    future_gesamt: float = 0
+    zusatzliche_ordergebuehren: float = 0
+    dividenden: float = 0
+    bezahlte_dividenden: float = 0
+    quellensteuer_z41: float = 0
+    zinseinnahmen: float = 0
+    zinsausgaben: float = 0
+    zinsen_gesamt: float = 0
+    z19_auslaendische_kapitalertraege: float = 0
+    z21_termingeschaefsgewinne_stillhalter: float = 0
+    z24_termingeschaefte_verluste: float = 0
+    kap_kap_inv: float = 0
+    kap_kap_inv_kerst_soli: float = 0
+    kap_kap_inv_verlustvortrag: float = 0
+    cash_balance_usd: float = 0
+    net_liquidating_value: float = 0
 
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
@@ -229,12 +227,14 @@ class EnglishTaxReport(object):
 
         return ret
 
+
 class Converter(object):
     def __init__(self, path: str) -> None:
         self.path = path
 
     def toGerman(self, input: dict) -> dict:
         return {}
+
 
 if __name__ == "__main__":
     import doctest
