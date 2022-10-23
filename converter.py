@@ -155,7 +155,7 @@ class GermanTaxReport(object):
 
 
         # test output by filling the object with ascending numbers
-        >>> print(GermanTaxReport(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58))
+        # >>> print(GermanTaxReport(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58))
         """
         ret: str = ""
         ret += f"{'Einzahlungen':<40}{self.einzahlungen: .2f}\n"
@@ -289,11 +289,59 @@ class EnglishTaxReport(object):
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
 
-        # >>> print(EnglishTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))     
+        # >>> print(EnglishTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))
         """
         ret: str = ""
-        ret = tabulate(self.__dict__.items(), headers=["Type", "Value"])
-
+        ret += f"{'deposits':<40}{self.deposits: .2f}\n"
+        ret += f"{'withdrawals':<40}{self.withdrawals: .2f}\n"
+        ret += f"{'broker fees':<40}{self.broker_fees: .2f}\n"
+        ret += f"{'all fees in USD':<40}{self.all_fees_in_usd: .2f}\n"
+        ret += f"{'all fees in EUR':<40}{self.all_fees_in_euro: .2f}\n"
+        ret += f"{'currency gains usd':<40}{self.currency_gains_usd: .2f}\n"
+        ret += f"{'currency gains usd tax free':<40}{self.currency_gains_usd_tax_free: .2f}\n"
+        ret += f"{'currency gains usd total':<40}{self.currency_gains_usd_total: .2f}\n"
+        ret += f"{'crypto gains':<40}{self.crypto_gains: .2f}\n"
+        ret += f"{'crypto losses':<40}{self.crypto_losses: .2f}\n"
+        ret += f"{'investment so':<40}{self.investment_so: .2f}\n"
+        ret += f"{'investment so tax amount':<40}{self.investment_so_tax_amount: .2f}\n"
+        ret += f"{'investment so loss carryforward':<40}{self.investment_so_loss_carryforward: .2f}\n"
+        ret += f"{'investment fund gains':<40}{self.investment_fund_gains: .2f}\n"
+        ret += f"{'investment fund losses':<40}{self.investment_fund_losses: .2f}\n"
+        ret += f"{'investment kap inv':<40}{self.investment_kap_inv: .2f}\n"
+        ret += f"{'stock gains z20':<40}{self.stock_gains_z20: .2f}\n"
+        ret += f"{'stock losses z23':<40}{self.stock_losses_z23: .2f}\n"
+        ret += f"{'stock total':<40}{self.stock_total: .2f}\n"
+        ret += f"{'stock tax amount':<40}{self.stock_tax_amount: .2f}\n"
+        ret += f"{'stock loss carryforward':<40}{self.stock_loss_carryforward: .2f}\n"
+        ret += f"{'other gains':<40}{self.other_gains: .2f}\n"
+        ret += f"{'other losses':<40}{self.other_losses: .2f}\n"
+        ret += f"{'other total':<40}{self.other_total: .2f}\n"
+        ret += f"{'option holder gains':<40}{self.option_holder_gains: .2f}\n"
+        ret += f"{'option holder losses':<40}{self.option_holder_losses: .2f}\n"
+        ret += f"{'option holder total':<40}{self.option_holder_total: .2f}\n"
+        ret += f"{'average held premium per day':<40}{self.average_held_premium_per_day: .2f}\n"
+        ret += f"{'option holder gains calls fifo':<40}{self.option_holder_gains_calls_fifo: .2f}\n"
+        ret += f"{'option holder losses calls fifo':<40}{self.option_holder_losses_calls_fifo: .2f}\n"
+        ret += f"{'option holder calls total fifo':<40}{self.option_holder_calls_total_fifo: .2f}\n"
+        ret += f"{'option holder gains puts fifo':<40}{self.option_holder_gains_puts_fifo: .2f}\n"
+        ret += f"{'option holder losses puts fifo':<40}{self.option_holder_losses_puts_fifo: .2f}\n"
+        ret += f"{'option holder puts total fifo':<40}{self.option_holder_puts_total_fifo: .2f}\n"
+        ret += f"{'option holder gains fifo':<40}{self.option_holder_gains_fifo: .2f}\n"
+        ret += f"{'option holder losses fifo':<40}{self.option_holder_losses_fifo: .2f}\n"
+        ret += f"{'option holder total fifo':<40}{self.option_holder_total_fifo: .2f}\n"
+        ret += f"{'long option gains':<40}{self.long_option_gains: .2f}\n"
+        ret += f"{'long option losses':<40}{self.long_option_losses: .2f}\n"
+        ret += f"{'long option total':<40}{self.long_option_total: .2f}\n"
+        ret += f"{'future gains':<40}{self.future_gains: .2f}\n"
+        ret += f"{'future losses':<40}{self.future_losses: .2f}\n"
+        ret += f"{'future total':<40}{self.future_total: .2f}\n"
+        ret += f"{'z21 term gains option holder':<40}{self.z21_term_gains_option_holder: .2f}\n"
+        ret += f"{'z24 term losses':<40}{self.z24_term_losses: .2f}\n"
+        ret += f"{'kap kap inv':<40}{self.kap_kap_inv: .2f}\n"
+        ret += f"{'kap kap inv kerst soli':<40}{self.kap_kap_inv_kerst_soli: .2f}\n"
+        ret += f"{'kap kap inv loss carryforward':<40}{self.kap_kap_inv_loss_carryforward: .2f}\n"
+        ret += f"{'cash balance usd':<40}{self.cash_balance_usd: .2f}\n"
+        ret += f"{'net liquidating value':<40}{self.net_liquidating_value: .2f}\n"
         return ret
 
 
