@@ -153,11 +153,69 @@ class GermanTaxReport(object):
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
 
-        # >>> print(GermanTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))
+
+        # test output by filling the object with ascending numbers
+        >>> print(GermanTaxReport(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58))
         """
         ret: str = ""
-        ret = tabulate(self.__dict__.items(), headers=["Typ", "Wert"])
-
+        ret += f"{'Einzahlungen':<40}{self.einzahlungen: .2f}\n"
+        ret += f"{'Auszahlungen':<40}{self.auszahlungen: .2f}\n"
+        ret += f"{'Brokergebühren':<40}{self.brokergebuehren: .2f}\n"
+        ret += f"{'Alle Gebühren in USD':<40}{self.alle_gebuehren_in_usd: .2f}\n"
+        ret += f"{'Alle Gebühren in EUR':<40}{self.alle_gebuehren_in_euro: .2f}\n"
+        ret += f"{'Währungsgewinne USD':<40}{self.waehrungsgewinne_usd: .2f}\n"
+        ret += f"{'Währungsgewinne USD steuerfrei':<40}{self.waehrungsgewinne_usd_steuerfrei: .2f}\n"
+        ret += f"{'Währungsgewinne USD Gesamt':<40}{self.waehrungsgewinne_usd_gesamt: .2f}\n"
+        ret += f"{'Krypto Gewinne':<40}{self.krypto_gewinne: .2f}\n"
+        ret += f"{'Krypto Verluste':<40}{self.krypto_verluste: .2f}\n"
+        ret += f"{'Anlage SO':<40}{self.anlage_so: .2f}\n"
+        ret += f"{'Anlage SO Steuerbetrag':<40}{self.anlage_so_steuerbetrag: .2f}\n"
+        ret += f"{'Anlage SO Verlustvortrag':<40}{self.anlage_so_verlustvortrag: .2f}\n"
+        ret += f"{'Investmentfondsgewinne':<40}{self.investmentfondsgewinne: .2f}\n"
+        ret += f"{'Investmentfondsverluste':<40}{self.investmentfondsverluste: .2f}\n"
+        ret += f"{'Anlage KAP+INV':<40}{self.anlage_kap_inv: .2f}\n"
+        ret += f"{'Aktiengewinne Z20':<40}{self.aktiengewinne_z20: .2f}\n"
+        ret += f"{'Aktienverluste Z23':<40}{self.aktienverluste_z23: .2f}\n"
+        ret += f"{'Aktien Gesamt':<40}{self.aktien_gesamt: .2f}\n"
+        ret += f"{'Aktien Steuerbetrag':<40}{self.aktien_steuerbetrag: .2f}\n"
+        ret += f"{'Aktien Verlustvortrag':<40}{self.aktien_verlustvortrag: .2f}\n"
+        ret += f"{'Sonstige Gewinne':<40}{self.sonstige_gewinne: .2f}\n"
+        ret += f"{'Sonstige Verluste':<40}{self.sonstige_verluste: .2f}\n"
+        ret += f"{'Sonstige Gesamt':<40}{self.sonstige_gesamt: .2f}\n"
+        ret += f"{'Stillhalter Gewinne':<40}{self.stillhalter_gewinne: .2f}\n"
+        ret += f"{'Stillhalter Verluste':<40}{self.stillhalter_verluste: .2f}\n"
+        ret += f"{'Stillhalter Gesamt':<40}{self.stillhalter_gesamt: .2f}\n"
+        ret += f"{'Durchschnitt behaltene Prämien pro Tag':<40}{self.durchschnitt_behaltene_praemien_pro_tag: .2f}\n"
+        ret += f"{'Stillhalter Gewinne Calls (FIFO)':<40}{self.stillhalter_gewinne_calls_fifo: .2f}\n"
+        ret += f"{'Stillhalter Verluste Calls (FIFO)':<40}{self.stillhalter_verluste_calls_fifo: .2f}\n"
+        ret += f"{'Stillhalter Calls Gesamt (FIFO)':<40}{self.stillhalter_calls_gesamt_fifo: .2f}\n"
+        ret += f"{'Stillhalter Gewinne Puts (FIFO)':<40}{self.stillhalter_gewinne_puts_fifo: .2f}\n"
+        ret += f"{'Stillhalter Verluste Puts (FIFO)':<40}{self.stillhalter_verluste_puts_fifo: .2f}\n"
+        ret += f"{'Stillhalter Puts Gesamt (FIFO)':<40}{self.stillhalter_puts_gesamt_fifo: .2f}\n"
+        ret += f"{'Stillhalter-Gewinne (FIFO)':<40}{self.stillhalter_gewinne_fifo: .2f}\n"
+        ret += f"{'Stillhalter-Verluste (FIFO)':<40}{self.stillhalter_verluste_fifo: .2f}\n"
+        ret += f"{'Stillhalter-Gesamt (FIFO)':<40}{self.stillhalter_gesamt_fifo: .2f}\n"
+        ret += f"{'Long-Optionen-Gewinne':<40}{self.long_optionen_gewinne: .2f}\n"
+        ret += f"{'Long-Optionen-Verluste':<40}{self.long_optionen_verluste: .2f}\n"
+        ret += f"{'Long-Optionen-Gesamt':<40}{self.long_optionen_gesamt: .2f}\n"
+        ret += f"{'Future-Gewinne ':<40}{self.future_gewinne: .2f}\n"
+        ret += f"{'Future-Verluste':<40}{self.future_verluste: .2f}\n"
+        ret += f"{'Future-Gesamt':<40}{self.future_gesamt: .2f}\n"
+        ret += f"{'zusätzliche Ordergebühren':<40}{self.zusatzliche_ordergebuehren: .2f}\n"
+        ret += f"{'Dividenden':<40}{self.dividenden: .2f}\n"
+        ret += f"{'bezahlte Dividenden':<40}{self.bezahlte_dividenden: .2f}\n"
+        ret += f"{'Quellensteuer':<40}{self.quellensteuer_z41: .2f}\n"
+        ret += f"{'Zinseinnahmen':<40}{self.zinseinnahmen: .2f}\n"
+        ret += f"{'Zinsausgaben':<40}{self.zinsausgaben: .2f}\n"
+        ret += f"{'Zinsen insgesamt':<40}{self.zinsen_gesamt: .2f}\n"
+        ret += f"{'Z19 Ausländische Kapitalerträge':<40}{self.z19_auslaendische_kapitalertraege: .2f}\n"
+        ret += f"{'Z21 Termingeschäfte+Stillhalter':<40}{self.z21_termingeschaefsgewinne_stillhalter: .2f}\n"
+        ret += f"{'Z24 Termingeschäftsverluste':<40}{self.z24_termingeschaefte_verluste: .2f}\n"
+        ret += f"{'KAP+KAP-INV':<40}{self.kap_kap_inv: .2f}\n"
+        ret += f"{'KAP+KAP-INV KErSt+Soli':<40}{self.kap_kap_inv_kerst_soli: .2f}\n"
+        ret += f"{'KAP+KAP-INV Verlustvortrag':<40}{self.kap_kap_inv_verlustvortrag: .2f}\n"
+        ret += f"{'Cash Balance USD':<40}{self.cash_balance_usd: .2f}\n"
+        ret += f"{'Net Liquidating Value':<40}{self.net_liquidating_value: .2f}\n"
         return ret
 
 
@@ -168,59 +226,70 @@ class EnglishTaxReport(object):
 
     It also includes a translation function to convert to the german tax report
     """
-    deposits: float
-    withdrawals: float
-    broker_fees: float
-    all_fees_in_usd: float
-    all_fees_in_euro: float
-    currency_gains_usd: float
-    currency_gains_usd_tax_free: float
-    currency_gains_usd_total: float
-    crypto_gains: float
-    crypto_losses: float
-    attachment_so: float
-    attachment_so_taxed: float
-    attachment_so_losses_carryforward: float
-    investment_fund_gains: float
-    investment_fund_losses: float
-    attachment_KAP_INV: float
-    stock_gains: float
-    stock_losses: float
-    stock_total: float
-    stock_tax_amount: float
-    stock_loss_carry_forward: float
-    other_gains: float
-    other_losses: float
-    other_total: float
-    option_gains: float
-    option_losses: float
-    option_total: float
-    average_option_premiums_per_day: float
-    option_gains_calls_fifo: float
-    option_losses_calls_fifo: float
-    option_total_calls_fifo: float
-    option_gains_puts_fifo: float
-    option_losses_puts_fifo: float
-    option_total_puts_fifo: float
-    option_gains_fifo: float
-    option_losses_fifo: float
-    option_total_fifo: float
-    long_option_gains: float
-    long_option_losses: float
-    long_option_total: float
-    future_gains: float
-    future_losses: float
-    future_total: float
-    additional_order_fees: float
-    dividends: float
-    paid_dividends: float
-    withholding_tax: float
-    interest_income: float
+    deposits: float = 0
+    withdrawals: float = 0
+    broker_fees: float = 0
+    all_fees_in_usd: float = 0
+    all_fees_in_euro: float = 0
+    currency_gains_usd: float = 0
+    currency_gains_usd_tax_free: float = 0
+    currency_gains_usd_total: float = 0
+    crypto_gains: float = 0
+    crypto_losses: float = 0
+    investment_so: float = 0
+    investment_so_tax_amount: float = 0
+    investment_so_loss_carryforward: float = 0
+    investment_fund_gains: float = 0
+    investment_fund_losses: float = 0
+    investment_kap_inv: float = 0
+    stock_gains_z20: float = 0
+    stock_losses_z23: float = 0
+    stock_total: float = 0
+    stock_tax_amount: float = 0
+    stock_loss_carryforward: float = 0
+    other_gains: float = 0
+    other_losses: float = 0
+    other_total: float = 0
+    option_holder_gains: float = 0
+    option_holder_losses: float = 0
+    option_holder_total: float = 0
+    average_held_premium_per_day: float = 0
+    option_holder_gains_calls_fifo: float = 0
+    option_holder_losses_calls_fifo: float = 0
+    option_holder_calls_total_fifo: float = 0
+    option_holder_gains_puts_fifo: float = 0
+    option_holder_losses_puts_fifo: float = 0
+    option_holder_puts_total_fifo: float = 0
+    option_holder_gains_fifo: float = 0
+    option_holder_losses_fifo: float = 0
+    option_holder_total_fifo: float = 0
+    long_option_gains: float = 0
+    long_option_losses: float = 0
+    long_option_total: float = 0
+    future_gains: float = 0
+    future_losses: float = 0
+    future_total: float = 0
+    additional_order_fees: float = 0
+    dividends: float = 0
+    paid_dividends: float = 0
+    withholding_tax_z41: float = 0
+    interest_income: float = 0
+    interest_expenses: float = 0
+    interest_total: float = 0
+    z19_foreign_capital_gains: float = 0
+    z21_term_gains_option_holder: float = 0
+    z24_term_losses: float = 0
+    kap_kap_inv: float = 0
+    kap_kap_inv_kerst_soli: float = 0
+    kap_kap_inv_loss_carryforward: float = 0
+    cash_balance_usd: float = 0
+    net_liquidating_value: float = 0
+
 
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
 
-        >>> print(EnglishTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))     
+        # >>> print(EnglishTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))     
         """
         ret: str = ""
         ret = tabulate(self.__dict__.items(), headers=["Type", "Value"])
