@@ -1,9 +1,12 @@
+import pandas as pd
 import logging
 import pprint
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
 from tabulate import tabulate
+
+from values import Values
 
 
 logger = logging.getLogger(__name__)
@@ -285,7 +288,6 @@ class EnglishTaxReport(object):
     cash_balance_usd: float = 0
     net_liquidating_value: float = 0
 
-
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
 
@@ -345,12 +347,45 @@ class EnglishTaxReport(object):
         return ret
 
 
-class Converter(object):
-    def __init__(self, path: str) -> None:
-        self.path = path
+class Printer(object):
+    def __init__(self, values: Values = None, closedTrades: pd.DataFrame = None) -> None:
+        self.values = values
+        self.closedTrades = closedTrades
 
-    def toGerman(self, input: dict) -> dict:
-        return {}
+    def EnglishTaxReport(self) -> EnglishTaxReport:
+        """ Returns a tax sreport in English """
+        report = EnglishTaxReport()
+
+        return report
+
+    def GermanTaxReport(self) -> GermanTaxReport:
+        """ Returns a tax report in German 
+
+
+        class Values:
+        store all data here
+        withdrawal: Money = Money()
+        transfer: Money = Money()
+        balanceAdjustment: Money = Money()
+        fee: Money = Money()
+        deposit: Money = Money()
+        creditInterest: Money = Money()
+        debitInterest: Money = Money()
+        dividend: Money = Money()
+        stockAndOptionsSum: Money = Money()
+        stockSum: Money = Money()
+        optionSum: Money = Money()
+        grossOptionsDifferential: Money = Money()
+        stockProfits: Money = Money()
+        stockLoss: Money = Money()
+        otherLoss: Money = Money()
+        stockFees: Money = Money()
+        otherFees: Money = Money()
+        """
+        report = GermanTaxReport()
+        report.auszahlungen = self.values['currency_gains_usd_tax_free']
+
+        return report
 
 
 if __name__ == "__main__":
