@@ -13,6 +13,7 @@ from history import History
 from money import Money
 from position import PositionType
 from transaction import Transaction
+from values import Values
 
 
 logger = logging.getLogger(__name__)
@@ -30,37 +31,6 @@ if not logger.handlers:
     handler = logging.StreamHandler()
     logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
-
-
-@dataclass_json
-@dataclass
-class Values:
-    """store all data here"""
-    withdrawal: Money = Money()
-    transfer: Money = Money()
-    balanceAdjustment: Money = Money()
-    fee: Money = Money()
-    deposit: Money = Money()
-    creditInterest: Money = Money()
-    debitInterest: Money = Money()
-    dividend: Money = Money()
-    stockAndOptionsSum: Money = Money()
-    stockSum: Money = Money()
-    optionSum: Money = Money()
-    grossOptionsDifferential: Money = Money()
-    stockProfits: Money = Money()
-    stockLoss: Money = Money()
-    otherLoss: Money = Money()
-    stockFees: Money = Money()
-    otherFees: Money = Money()
-
-    def __str__(self):
-        """pretty prints all the contained Values
-        >>> values = Values()
-
-        """
-        j = self.to_json()
-        return str(json.dumps(j, indent=4, sort_keys=True))
 
 
 class Tasty(object):
@@ -468,7 +438,7 @@ class Tasty(object):
 
                 if trade.Quantity != 0:
                     self.closedTrades = pd.concat([self.closedTrades,
-                        trade.to_frame().T])
+                                                   trade.to_frame().T])
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
@@ -479,8 +449,9 @@ class Tasty(object):
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
             logging.info("{} Adding '{}' of '{}' to the open positions".format(transaction.getDateTime(),
                                                                                transaction.getQuantity(), transaction.getSymbol()))
-            
-            self.positions =  pd.concat([self.positions, transaction.to_frame().T])
+
+            self.positions = pd.concat(
+                [self.positions, transaction.to_frame().T])
 
     @classmethod
     def _updatePosition(cls, oldPositionQuantity, transactionQuantity):
