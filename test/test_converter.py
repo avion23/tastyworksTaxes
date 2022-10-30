@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
 from converter import Printer
-
+from tasty import Tasty
+from pprint import pprint
 
 def test_uso():
     """Tests with the uso file"""
@@ -131,5 +132,12 @@ def test_uso():
     }
 
     # given
-    converter = Printer("test/uso.csv")
-    converter.toGerman = Mock(return_value="1,23")
+    t = Tasty("test/uso.csv")
+    values = t.run()
+    pprint(t)
+    pprint(values)
+    # printer = Printer(t.yearValues[2020], t.closedTrades)
+    pprint(t.closedTrades)
+    # de = printer.GermanTaxReport()
+    # en = printer.EnglishTaxReport()
+    # assert (de == en)

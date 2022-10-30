@@ -16,7 +16,7 @@ for key in logging.Logger.manager.loggerDict:  # disable logging for imported mo
     temp = logging.getLogger(key)
     temp.propagate = True
     temp.setLevel(logging.INFO)
-    if temp.name == "trade":
+    if temp.name == "transaction":
         temp.setLevel(logging.DEBUG)
 if not logger.handlers:
     handler = logging.StreamHandler()
