@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
-from converter import Printer
+from printer import Printer
 from tasty import Tasty
 from pprint import pprint
 
