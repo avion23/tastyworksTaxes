@@ -21,8 +21,8 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.WARNING,
     datefmt='%Y-%m-%d %H:%M:%S')
-for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
-    temp = logging.getLogger(key)
+for logKey in logging.Logger.manager.loggerDict:  # disable logging for imported modules
+    temp = logging.getLogger(logKey)
     temp.propagate = True
     temp.setLevel(logging.INFO)
     if temp.name == "trade":

@@ -12,7 +12,7 @@ import json
 
 @dataclass_json
 @dataclass
-class Values:
+class Values(object):
     """store all data here"""
     withdrawal: Money = Money()
     transfer: Money = Money()
