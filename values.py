@@ -5,8 +5,6 @@ from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
 from history import History
 from money import Money
-from position import PositionType
-from transaction import Transaction
 import json
 
 
