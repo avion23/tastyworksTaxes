@@ -1,35 +1,25 @@
-
 import datetime
-from dataclasses import dataclass
-from datetime import date
-
 from currency_converter import CurrencyConverter
-from dataclasses_json import dataclass_json
 
-
-@dataclass_json
-@dataclass
 class Money:
     """replaces eur and usd"""
+    
+    def __init__(self, eur=0.0, usd=0.0, row=None, date=''):
+        self.eur = eur
+        self.usd = usd
+        self.row = row if row is not None else {}
+        self.date = date
 
-    eur: float = 0
-    usd: float = 0
-
-    def __init__(self, row = None, date=None, usd=None, eur=None):
-        """converts directly if usd and date are set
-
-        >>> str(Money(date='2010-11-21', usd=100))
-        "{'usd': 100, 'eur': 73.22788517867605}"
-                """
-        if usd:
-            self.usd = usd
-        if eur:
-            self.eur = eur
-        if date and usd:
-            self.fromUsdToEur(date)
-        if row is not None:
-            self.usd = row['Amount']
-            self.eur = row['AmountEuro']
+        if self.usd:
+            pass
+        elif 'Amount' in self.row:
+            self.usd = self.row['Amount']
+        if self.eur:
+            pass
+        elif 'AmountEuro' in self.row:
+            self.eur = self.row['AmountEuro']
+        if self.date and self.usd:
+            self.fromUsdToEur(self.date)
 
     def fromUsdToEur(self, date):
         """converts from USD to eur at a certain date
@@ -45,7 +35,7 @@ class Money:
         self.eur = usd
 
     def __repr__(self):
-        return str(self.__dict__)
+        return str({'eur': self.eur, 'usd': self.usd})
 
     def __add__(self, x):
         """overloads + operator for Money class
@@ -59,8 +49,7 @@ class Money:
         >>> print(a + b)
         {'eur': 12, 'usd': 14}
         """
-
-        m: Money = Money()
+        m = Money()
         m.eur = self.eur + x.eur
         m.usd = self.usd + x.usd
         return m
@@ -77,8 +66,7 @@ class Money:
         >>> print(b - a)
         {'eur': 2, 'usd': -1}
         """
-
-        m: Money = Money()
+        m = Money()
         m.eur = self.eur - x.eur
         m.usd = self.usd - x.usd
         return m
