@@ -34,7 +34,7 @@ logger.setLevel(logging.DEBUG)
 
 
 class Tasty(object):
-    yearValues = dict()
+    yearValues: dict = dict()
     history: History
     positions: pd.DataFrame
     closedTrades:  pd.DataFrame
