@@ -1,4 +1,5 @@
 dataclasses
 dataclasses_json
 argparse
-pathlib
+pathlibprinter
+pytest
