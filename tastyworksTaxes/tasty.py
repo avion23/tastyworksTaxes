@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import json
 import logging
 import math
@@ -9,11 +13,11 @@ from typing import List
 import pandas as pd
 from dataclasses_json import dataclass_json
 
-from history import History
-from money import Money
-from position import PositionType
-from transaction import Transaction
-from values import Values
+from tastyworksTaxes.history import History
+from tastyworksTaxes.money import Money
+from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.transaction import Transaction
+from tastyworksTaxes.values import Values
 
 
 logger = logging.getLogger(__name__)

@@ -3,9 +3,15 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
-from printer import Printer
-from tasty import Tasty
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from pprint import pprint
+
+
+from tastyworksTaxes.printer import Printer
+from tastyworksTaxes.tasty import Tasty
 
 def test_uso():
     """Tests with the uso file"""

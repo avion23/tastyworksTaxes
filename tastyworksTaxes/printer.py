@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pandas as pd
 import logging
 import pprint
@@ -6,7 +10,7 @@ from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
 from tabulate import tabulate
 
-from values import Values
+from tastyworksTaxes.values import Values
 
 
 logger = logging.getLogger(__name__)

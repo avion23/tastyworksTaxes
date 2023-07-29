@@ -1,11 +1,16 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import logging
 import pprint
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
-from history import History
-from money import Money
 import json
+
+from tastyworksTaxes.history import History
+from tastyworksTaxes.money import Money
 
 
 @dataclass_json
