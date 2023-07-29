@@ -1,8 +1,12 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import doctest
 from datetime import datetime
 from enum import Enum
 
-from money import Money
+from tastyworksTaxes.money import Money
 
 
 class PositionType(Enum):

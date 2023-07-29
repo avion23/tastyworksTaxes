@@ -1,10 +1,14 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from datetime import datetime
 import logging
 import pandas as pd
 
-from history import History
-from money import Money
-from position import Option, Position, PositionType, Stock
+from tastyworksTaxes.history import History
+from tastyworksTaxes.money import Money
+from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
 
 logger = logging.getLogger(__name__)
