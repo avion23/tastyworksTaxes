@@ -316,7 +316,7 @@ class Transaction(pd.core.series.Series):
         """ returns the value of the transaction at that specific point of time
 
         >>> print(Transaction(h.iloc[10]).getValue())
-        {'usd': -2720.0, 'eur': -2240.527182866557}
+        {'eur': -2240.527182866557, 'usd': -2720.0}
         """
         v = Money(row=self)
         return v
@@ -325,12 +325,12 @@ class Transaction(pd.core.series.Series):
         """ sets the individual values for euro in AmountEuro and usd in Amount
 
         >>> print(Transaction(h.iloc[10]).getValue())
-        {'usd': -2720.0, 'eur': -2240.527182866557}
+        {'eur': -2240.527182866557, 'usd': -2720.0}
 
         >>> t =  Transaction(h.iloc[10])
         >>> t.setValue(Money(usd=45, eur=20))
         >>> print(t.getValue())
-        {'usd': 45, 'eur': 20}
+        {'eur': 20, 'usd': 45}
         """
         self["Amount"] = money.usd
         self["AmountEuro"] = money.eur
@@ -339,7 +339,7 @@ class Transaction(pd.core.series.Series):
         """ returns the fees of the transaction at that specific point of time
 
         >>> print(Transaction(h.iloc[10]).getFees())
-        {'usd': 0.16, 'eur': 0.13179571663920922}
+        {'eur': 0.13179571663920922, 'usd': 0.16}
         """
         v = Money()
         v.usd = self["Fees"]
@@ -352,7 +352,7 @@ class Transaction(pd.core.series.Series):
         >>> t =  Transaction(h.iloc[10])
         >>> t.setFees(Money(usd=45, eur=20))
         >>> print(t.getFees())
-        {'usd': 45, 'eur': 20}
+        {'eur': 20, 'usd': 45}
         """
         self["Fees"] = money.usd
         self["FeesEuro"] = money.eur
