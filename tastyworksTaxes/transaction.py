@@ -279,7 +279,7 @@ class Transaction(pd.core.series.Series):
             return  # Open/Close and Buy/Sell is unset here
 
         if quantity < 0:
-            self.loc["Buy/Sell"] == "Sell"
+            self.loc["Buy/Sell"] = "Sell"
 
             if self.loc["Open/Close"] == "Open":
                 self.loc["Transaction Subcode"] = "Sell to Open"
@@ -289,7 +289,7 @@ class Transaction(pd.core.series.Series):
                 raise ValueError(
                     "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
         elif quantity >= 0:
-            self.loc["Buy/Sell"] == "Buy"
+            self.loc["Buy/Sell"] = "Buy"
 
             if self.loc["Open/Close"] == "Open":
                 self.loc["Transaction Subcode"] = "Buy to Open"
