@@ -10,24 +10,14 @@ from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
-
 logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.WARNING,
-    datefmt='%Y-%m-%d %H:%M:%S')
-for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
-    temp = logging.getLogger(key)
-    temp.propagate = True
-    temp.setLevel(logging.INFO)
-    if temp.name == "transaction":
-        temp.setLevel(logging.DEBUG)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
-
-
+logger.propagate = False
 
 class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
@@ -71,6 +61,11 @@ class Transaction(pd.core.series.Series):
         temp = self.loc["Date/Time"]
         return str(temp)
 
+
+    def isType(self, type_column: str, valid_values: set) -> bool:
+        value = self.loc[type_column]
+        return value in valid_values
+    
     def isOption(self) -> bool:
         """returns true if the transaction is an option
 
@@ -82,19 +77,11 @@ class Transaction(pd.core.series.Series):
         False
         >>> Transaction(h.iloc[20]).isOption()
         True
-
         """
-        option = self.loc["Call/Put"]
-        subcode = self.loc["Transaction Subcode"]
-        if (option == "P" or option == "C") and (
-            subcode == "Sell to Open"
-            or subcode == "Buy to Open"
-            or subcode == "Sell to Close"
-            or subcode == "Buy to Close"
-        ):
-            return True
-        else:
-            return False
+        valid_options = {"P", "C"}
+        valid_subcodes = {"Sell to Open", "Buy to Open", "Sell to Close", "Buy to Close"}
+        return self.isType("Call/Put", valid_options) and self.isType("Transaction Subcode", valid_subcodes)
+
 
     def isStock(self) -> bool:
         """returns true if the symbol is a stock ticker
