@@ -1,4 +1,320 @@
 Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
+07/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,
+06/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,
+06/15/2023 10:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-6000,WIRE TRANSFER,
+06/15/2023 10:00 PM,Money Movement,Fee,,,,0,,,,,0.00,-25,DOMESTIC WIRE FEE,
+05/27/2023 3:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,
+05/23/2023 3:15 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,25.6,0.125,2560,Sold 100 SQQQ @ 25.60,
+05/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,
+05/06/2023 3:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+05/04/2023 2:55 PM,Trade,Sell to Close,IEP,Sell,Close,1,06/16/2023,45,C,0.77,0.142,77,Sold 1 IEP 06/16/23 Call 45.00 @ 0.77,
+05/02/2023 4:16 PM,Trade,Buy to Open,IEP,Buy,Open,1,06/16/2023,45,C,2.7,1.13,-270,Bought 1 IEP 06/16/23 Call 45.00 @ 2.70,
+04/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
+04/14/2023 10:00 PM,Receive Deliver,Assignment,SQQQ,,,1,04/21/2023,42,P,,0.00,0,Removal of option due to assignment,
+04/14/2023 10:00 PM,Receive Deliver,Buy to Open,SQQQ,Buy,Open,100,,,,42,5.00,-4200,Buy to Open 100 SQQQ @ 42.00,
+03/25/2023 2:03 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,
+03/23/2023 2:01 PM,Trade,Sell to Close,SQ,Sell,Close,100,,,,58.9,0.145,5890,Sold 100 SQ @ 58.90,
+03/23/2023 1:38 PM,Trade,Buy to Open,SQ,Buy,Open,100,,,,58.53,0.08,-5853,Bought 100 SQ @ 58.53,
+03/18/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+03/16/2023 9:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,
+03/13/2023 5:37 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,04/21/2023,42,P,5.9,1.142,590,Sold 1 SQQQ 04/21/23 Put 42.00 @ 5.90,
+03/11/2023 2:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+03/07/2023 3:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,04/21/2023,38,P,4,0.26,-800,Bought 2 SQQQ 04/21/23 Put 38.00 @ 4.00,
+03/06/2023 3:43 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,04/21/2023,38,P,5.2,2.275,1040,Sold 2 SQQQ 04/21/23 Put 38.00 @ 5.20,
+02/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,
+01/30/2023 8:40 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,03/17/2023,45,P,7.05,0.24,-1410,Bought 2 SQQQ 03/17/23 Put 45.00 @ 7.05,
+01/27/2023 3:29 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,03/17/2023,45,P,7.85,2.285,1570,Sold 2 SQQQ 03/17/23 Put 45.00 @ 7.85,
+01/18/2023 6:06 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,02/17/2023,48,P,4.5,0.24,-900,Bought 2 SQQQ 02/17/23 Put 48.00 @ 4.50,
+01/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,
+01/14/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+01/13/2023 3:23 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,02/17/2023,48,P,4.7,2.275,940,Sold 2 SQQQ 02/17/23 Put 48.00 @ 4.70,
+12/30/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.07,INTEREST ON CREDIT BALANCE,
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,16,01/20/2023,7.5,P,1.5,1.89,-2400,Bought 16 PLTR 01/20/23 Put 7.50 @ 1.50,
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,2,01/20/2023,7.5,P,1.5,0.24,-300,Bought 2 PLTR 01/20/23 Put 7.50 @ 1.50,
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,
+12/17/2022 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+12/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,4,01/20/2023,7.5,P,0.87,0.489,348,Sold 4 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/20/2023,7.5,P,0.87,0.132,87,Sold 1 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,1.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 3:46 PM,Trade,Sell to Open,PLTR,Sell,Open,9,01/20/2023,7.5,P,0.87,10.10,783,Sold 9 PLTR 01/20/23 Put 7.50 @ 0.87,
+12/16/2022 2:31 PM,Trade,Sell to Close,WELL,Sell,Close,1,01/20/2023,65,P,1.9,0.132,190,Sold 1 WELL 01/20/23 Put 65.00 @ 1.90,
+12/14/2022 5:44 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,01/20/2023,43,P,4.4,0.24,-880,Bought 2 SQQQ 01/20/23 Put 43.00 @ 4.40,
+12/13/2022 2:51 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,40.09,0.376,8018,Sold 200 SQQQ @ 40.09,
+12/13/2022 2:50 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,01/20/2023,43,P,6.05,2.274,1210,Sold 2 SQQQ 01/20/23 Put 43.00 @ 6.05,
+12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,
+12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,
+12/07/2022 3:03 PM,Trade,Buy to Open,WELL,Buy,Open,1,01/20/2023,65,P,3.5,1.12,-350,Bought 1 WELL 01/20/23 Put 65.00 @ 3.50,
+11/28/2022 3:12 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,12/23/2022,52,P,8.8,0.24,-1760,Bought 2 SQQQ 12/23/22 Put 52.00 @ 8.80,
+11/22/2022 2:38 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,12/23/2022,52,P,7.9,0.12,-790,Bought 1 SQQQ 12/23/22 Put 52.00 @ 7.90,
+11/19/2022 3:39 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
+11/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,
+11/14/2022 5:36 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,12/23/2022,52,P,10.5,1.152,1050,Sold 1 SQQQ 12/23/22 Put 52.00 @ 10.50,
+11/10/2022 7:28 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,12/23/2022,52,P,8,2.284,1600,Sold 2 SQQQ 12/23/22 Put 52.00 @ 8.00,
+11/09/2022 5:03 PM,Trade,Buy to Close,PLTR,Buy,Close,10,12/23/2022,7.5,P,0.8,1.18,-800,Bought 10 PLTR 12/23/22 Put 7.50 @ 0.80,
+11/07/2022 6:23 PM,Trade,Sell to Open,PLTR,Sell,Open,10,12/23/2022,7.5,P,0.96,11.232,960,Sold 10 PLTR 12/23/22 Put 7.50 @ 0.96,
+11/03/2022 1:30 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,61.02,0.233,6102,Sold 100 SQQQ @ 61.02,
+10/26/2022 3:06 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,51.4,0.213,5140,Sold 100 SQQQ @ 51.40,
+10/25/2022 4:53 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,49.27,0.08,-4927,Bought 100 SQQQ @ 49.27,
+10/17/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,
+10/17/2022 6:37 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,57.85,0.08,-5785,Bought 100 SQQQ @ 57.85,
+10/15/2022 2:43 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,
+10/14/2022 8:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,11/25/2022,64,P,8.95,0.13,-895,Bought 1 SQQQ 11/25/22 Put 64.00 @ 8.95,
+10/14/2022 2:31 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,11/25/2022,64,P,12.8,1.162,1280,Sold 1 SQQQ 11/25/22 Put 64.00 @ 12.80,
+10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,
+10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,
+10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,
+10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,
+09/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
+09/12/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,10,09/23/2022,8,P,0.41,1.29,-410,Bought 10 PLTR 09/23/22 Put 8.00 @ 0.41,Individual...39
+09/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,7,09/23/2022,8,P,0.72,7.935,504,Sold 7 PLTR 09/23/22 Put 8.00 @ 0.72,Individual...39
+09/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,09/23/2022,8,P,0.72,1.142,72,Sold 1 PLTR 09/23/22 Put 8.00 @ 0.72,Individual...39
+09/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,2,09/23/2022,8,P,0.72,2.274,144,Sold 2 PLTR 09/23/22 Put 8.00 @ 0.72,Individual...39
+08/26/2022 5:21 PM,Trade,Buy to Close,SQQQ,Buy,Close,3,09/16/2022,45,P,6.4,0.39,-1920,Bought 3 SQQQ 09/16/22 Put 45.00 @ 6.40,Individual...39
+08/16/2022 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,Individual...39
+07/28/2022 7:42 PM,Trade,Sell to Open,SQQQ,Sell,Open,3,09/16/2022,45,P,6.9,3.447,2070,Sold 3 SQQQ 09/16/22 Put 45.00 @ 6.90,Individual...39
+07/26/2022 5:05 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,08/26/2022,51.5,P,6.85,0.26,-1370,Bought 2 SQQQ 08/26/22 Put 51.50 @ 6.85,Individual...39
+07/23/2022 3:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/20/2022 3:35 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,08/26/2022,51.5,P,8.15,2.304,1630,Sold 2 SQQQ 08/26/22 Put 51.50 @ 8.15,Individual...39
+07/18/2022 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,Individual...39
+07/18/2022 5:15 PM,Trade,Buy to Close,PLTR,Buy,Close,12,08/26/2022,9.5,P,1.04,1.55,-1248,Bought 12 PLTR 08/26/22 Put 9.50 @ 1.04,Individual...39
+07/16/2022 4:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+07/14/2022 6:36 PM,Trade,Sell to Open,PLTR,Sell,Open,5,08/26/2022,9.5,P,1.28,3.681,640,Sold 5 PLTR 08/26/22 Put 9.50 @ 1.28,Individual...39
+07/14/2022 6:36 PM,Trade,Sell to Open,PLTR,Sell,Open,7,08/26/2022,9.5,P,1.28,7.945,896,Sold 7 PLTR 08/26/22 Put 9.50 @ 1.28,Individual...39
+07/12/2022 9:32 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,08/19/2022,53,P,5.65,0.26,-1130,Bought 2 SQQQ 08/19/22 Put 53.00 @ 5.65,Individual...39
+07/09/2022 4:48 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/07/2022 4:52 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,08/19/2022,53,P,7.85,2.304,1570,Sold 2 SQQQ 08/19/22 Put 53.00 @ 7.85,Individual...39
+07/02/2022 3:36 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+06/30/2022 4:02 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,08/05/2022,52.5,P,3.55,0.26,-710,Bought 2 SQQQ 08/05/22 Put 52.50 @ 3.55,Individual...39
+06/27/2022 4:50 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,08/05/2022,52.5,P,7.3,2.304,1460,Sold 2 SQQQ 08/05/22 Put 52.50 @ 7.30,Individual...39
+06/23/2022 4:20 PM,Trade,Buy to Close,PLTR,Buy,Close,10,07/22/2022,9,P,0.62,1.29,-620,Bought 10 PLTR 07/22/22 Put 9.00 @ 0.62,Individual...39
+06/16/2022 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...39
+06/11/2022 3:43 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+06/10/2022 9:53 PM,Trade,Sell to Open,PLTR,Sell,Open,10,07/22/2022,9,P,1.18,11.34,1180,Sold 10 PLTR 07/22/22 Put 9.00 @ 1.18,Individual...39
+06/10/2022 7:46 PM,Trade,Sell to Close,UPRO,Sell,Close,98,,,,39.4,0.181,3861.2,Sold 98 UPRO @ 39.40,Individual...39
+06/10/2022 7:46 PM,Trade,Sell to Close,UPRO,Sell,Close,2,,,,39.4,0.012,78.8,Sold 2 UPRO @ 39.40,Individual...39
+06/10/2022 4:40 PM,Trade,Buy to Open,UPRO,Buy,Open,100,,,,39.32,0.08,-3932,Bought 100 UPRO @ 39.32,Individual...39
+06/10/2022 3:30 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,07/08/2022,50,P,3.8,0.13,-380,Bought 1 SQQQ 07/08/22 Put 50.00 @ 3.80,Individual...39
+06/10/2022 3:30 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,07/08/2022,50,P,3.8,0.13,-380,Bought 1 SQQQ 07/08/22 Put 50.00 @ 3.80,Individual...39
+05/28/2022 4:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/27/2022 5:13 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,07/08/2022,50,P,7,2.304,1400,Sold 2 SQQQ 07/08/22 Put 50.00 @ 7.00,Individual...39
+05/16/2022 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.08,INTEREST ON CREDIT BALANCE,Individual...39
+05/13/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,10,06/24/2022,8,P,1.05,1.29,-1050,Bought 10 PLTR 06/24/22 Put 8.00 @ 1.05,Individual...39
+05/09/2022 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,10,06/24/2022,8,P,1.2,11.32,1200,Sold 10 PLTR 06/24/22 Put 8.00 @ 1.20,Individual...39
+05/07/2022 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/05/2022 4:05 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,06/17/2022,47,P,7.1,0.26,-1420,Bought 2 SQQQ 06/17/22 Put 47.00 @ 7.10,Individual...39
+05/04/2022 9:34 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,06/17/2022,47,P,8.85,2.274,1770,Sold 2 SQQQ 06/17/22 Put 47.00 @ 8.85,Individual...39
+05/03/2022 3:33 PM,Trade,Buy to Close,PLTR,Buy,Close,9,06/03/2022,10.5,P,0.95,1.16,-855,Bought 9 PLTR 06/03/22 Put 10.50 @ 0.95,Individual...39
+04/27/2022 9:42 PM,Trade,Sell to Open,PLTR,Sell,Open,9,06/03/2022,10.5,P,1.1,10.188,990,Sold 9 PLTR 06/03/22 Put 10.50 @ 1.10,Individual...39
+04/23/2022 4:31 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+04/19/2022 5:39 PM,Trade,Sell to Close,PLTR,Sell,Close,200,,,,12.94,0.204,2588,Sold 200 PLTR @ 12.94,Individual...39
+04/19/2022 5:39 PM,Trade,Sell to Close,PLTR,Sell,Close,100,,,,12.94,0.102,1294,Sold 100 PLTR @ 12.94,Individual...39
+04/18/2022 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-1.04,FROM 03/16 THRU 04/15 @ 8    %,Individual...39
+04/18/2022 3:36 PM,Trade,Buy to Close,PLTR,Buy,Close,2,04/29/2022,12,C,0.63,0.26,-126,Bought 2 PLTR 04/29/22 Call 12.00 @ 0.63,Individual...39
+04/18/2022 3:36 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/29/2022,12,C,0.63,0.13,-63,Bought 1 PLTR 04/29/22 Call 12.00 @ 0.63,Individual...39
+04/14/2022 11:00 PM,Receive Deliver,Assignment,SPYG,,,1,04/14/2022,60,C,,0.00,0,Removal of option due to assignment,Individual...39
+04/14/2022 11:00 PM,Receive Deliver,Sell to Close,SPYG,Sell,Close,100,,,,60,5.052,6000,Sell to Close 100 SPYG @ 60.00,Individual...39
+04/13/2022 3:40 PM,Trade,Sell to Close,MULN,Sell,Close,1,05/20/2022,2.5,P,0.8,0.142,80,Sold 1 MULN 05/20/22 Put 2.50 @ 0.80,Individual...39
+04/13/2022 3:40 PM,Trade,Sell to Close,MULN,Sell,Close,2,05/20/2022,2.5,P,0.8,0.274,160,Sold 2 MULN 05/20/22 Put 2.50 @ 0.80,Individual...39
+04/13/2022 3:40 PM,Trade,Sell to Close,MULN,Sell,Close,2,05/20/2022,2.5,P,0.8,0.274,160,Sold 2 MULN 05/20/22 Put 2.50 @ 0.80,Individual...39
+04/06/2022 8:27 PM,Trade,Buy to Open,MULN,Buy,Open,5,05/20/2022,2.5,P,0.75,5.65,-375,Bought 5 MULN 05/20/22 Put 2.50 @ 0.75,Individual...39
+04/06/2022 5:48 PM,Trade,Sell to Close,HMHC,Sell,Close,20,05/20/2022,22.5,C,0.2,2.63,400,Sold 20 HMHC 05/20/22 Call 22.50 @ 0.20,Individual...39
+04/05/2022 9:28 PM,Trade,Sell to Close,VIX,Sell,Close,1,04/20/2022,26,C,1.45,0.782,145,Sold 1 VIX 04/20/22 Call 26.00 @ 1.45,Individual...39
+03/25/2022 2:44 PM,Trade,Buy to Open,HMHC,Buy,Open,20,05/20/2022,22.5,C,0.2,12.58,-400,Bought 20 HMHC 05/20/22 Call 22.50 @ 0.20,Individual...39
+03/24/2022 10:00 PM,Money Movement,Dividend,SPYG,,,0,,,,,0.00,11.46,SPDR SERIES TRUST,Individual...39
+03/24/2022 10:00 PM,Money Movement,Dividend,SPYG,,,0,,,,,0.00,-1.72,SPDR SERIES TRUST,Individual...39
+03/19/2022 3:42 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+03/17/2022 2:59 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/29/2022,12,C,1.25,1.142,125,Sold 1 PLTR 04/29/22 Call 12.00 @ 1.25,Individual...39
+03/17/2022 2:59 PM,Trade,Sell to Open,PLTR,Sell,Open,2,04/29/2022,12,C,1.25,2.274,250,Sold 2 PLTR 04/29/22 Call 12.00 @ 1.25,Individual...39
+03/16/2022 10:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.13,FROM 02/16 THRU 03/15 @ 8    %,Individual...39
+03/16/2022 8:29 PM,Trade,Buy to Open,VIX,Buy,Open,1,04/20/2022,26,C,4.2,1.78,-420,Bought 1 VIX 04/20/22 Call 26.00 @ 4.20,Individual...39
+03/14/2022 3:25 PM,Trade,Sell to Open,SPYG,Sell,Open,1,04/14/2022,60,C,2.5,1.142,250,Sold 1 SPYG 04/14/22 Call 60.00 @ 2.50,Individual...39
+03/14/2022 2:56 PM,Trade,Buy to Close,PLTR,Buy,Close,3,04/08/2022,12.5,C,0.4,0.39,-120,Bought 3 PLTR 04/08/22 Call 12.50 @ 0.40,Individual...39
+03/07/2022 6:02 PM,Trade,Buy to Close,SPYG,Buy,Close,1,04/14/2022,60,C,2.95,0.13,-295,Bought 1 SPYG 04/14/22 Call 60.00 @ 2.95,Individual...39
+02/28/2022 5:18 PM,Trade,Buy to Close,PLTR,Buy,Close,2,04/01/2022,12.5,P,1.34,0.26,-268,Bought 2 PLTR 04/01/22 Put 12.50 @ 1.34,Individual...39
+02/26/2022 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+02/24/2022 9:50 PM,Trade,Sell to Open,PLTR,Sell,Open,3,04/08/2022,12.5,C,0.92,3.406,276,Sold 3 PLTR 04/08/22 Call 12.50 @ 0.92,Individual...39
+02/24/2022 7:39 PM,Trade,Sell to Open,SPYG,Sell,Open,1,04/14/2022,60,C,3.2,1.142,320,Sold 1 SPYG 04/14/22 Call 60.00 @ 3.20,Individual...39
+02/24/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/14/2022,10,C,1.16,0.13,-116,Bought 1 PLTR 04/14/22 Call 10.00 @ 1.16,Individual...39
+02/24/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/14/2022,10,C,1.16,0.13,-116,Bought 1 PLTR 04/14/22 Call 10.00 @ 1.16,Individual...39
+02/24/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/14/2022,10,C,1.16,0.13,-116,Bought 1 PLTR 04/14/22 Call 10.00 @ 1.16,Individual...39
+02/23/2022 4:50 PM,Trade,Buy to Close,SPYG,Buy,Close,1,04/14/2022,63,C,1.95,0.13,-195,Bought 1 SPYG 04/14/22 Call 63.00 @ 1.95,Individual...39
+02/22/2022 9:02 PM,Trade,Sell to Open,SPYG,Sell,Open,1,04/14/2022,63,C,2.3,1.142,230,Sold 1 SPYG 04/14/22 Call 63.00 @ 2.30,Individual...39
+02/22/2022 5:17 PM,Trade,Sell to Open,PLTR,Sell,Open,3,04/14/2022,10,C,1.4,3.406,420,Sold 3 PLTR 04/14/22 Call 10.00 @ 1.40,Individual...39
+02/19/2022 5:12 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+02/18/2022 7:46 PM,Trade,Buy to Close,PARA,Buy,Close,2,04/01/2022,29,P,2.2,0.26,-440,Bought 2 PARA 04/01/22 Put 29.00 @ 2.20,Individual...39
+02/17/2022 8:28 PM,Trade,Sell to Open,PLTR,Sell,Open,2,04/01/2022,12.5,P,1.4,2.274,280,Sold 2 PLTR 04/01/22 Put 12.50 @ 1.40,Individual...39
+02/17/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,03/25/2022,15,C,0.42,0.13,-42,Bought 1 PLTR 03/25/22 Call 15.00 @ 0.42,Individual...39
+02/17/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,2,03/25/2022,15,C,0.42,0.26,-84,Bought 2 PLTR 03/25/22 Call 15.00 @ 0.42,Individual...39
+02/17/2022 12:54 PM,Receive Deliver,Symbol Change,PARA,Sell,Open,2,04/01/2022,29,P,,0.00,520,Symbol change:  Open 2.0 PARA  220401P00029000,Individual...39
+02/17/2022 12:54 PM,Receive Deliver,Symbol Change,VIAC,Buy,Close,2,04/01/2022,29,P,,0.00,-520,Symbol change:  Close 2.0 VIAC  220401P00029000,Individual...39
+02/16/2022 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-6.2,FROM 01/16 THRU 02/15 @ 8    %,Individual...39
+02/16/2022 6:33 PM,Trade,Sell to Open,VIAC,Sell,Open,2,04/01/2022,29,P,2.6,2.274,520,Sold 2 VIAC 04/01/22 Put 29.00 @ 2.60,Individual...39
+02/14/2022 3:51 PM,Trade,Sell to Open,PLTR,Sell,Open,3,03/25/2022,15,C,0.85,3.406,255,Sold 3 PLTR 03/25/22 Call 15.00 @ 0.85,Individual...39
+02/08/2022 4:35 PM,Trade,Buy to Close,SPYG,Buy,Close,1,02/18/2022,63,C,2.59,0.13,-259,Bought 1 SPYG 02/18/22 Call 63.00 @ 2.59,Individual...39
+02/05/2022 4:06 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...39
+02/03/2022 9:36 PM,Trade,Buy to Close,PLTR,Buy,Close,3,03/18/2022,15,C,0.55,0.39,-165,Bought 3 PLTR 03/18/22 Call 15.00 @ 0.55,Individual...39
+02/03/2022 9:06 PM,Trade,Sell to Close,SLI,Sell,Close,3,03/18/2022,7.5,P,2.45,0.406,735,Sold 3 SLI 03/18/22 Put 7.50 @ 2.45,Individual...39
+02/03/2022 4:51 PM,Trade,Buy to Open,SLI,Buy,Open,3,03/18/2022,7.5,P,2,3.39,-600,Bought 3 SLI 03/18/22 Put 7.50 @ 2.00,Individual...39
+02/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,2,03/18/2022,15,C,1.09,2.254,218,Sold 2 PLTR 03/18/22 Call 15.00 @ 1.09,Individual...39
+02/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/18/2022,15,C,1.09,1.132,109,Sold 1 PLTR 03/18/22 Call 15.00 @ 1.09,Individual...39
+01/28/2022 11:00 PM,Receive Deliver,Assignment,PLTR,,,1,01/28/2022,18.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+01/28/2022 11:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,100,,,,18.5,5.00,-1850,Buy to Open 100 PLTR @ 18.50,Individual...39
+01/28/2022 9:54 PM,Trade,Sell to Open,SPYG,Sell,Open,1,02/18/2022,63,C,2.75,1.132,275,Sold 1 SPYG 02/18/22 Call 63.00 @ 2.75,Individual...39
+01/28/2022 5:57 PM,Trade,Sell to Close,GREE,Sell,Close,100,,,,11.28,0.102,1128,Sold 100 GREE @ 11.28,Individual...39
+01/28/2022 5:57 PM,Trade,Sell to Close,GREE,Sell,Close,100,,,,11.28,0.102,1128,Sold 100 GREE @ 11.28,Individual...39
+01/18/2022 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-3.51,FROM 01/01 THRU 01/15 @ 8    %,Individual...39
+01/08/2022 3:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+01/05/2022 8:45 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/28/2022,18.5,P,1.85,1.132,185,Sold 1 PLTR 01/28/22 Put 18.50 @ 1.85,Individual...39
+01/05/2022 6:27 PM,Trade,Buy to Close,GREE,Buy,Close,2,01/21/2022,20,C,0.53,0.24,-106,Bought 2 GREE 01/21/22 Call 20.00 @ 0.53,Individual...39
+01/05/2022 3:32 PM,Trade,Buy to Close,SPYG,Buy,Close,1,02/18/2022,75,C,0.55,0.12,-55,Bought 1 SPYG 02/18/22 Call 75.00 @ 0.55,Individual...39
+01/02/2022 6:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/31/2021 11:00 PM,Receive Deliver,Assignment,PLTR,,,2,12/31/2021,22.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+12/31/2021 11:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,200,,,,22.5,5.00,-4500,Buy to Open 200 PLTR @ 22.50,Individual...39
+12/31/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.01,INTEREST ON CREDIT BALANCE,Individual...39
+12/27/2021 4:00 PM,Trade,Sell to Open,SPYG,Sell,Open,1,02/18/2022,75,C,1.1,1.132,110,Sold 1 SPYG 02/18/22 Call 75.00 @ 1.10,Individual...39
+12/24/2021 3:41 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.02,Regulatory fee adjustment,Individual...39
+12/23/2021 11:00 PM,Money Movement,Dividend,SPYG,,,0,,,,,0.00,12.28,SPDR SERIES TRUST,Individual...39
+12/23/2021 11:00 PM,Money Movement,Dividend,SPYG,,,0,,,,,0.00,-1.84,SPDR SERIES TRUST,Individual...39
+12/23/2021 5:23 PM,Trade,Sell to Open,GREE,Sell,Open,1,01/21/2022,20,C,2.4,1.132,240,Sold 1 GREE 01/21/22 Call 20.00 @ 2.40,Individual...39
+12/23/2021 5:22 PM,Trade,Sell to Open,GREE,Sell,Open,1,01/21/2022,20,C,2.4,1.132,240,Sold 1 GREE 01/21/22 Call 20.00 @ 2.40,Individual...39
+12/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...39
+12/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.63,FROM 11/16 THRU 12/15 @ 8    %,Individual...39
+12/04/2021 3:39 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/01/2021 4:30 PM,Trade,Buy to Close,GREE,Buy,Close,1,01/21/2022,25,C,1.4,0.12,-140,Bought 1 GREE 01/21/22 Call 25.00 @ 1.40,Individual...39
+12/01/2021 4:23 PM,Trade,Buy to Close,SPYG,Buy,Close,1,12/17/2021,73,C,0.6,0.12,-60,Bought 1 SPYG 12/17/21 Call 73.00 @ 0.60,Individual...39
+12/01/2021 4:21 PM,Trade,Buy to Close,GREE,Buy,Close,1,01/21/2022,25,C,1.4,0.12,-140,Bought 1 GREE 01/21/22 Call 25.00 @ 1.40,Individual...39
+11/29/2021 8:10 PM,Trade,Sell to Open,GREE,Sell,Open,2,01/21/2022,25,C,1.6,2.254,320,Sold 2 GREE 01/21/22 Call 25.00 @ 1.60,Individual...39
+11/27/2021 3:53 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+11/23/2021 4:53 PM,Trade,Buy to Open,GREE,Buy,Open,100,,,,19.87,0.08,-1987,Bought 100 GREE @ 19.87,Individual...39
+11/23/2021 4:53 PM,Trade,Buy to Open,GREE,Buy,Open,50,,,,19.87,0.04,-993.5,Bought 50 GREE @ 19.87,Individual...39
+11/23/2021 4:53 PM,Trade,Buy to Open,GREE,Buy,Open,50,,,,19.87,0.04,-993.5,Bought 50 GREE @ 19.87,Individual...39
+11/23/2021 3:50 PM,Trade,Sell to Open,PLTR,Sell,Open,2,12/31/2021,22.5,P,2.4,2.254,480,Sold 2 PLTR 12/31/21 Put 22.50 @ 2.40,Individual...39
+11/23/2021 3:43 PM,Trade,Sell to Close,VALN,Sell,Close,100,,,,45.99,0.122,4599,Sold 100 VALN @ 45.99,Individual...39
+11/22/2021 8:47 PM,Trade,Sell to Close,VALN,Sell,Close,100,,,,46.16,0.122,4616,Sold 100 VALN @ 46.16,Individual...39
+11/22/2021 7:09 PM,Trade,Buy to Open,VALN,Buy,Open,100,,,,44.6797,0.08,-4467.97,Bought 100 VALN @ 44.68,Individual...39
+11/22/2021 6:46 PM,Trade,Buy to Close,GREE,Buy,Close,1,12/17/2021,20,P,2.45,0.12,-245,Bought 1 GREE 12/17/21 Put 20.00 @ 2.45,Individual...39
+11/22/2021 6:46 PM,Trade,Buy to Close,GREE,Buy,Close,1,12/17/2021,20,P,2.45,0.12,-245,Bought 1 GREE 12/17/21 Put 20.00 @ 2.45,Individual...39
+11/22/2021 6:39 PM,Trade,Buy to Open,VALN,Buy,Open,100,,,,44.3097,0.08,-4430.97,Bought 100 VALN @ 44.31,Individual...39
+11/22/2021 6:39 PM,Trade,Sell to Close,GREE,Sell,Close,100,,,,19.37,0.102,1937,Sold 100 GREE @ 19.37,Individual...39
+11/22/2021 6:38 PM,Trade,Sell to Close,MVST,Sell,Close,500,,,,8.5128,0.49,4256.4,Sold 500 MVST @ 8.51,Individual...39
+11/22/2021 5:42 PM,Trade,Buy to Close,MVST,Buy,Close,5,12/17/2021,11,C,0.15,0.61,-75,Bought 5 MVST 12/17/21 Call 11.00 @ 0.15,Individual...39
+11/22/2021 5:33 PM,Trade,Sell to Open,GREE,Sell,Open,2,12/17/2021,20,P,2.5,2.254,500,Sold 2 GREE 12/17/21 Put 20.00 @ 2.50,Individual...39
+11/18/2021 6:07 PM,Trade,Buy to Close,GREE,Buy,Close,1,11/19/2021,25,C,0.1,0.12,-10,Bought 1 GREE 11/19/21 Call 25.00 @ 0.10,Individual...39
+11/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.05,INTEREST ON CREDIT BALANCE,Individual...39
+11/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.09,FROM 10/16 THRU 11/15 @ 8    %,Individual...39
+11/15/2021 3:30 PM,Trade,Sell to Open,SPYG,Sell,Open,1,12/17/2021,73,C,0.75,1.132,75,Sold 1 SPYG 12/17/21 Call 73.00 @ 0.75,Individual...39
+11/12/2021 3:35 PM,Trade,Sell to Open,MVST,Sell,Open,5,12/17/2021,11,C,0.45,5.63,225,Sold 5 MVST 12/17/21 Call 11.00 @ 0.45,Individual...39
+11/11/2021 5:04 PM,Trade,Buy to Open,SPYG,Buy,Open,100,,,,70.5754,0.08,-7057.54,Bought 100 SPYG @ 70.58,Individual...39
+11/05/2021 2:31 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,9,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 9.00 @ 0.70,Individual...39
+11/05/2021 2:31 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,9,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 9.00 @ 0.70,Individual...39
+11/05/2021 2:31 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,9,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 9.00 @ 0.70,Individual...39
+11/05/2021 2:31 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,9,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 9.00 @ 0.70,Individual...39
+11/05/2021 2:31 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,9,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 9.00 @ 0.70,Individual...39
+11/01/2021 2:30 PM,Trade,Sell to Open,MVST,Sell,Open,5,11/19/2021,9,C,0.8,5.63,400,Sold 5 MVST 11/19/21 Call 9.00 @ 0.80,Individual...39
+10/30/2021 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+10/29/2021 6:52 PM,Trade,Buy to Close,GREE,Buy,Close,3,11/19/2021,25,P,3,0.37,-900,Bought 3 GREE 11/19/21 Put 25.00 @ 3.00,Individual...39
+10/27/2021 8:27 PM,Trade,Sell to Open,GREE,Sell,Open,1,11/19/2021,25,C,2.6,1.132,260,Sold 1 GREE 11/19/21 Call 25.00 @ 2.60,Individual...39
+10/23/2021 4:47 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+10/19/2021 9:15 PM,Trade,Sell to Open,GREE,Sell,Open,2,11/19/2021,25,P,4.1,2.254,820,Sold 2 GREE 11/19/21 Put 25.00 @ 4.10,Individual...39
+10/19/2021 9:15 PM,Trade,Sell to Open,GREE,Sell,Open,1,11/19/2021,25,P,4.1,1.132,410,Sold 1 GREE 11/19/21 Put 25.00 @ 4.10,Individual...39
+10/19/2021 6:15 PM,Trade,Buy to Close,GREE,Buy,Close,1,11/19/2021,25,C,2.2,0.12,-220,Bought 1 GREE 11/19/21 Call 25.00 @ 2.20,Individual...39
+10/18/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...39
+10/18/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.21,FROM 09/16 THRU 10/15 @ 8    %,Individual...39
+10/18/2021 6:09 PM,Trade,Sell to Open,GREE,Sell,Open,1,11/19/2021,25,C,3.5,1.132,350,Sold 1 GREE 11/19/21 Call 25.00 @ 3.50,Individual...39
+10/16/2021 4:51 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+10/15/2021 11:00 PM,Receive Deliver,Assignment,HIMS,,,7,10/15/2021,7.5,C,,0.00,0,Removal of option due to assignment,Individual...39
+10/15/2021 11:00 PM,Receive Deliver,Sell to Close,HIMS,Sell,Close,700,,,,7.5,5.113,5250,Sell to Close 700 HIMS @ 7.50,Individual...39
+10/15/2021 10:00 PM,Receive Deliver,Expiration,GREE,,,1,10/15/2021,25,C,,0.00,0,Removal of 1.0 GREE 10/15/21 Call 25.00 due to expiration.,Individual...39
+10/11/2021 6:42 PM,Trade,Buy to Close,MVST,Buy,Close,1,11/19/2021,8,C,0.7,0.12,-70,Bought 1 MVST 11/19/21 Call 8.00 @ 0.70,Individual...39
+10/11/2021 5:34 PM,Trade,Sell to Open,MVST,Sell,Open,1,11/19/2021,8,C,0.8,1.132,80,Sold 1 MVST 11/19/21 Call 8.00 @ 0.80,Individual...39
+10/11/2021 4:11 PM,Trade,Sell to Open,GREE,Sell,Open,1,10/15/2021,25,C,1.8,1.132,180,Sold 1 GREE 10/15/21 Call 25.00 @ 1.80,Individual...39
+10/06/2021 8:36 PM,Trade,Buy to Close,GREE,Buy,Close,1,10/15/2021,25,C,2.35,0.12,-235,Bought 1 GREE 10/15/21 Call 25.00 @ 2.35,Individual...39
+10/04/2021 8:07 PM,Trade,Sell to Open,GREE,Sell,Open,1,10/15/2021,25,C,2.55,1.132,255,Sold 1 GREE 10/15/21 Call 25.00 @ 2.55,Individual...39
+10/04/2021 6:50 PM,Trade,Sell to Open,HIMS,Sell,Open,1,10/15/2021,7.5,C,0.4,1.132,40,Sold 1 HIMS 10/15/21 Call 7.50 @ 0.40,Individual...39
+10/04/2021 6:50 PM,Trade,Sell to Open,HIMS,Sell,Open,3,10/15/2021,7.5,C,0.4,3.386,120,Sold 3 HIMS 10/15/21 Call 7.50 @ 0.40,Individual...39
+10/04/2021 6:50 PM,Trade,Sell to Open,HIMS,Sell,Open,3,10/15/2021,7.5,C,0.4,3.386,120,Sold 3 HIMS 10/15/21 Call 7.50 @ 0.40,Individual...39
+10/02/2021 3:13 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+09/29/2021 9:58 PM,Trade,Buy to Open,GREE,Buy,Open,32,,,,25.49,0.026,-815.68,Bought 32 GREE @ 25.49,Individual...39
+09/29/2021 9:58 PM,Trade,Buy to Open,GREE,Buy,Open,68,,,,25.49,0.055,-1733.32,Bought 68 GREE @ 25.49,Individual...39
+09/29/2021 7:11 PM,Trade,Sell to Close,GREE,Sell,Close,100,,,,27.7,0.112,2770,Sold 100 GREE @ 27.70,Individual...39
+09/29/2021 5:36 PM,Trade,Buy to Close,MVST,Buy,Close,5,10/15/2021,10,C,0.3,0.66,-150,Bought 5 MVST 10/15/21 Call 10.00 @ 0.30,Individual...39
+09/29/2021 12:01 AM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,85.92,Delayed Delivery_GREE1_Assignment_SEP_17,Individual...39
+09/25/2021 4:31 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.02,Regulatory fee adjustment,Individual...39
+09/23/2021 7:38 PM,Trade,Buy to Open,GREE,Buy,Open,2,,,,27.05,0.002,-54.1,Bought 2 GREE @ 27.05,Individual...39
+09/23/2021 7:38 PM,Trade,Buy to Open,GREE,Buy,Open,98,,,,27.05,0.079,-2650.9,Bought 98 GREE @ 27.05,Individual...39
+09/23/2021 7:14 PM,Trade,Sell to Close,GREE,Sell,Close,31,,,,27.13,0.039,841.03,Sold 31 GREE @ 27.13,Individual...39
+09/23/2021 7:14 PM,Trade,Sell to Close,GREE,Sell,Close,26,,,,27.13,0.034,705.38,Sold 26 GREE @ 27.13,Individual...39
+09/23/2021 7:14 PM,Trade,Sell to Close,WYNN,Sell,Close,1,10/29/2021,75,P,2.05,0.142,205,Sold 1 WYNN 10/29/21 Put 75.00 @ 2.05,Individual...39
+09/23/2021 7:09 PM,Trade,Sell to Close,GREE,Sell,Close,9,,,,27.13,0.019,244.17,Sold 9 GREE @ 27.13,Individual...39
+09/21/2021 4:30 PM,Trade,Buy to Open,WYNN,Buy,Open,1,10/29/2021,75,P,3.5,1.13,-350,Bought 1 WYNN 10/29/21 Put 75.00 @ 3.50,Individual...39
+09/20/2021 4:25 PM,Trade,Sell to Open,MVST,Sell,Open,1,10/15/2021,10,C,0.5,1.142,50,Sold 1 MVST 10/15/21 Call 10.00 @ 0.50,Individual...39
+09/20/2021 4:25 PM,Trade,Sell to Open,MVST,Sell,Open,2,10/15/2021,10,C,0.5,2.274,100,Sold 2 MVST 10/15/21 Call 10.00 @ 0.50,Individual...39
+09/20/2021 4:19 PM,Trade,Sell to Open,MVST,Sell,Open,1,10/15/2021,10,C,0.5,1.142,50,Sold 1 MVST 10/15/21 Call 10.00 @ 0.50,Individual...39
+09/20/2021 4:19 PM,Trade,Sell to Open,MVST,Sell,Open,1,10/15/2021,10,C,0.5,1.142,50,Sold 1 MVST 10/15/21 Call 10.00 @ 0.50,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Assignment,GREE,,,6,09/17/2021,22,P,,0.00,0,Removal of option due to assignment,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Buy to Open,GREE,Buy,Open,66,,,,200,5.00,-13200,Buy to Open 66 GREE @ 200.00,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Assignment,HIMS,,,7,09/17/2021,12.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Buy to Open,HIMS,Buy,Open,700,,,,12.5,5.00,-8750,Buy to Open 700 HIMS @ 12.50,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Assignment,MVST,,,5,09/17/2021,12.5,P,,0.00,0,Removal of option due to assignment,Individual...39
+09/17/2021 11:00 PM,Receive Deliver,Buy to Open,MVST,Buy,Open,500,,,,12.5,5.00,-6250,Buy to Open 500 MVST @ 12.50,Individual...39
+09/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.18,INTEREST ON CREDIT BALANCE,Individual...39
+09/15/2021 12:36 PM,Receive Deliver,Stock Merger,GREE,Sell,Open,6,09/17/2021,22,P,,0.00,3360,Stock merger Open 6.0 GREE1 210917P00022000,Individual...39
+09/15/2021 12:36 PM,Receive Deliver,Stock Merger,SPRT,Buy,Close,6,09/17/2021,22,P,,0.00,-3360,Stock merger Close 6.0 SPRT  210917P00022000,Individual...39
+09/09/2021 5:31 PM,Trade,Sell to Open,SPRT,Sell,Open,6,09/17/2021,22,P,5.6,6.822,3360,Sold 6 SPRT 09/17/21 Put 22.00 @ 5.60,Individual...39
+09/08/2021 4:11 PM,Trade,Sell to Open,HIMS,Sell,Open,7,09/17/2021,12.5,P,4,7.964,2800,Sold 7 HIMS 09/17/21 Put 12.50 @ 4.00,Individual...39
+09/07/2021 9:54 PM,Trade,Sell to Open,MVST,Sell,Open,5,09/17/2021,12.5,P,2.3,5.68,1150,Sold 5 MVST 09/17/21 Put 12.50 @ 2.30,Individual...39
+09/07/2021 6:47 PM,Trade,Buy to Close,MVST,Buy,Close,2,09/17/2021,12.5,P,1.6,0.26,-320,Bought 2 MVST 09/17/21 Put 12.50 @ 1.60,Individual...39
+09/03/2021 3:32 PM,Trade,Sell to Close,CLOV,Sell,Close,400,,,,9.4,0.388,3760,Sold 400 CLOV @ 9.40,Individual...39
+08/17/2021 3:30 PM,Trade,Buy to Open,CLOV,Buy,Open,400,,,,8.31,0.32,-3324,Bought 400 CLOV @ 8.31,Individual...39
+08/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...39
+08/14/2021 3:47 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+08/13/2021 11:00 PM,Receive Deliver,Assignment,CLF,,,4,08/13/2021,22.5,C,,0.00,0,Removal of option due to assignment,Individual...39
+08/13/2021 11:00 PM,Receive Deliver,Sell to Close,CLF,Sell,Close,400,,,,22.5,5.098,9000,Sell to Close 400 CLF @ 22.50,Individual...39
+08/12/2021 4:02 PM,Trade,Buy to Close,PLTR,Buy,Close,1,09/24/2021,23,C,2.58,0.13,-258,Bought 1 PLTR 09/24/21 Call 23.00 @ 2.58,Individual...39
+08/12/2021 4:02 PM,Trade,Buy to Close,PLTR,Buy,Close,1,09/24/2021,23,C,2.58,0.13,-258,Bought 1 PLTR 09/24/21 Call 23.00 @ 2.58,Individual...39
+08/12/2021 4:02 PM,Trade,Buy to Close,PLTR,Buy,Close,1,09/24/2021,23,C,2.58,0.13,-258,Bought 1 PLTR 09/24/21 Call 23.00 @ 2.58,Individual...39
+08/12/2021 3:49 PM,Trade,Buy to Close,PLTR,Buy,Close,3,08/20/2021,24.5,C,0.8,0.40,-240,Bought 3 PLTR 08/20/21 Call 24.50 @ 0.80,Individual...39
+08/12/2021 3:38 PM,Trade,Sell to Close,PLTR,Sell,Close,300,,,,23.75,0.316,7125,Sold 300 PLTR @ 23.75,Individual...39
+08/12/2021 3:38 PM,Trade,Sell to Open,PLTR,Sell,Open,3,09/24/2021,23,C,1.88,3.416,564,Sold 3 PLTR 09/24/21 Call 23.00 @ 1.88,Individual...39
+08/10/2021 6:50 PM,Trade,Buy to Open,CLF,Buy,Open,200,,,,25.85,0.16,-5170,Bought 200 CLF @ 25.85,Individual...39
+08/10/2021 5:50 PM,Trade,Sell to Open,MVST,Sell,Open,2,09/17/2021,12.5,P,1.8,2.284,360,Sold 2 MVST 09/17/21 Put 12.50 @ 1.80,Individual...39
+08/10/2021 3:30 PM,Trade,Sell to Close,CLF,Sell,Close,2,01/21/2022,24,C,4.6,0.284,920,Sold 2 CLF 01/21/22 Call 24.00 @ 4.60,Individual...39
+08/10/2021 3:30 PM,Trade,Buy to Close,MVST,Buy,Close,3,08/20/2021,10,P,0.25,0.40,-75,Bought 3 MVST 08/20/21 Put 10.00 @ 0.25,Individual...39
+08/07/2021 3:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+08/06/2021 5:36 PM,Trade,Buy to Close,CLNE,Buy,Close,1,08/20/2021,9,C,0.12,0.13,-12,Bought 1 CLNE 08/20/21 Call 9.00 @ 0.12,Individual...39
+08/06/2021 5:36 PM,Trade,Sell to Close,CLNE,Sell,Close,100,,,,7.34,0.102,734,Sold 100 CLNE @ 7.34,Individual...39
+08/05/2021 4:22 PM,Trade,Sell to Open,PLTR,Sell,Open,3,08/20/2021,24.5,C,0.47,3.416,141,Sold 3 PLTR 08/20/21 Call 24.50 @ 0.47,Individual...39
+08/03/2021 3:30 PM,Trade,Sell to Close,UWMC,Sell,Close,65,,,,7.89,0.07,512.85,Sold 65 UWMC @ 7.89,Individual...39
+08/03/2021 3:30 PM,Trade,Sell to Close,UWMC,Sell,Close,135,,,,7.89,0.134,1065.15,Sold 135 UWMC @ 7.89,Individual...39
+07/31/2021 3:56 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/30/2021 9:52 PM,Trade,Buy to Close,BB,Buy,Close,1,08/27/2021,11,C,0.65,0.13,-65,Bought 1 BB 08/27/21 Call 11.00 @ 0.65,Individual...39
+07/30/2021 9:52 PM,Trade,Sell to Close,BB,Sell,Close,100,,,,10.19,0.102,1019,Sold 100 BB @ 10.19,Individual...39
+07/28/2021 9:05 PM,Trade,Sell to Open,BB,Sell,Open,1,08/27/2021,11,C,1.03,1.142,103,Sold 1 BB 08/27/21 Call 11.00 @ 1.03,Individual...39
+07/28/2021 6:24 PM,Trade,Buy to Close,PLTR,Buy,Close,1,08/20/2021,25,P,2.89,0.13,-289,Bought 1 PLTR 08/20/21 Put 25.00 @ 2.89,Individual...39
+07/28/2021 6:24 PM,Trade,Buy to Close,PLTR,Buy,Close,4,08/20/2021,25,P,2.89,0.54,-1156,Bought 4 PLTR 08/20/21 Put 25.00 @ 2.89,Individual...39
+07/27/2021 5:15 PM,Trade,Buy to Close,BB,Buy,Close,1,08/13/2021,12,C,0.19,0.13,-19,Bought 1 BB 08/13/21 Call 12.00 @ 0.19,Individual...39
+07/27/2021 3:54 PM,Trade,Sell to Open,MVST,Sell,Open,3,08/20/2021,10,P,1.98,3.416,594,Sold 3 MVST 08/20/21 Put 10.00 @ 1.98,Individual...39
+07/24/2021 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+07/23/2021 9:34 PM,Trade,Sell to Open,CLF,Sell,Open,2,08/13/2021,22.5,C,0.85,2.284,170,Sold 2 CLF 08/13/21 Call 22.50 @ 0.85,Individual...39
+07/23/2021 9:34 PM,Trade,Sell to Open,CLF,Sell,Open,2,08/13/2021,22.5,C,0.85,2.284,170,Sold 2 CLF 08/13/21 Call 22.50 @ 0.85,Individual...39
+07/23/2021 3:30 PM,Trade,Buy to Close,CLF,Buy,Close,1,08/27/2021,21,P,1.56,0.13,-156,Bought 1 CLF 08/27/21 Put 21.00 @ 1.56,Individual...39
+07/23/2021 3:30 PM,Trade,Buy to Close,CLF,Buy,Close,1,08/27/2021,21,P,1.56,0.13,-156,Bought 1 CLF 08/27/21 Put 21.00 @ 1.56,Individual...39
+07/20/2021 3:30 PM,Trade,Sell to Open,CLNE,Sell,Open,1,08/20/2021,9,C,0.45,1.142,45,Sold 1 CLNE 08/20/21 Call 9.00 @ 0.45,Individual...39
+07/19/2021 3:36 PM,Trade,Sell to Open,CLF,Sell,Open,2,08/27/2021,21,P,3.2,2.284,640,Sold 2 CLF 08/27/21 Put 21.00 @ 3.20,Individual...39
+07/17/2021 3:35 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+07/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...39
+07/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-1.58,FROM 06/16 THRU 07/15 @ 8    %,Individual...39
+07/16/2021 10:00 PM,Receive Deliver,Expiration,CLNE,,,1,07/16/2021,14,C,,0.00,0,Removal of 1.0 CLNE 07/16/21 Call 14.00 due to expiration.,Individual...39
+07/15/2021 7:11 PM,Trade,Buy to Close,CLF,Buy,Close,4,08/13/2021,23,C,1.26,0.54,-504,Bought 4 CLF 08/13/21 Call 23.00 @ 1.26,Individual...39
+07/14/2021 8:05 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.8,1.142,380,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.80,Individual...39
+07/14/2021 8:05 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.8,1.142,380,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.80,Individual...39
+07/09/2021 9:24 PM,Trade,Sell to Open,CLF,Sell,Open,4,08/13/2021,23,C,1.76,4.558,704,Sold 4 CLF 08/13/21 Call 23.00 @ 1.76,Individual...39
+07/09/2021 9:22 PM,Trade,Sell to Open,BB,Sell,Open,1,08/13/2021,12,C,0.98,1.142,98,Sold 1 BB 08/13/21 Call 12.00 @ 0.98,Individual...39
+07/08/2021 7:26 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,2.97,1.142,297,Sold 1 PLTR 08/20/21 Put 25.00 @ 2.97,Individual...39
 07/07/2021 7:24 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,23,C,0.79,0.54,-316,Bought 4 CLF 07/23/21 Call 23.00 @ 0.79,Individual...39
 07/07/2021 4:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.15,1.142,315,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.15,Individual...39
 07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,289,,,,4.81,0.276,1390.09,Sold 289 SPRT @ 4.81,Individual...39
