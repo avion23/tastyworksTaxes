@@ -335,16 +335,16 @@ class Tasty(object):
         >>> len(t.positions.index) #  removed
         2
         >>> t.closedTrades.iloc[0]["Amount"]
-        1420
+        1420.0
         >>> t.closedTrades.iloc[0]["Fees"]
         2.324
         >>> t.addPosition(Transaction(t.history.iloc[674])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 16.78
         >>> t.positions.iloc[0].Amount # only half the opening value
-        -220
+        -220.0
         >>> t.positions.iloc[0].Fees # only half the opening value
         1.14
         >>> t.positions.iloc[1].Amount
-        6000
+        6000.0
         >>> t.closedTrades.iloc[1]["Fees"]
         1.3219999999999998
 
@@ -360,7 +360,7 @@ class Tasty(object):
         >>> t.addPosition(Transaction(t.history.iloc[672])) # Bought 100 LFIN @ 57.20
         >>> t.addPosition(Transaction(t.history.iloc[671])) # Sold 1 LFIN 06/15/18 Call 40.00 @ 17.15
         >>> t.closedTrades["Amount"].sum()
-        -1023
+        -1023.0
         >>> len(t.positions.index)
         0
 
@@ -747,5 +747,5 @@ class Tasty(object):
 if __name__ == "__main__":
     import doctest
 
-    # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    doctest.run_docstring_examples(Tasty.run, globals())
+    doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
+    # doctest.run_docstring_examples(Tasty.run, globals())
