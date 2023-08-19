@@ -11,13 +11,20 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.WARNING,
+    datefmt='%Y-%m-%d %H:%M:%S')
+for logKey in logging.Logger.manager.loggerDict:  # disable logging for imported modules
+    temp = logging.getLogger(logKey)
+    temp.propagate = True
+    temp.setLevel(logging.INFO)
+    if temp.name == "trade":
+        temp.setLevel(logging.DEBUG)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
-logger.propagate = False
 
 class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
@@ -28,7 +35,7 @@ class Transaction(pd.core.series.Series):
     def getYear(self) -> str:
         """returns the year as string from a csv entry
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[-1]).getYear()
         2018
         """
@@ -44,7 +51,7 @@ class Transaction(pd.core.series.Series):
     def getDate(self) -> str:
         """returns 2018-04-02 date format
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[-1]).getDate())
         2018-03-08
         """
@@ -54,7 +61,7 @@ class Transaction(pd.core.series.Series):
     def getDateTime(self) -> str:
         """returns the exact date
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[-1]).getDateTime())
         2018-03-08 23:00:00
         """
@@ -69,6 +76,7 @@ class Transaction(pd.core.series.Series):
     def isOption(self) -> bool:
         """returns true if the transaction is an option
 
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[0]).isOption()
         True
 
@@ -86,6 +94,8 @@ class Transaction(pd.core.series.Series):
     def isStock(self) -> bool:
         """returns true if the symbol is a stock ticker
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[13]).isStock()
         False
         >>> Transaction(h.iloc[10]).isStock()
@@ -96,6 +106,7 @@ class Transaction(pd.core.series.Series):
     def getSymbol(self) -> str:
         """returns the Ticker symbol
 
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[13]).getSymbol()
         'PCG'
 
@@ -117,6 +128,8 @@ class Transaction(pd.core.series.Series):
     def getType(self) -> PositionType:
         """returns put, call or stock
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[10]).getType().name
         'stock'
         >>> Transaction(h.iloc[13]).getType().name
@@ -156,6 +169,8 @@ class Transaction(pd.core.series.Series):
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[11]).getSymbol()
         'NKLA'
         >>> Transaction(h.iloc[11]).getQuantity()
@@ -230,6 +245,8 @@ class Transaction(pd.core.series.Series):
 
     def setQuantity(self, quantity: int):
         """ Signage is decided with the subcode
+
+        >>> h = History.fromFile("test/merged.csv")
         >>> t = Transaction(h.iloc[270])
         >>> t.getQuantity()
         -100
@@ -302,6 +319,7 @@ class Transaction(pd.core.series.Series):
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
 
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[10]).getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
         """
@@ -311,6 +329,8 @@ class Transaction(pd.core.series.Series):
     def setValue(self, money: Money):
         """ sets the individual values for euro in AmountEuro and usd in Amount
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[10]).getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
 
@@ -325,6 +345,8 @@ class Transaction(pd.core.series.Series):
     def getFees(self) -> Money:
         """ returns the fees of the transaction at that specific point of time
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[10]).getFees())
         {'eur': 0.13179571663920922, 'usd': 0.16}
         """
@@ -336,6 +358,8 @@ class Transaction(pd.core.series.Series):
     def setFees(self, money: Money):
         """ sets the individual values for euro in FeesEuro and usd 
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> t =  Transaction(h.iloc[10])
         >>> t.setFees(Money(usd=45, eur=20))
         >>> print(t.getFees())
@@ -347,6 +371,8 @@ class Transaction(pd.core.series.Series):
     def getExpiry(self) -> datetime:
         """ returns the expiry date if it exists
 
+        
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[0]).getExpiry())
         2021-01-15 00:00:00
         """
@@ -357,7 +383,7 @@ class Transaction(pd.core.series.Series):
     def getStrike(self) -> float:
         """ returns the strike of the option
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[0]).getStrike())
         26.0
         """
@@ -367,5 +393,4 @@ class Transaction(pd.core.series.Series):
 
 if __name__ == "__main__":
     import doctest
-
-    doctest.testmod(extraglobs={"h": History.fromFile("test/merged.csv")})
+    doctest.testmod()
