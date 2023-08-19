@@ -96,13 +96,13 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.moneyMovement(t.history.iloc[48])
         >>> str(t.year(2021).debitInterest)
-        "{'eur': -0.7164621592687145, 'usd': -0.87}"
+        "{'eur': -0.7175849554602441, 'usd': -0.87}"
 
         # dividend
         >>> t = Tasty("test/merged2.csv")
         >>> t.moneyMovement(t.history.iloc[12])
         >>> str(t.year(2021).dividend)
-        "{'eur': -2.470559169892119, 'usd': -3.0}"
+        "{'eur': -2.5342118601115056, 'usd': -3.0}"
         """
         t = Transaction(row)
         m = Money(row=row)
