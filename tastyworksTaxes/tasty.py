@@ -688,7 +688,7 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getStockProfits(y) for y in years][0].usd != 0
+        >>> [t.getStockProfits(y) for y in years][3].usd != 0
         True
         """
         m: Money = Money()
