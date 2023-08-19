@@ -8,7 +8,7 @@ import math
 import pathlib
 import pprint
 from dataclasses import dataclass
-from typing import List
+from typing import List, Callable
 
 import pandas as pd
 from dataclasses_json import dataclass_json
@@ -531,7 +531,6 @@ class Tasty(object):
                 self.receiveDelivery(row)
             if row.loc["Transaction Code"] == "Trade":
                 self.trade(row)
-
     def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
         >>> t = Tasty("test/merged2.csv")
@@ -539,17 +538,23 @@ class Tasty(object):
         >>> len(t.getYearlyTrades())
         4
         """
+        
+        def converter(x: str) -> PositionType:
+            return PositionType[x.split('.')[-1]]
+        
         trades = self.closedTrades
         trades['Closing Date'] = pd.to_datetime(trades['Closing Date'])
         trades['year'] = trades['Closing Date'].dt.year
+        trades['callPutStock'] = trades['callPutStock'].apply(converter)  # type: ignore
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
+
 
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getStockSum(y) for y in years][0].usd != 0
+        >>> [t.getCombinedSum(y) for y in years][0].usd != 0
         True
         """
         m: Money = Money()
@@ -700,7 +705,6 @@ class Tasty(object):
         >>> years = t.getYearlyTrades()
         >>> [t.getFeesSum(y) for y in years][0].usd != 0
         True
-        >>> [t.getFeesSum(y) for y in years]
         """
         m: Money = Money()
         m.usd = trades['Fees'].sum()
