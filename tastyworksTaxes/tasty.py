@@ -540,6 +540,8 @@ class Tasty(object):
         """
         
         def converter(x: str) -> PositionType:
+            if isinstance(x, PositionType):
+                return x
             return PositionType[x.split('.')[-1]]
         
         trades = self.closedTrades
