@@ -4,7 +4,7 @@ Automate the calculation of yearly taxes for a tastyworks export in the context 
 
 ⚠️ **Note:** This software is currently a work in progress. While extensive test driven development has been done with real data, users should be cautious and verify results independently.
 
-🚨🚨🚨 BIG FAT WARNING ON TAXES FOR OPTIONS TRADING 🚨🚨🚨
+🚨🚨🚨 WARNING ON TAXES FOR OPTIONS TRADING 🚨🚨🚨
 
 If you have over 20,000 EUR in annual revenue from options trading, you will be taxed on this revenue even if you did not actually earn a profit! 
 
@@ -15,6 +15,11 @@ Losses from "terminating transactions" (Termingeschäfte) such as options are su
 Any losses above 20,000 EUR cannot be deducted from taxable income and are carried forward to future years.
 
 This means with options trading revenue over 20,000 EUR, you may pay taxes on that revenue even if your actual profit is lower due to undeductible losses.
+
+**Development Status**:
+- Currently, the program does not differentiate between various asset classes; it only recognizes stocks and options. This does not accurately reflect all trading scenarios.
+- Please triple-check your results. Accurately assigning losses, profits, fees, interest, etc., to their specific categories is challenging.
+
 
 **Stocks**:
 
