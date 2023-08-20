@@ -37,8 +37,7 @@ class GermanTaxReport(object):
 
     Sorry for the german variable names. There is also an english version and I've created translation functions
 
-
- Example output:
+    Example output:
     Einzahlungen
     Auszahlungen
     Brokergebühren
@@ -352,17 +351,21 @@ class EnglishTaxReport(object):
 
 
 class Printer(object):
-    def __init__(self, values: Values = None, closedTrades: pd.DataFrame = None) -> None:
+    """ Print the tax report to the console 
+    
+    Used to convert our internal dictionary to a format which is similar to tastyworks-pnl
+    """
+    def __init__(self, values: Values, closedTrades: pd.DataFrame) -> None:
         self.values = values
         self.closedTrades = closedTrades
 
-    def EnglishTaxReport(self) -> EnglishTaxReport:
-        """ Returns a tax sreport in English """
+    def generateEnglishTaxReport(self) -> EnglishTaxReport:
+        """ Returns a tax report in English """
         report = EnglishTaxReport()
 
         return report
 
-    def GermanTaxReport(self) -> GermanTaxReport:
+    def generateGermanTaxReport(self) -> GermanTaxReport:
         """ Returns a tax report in German 
 
 
@@ -387,9 +390,107 @@ class Printer(object):
         otherFees: Money = Money()
         """
         report = GermanTaxReport()
-        report.auszahlungen = self.values['currency_gains_usd_tax_free']
+        report.einzahlungen = self.values.deposit.eur
+        report.auszahlungen = self.values.withdrawal.eur
 
+        report.alle_gebuehren_in_usd = 0
+        report.alle_gebuehren_in_euro = 0
+        report.waehrungsgewinne_usd = 0
+        report.waehrungsgewinne_usd_steuerfrei = 0
+        report.waehrungsgewinne_usd_gesamt = 0
+        report.krypto_gewinne = 0
+        report.krypto_verluste = 0
+        report.anlage_so = 0
+        report.anlage_so_steuerbetrag = 0
+        report.anlage_so_verlustvortrag = 0
+        report.investmentfondsgewinne = 0
+        report.investmentfondsverluste = 0
+        report.anlage_kap_inv = 0
+        report.aktiengewinne_z20 = 0
+        report.aktienverluste_z23 = 0
+        report.aktien_gesamt = 0
+        report.aktien_steuerbetrag = 0
+        report.aktien_verlustvortrag = 0
+        report.sonstige_gewinne = 0
+        report.sonstige_verluste = 0
+        report.sonstige_gesamt = 0
+        report.stillhalter_gewinne = 0
+        report.stillhalter_verluste = 0
+        report.stillhalter_gesamt = 0
+        report.durchschnitt_behaltene_praemien_pro_tag = 0
+        report.stillhalter_gewinne_calls_fifo = 0
+        report.stillhalter_verluste_calls_fifo = 0
+        report.stillhalter_calls_gesamt_fifo = 0
+        report.stillhalter_gewinne_puts_fifo = 0
+        report.stillhalter_verluste_puts_fifo = 0
+        report.stillhalter_puts_gesamt_fifo = 0
+        report.stillhalter_gewinne_fifo = 0
+        report.stillhalter_verluste_fifo = 0
+        report.stillhalter_gesamt_fifo = 0
+        report.long_optionen_gewinne = 0
+        report.long_optionen_verluste = 0
+        report.long_optionen_gesamt = 0
+        report.future_gewinne = 0
+        report.future_verluste = 0
+        report.future_gesamt = 0
+        report.zusatzliche_ordergebuehren = 0
+        report.dividenden = 0
+        report.bezahlte_dividenden = 0
+        report.quellensteuer_z41 = 0
+        report.zinseinnahmen = 0
+        report.zinsausgaben = 0
+        report.zinsen_gesamt = 0
+        report.z19_auslaendische_kapitalertraege = 0
+        report.z21_termingeschaefsgewinne_stillhalter = 0
+        report.z24_termingeschaefte_verluste = 0
+        report.kap_kap_inv = 0
+        report.kap_kap_inv_kerst_soli = 0
+        report.kap_kap_inv_verlustvortrag = 0
+        report.cash_balance_usd = 0
+        report.net_liquidating_value = 0
+
+        report.zinseinnahmen = self.values.creditInterest.eur
+        report.zinsausgaben = self.values.debitInterest.eur
+        report.dividenden = self.values.dividend.eur
+        report.zusatzliche_ordergebuehren = self.values.otherFees.eur
+        report.aktiengewinne_z20 = self.values.stockProfits.eur
+        report.aktienverluste_z23 = self.values.stockLoss.eur
+        report.sonstige_verluste = self.values.otherLoss.eur
+        # for attr, value in self.values:
+        #     print(f"{attr}: {value}")
         return report
+
+    def generateDummyReport(self) -> str:
+        """Output the raw data directly, but format it nicely"""
+        translations = {
+        "withdrawal": "Abhebung",
+        "transfer": "Überweisung",
+        "balanceAdjustment": "Kontostandsanpassung",
+        "fee": "Gebühr",
+        "deposit": "Einzahlung",
+        "creditInterest": "Habenzinsen",
+        "debitInterest": "Sollzinsen",
+        "dividend": "Dividende",
+        "stockAndOptionsSum": "Summe Aktien und Optionen",
+        "stockSum": "Aktiensumme",
+        "optionSum": "Optionsbetrag",
+        "grossOptionsDifferential": "Brutto-Optionsdifferential",
+        "stockProfits": "Aktiengewinne",
+        "stockLoss": "Aktienverlust",
+        "otherLoss": "Sonstiger Verlust",
+        "stockFees": "Aktiengebühren",
+        "otherFees": "Sonstige Gebühren"
+        }
+
+        # Determine max width for attribute names and values
+        max_attr_width = max(len(translations.get(attr, attr)) for attr in vars(self.values))
+        max_value_width = max(len(f"{value.eur:.2f}") for value in vars(self.values).values())
+
+        ret = ""
+        for attr, value in vars(self.values).items():  # Using vars() to get attributes and values
+            translated_attr = translations.get(attr, attr)  # Use original attr if no translation exists
+            ret += f"{translated_attr.ljust(max_attr_width)} {f'{value.eur:.2f}'.rjust(max_value_width)}\n"
+        return ret
 
 
 if __name__ == "__main__":
