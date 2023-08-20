@@ -459,38 +459,62 @@ class Printer(object):
         # for attr, value in self.values:
         #     print(f"{attr}: {value}")
         return report
-
-    def generateDummyReport(self) -> str:
-        """Output the raw data directly, but format it nicely"""
-        translations = {
-            "withdrawal": "Abhebung",
-            "transfer": "Transfer",
-            "balanceAdjustment": "Kontokorrektur",
-            "fee": "Gebühren",
-            "deposit": "Einzahlung",
-            "creditInterest": "Guthabenzinsen",
-            "debitInterest": "Sollzinsen",
-            "dividend": "Dividendenzahlungen",
-            "stockAndOptionsSum": "Summe aus Aktien und Optionen",
-            "stockSum": "Summe Aktienhandel",
-            "optionSum": "Summe Optionshandel",
-            "grossOptionsDifferential": "Brutto-Optionsdifferenz",
-            "stockProfits": "Aktiengewinne",
-            "stockLoss": "Aktienverluste",
-            "otherLoss": "Sonstige Verluste",
-            "stockFees": "Aktiengebühren",
-            "otherFees": "Sonstige Gebühren"
+   
+    def generateDummyReport(self):
+        """Generate the formatted report."""
+        CATEGORIES = {
+            "Transaktionen": {
+                "withdrawal": "Abhebungen",
+                "deposit": "Einzahlungen",
+                "transfer": "Transfers",
+                "balanceAdjustment": "Kontokorrekturen"
+            },
+            "Zinsen & Dividenden": {
+                "creditInterest": "Guthabenzinsen",
+                "debitInterest": "Sollzinsen",
+                "dividend": "Dividendenzahlungen"
+            },
+            "Aktien & Optionen": {
+                "stockAndOptionsSum": "Summe Aktien/Optionen",
+                "stockSum": "Summe Aktienhandel",
+                "optionSum": "Summe Optionshandel",
+                "grossOptionsDifferential": "Max Optionen-Delta",
+                "stockProfits": "Aktiengewinne",
+                "stockLoss": "Aktienverluste"
+            },
+            "Gebühren & Verluste": {
+                "fee": "Gebühren",
+                "stockFees": "Aktiengebühren",
+                "otherFees": "Andere Gebühren",
+                "otherLoss": "Andere Verluste"
+            }
         }
 
-        # Determine max width for attribute names and values
-        max_attr_width = max(len(translations.get(attr, attr)) for attr in vars(self.values))
-        max_value_width = max(len(f"{value.eur:.2f}") for value in vars(self.values).values())
 
-        ret = ""
-        for attr, value in vars(self.values).items():  # Using vars() to get attributes and values
-            translated_attr = translations.get(attr, attr)  # Use original attr if no translation exists
-            ret += f"{translated_attr.ljust(max_attr_width)} {f'{value.eur:.2f}'.rjust(max_value_width)}\n"
-        return ret
+
+        values_attrs = vars(self.values)
+        all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
+        
+        max_attr_width = max(len(all_translations.get(attr, attr)) for attr in values_attrs)
+        max_value_width = max(len(f"{value.eur:.2f}") for value in values_attrs.values())
+
+        report = []
+
+        for category, translations in CATEGORIES.items():
+            for attr, translation in translations.items():
+                value = values_attrs.get(attr)
+                if value:
+                    line = f"{translation.ljust(max_attr_width)} {f'{value.eur:.2f}'.rjust(max_value_width)}\n"
+                    report.append(line)
+
+        # Check if all items have been printed
+        printed_keys = set(attr for translations in CATEGORIES.values() for attr in translations.keys())
+        missing_keys = set(values_attrs.keys()) - printed_keys
+        if missing_keys:
+            raise ValueError(f"The following keys were not printed: {', '.join(missing_keys)}")
+
+        return ''.join(report)
+
 
 
 if __name__ == "__main__":
