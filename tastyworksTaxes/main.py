@@ -7,6 +7,7 @@ import logging
 import pathlib
 
 from tasty import Tasty
+from tastyworksTaxes.printer import Printer
 
 
 logger = logging.getLogger(__name__)
@@ -45,18 +46,23 @@ def main() -> None:
     args = parser.parse_args()
     if not args.input.exists():
         raise FileNotFoundError(f"File {args.input} does not exist")
-    else:
-        t = Tasty(path=args.input)
-        t.run()
-        if args.write_closed_trades:
-            logging.info(
-                f"Writing closed trades to: '{args.write_closed_trades}'")
-            closedTrades = t.closedTrades
-            if not closedTrades.empty:
-                closedTrades.to_csv(args.write_closed_trades, index=False)
-            else:
-                logging.error(
-                    "The closed trades dataframe is empty. Not saving to file.")
+    t = Tasty(path=args.input)
+    t.run()
+    for year, values in t.yearValues.items():
+        print(f"Values for year {year} in Euro:")
+        # for attr, value in vars(values).items():
+            # print(f"{attr}: {value}")
+        p = Printer(values=values, closedTrades=t.closedTrades)
+        print(p.generateDummyReport())
+    if args.write_closed_trades:
+        logging.info(
+            f"Writing closed trades to: '{args.write_closed_trades}'")
+        closedTrades = t.closedTrades
+        if not closedTrades.empty:
+            closedTrades.to_csv(args.write_closed_trades, index=False)
+        else:
+            logging.error(
+                "The closed trades dataframe is empty. Not saving to file.")
     logging.info("Done")
 
 
