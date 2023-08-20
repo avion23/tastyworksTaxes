@@ -1,16 +1,14 @@
+from tastyworksTaxes.values import Values
+from tabulate import tabulate
+from unittest.mock import Mock, patch
+from dataclasses_json import dataclass_json
+from dataclasses import dataclass
+import pprint
+import logging
+import pandas as pd
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import pandas as pd
-import logging
-import pprint
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
-from unittest.mock import Mock, patch
-from tabulate import tabulate
-
-from tastyworksTaxes.values import Values
 
 
 logger = logging.getLogger(__name__)
@@ -352,9 +350,10 @@ class EnglishTaxReport(object):
 
 class Printer(object):
     """ Print the tax report to the console 
-    
+
     Used to convert our internal dictionary to a format which is similar to tastyworks-pnl
     """
+
     def __init__(self, values: Values, closedTrades: pd.DataFrame) -> None:
         self.values = values
         self.closedTrades = closedTrades
@@ -459,7 +458,7 @@ class Printer(object):
         # for attr, value in self.values:
         #     print(f"{attr}: {value}")
         return report
-   
+
     def generateDummyReport(self):
         """Generate the formatted report."""
         CATEGORIES = {
@@ -490,11 +489,9 @@ class Printer(object):
             }
         }
 
-
-
         values_attrs = vars(self.values)
         all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
-        
+
         max_attr_width = max(len(all_translations.get(attr, attr)) for attr in values_attrs)
         max_value_width = max(len(f"{value.eur:.2f}") for value in values_attrs.values())
 
@@ -514,7 +511,6 @@ class Printer(object):
             raise ValueError(f"The following keys were not printed: {', '.join(missing_keys)}")
 
         return ''.join(report)
-
 
 
 if __name__ == "__main__":
