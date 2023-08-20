@@ -463,23 +463,23 @@ class Printer(object):
     def generateDummyReport(self) -> str:
         """Output the raw data directly, but format it nicely"""
         translations = {
-        "withdrawal": "Abhebung",
-        "transfer": "Überweisung",
-        "balanceAdjustment": "Kontostandsanpassung",
-        "fee": "Gebühr",
-        "deposit": "Einzahlung",
-        "creditInterest": "Habenzinsen",
-        "debitInterest": "Sollzinsen",
-        "dividend": "Dividende",
-        "stockAndOptionsSum": "Summe Aktien und Optionen",
-        "stockSum": "Aktiensumme",
-        "optionSum": "Optionsbetrag",
-        "grossOptionsDifferential": "Brutto-Optionsdifferential",
-        "stockProfits": "Aktiengewinne",
-        "stockLoss": "Aktienverlust",
-        "otherLoss": "Sonstiger Verlust",
-        "stockFees": "Aktiengebühren",
-        "otherFees": "Sonstige Gebühren"
+            "withdrawal": "Abhebung",
+            "transfer": "Transfer",
+            "balanceAdjustment": "Kontokorrektur",
+            "fee": "Gebühren",
+            "deposit": "Einzahlung",
+            "creditInterest": "Guthabenzinsen",
+            "debitInterest": "Sollzinsen",
+            "dividend": "Dividendenzahlungen",
+            "stockAndOptionsSum": "Summe aus Aktien und Optionen",
+            "stockSum": "Summe Aktienhandel",
+            "optionSum": "Summe Optionshandel",
+            "grossOptionsDifferential": "Brutto-Optionsdifferenz",
+            "stockProfits": "Aktiengewinne",
+            "stockLoss": "Aktienverluste",
+            "otherLoss": "Sonstige Verluste",
+            "stockFees": "Aktiengebühren",
+            "otherFees": "Sonstige Gebühren"
         }
 
         # Determine max width for attribute names and values
