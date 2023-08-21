@@ -501,7 +501,7 @@ class Printer(object):
             for attr, translation in translations.items():
                 value = values_attrs.get(attr)
                 if value:
-                    line = f"{translation.ljust(max_attr_width)} {f'{value.eur:.2f}'.rjust(max_value_width)}\n"
+                    line = f"{translation.ljust(max_attr_width)}\t{f'{value.eur:.2f}'.rjust(max_value_width)}\n"
                     report.append(line)
 
         # Check if all items have been printed
@@ -511,6 +511,8 @@ class Printer(object):
             raise ValueError(f"The following keys were not printed: {', '.join(missing_keys)}")
 
         return ''.join(report)
+
+
 
 
 if __name__ == "__main__":
