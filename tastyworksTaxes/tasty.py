@@ -1,21 +1,18 @@
+from tastyworksTaxes.values import Values
+from tastyworksTaxes.transaction import Transaction
+from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.money import Money
+from tastyworksTaxes.history import History
+import pandas as pd
+from typing import List, Callable
+import pprint
+import pathlib
+import math
+import logging
+import json
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-import json
-import logging
-import math
-import pathlib
-import pprint
-from typing import List, Callable
-
-import pandas as pd
-
-from tastyworksTaxes.history import History
-from tastyworksTaxes.money import Money
-from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.transaction import Transaction
-from tastyworksTaxes.values import Values
 
 
 logger = logging.getLogger(__name__)
@@ -110,7 +107,7 @@ class Tasty(object):
         >>> str(t.year(2021).deposit)
         "{'eur': 3957.8528167261256, 'usd': 4770.4}"
 
-        
+
         """
         t = Transaction(row)
         m = Money(row=row)
@@ -208,10 +205,12 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Reverse Split":
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Symbol Change":
-            logger.warning(f"Symbol Change not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
+            logger.warning(
+                f"Symbol Change not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Stock Merger":
-            logger.warning(f"Stock Merger not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
+            logger.warning(
+                f"Stock Merger not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
@@ -544,6 +543,7 @@ class Tasty(object):
                 self.receiveDelivery(row)
             if row.loc["Transaction Code"] == "Trade":
                 self.trade(row)
+
     def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
         >>> t = Tasty("test/merged2.csv")
@@ -551,18 +551,17 @@ class Tasty(object):
         >>> len(t.getYearlyTrades())
         4
         """
-        
+
         def converter(x: str) -> PositionType:
             if isinstance(x, PositionType):
                 return x
             return PositionType[x.split('.')[-1]]
-        
+
         trades = self.closedTrades
         trades['Closing Date'] = pd.to_datetime(trades['Closing Date'])
         trades['year'] = trades['Closing Date'].dt.year
         trades['callPutStock'] = trades['callPutStock'].apply(converter)  # type: ignore
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
-
 
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
