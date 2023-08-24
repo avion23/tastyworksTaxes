@@ -20,7 +20,6 @@ This means with options trading revenue over 20,000 EUR, you may pay taxes on th
 - Currently, the program does not differentiate between various asset classes; it only recognizes stocks and options. This does not accurately reflect all trading scenarios.
 - Please triple-check your results. Accurately assigning losses, profits, fees, interest, etc., to their specific categories is challenging.
 
-
 **Stocks**:
 
 - Gains and losses are calculated using the FIFO (first-in, first-out) method.
@@ -81,6 +80,7 @@ The project also incorporates doctest to test interactive examples within docstr
 ## Known Issues
 - Symbol changes currently count as sales. While this simplification doesn't matter if you sell within the same year, it's simply wrong.
 - I am not sure about fee calculations.
+- In the case of short selling stocks (beyond an annual limit), 30% of the price is taxed with the capital gains tax as a substitute assessment base (§ 43a Absatz 2 Satz 7 EStG), and only offset with the covering. This is not implemented.
 
 ## Contributing
 
