@@ -8,6 +8,8 @@ import logging
 import pandas as pd
 import os
 import sys
+import locale
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
@@ -488,6 +490,8 @@ class Printer(object):
                 "otherLoss": "Andere Verluste"
             }
         }
+        locale.setlocale(locale.LC_ALL, 'de_DE')
+
 
         values_attrs = vars(self.values)
         all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
@@ -501,9 +505,11 @@ class Printer(object):
             for attr, translation in translations.items():
                 value = values_attrs.get(attr)
                 if value:
-                    line = f"{translation.ljust(max_attr_width)}\t{f'{value.eur:.2f}'.rjust(max_value_width)}\n"
+                    # Use locale.format_string to format the value with a comma as the decimal separator
+                    formatted_value = locale.format_string("%.2f", value.eur, grouping=True)
+                    line = f"{translation.ljust(max_attr_width)}\t{formatted_value.rjust(max_value_width)}\n"
                     report.append(line)
-
+                    
         # Check if all items have been printed
         printed_keys = set(attr for translations in CATEGORIES.values() for attr in translations.keys())
         missing_keys = set(values_attrs.keys()) - printed_keys
