@@ -2,14 +2,11 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import logging
-import pprint
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from unittest.mock import Mock, patch
 import json
 
-from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money
 
 
@@ -28,6 +25,9 @@ class Values(object):
     stockAndOptionsSum: Money = Money()
     stockSum: Money = Money()
     optionSum: Money = Money()
+    optionProfits: Money = Money()
+    optionLosses: Money = Money()
+    optionTotalLosses: Money = Money()
     grossOptionsDifferential: Money = Money()
     stockProfits: Money = Money()
     stockLoss: Money = Money()
@@ -42,3 +42,8 @@ class Values(object):
         """
         j = self.to_json()
         return str(json.dumps(j, indent=4, sort_keys=True))
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
