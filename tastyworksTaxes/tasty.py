@@ -17,21 +17,18 @@ import math
 import logging
 import json
 
-logger = logging.getLogger(__name__)
+
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.WARNING,
-    datefmt='%Y-%m-%d %H:%M:%S')
-for logKey in logging.Logger.manager.loggerDict:  # disable logging for imported modules
-    temp = logging.getLogger(logKey)
-    temp.propagate = True
-    temp.setLevel(logging.INFO)
-    if temp.name == "trade":
-        temp.setLevel(logging.DEBUG)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+for logger_name, logger in logging.Logger.manager.loggerDict.items():
+    if isinstance(logger, logging.Logger):
+        if logger_name != "__main__":  
+            logger.setLevel(logging.WARNING)
+
 
 
 class Tasty(object):
@@ -190,6 +187,16 @@ class Tasty(object):
         # Stock merger
         >>> t = Tasty("test/merged3.csv")
         >>> t.addPosition(Transaction(t.history.iloc[193]))
+
+        # uvxy showed remaining positions, even thought they should have been closed
+        >>> t = Tasty("test/merged3.csv")
+        >>> t.addPosition(Transaction.fromString("01/12/2021 9:50 PM,Trade,Buy to Open,UVXY,Buy,Open,100,,,,10.52,0.08,-1052,Bought 100 UVXY @ 10.52,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39"))
+        >>> print(Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39"))
+        >>> t.closedTrades
+        >>> t.positions
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -207,11 +214,11 @@ class Tasty(object):
         elif t.loc["Transaction Subcode"] == "Reverse Split":
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Symbol Change":
-            logger.warning(
+            logging.warning(
                 f"Symbol Change not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Stock Merger":
-            logger.warning(
+            logging.warning(
                 f"Stock Merger not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
         else:
@@ -406,6 +413,7 @@ class Tasty(object):
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
                                                                                                                                                  entry.getExpiry() == transaction.getExpiry()):
                 trade = Transaction()
+
                 logging.info("{} found an open position: {} {} and adding {}".format(
                              entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
 
@@ -415,7 +423,7 @@ class Tasty(object):
 
                 (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
                     entry.getQuantity(), transaction.getQuantity())
-
+                
                 # percentage which is used in a trade
                 # percentage = (entry.getQuantity() / transaction.getQuantity)
                 percentageClosed = abs(tradeQuantity / entry.getQuantity())
@@ -457,7 +465,7 @@ class Tasty(object):
 
                 if trade.Quantity != 0:
                     if entry.isOption() and entry.getQuantity() > 0 and abs(entry.getValue().usd) < 0.01:
-                        logger.warning(f"Assignment of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
+                        logging.warning(f"Assignment of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
                         trade["worthlessExpiry"] = True
                     else:
                         trade["worthlessExpiry"] = False
