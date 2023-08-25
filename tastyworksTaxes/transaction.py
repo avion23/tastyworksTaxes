@@ -5,6 +5,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from datetime import datetime
 import logging
 import pandas as pd
+from io import StringIO
+
 
 from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money
@@ -32,7 +34,57 @@ class Transaction(pd.core.series.Series):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, dtype='object')
 
-    def getYear(self) -> str:
+    def __repr__(self):
+        return (
+            f"Transaction(\n"
+            f"Date/Time: {self['Date/Time']},\n"
+            f"Transaction Code: {self['Transaction Code']},\n"
+            f"Transaction Subcode: {self['Transaction Subcode']},\n"
+            f"Symbol: {self['Symbol']},\n"
+            f"Buy/Sell: {self['Buy/Sell']},\n"
+            f"Open/Close: {self['Open/Close']},\n"
+            f"Quantity: {self['Quantity']},\n"
+            f"Expiration Date: {self['Expiration Date']},\n"
+            f"Strike: {self['Strike']},\n"
+            f"Call/Put: {self['Call/Put']},\n"
+            f"Price: {self['Price']},\n"
+            f"Amount: {self['Amount']},\n"
+            f"Description: {self['Description']})"
+        )
+
+    @classmethod
+    def fromString(cls, input: str):
+        """ returns a Transaction from a csv string
+        
+        >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39")
+        Transaction(
+        Date/Time: 01/29/2021 7:31 PM,
+        Transaction Code: Trade,
+        Transaction Subcode: Sell to Open,
+        Symbol: UVXY,
+        Buy/Sell: Sell,
+        Open/Close: Open,
+        Quantity: 1,
+        Expiration Date: 01/29/2021,
+        Strike: 14.5,
+        Call/Put: P,
+        Price: 0.56,
+        Amount: 56,
+        Description: Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56)
+        """
+        header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
+        csv = header + "\n" + input
+        try:
+            df = pd.read_csv(StringIO(csv))
+        except pd.errors.ParserError as e:
+            logger.error(f"Could not parse '{input}' as Transaction")
+            raise e
+        return Transaction(df.iloc[0])
+
+
+
+
+    def getYear(self) -> str: 
         """returns the year as string from a csv entry
 
         >>> h = History.fromFile("test/merged.csv")
