@@ -2,12 +2,11 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
-from unittest.mock import Mock, patch
-import json
-
 from tastyworksTaxes.money import Money
+import json
+from unittest.mock import Mock, patch
+from dataclasses_json import dataclass_json
+from dataclasses import dataclass
 
 
 @dataclass_json
@@ -25,13 +24,12 @@ class Values(object):
     stockAndOptionsSum: Money = Money()
     stockSum: Money = Money()
     optionSum: Money = Money()
-    optionProfits: Money = Money()
-    optionLosses: Money = Money()
-    optionTotalLosses: Money = Money()
-    grossOptionsDifferential: Money = Money()
+    longOptionProfits: Money = Money()
+    longOptionLosses: Money = Money()
+    longOptionTotalLosses: Money = Money()
+    grossOptionDifferential: Money = Money()
     stockProfits: Money = Money()
     stockLoss: Money = Money()
-    otherLoss: Money = Money()
     stockFees: Money = Money()
     otherFees: Money = Money()
 

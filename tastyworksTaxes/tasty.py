@@ -1,3 +1,9 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.position import PositionType
@@ -10,10 +16,6 @@ import pathlib
 import math
 import logging
 import json
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -591,7 +593,7 @@ class Tasty(object):
                             PositionType.stock), 'AmountEuro'].sum()
         return m
 
-    def getOptionsSum(self, trades: pd.DataFrame) -> Money:
+    def getOptionSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all option trades in the corresponding dataframe
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
@@ -605,23 +607,55 @@ class Tasty(object):
         m.eur = trades.loc[(trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put), 'AmountEuro'].sum()
         return m
-
-    def getOtherLoss(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all option losses
+    
+    def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all positive option trades in the corresponding dataframe
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getOtherLoss(y) for y in years][0].usd != 0
+        >>> [t.getLongOptionsProfits(y) for y in years][0].usd != 0
         True
         """
         m: Money = Money()
         m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0), 'Amount'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] > 0) & (trades['Quantity'] > 0), 'Amount'].sum()
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] > 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
         return m
 
-    def getOptionsDifferential(self, trades: pd.DataFrame) -> Money:
+    def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all negative option trades in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getLongOptionsLosses(y) for y in years][1].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0) & (trades['Quantity'] > 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
+        return m
+    
+    def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all total losses
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getLongOptionsTotalLosses(y) for y in years][1]
+        True
+        # >>> t.closedTrades
+        """
+        m: Money = Money()
+        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] != 0) & (trades['Quantity'] > 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
+        return m
+
+
+    def getOptionDifferential(self, trades: pd.DataFrame) -> Money:
         """ returns the highes difference in options, e.g. how many positive and how many negatives have occured 
 
         In Germany there is no net taxation for options. Instead, gross is taxed - but only if you are over 20k EUR per year. 
@@ -750,12 +784,14 @@ class Tasty(object):
             ret[key] = self.yearValues[key]
             ret[key].stockAndOptionsSum = self.getCombinedSum(trades[index])
             ret[key].stockSum = self.getStockSum(trades[index])
-            ret[key].optionSum = self.getOptionsSum(trades[index])
-            ret[key].grossOptionsDifferential = self.getOptionsDifferential(
+            ret[key].optionSum = self.getOptionSum(trades[index])
+            ret[key].longOptionProfits = self.getLongOptionsProfits(trades[index])
+            ret[key].longOptionLosses = self.getLongOptionLosses(trades[index])
+            ret[key].longOptionTotalLosses = self.getLongOptionTotalLosses(trades[index])
+            ret[key].grossOptionDifferential = self.getOptionDifferential(
                 trades[index])
             ret[key].stockProfits = self.getStockProfits(trades[index])
             ret[key].stockLoss = self.getStockLoss(trades[index])
-            ret[key].otherLoss = self.getOtherLoss(trades[index])
             ret[key].stockFees = self.getStockFees(trades[index])
             ret[key].otherFees = self.getOtherFees(trades[index])
 

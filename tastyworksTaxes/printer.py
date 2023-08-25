@@ -478,16 +478,18 @@ class Printer(object):
             "Aktien & Optionen": {
                 "stockAndOptionsSum": "Summe Aktien/Optionen",
                 "stockSum": "Summe Aktienhandel",
-                "optionSum": "Summe Optionshandel",
-                "grossOptionsDifferential": "Max Optionen-Delta",
                 "stockProfits": "Aktiengewinne",
-                "stockLoss": "Aktienverluste"
+                "stockLoss": "Aktienverluste",
+                "optionSum": "Summe Optionshandel",
+                "longOptionProfits": "Long Optionen Gewinne",
+                "longOptionLosses": "Long Optionen Verluste",
+                "longOptionTotalLosses": "Long Optionen Totalverluste",
+                "grossOptionDifferential": "Max Optionen-Delta",
             },
             "Gebühren & Verluste": {
                 "fee": "Gebühren",
                 "stockFees": "Aktiengebühren",
                 "otherFees": "Andere Gebühren",
-                "otherLoss": "Andere Verluste"
             }
         }
         locale.setlocale(locale.LC_ALL, 'de_DE')
@@ -509,7 +511,7 @@ class Printer(object):
                     formatted_value = locale.format_string("%.2f", value.eur, grouping=True)
                     line = f"{translation.ljust(max_attr_width)}\t{formatted_value.rjust(max_value_width)}\n"
                     report.append(line)
-                    
+
         # Check if all items have been printed
         printed_keys = set(attr for translations in CATEGORIES.values() for attr in translations.keys())
         missing_keys = set(values_attrs.keys()) - printed_keys
