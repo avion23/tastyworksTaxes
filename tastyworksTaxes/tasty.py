@@ -194,9 +194,11 @@ class Tasty(object):
         >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...39"))
         >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...39"))
         >>> t.addPosition(Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39"))
-        >>> print(Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39"))
-        >>> t.closedTrades
-        >>> t.positions
+        >>> t.addPosition(Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39"))
+        >>> len(t.closedTrades)
+        3
+        >>> t.positions.empty
+        True
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -462,19 +464,18 @@ class Tasty(object):
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
     
-
                 if trade.Quantity != 0:
-                    if entry.isOption() and entry.getQuantity() > 0 and abs(entry.getValue().usd) < 0.01:
-                        logging.warning(f"Assignment of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
+                    if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration":
+                        logging.warning(f"Expiry of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
                         trade["worthlessExpiry"] = True
                     else:
                         trade["worthlessExpiry"] = False
                     self.closedTrades = pd.concat([self.closedTrades,
-                                                   trade.to_frame().T])
+                                                    trade.to_frame().T])
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
-                    )
+                        )
         if transaction.getQuantity() != 0:
             if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment" or transaction["Transaction Subcode"] == "Reverse Split" and transaction["Open/Close"] == "Close":
                 raise ValueError(
