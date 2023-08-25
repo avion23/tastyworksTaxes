@@ -208,11 +208,11 @@ class Tasty(object):
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Symbol Change":
             logger.warning(
-                f"Symbol Change not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
+                f"Symbol Change not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
         elif t.loc["Transaction Subcode"] == "Stock Merger":
             logger.warning(
-                f"Stock Merger not implemented yet: {t['Description']}. This is counted as a sale for tax purposes.")
+                f"Stock Merger not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
         else:
             raise ValueError("unknown subcode for receive deliver: {}".format(
