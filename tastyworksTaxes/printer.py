@@ -476,7 +476,7 @@ class Printer(object):
                 "dividend": "Dividendenzahlungen"
             },
             "Aktien & Optionen": {
-                "stockAndOptionsSum": "Summe Aktien/Optionen",
+                "stockAndOptionsSum": "Summe Aktien und Optionen",
                 "stockSum": "Summe Aktienhandel",
                 "stockProfits": "Aktiengewinne",
                 "stockLoss": "Aktienverluste",
@@ -484,6 +484,8 @@ class Printer(object):
                 "longOptionProfits": "Long Optionen Gewinne",
                 "longOptionLosses": "Long Optionen Verluste",
                 "longOptionTotalLosses": "Long Optionen Totalverluste",
+                "shortOptionProfits": "Short Optionen Gewinne",
+                "shortOptionLosses": "Short Optionen Verluste",
                 "grossOptionDifferential": "Max Optionen-Delta",
             },
             "Gebühren & Verluste": {

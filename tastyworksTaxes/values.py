@@ -27,6 +27,8 @@ class Values(object):
     longOptionProfits: Money = Money()
     longOptionLosses: Money = Money()
     longOptionTotalLosses: Money = Money()
+    shortOptionProfits: Money = Money()
+    shortOptionLosses: Money = Money()
     grossOptionDifferential: Money = Money()
     stockProfits: Money = Money()
     stockLoss: Money = Money()

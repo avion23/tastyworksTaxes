@@ -598,7 +598,7 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getOptionsSum(y) for y in years][0].usd != 0
+        >>> [t.getOptionSum(y) for y in years][0].usd != 0
         True
         """
         m: Money = Money()
@@ -628,7 +628,7 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionsLosses(y) for y in years][1].usd != 0
+        >>> [t.getLongOptionLosses(y) for y in years][1].usd != 0
         True
         """
         m: Money = Money()
@@ -643,15 +643,44 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionsTotalLosses(y) for y in years][1]
+        >>> [t.getLongOptionTotalLosses(y) for y in years][1].usd != 0
         True
-        # >>> t.closedTrades
         """
         m: Money = Money()
         m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put)) & (trades['Amount'] != 0) & (trades['Quantity'] > 0), 'Amount'].sum()
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
+        return m
+
+    def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all positive option trades for short options in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getShortOptionProfits(y) for y in years][1].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] > 0) & (trades['Quantity'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] > 0) & (trades['Quantity'] < 0), 'AmountEuro'].sum()
+        return m
+
+    def getShortOptionLosses(self, trades: pd.DataFrame) -> Money:
+        """ returns the sum of all negative option trades for short options in the corresponding dataframe
+        >>> t = Tasty("test/merged2.csv")
+        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        >>> years = t.getYearlyTrades()
+        >>> [t.getShortOptionLosses(y) for y in years][1].usd != 0
+        True
+        """
+        m: Money = Money()
+        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0) & (trades['Quantity'] < 0), 'Amount'].sum()
+        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0) & (trades['Quantity'] < 0), 'AmountEuro'].sum()
         return m
 
 
@@ -667,7 +696,7 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getOptionsDifferential(y) for y in years][0].usd != 0
+        >>> [t.getOptionDifferential(y) for y in years][0].usd != 0
         True
         """
         negative: Money = Money()
@@ -788,6 +817,8 @@ class Tasty(object):
             ret[key].longOptionProfits = self.getLongOptionsProfits(trades[index])
             ret[key].longOptionLosses = self.getLongOptionLosses(trades[index])
             ret[key].longOptionTotalLosses = self.getLongOptionTotalLosses(trades[index])
+            ret[key].shortOptionProfits = self.getShortOptionProfits(trades[index])
+            ret[key].shortOptionLosses = self.getShortOptionLosses(trades[index])
             ret[key].grossOptionDifferential = self.getOptionDifferential(
                 trades[index])
             ret[key].stockProfits = self.getStockProfits(trades[index])
