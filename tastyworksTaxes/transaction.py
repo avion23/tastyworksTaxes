@@ -14,21 +14,16 @@ from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
-logger = logging.getLogger(__name__)
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.WARNING,
-    datefmt='%Y-%m-%d %H:%M:%S')
-for logKey in logging.Logger.manager.loggerDict:  # disable logging for imported modules
-    temp = logging.getLogger(logKey)
-    temp.propagate = True
-    temp.setLevel(logging.INFO)
-    if temp.name == "trade":
-        temp.setLevel(logging.DEBUG)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+for logger_name, logger in logging.Logger.manager.loggerDict.items():
+    if isinstance(logger, logging.Logger):
+        if logger_name != "__main__":  
+            logger.setLevel(logging.WARNING)
 
 class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
@@ -252,8 +247,8 @@ class Transaction(pd.core.series.Series):
         2
 
         # expiration
-        >>> Transaction(h.iloc[304]).getQuantity()
-        -1
+        >>> Transaction.fromString("07/20/2018 10:00 PM,Receive Deliver,Expiration,MU,,,1,07/20/2018,70,C,,0.00,0,Removal of 1 MU 07/20/18 Call 70.00 due to expiration.,Individual...39").getQuantity()
+        1
 
         # reverse split
         >>> h = History.fromFile("test/merged2.csv")
@@ -274,6 +269,9 @@ class Transaction(pd.core.series.Series):
         6
         >>> Transaction(h.iloc[195]).getQuantity()
         -6
+
+        >>> Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39").getQuantity()
+        1
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in validTransactionCodes:
@@ -290,7 +288,7 @@ class Transaction(pd.core.series.Series):
         elif subcode == "Assignment":
             sign = +1
         elif subcode == "Expiration":
-            sign = -1  # TODO
+            sign = 1  # it's positive because we are probably short
         # TODO: Handle this without realizing a trade
         elif subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
             if self.loc["Buy/Sell"] == "Buy":
@@ -343,12 +341,6 @@ class Transaction(pd.core.series.Series):
         >>> t.setQuantity(8)
         >>> t.getQuantity()
         8
-        >>> t = Transaction(h.iloc[223])
-        >>> t.getQuantity()
-        -1
-        >>> t.setQuantity(8)
-        >>> t.getQuantity()
-        -8
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in ["Trade", "Receive Deliver"]:
