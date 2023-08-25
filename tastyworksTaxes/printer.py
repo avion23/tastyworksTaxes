@@ -483,7 +483,7 @@ class Printer(object):
                 "optionSum": "Summe Optionshandel",
                 "longOptionProfits": "Long Optionen Gewinne",
                 "longOptionLosses": "Long Optionen Verluste",
-                "longOptionTotalLosses": "Long Optionen Totalverluste",
+                "longOptionTotalLosses": "Long Optionen Totalverluste (ungetestet!)",
                 "shortOptionProfits": "Short Optionen Gewinne",
                 "shortOptionLosses": "Short Optionen Verluste",
                 "grossOptionDifferential": "Max Optionen-Delta",

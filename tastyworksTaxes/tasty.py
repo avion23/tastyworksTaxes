@@ -453,8 +453,14 @@ class Tasty(object):
                 self.positions.loc[index] = entry
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
+    
 
                 if trade.Quantity != 0:
+                    if entry.isOption() and entry.getQuantity() > 0 and abs(entry.getValue().usd) < 0.01:
+                        logger.warning(f"Assignment of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
+                        trade["worthlessExpiry"] = True
+                    else:
+                        trade["worthlessExpiry"] = False
                     self.closedTrades = pd.concat([self.closedTrades,
                                                    trade.to_frame().T])
                     logging.info(
@@ -524,26 +530,29 @@ class Tasty(object):
     def processTransactionHistory(self):
         """ takes the history and calculates the closed trades in self.closedTrades
 
-        # >>> t = Tasty("test/merged2.csv")
+        # >>> t = Tasty("test/merged4.csv")
         # >>> t.processTransactionHistory()
         # >>> t.print()
         # >>> t.closedTrades
+        # >>> t.positions
 
         # >>> t.closedTrades.to_csv("test.csv", index=False)
 
         """
         # reverses the order and kills prefetching and caching
         for i, row in self.history.iloc[::-1].iterrows():
+            transaction_code = row.loc["Transaction Code"]
             # if row.loc["Symbol"] != "PLTR":
             #     continue
             # print(
             #     ">>> t.addPosition(Transaction(t.history.iloc[{}]))".format(i))
             # logging.info(row)
-            if row.loc["Transaction Code"] == "Money Movement":
+
+            if transaction_code == "Money Movement":
                 self.moneyMovement(row)
-            if row.loc["Transaction Code"] == "Receive Deliver":
+            elif transaction_code == "Receive Deliver":
                 self.receiveDelivery(row)
-            if row.loc["Transaction Code"] == "Trade":
+            elif transaction_code == "Trade":
                 self.trade(row)
 
     def getYearlyTrades(self) -> List[pd.DataFrame]:
@@ -551,7 +560,7 @@ class Tasty(object):
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> len(t.getYearlyTrades())
-        4
+        6
         """
 
         def converter(x: str) -> PositionType:
@@ -640,17 +649,23 @@ class Tasty(object):
     
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all total losses
+
+        we detect worthless expiry with the field worthlessExpiry.
+        Unfortunately, we need to set this while processing the transactions,
+        because only then we know if we get no money for the assignment or not.
+        Also it's untested
+        
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionTotalLosses(y) for y in years][1].usd != 0
+        >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd == 0
         True
         """
         m: Money = Money()
         m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] != 0) & (trades['Quantity'] > 0), 'Amount'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']), 'Amount'].sum()
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']), 'AmountEuro'].sum()
         return m
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
