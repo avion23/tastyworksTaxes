@@ -6,6 +6,8 @@ from datetime import datetime
 import logging
 import pandas as pd
 from io import StringIO
+from currency_converter import CurrencyConverter
+
 
 
 from tastyworksTaxes.history import History
@@ -53,35 +55,46 @@ class Transaction(pd.core.series.Series):
         )
 
     @classmethod
-    def fromString(cls, input: str):
+    def fromString(cls, line: str):
         """ returns a Transaction from a csv string
         
         >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39")
         Transaction(
-        Date/Time: 01/29/2021 7:31 PM,
+        Date/Time: 2021-01-29 19:31:00,
         Transaction Code: Trade,
         Transaction Subcode: Sell to Open,
         Symbol: UVXY,
         Buy/Sell: Sell,
         Open/Close: Open,
         Quantity: 1,
-        Expiration Date: 01/29/2021,
+        Expiration Date: 2021-01-29 00:00:00,
         Strike: 14.5,
         Call/Put: P,
         Price: 0.56,
         Amount: 56,
         Description: Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56)
         """
+        def addEuroConversion(df):
+            """ adds new columns called "AmountEuro" and "FeesEuro" to the DataFrame"""
+            c = CurrencyConverter(fallback_on_missing_rate=True,
+                                    fallback_on_wrong_date=True)
+            df['Date/Time'] = pd.to_datetime(df['Date/Time'])
+            df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
+            df['AmountEuro'] = df.apply(lambda x: c.convert(
+                x['Amount'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
+            df['FeesEuro'] = df.apply(lambda x: c.convert(
+                x['Fees'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
+
         header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
-        csv = header + "\n" + input
+        csv = header + "\n" + line
         try:
             df = pd.read_csv(StringIO(csv))
         except pd.errors.ParserError as e:
-            logger.error(f"Could not parse '{input}' as Transaction")
-            raise e
+            raise ValueError(f"Could not parse '{line}' as Transaction. Original error: {str(e)}") from e
+        addEuroConversion(df)
         return Transaction(df.iloc[0])
 
-
+   
 
 
     def getYear(self) -> str: 
