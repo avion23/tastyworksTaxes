@@ -282,41 +282,39 @@ class Transaction(pd.core.series.Series):
         >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39").getQuantity()
         -1
         """
-        validTransactionCodes = ["Trade", "Receive Deliver"]
-        if self.loc["Transaction Code"] not in validTransactionCodes:
-            raise KeyError(
-                "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
+        def get_sign_based_on_subcode(subcode: str, buy_sell: str) -> int:
+            """Determine the sign of the quantity based on the transaction subcode."""
+            sign_mapping = {
+                "Buy to Open": 1,
+                "Buy to Close": 1,
+                "Sell to Open": -1,
+                "Sell to Close": -1,
+                "Assignment": 1,
+                "Expiration": 1  # This is wrong. It's stateful and depends on the previous trade
+            }
+            
+            if subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
+                return 1 if buy_sell == "Buy" else -1
+            
+            try:
+                return sign_mapping[subcode]
+            except KeyError as exc:
+                raise ValueError(f"Invalid Transaction Subcode: {subcode}") from exc
 
+        valid_transaction_codes = ["Trade", "Receive Deliver"]
+        if self.loc["Transaction Code"] not in valid_transaction_codes:
+            raise KeyError(f"Invalid Transaction Code: {self.loc['Transaction Code']}")
+        
         subcode = self.loc["Transaction Subcode"]
+        buy_sell = self.loc["Buy/Sell"]
+        sign = get_sign_based_on_subcode(subcode, buy_sell)
+        quantity = self.loc["Quantity"]
 
-        sign = 1
-        if subcode == "Buy to Open" or subcode == "Buy to Close":
-            sign = 1
-        elif subcode == "Sell to Open" or subcode == "Sell to Close":
-            sign = -1
-        elif subcode == "Assignment":
-            sign = +1
-        elif subcode == "Expiration":
-            sign = 1 # this is not correct, but it depends on the previous trade
-        # TODO: Handle this without realizing a trade
-        elif subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
-            if self.loc["Buy/Sell"] == "Buy":
-                sign = 1
-            elif self.loc["Buy/Sell"] == "Sell":
-                sign = -1
-            else:
-                raise ValueError(
-                    "Unhandled case for '{}'. Transaction was: '{}'".format(subcode, self))
-        else:
-            raise ValueError(
-                "Transaction Subcode is invalid: '{}'".format(subcode))
-        q = self.loc["Quantity"]
-
-        size = sign * q
-        return int(size)
+        return int(sign * quantity)
 
     def setQuantity(self, quantity: int):
-        """ Signage is decided with the subcode
+        """Update the 'Quantity' field and related transaction codes based on the provided quantity
+        signage is decided with the subcode
 
         >>> h = History.fromFile("test/merged.csv")
         >>> t = Transaction(h.iloc[270])
@@ -357,37 +355,28 @@ class Transaction(pd.core.series.Series):
         >>> t.getQuantity()
         -3
         """
-        validTransactionCodes = ["Trade", "Receive Deliver"]
-        if self.loc["Transaction Code"] not in validTransactionCodes:
-            raise KeyError(
-                "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
-
+        # Validate Transaction Code
+        valid_transaction_codes = ["Trade", "Receive Deliver"]
+        if self.loc["Transaction Code"] not in valid_transaction_codes:
+            raise KeyError(f"Transaction Code is '{self.loc['Transaction Code']}' and not in '{valid_transaction_codes}'.")
 
         if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
             self.loc["Quantity"] = quantity
-            return  # Open/Close and Buy/Sell is unset here
+            return
 
         self.loc["Quantity"] = abs(quantity)
-        if quantity < 0:
-            self.loc["Buy/Sell"] = "Sell"
+        self.loc["Buy/Sell"] = "Sell" if quantity < 0 else "Buy"
+        
+        subcode_mapping = {
+            "Open": f"{self.loc['Buy/Sell']} to Open",
+            "Close": f"{self.loc['Buy/Sell']} to Close"
+        }
+        try:
+            self.loc["Transaction Subcode"] = subcode_mapping[self.loc["Open/Close"]]
+        except KeyError as e:
+            raise ValueError(f"Unexpected value in 'Open/Close': {self.loc['Open/Close']}") from e
 
-            if self.loc["Open/Close"] == "Open":
-                self.loc["Transaction Subcode"] = "Sell to Open"
-            elif self.loc["Open/Close"] == "Close":
-                self.loc["Transaction Subcode"] = "Sell to Close"
-            else:
-                raise ValueError(
-                    "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
-        elif quantity >= 0:
-            self.loc["Buy/Sell"] = "Buy"
 
-            if self.loc["Open/Close"] == "Open":
-                self.loc["Transaction Subcode"] = "Buy to Open"
-            elif self.loc["Open/Close"] == "Close":
-                self.loc["Transaction Subcode"] = "Buy to Close"
-            else:
-                raise ValueError(
-                    "Unexpected value in 'Open/Close': {}".format(self.loc["Open/Close"]))
 
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
