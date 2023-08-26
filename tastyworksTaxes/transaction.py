@@ -269,9 +269,18 @@ class Transaction(pd.core.series.Series):
         6
         >>> Transaction(h.iloc[195]).getQuantity()
         -6
-
+        
+        # expiry
         >>> Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39").getQuantity()
         1
+
+        # expiry
+        >>> Transaction.fromString("07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...39").getQuantity()
+        2
+
+        # size was shown as 1 in testing
+        >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39").getQuantity()
+        -1
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in validTransactionCodes:
@@ -288,7 +297,7 @@ class Transaction(pd.core.series.Series):
         elif subcode == "Assignment":
             sign = +1
         elif subcode == "Expiration":
-            sign = 1  # it's positive because we are probably short
+            sign = 1 # this is not correct, but it depends on the previous trade
         # TODO: Handle this without realizing a trade
         elif subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
             if self.loc["Buy/Sell"] == "Buy":
@@ -341,17 +350,24 @@ class Transaction(pd.core.series.Series):
         >>> t.setQuantity(8)
         >>> t.getQuantity()
         8
+        >>> t = Transaction.fromString("07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...39")
+        >>> t.getQuantity()
+        2
+        >>> t.setQuantity(-3)
+        >>> t.getQuantity()
+        -3
         """
         validTransactionCodes = ["Trade", "Receive Deliver"]
-        if self.loc["Transaction Code"] not in ["Trade", "Receive Deliver"]:
+        if self.loc["Transaction Code"] not in validTransactionCodes:
             raise KeyError(
                 "Transaction Code is '{}' and not in '{}'.".format(self.loc["Transaction Code"], validTransactionCodes))
 
-        self.loc["Quantity"] = abs(quantity)
 
         if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
+            self.loc["Quantity"] = quantity
             return  # Open/Close and Buy/Sell is unset here
 
+        self.loc["Quantity"] = abs(quantity)
         if quantity < 0:
             self.loc["Buy/Sell"] = "Sell"
 
