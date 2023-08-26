@@ -65,6 +65,7 @@ Merging is manual. I didn't manage even a half-way automatic merge because of du
 ## Usage
 
 After installing the dependencies, you can run the main program using:
+
     python tastyworksTaxes/main.py [ --write-closed-trades <output-file.csv> ] <tastyworks-data.csv>
 
 ### Test-Driven Development
