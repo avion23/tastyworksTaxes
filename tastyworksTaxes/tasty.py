@@ -8,7 +8,8 @@ from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 import pandas as pd
-from typing import List, Callable
+from typing import List, Callable, Optional
+
 import pprint
 import pathlib
 import math
@@ -35,11 +36,15 @@ class Tasty(object):
     positions: pd.DataFrame
     closedTrades:  pd.DataFrame
 
-    def __init__(self, path: pathlib.Path):
+    def __init__(self, path: Optional[pathlib.Path] = None):
         self.yearValues.clear()
-        self.history = History.fromFile(path)
+        if path:
+            self.history = History.fromFile(path)
+        else:
+            self.history = History()
         self.closedTrades: pd.DataFrame = pd.DataFrame()
         self.positions = pd.DataFrame()
+
 
     def year(self, year):
         """used to access the dictionary and create the year if it doesn't exist
@@ -394,21 +399,21 @@ class Tasty(object):
 
         # SPRT
         >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[21]))
-        >>> t.addPosition(Transaction(t.history.iloc[20]))
-        >>> t.addPosition(Transaction(t.history.iloc[19]))
-        >>> t.addPosition(Transaction(t.history.iloc[18]))
-        >>> t.addPosition(Transaction(t.history.iloc[17]))
-        >>> t.addPosition(Transaction(t.history.iloc[16])) # this is the last buy
+        >>> t.addPosition(Transaction.fromString("07/01/2021 8:57 PM,Trade,Buy to Open,SPRT,Buy,Open,200,,,,3.87,0.16,-774,Bought 200 SPRT @ 3.87,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,44,,,,3.87,0.036,-170.28,Bought 44 SPRT @ 3.87,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,1,,,,3.87,0.001,-3.87,Bought 1 SPRT @ 3.87,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,55,,,,3.87,0.044,-212.85,Bought 55 SPRT @ 3.87,Individual...39"))
         >>> t.positions.iloc[0].Amount
         -1934.9999999999998
-        >>> t.addPosition(Transaction(t.history.iloc[8]))
-        >>> t.addPosition(Transaction(t.history.iloc[7]))
-        >>> t.addPosition(Transaction(t.history.iloc[6]))
-        >>> t.addPosition(Transaction(t.history.iloc[5]))
-        >>> t.addPosition(Transaction(t.history.iloc[4]))
-        >>> t.addPosition(Transaction(t.history.iloc[3]))
-        >>> t.addPosition(Transaction(t.history.iloc[2]))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,51,,,,4.81,0.057,245.31,Sold 51 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,289,,,,4.81,0.276,1390.09,Sold 289 SPRT @ 4.81,Individual...39"))
         >>> len(t.positions.index)
         0
         >>> t.closedTrades["Amount"].sum()
@@ -486,9 +491,11 @@ class Tasty(object):
 
                 # write back
                 self.positions.loc[index] = entry
+                logging.debug(f"entry quantity {entry.Quantity}, transaction quantity {transaction.Quantity}, trade quantity {trade.Quantity}")
+
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
-
+                if tradeQuantity != 0:
                     # Explicitly convert 'worthlessExpiry' to boolean type in both DataFrames before concatenation
                     if 'worthlessExpiry' in self.closedTrades.columns:
                         self.closedTrades['worthlessExpiry'] = self.closedTrades['worthlessExpiry'].astype(bool)
