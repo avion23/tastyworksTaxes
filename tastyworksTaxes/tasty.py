@@ -452,7 +452,7 @@ class Tasty(object):
                         f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
                     )
                     if entry["Transaction Subcode"] == "Buy to Open" and entry.getType() in [PositionType.call, PositionType.put]:
-                        logging.warning(f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: ...")
+                        logging.debug(f"Expiry for long position: Symbol: {entry['Symbol']}, Qty: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record this as total loss.")
                         trade["worthlessExpiry"] = True
                 
                 logging.info(f"{entry.getDateTime()} found an open position: {entry.getQuantity()} {entry.getSymbol()} and adding {transaction.getQuantity()}")
