@@ -419,56 +419,41 @@ class Tasty(object):
         """
 
         def appendTrade(trade, target_df):
-            # Ensure that the 'worthlessExpiry' column is a boolean type
             if 'worthlessExpiry' in target_df.columns:
                 target_df['worthlessExpiry'] = target_df['worthlessExpiry'].astype(bool)
-
-            # Convert the trade into a DataFrame
             trade_df = trade.to_frame().T
-
-            # Ensure that the 'worthlessExpiry' in the trade DataFrame is a boolean type
             if 'worthlessExpiry' in trade_df.columns:
                 trade_df['worthlessExpiry'] = trade_df['worthlessExpiry'].astype(bool)
-
-            # Concatenate the trade DataFrame with the target DataFrame
             return pd.concat([target_df, trade_df])
 
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
-            if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
-                                                                                                                                                 entry.getExpiry() == transaction.getExpiry()):
+            
+            if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and \
+                (entry.getType() == PositionType.stock or (entry.getStrike() == transaction.getStrike() and entry.getExpiry() == transaction.getExpiry())):
+                
                 trade = Transaction()
                 trade["worthlessExpiry"] = False
-                trade["worthlessExpiry"] = trade["worthlessExpiry"].astype(bool)
-                # match the quantity sign for "Removal of ... due to expiration".
-                # This is stateful, i.e. you need to know the previous transaction
-                # Copy the opposite sign of 'entry' to 'transaction'
-                # Existing condition for "Removal of ... due to expiration"
-                if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and abs(transaction.getQuantity()) == abs(entry.getQuantity()):
-                    quantityOld = transaction.getQuantity()
 
-                    # Invert the sign of 'entry' and apply it to 'transaction'
+                if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and \
+                    abs(transaction.getQuantity()) == abs(entry.getQuantity()):
+                    
+                    quantityOld = transaction.getQuantity()
                     opposite_sign = -1 if entry.getQuantity() > 0 else 1
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
 
-                    logging.debug(
-                        f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. "
-                        f"Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | "
-                        f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
-                    )
+                    logging.debug(f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: ...")
 
-                    # Check if the 'entry' was a long call or put
-                    if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
-                        logging.warning(
-                            f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record as total loss.")
+                    if entry["Transaction Subcode"] == "Buy to Open" and entry.getType() in [PositionType.call, PositionType.put]:
+                        logging.warning(f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: ...")
                         trade["worthlessExpiry"] = True
-
-                logging.info("{} found an open position: {} {} and adding {}".format(
-                             entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
-
-                if (transaction.getType() == PositionType.call or transaction.getType() == PositionType.put):
+                
+                logging.info(f"{entry.getDateTime()} found an open position: {entry.getQuantity()} {entry.getSymbol()} and adding {transaction.getQuantity()}")
+                
+                if transaction.getType() in [PositionType.call, PositionType.put]:
                     trade["Expiry"] = transaction.getExpiry()
                     trade["Strike"] = transaction.getStrike()
+
 
                 (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
                     entry.getQuantity(), transaction.getQuantity())
