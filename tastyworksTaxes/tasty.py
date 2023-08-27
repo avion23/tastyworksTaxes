@@ -419,7 +419,21 @@ class Tasty(object):
         >>> t.closedTrades["Amount"].sum()
         469.99999999999994
         """
+        def appendTrade(trade, target_df):
+            # Ensure that the 'worthlessExpiry' column is a boolean type
+            if 'worthlessExpiry' in target_df.columns:
+                target_df['worthlessExpiry'] = target_df['worthlessExpiry'].astype(bool)
 
+            # Convert the trade into a DataFrame
+            trade_df = trade.to_frame().T
+
+            # Ensure that the 'worthlessExpiry' in the trade DataFrame is a boolean type
+            if 'worthlessExpiry' in trade_df.columns:
+                trade_df['worthlessExpiry'] = trade_df['worthlessExpiry'].astype(bool)
+
+            # Concatenate the trade DataFrame with the target DataFrame
+            return pd.concat([target_df, trade_df])
+        
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
@@ -496,17 +510,8 @@ class Tasty(object):
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
                 if tradeQuantity != 0:
-                    # Explicitly convert 'worthlessExpiry' to boolean type in both DataFrames before concatenation
-                    if 'worthlessExpiry' in self.closedTrades.columns:
-                        self.closedTrades['worthlessExpiry'] = self.closedTrades['worthlessExpiry'].astype(bool)
-
-                    trade_df = trade.to_frame().T
-                    if 'worthlessExpiry' in trade_df.columns:
-                        trade_df['worthlessExpiry'] = trade_df['worthlessExpiry'].astype(bool)
-
-                    # Concatenate
-                    self.closedTrades = pd.concat([self.closedTrades, trade_df])
-
+                    self.closedTrades = appendTrade(trade, self.closedTrades)
+            
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
@@ -517,9 +522,7 @@ class Tasty(object):
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
             logging.info("{} Adding '{}' of '{}' to the open positions".format(transaction.getDateTime(),
                                                                                transaction.getQuantity(), transaction.getSymbol()))
-
-            self.positions = pd.concat(
-                [self.positions, transaction.to_frame().T])
+            self.positions = appendTrade(transaction, self.positions)
 
     @classmethod
     def _updatePosition(cls, oldPositionQuantity, transactionQuantity):
