@@ -190,15 +190,22 @@ class Tasty(object):
 
         # uvxy showed remaining positions, even thought they should have been closed
         >>> t = Tasty("test/merged3.csv")
-        >>> t.addPosition(Transaction.fromString("01/12/2021 9:50 PM,Trade,Buy to Open,UVXY,Buy,Open,100,,,,10.52,0.08,-1052,Bought 100 UVXY @ 10.52,Individual...39"))
-        >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...39"))
-        >>> t.addPosition(Transaction.fromString("01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...39"))
         >>> t.addPosition(Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39"))
+        >>> t.closedTrades
+        >>> t.positions
         >>> t.addPosition(Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39"))
         >>> len(t.closedTrades)
         3
         >>> t.positions.empty
         True
+
+
+        >>> t = Tasty("test/merged3.csv") 
+        >>> t.addPosition(Transaction.fromString("05/22/2018 5:36 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,11,C,1.05,2.28,-210,Bought 2 DERM 07/20/18 Call 11.00 @ 1.05,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...39"))
+        >>> t.closedTrades
+        >>> t.positions
+
         """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
@@ -415,7 +422,26 @@ class Tasty(object):
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
                                                                                                                                                  entry.getExpiry() == transaction.getExpiry()):
                 trade = Transaction()
+                trade["worthlessExpiry"] = False
+                trade["worthlessExpiry"] = trade["worthlessExpiry"].astype(bool)
+                # match the quantity sign for "Removal of ... due to expiration".
+                # This is stateful, i.e. you need to know the previous transaction
+                # Copy the opposite sign of 'entry' to 'transaction'
+                # if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and abs(transaction.getQuantity()) == abs(entry.getQuantity()):
+                    
+                #     opposite_sign = -1 if entry.getQuantity() > 0 else 1
+                #     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
 
+                #     # Check if the previous position ('entry') was a long call or put
+                #     if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
+                #         logging.warning(f"Expiry of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
+                #         trade["worthlessExpiry"] = True
+                #     else:
+                #         logging.debug(f"Expiry of {entry['Symbol']} with value {entry.getValue()} for short position.")
+                #         trade["worthlessExpiry"] = False
+                # else:
+                #     trade["worthlessExpiry"] = False
+                
                 logging.info("{} found an open position: {} {} and adding {}".format(
                              entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
 
@@ -427,7 +453,6 @@ class Tasty(object):
                     entry.getQuantity(), transaction.getQuantity())
                 
                 # percentage which is used in a trade
-                # percentage = (entry.getQuantity() / transaction.getQuantity)
                 percentageClosed = abs(tradeQuantity / entry.getQuantity())
                 trade["Amount"] = percentageClosed * \
                     entry["Amount"] + transaction["Amount"]
@@ -463,15 +488,18 @@ class Tasty(object):
                 self.positions.loc[index] = entry
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
-    
-                if trade.Quantity != 0:
-                    if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration":
-                        logging.warning(f"Expiry of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
-                        trade["worthlessExpiry"] = True
-                    else:
-                        trade["worthlessExpiry"] = False
-                    self.closedTrades = pd.concat([self.closedTrades,
-                                                    trade.to_frame().T])
+
+                    # Explicitly convert 'worthlessExpiry' to boolean type in both DataFrames before concatenation
+                    if 'worthlessExpiry' in self.closedTrades.columns:
+                        self.closedTrades['worthlessExpiry'] = self.closedTrades['worthlessExpiry'].astype(bool)
+
+                    trade_df = trade.to_frame().T
+                    if 'worthlessExpiry' in trade_df.columns:
+                        trade_df['worthlessExpiry'] = trade_df['worthlessExpiry'].astype(bool)
+
+                    # Concatenate
+                    self.closedTrades = pd.concat([self.closedTrades, trade_df])
+
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
