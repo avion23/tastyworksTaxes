@@ -66,13 +66,13 @@ class Transaction(pd.core.series.Series):
         Strike: 14.5,
         Call/Put: P,
         Price: 0.56,
-        Amount: 56,
+        Amount: 56.0,
         Description: Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56)
         """
         def addEuroConversion(df):
             """ adds new columns called "AmountEuro" and "FeesEuro" to the DataFrame"""
             c = CurrencyConverter(fallback_on_missing_rate=True,
-                                    fallback_on_wrong_date=True)
+                                fallback_on_wrong_date=True)
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
             df['AmountEuro'] = df.apply(lambda x: c.convert(
@@ -82,11 +82,18 @@ class Transaction(pd.core.series.Series):
 
         header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
         csv = header + "\n" + line
+
         try:
             df = pd.read_csv(StringIO(csv))
         except pd.errors.ParserError as e:
             raise ValueError(f"Could not parse '{line}' as Transaction. Original error: {str(e)}") from e
+
+        # Explicitly cast 'Strike' and 'Amount' to float
+        df['Strike'] = df['Strike'].astype(float)
+        df['Amount'] = df['Amount'].astype(float)
+
         addEuroConversion(df)
+
         return Transaction(df.iloc[0])
 
    
