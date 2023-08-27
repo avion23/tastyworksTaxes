@@ -2,8 +2,6 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
-
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.position import PositionType
@@ -18,6 +16,7 @@ import logging
 import json
 
 
+
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.DEBUG,
@@ -26,9 +25,8 @@ logging.basicConfig(
 
 for logger_name, logger in logging.Logger.manager.loggerDict.items():
     if isinstance(logger, logging.Logger):
-        if logger_name != "__main__":  
+        if logger_name != "__main__":
             logger.setLevel(logging.WARNING)
-
 
 
 class Tasty(object):
@@ -430,18 +428,20 @@ class Tasty(object):
                 # Existing condition for "Removal of ... due to expiration"
                 if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and abs(transaction.getQuantity()) == abs(entry.getQuantity()):
                     quantityOld = transaction.getQuantity()
-                    
+
                     # Invert the sign of 'entry' and apply it to 'transaction'
                     opposite_sign = -1 if entry.getQuantity() > 0 else 1
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
-                    
-                    logging.debug(f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}")
+
+                    logging.debug(
+                        f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}")
 
                     # Check if the 'entry' was a long call or put
                     if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
-                        logging.warning(f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record as total loss.")
+                        logging.warning(
+                            f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record as total loss.")
                         trade["worthlessExpiry"] = True
-                
+
                 logging.info("{} found an open position: {} {} and adding {}".format(
                              entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
 
@@ -451,7 +451,7 @@ class Tasty(object):
 
                 (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
                     entry.getQuantity(), transaction.getQuantity())
-                
+
                 # percentage which is used in a trade
                 percentageClosed = abs(tradeQuantity / entry.getQuantity())
                 trade["Amount"] = percentageClosed * \
@@ -503,7 +503,7 @@ class Tasty(object):
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
-                        )
+                    )
         if transaction.getQuantity() != 0:
             if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment" or transaction["Transaction Subcode"] == "Reverse Split" and transaction["Open/Close"] == "Close":
                 raise ValueError(
@@ -653,7 +653,7 @@ class Tasty(object):
         m.eur = trades.loc[(trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put), 'AmountEuro'].sum()
         return m
-    
+
     def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all positive option trades in the corresponding dataframe
         >>> t = Tasty("test/merged2.csv")
@@ -670,7 +670,7 @@ class Tasty(object):
         return m
 
     def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all negative option trades in the corresponding dataframe
+        """ returns the sum of all negative option trades in the corresponding dataframe, but without total losses
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
@@ -683,7 +683,7 @@ class Tasty(object):
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
         return m
-    
+
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all total losses
 
@@ -691,7 +691,7 @@ class Tasty(object):
         Unfortunately, we need to set this while processing the transactions,
         because only then we know if we get no money for the assignment or not.
         Also it's untested
-        
+
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
@@ -734,7 +734,6 @@ class Tasty(object):
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
             trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0) & (trades['Quantity'] < 0), 'AmountEuro'].sum()
         return m
-
 
     def getOptionDifferential(self, trades: pd.DataFrame) -> Money:
         """ returns the highes difference in options, e.g. how many positive and how many negatives have occured 
