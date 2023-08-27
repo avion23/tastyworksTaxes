@@ -191,11 +191,9 @@ class Tasty(object):
         # uvxy showed remaining positions, even thought they should have been closed
         >>> t = Tasty("test/merged3.csv")
         >>> t.addPosition(Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39"))
-        >>> t.closedTrades
-        >>> t.positions
         >>> t.addPosition(Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39"))
         >>> len(t.closedTrades)
-        3
+        1
         >>> t.positions.empty
         True
 
@@ -203,8 +201,10 @@ class Tasty(object):
         >>> t = Tasty("test/merged3.csv") 
         >>> t.addPosition(Transaction.fromString("05/22/2018 5:36 PM,Trade,Buy to Open,DERM,Buy,Open,2,07/20/2018,11,C,1.05,2.28,-210,Bought 2 DERM 07/20/18 Call 11.00 @ 1.05,Individual...39"))
         >>> t.addPosition(Transaction.fromString("07/20/2018 10:00 PM,Receive Deliver,Expiration,DERM,,,2,07/20/2018,11,C,,0.00,0,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,Individual...39"))
-        >>> t.closedTrades
-        >>> t.positions
+        >>> len(t.closedTrades)
+        1
+        >>> t.positions.empty
+        True
 
         """
         t = Transaction(row)
@@ -427,20 +427,20 @@ class Tasty(object):
                 # match the quantity sign for "Removal of ... due to expiration".
                 # This is stateful, i.e. you need to know the previous transaction
                 # Copy the opposite sign of 'entry' to 'transaction'
-                # if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and abs(transaction.getQuantity()) == abs(entry.getQuantity()):
+                # Existing condition for "Removal of ... due to expiration"
+                if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and abs(transaction.getQuantity()) == abs(entry.getQuantity()):
+                    quantityOld = transaction.getQuantity()
                     
-                #     opposite_sign = -1 if entry.getQuantity() > 0 else 1
-                #     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
+                    # Invert the sign of 'entry' and apply it to 'transaction'
+                    opposite_sign = -1 if entry.getQuantity() > 0 else 1
+                    transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
+                    
+                    logging.debug(f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}")
 
-                #     # Check if the previous position ('entry') was a long call or put
-                #     if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
-                #         logging.warning(f"Expiry of {entry['Symbol']} with value {entry.getValue()} is untested. This should be recorded as a total loss.")
-                #         trade["worthlessExpiry"] = True
-                #     else:
-                #         logging.debug(f"Expiry of {entry['Symbol']} with value {entry.getValue()} for short position.")
-                #         trade["worthlessExpiry"] = False
-                # else:
-                #     trade["worthlessExpiry"] = False
+                    # Check if the 'entry' was a long call or put
+                    if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
+                        logging.warning(f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record as total loss.")
+                        trade["worthlessExpiry"] = True
                 
                 logging.info("{} found an open position: {} {} and adding {}".format(
                              entry.getDateTime(), entry.getQuantity(), entry.getSymbol(), transaction.getQuantity()))
