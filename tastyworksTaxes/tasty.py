@@ -690,11 +690,16 @@ class Tasty:
         >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd == 0
         True
         """
-        m: Money = Money()
-        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']), 'Amount'].sum()
-        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']), 'AmountEuro'].sum()
+        m = Money()
+        m.usd = trades.loc[
+            ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
+            (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] == True),
+            'Amount'].sum()
+
+        m.eur = trades.loc[
+            ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
+            (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] == True),
+            'AmountEuro'].sum()
         return m
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
