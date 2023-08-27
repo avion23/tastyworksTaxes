@@ -8,13 +8,14 @@ from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 import pandas as pd
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Dict
 
 import pprint
 import pathlib
 import math
 import logging
 import json
+
 
 
 logging.basicConfig(
@@ -29,25 +30,15 @@ for logger_name, logger in logging.Logger.manager.loggerDict.items():
             logger.setLevel(logging.WARNING)
 
 
-class Tasty(object):
-    yearValues: dict = dict()
-    history: History
-    positions: pd.DataFrame
-    closedTrades:  pd.DataFrame
-
-    def __init__(self, path: Optional[pathlib.Path] = None):
-        self.yearValues.clear()
-        if path:
-            self.history = History.fromFile(path)
-        else:
-            self.history = History()
+class Tasty:
+    def __init__(self, path: Optional[pathlib.Path] = None) -> None:
+        self.yearValues: Dict = {}
+        self.history: History = History.fromFile(path) if path else History()
         self.closedTrades: pd.DataFrame = pd.DataFrame()
-        self.positions = pd.DataFrame()
+        self.positions: pd.DataFrame = pd.DataFrame()
 
     def year(self, year):
-        """used to access the dictionary and create the year if it doesn't exist
-
-        """
+        """used to access the dictionary and create the year if it doesn't exist        """
         if not year in self.yearValues:
             self.yearValues[year] = Values()
         return self.yearValues[year]
@@ -355,7 +346,7 @@ class Tasty(object):
 
         # LFIN again
         >>> t = Tasty("test/merged2.csv")
-        
+
         # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
         >>> t.addPosition(Transaction.fromString("03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39"))
         >>> t.positions.iloc[0].Amount 
@@ -432,16 +423,16 @@ class Tasty(object):
 
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
-            
+
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and \
-                (entry.getType() == PositionType.stock or (entry.getStrike() == transaction.getStrike() and entry.getExpiry() == transaction.getExpiry())):
-                
+                    (entry.getType() == PositionType.stock or (entry.getStrike() == transaction.getStrike() and entry.getExpiry() == transaction.getExpiry())):
+
                 trade = Transaction()
                 trade["worthlessExpiry"] = False
 
                 if transaction["Transaction Code"] == "Receive Deliver" and transaction["Transaction Subcode"] == "Expiration" and \
-                    abs(transaction.getQuantity()) == abs(entry.getQuantity()):
-                    
+                        abs(transaction.getQuantity()) == abs(entry.getQuantity()):
+
                     quantityOld = transaction.getQuantity()
                     opposite_sign = -1 if entry.getQuantity() > 0 else 1
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
@@ -452,15 +443,16 @@ class Tasty(object):
                         f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
                     )
                     if entry["Transaction Subcode"] == "Buy to Open" and entry.getType() in [PositionType.call, PositionType.put]:
-                        logging.debug(f"Expiry for long position: Symbol: {entry['Symbol']}, Qty: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record this as total loss.")
+                        logging.debug(
+                            f"Expiry for long position: Symbol: {entry['Symbol']}, Qty: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record this as total loss.")
                         trade["worthlessExpiry"] = True
-                
-                logging.info(f"{entry.getDateTime()} found an open position: {entry.getQuantity()} {entry.getSymbol()} and adding {transaction.getQuantity()}")
-                
+
+                logging.info(
+                    f"{entry.getDateTime()} found an open position: {entry.getQuantity()} {entry.getSymbol()} and adding {transaction.getQuantity()}")
+
                 if transaction.getType() in [PositionType.call, PositionType.put]:
                     trade["Expiry"] = transaction.getExpiry()
                     trade["Strike"] = transaction.getStrike()
-
 
                 (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
                     entry.getQuantity(), transaction.getQuantity())
