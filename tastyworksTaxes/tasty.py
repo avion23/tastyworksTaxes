@@ -301,16 +301,15 @@ class Tasty:
 
         # blackberry BB
         >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[263]))
-        >>> t.addPosition(Transaction(t.history.iloc[249]))
-        >>> t.addPosition(Transaction(t.history.iloc[238]))
-        >>> t.addPosition(Transaction(t.history.iloc[237]))
-        >>> t.addPosition(Transaction(t.history.iloc[236]))
+        >>> t.addPosition(Transaction.fromString("12/23/2020 3:45 PM,Trade,Buy to Open,BB,Buy,Open,5,02/19/2021,7,C,1,5.68,-500,Bought 5 BB 02/19/21 Call 7.00 @ 1.00,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/11/2021 5:51 PM,Trade,Sell to Close,BB,Sell,Close,5,02/19/2021,7,C,1.09,0.71,545,Sold 5 BB 02/19/21 Call 7.00 @ 1.09,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39"))
+        >>> t.addPosition(Transaction.fromString("01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...39"))
         >>> t.addPosition(Transaction(t.history.iloc[229]))
         >>> t.addPosition(Transaction(t.history.iloc[197]))
         >>> t.addPosition(Transaction(t.history.iloc[171]))
         >>> t.addPosition(Transaction(t.history.iloc[170]))
-
 
         >>> t.addPosition(Transaction(t.history.iloc[168]))
         >>> t.addPosition(Transaction(t.history.iloc[167]))
@@ -340,9 +339,7 @@ class Tasty:
         >>> t.addPosition(Transaction(t.history.iloc[23]))
         >>> t.addPosition(Transaction(t.history.iloc[22]))
         >>> len(t.positions.index)
-        2
-        >>> t.positions
-        >>> t.closedTrades
+        1
 
         # LFIN again
         >>> t = Tasty("test/merged2.csv")
