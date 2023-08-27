@@ -2,27 +2,24 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from glob import glob
-from pathlib import Path
-
 import pandas as pd
 from currency_converter import CurrencyConverter
+from pathlib import Path
+from glob import glob
 
 
 class History(pd.DataFrame):
 
     def __init__(self, *args, **kwargs):
-        """ reads in a tastyworks transaction history file
-
-        """
         super().__init__(*args, **kwargs)
 
     @classmethod
     def fromFile(cls, path):
         """ initializes a History object / pd df from a filesystem path
-
+        
         >>> t = History.fromFile("test/merged.csv")
         """
+
         df = History(pd.read_csv(path))
         df['Date/Time'] = pd.to_datetime(df['Date/Time'],
                                          format='%m/%d/%Y %I:%M %p')
@@ -33,9 +30,9 @@ class History(pd.DataFrame):
         df.drop(columns="Account Reference", inplace=True)
         return df
 
+
     def addEuroConversion(self):
         """ adds a new column called "AmountEuro" and "FeesEuro" to the dataframe
-
 
         >>> t = History.fromFile("test/merged.csv")
         >>> t.addEuroConversion()
@@ -46,6 +43,8 @@ class History(pd.DataFrame):
         """
         c = CurrencyConverter(fallback_on_missing_rate=True,
                               fallback_on_wrong_date=True)
+        self['Date/Time'] = pd.to_datetime(self['Date/Time'])
+        self['Expiration Date'] = pd.to_datetime(self['Expiration Date'])
         self['AmountEuro'] = self.apply(lambda x: c.convert(
             x['Amount'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
         self['FeesEuro'] = self.apply(lambda x: c.convert(
