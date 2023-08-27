@@ -89,12 +89,11 @@ class Transaction(pd.core.series.Series):
         except pd.errors.ParserError as e:
             raise ValueError(f"Could not parse '{line}' as Transaction. Original error: {str(e)}") from e
 
-        # Explicitly cast 'Strike' and 'Amount' to float
+        df = df.drop(columns=['Account Reference'])
         df['Strike'] = df['Strike'].astype(float)
         df['Amount'] = df['Amount'].astype(float)
 
         addEuroConversion(df)
-
         return Transaction(df.iloc[0])
 
     def getYear(self) -> str:
