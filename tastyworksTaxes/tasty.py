@@ -350,6 +350,8 @@ class Tasty(object):
         >>> t.addPosition(Transaction(t.history.iloc[22]))
         >>> len(t.positions.index)
         2
+        >>> t.positions
+        >>> t.closedTrades
 
         # LFIN again
         >>> t = Tasty("test/merged2.csv")
@@ -444,8 +446,11 @@ class Tasty(object):
                     opposite_sign = -1 if entry.getQuantity() > 0 else 1
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
 
-                    logging.debug(f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: ...")
-
+                    logging.debug(
+                        f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. "
+                        f"Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | "
+                        f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
+                    )
                     if entry["Transaction Subcode"] == "Buy to Open" and entry.getType() in [PositionType.call, PositionType.put]:
                         logging.warning(f"Expiry for long position confirmed. Symbol: {entry['Symbol']}, Quantity: ...")
                         trade["worthlessExpiry"] = True
