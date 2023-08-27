@@ -17,7 +17,6 @@ import logging
 import json
 
 
-
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.DEBUG,
@@ -44,7 +43,6 @@ class Tasty(object):
             self.history = History()
         self.closedTrades: pd.DataFrame = pd.DataFrame()
         self.positions = pd.DataFrame()
-
 
     def year(self, year):
         """used to access the dictionary and create the year if it doesn't exist
@@ -419,6 +417,7 @@ class Tasty(object):
         >>> t.closedTrades["Amount"].sum()
         469.99999999999994
         """
+
         def appendTrade(trade, target_df):
             # Ensure that the 'worthlessExpiry' column is a boolean type
             if 'worthlessExpiry' in target_df.columns:
@@ -433,7 +432,7 @@ class Tasty(object):
 
             # Concatenate the trade DataFrame with the target DataFrame
             return pd.concat([target_df, trade_df])
-        
+
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
             if entry.getSymbol() == transaction.getSymbol() and entry.getType() == transaction.getType() and transaction.getQuantity() != 0 and (entry.getType() == PositionType.stock or entry.getStrike() == transaction.getStrike() and
@@ -453,7 +452,10 @@ class Tasty(object):
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
 
                     logging.debug(
-                        f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}")
+                        f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. "
+                        f"Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | "
+                        f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
+                    )
 
                     # Check if the 'entry' was a long call or put
                     if entry["Transaction Subcode"] in ["Buy to Open"] and entry.getType() in [PositionType.call, PositionType.put]:
@@ -505,13 +507,14 @@ class Tasty(object):
 
                 # write back
                 self.positions.loc[index] = entry
-                logging.debug(f"entry quantity {entry.Quantity}, transaction quantity {transaction.Quantity}, trade quantity {trade.Quantity}")
+                logging.debug(
+                    f"entry quantity {entry.Quantity}, transaction quantity {transaction.Quantity}, trade quantity {trade.Quantity}")
 
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
                 if tradeQuantity != 0:
                     self.closedTrades = appendTrade(trade, self.closedTrades)
-            
+
                     logging.info(
                         "{} - {} closing {} {}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
