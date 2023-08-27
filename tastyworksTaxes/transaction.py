@@ -8,11 +8,11 @@ import pandas as pd
 from io import StringIO
 from currency_converter import CurrencyConverter
 
-
-
 from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
+
+
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -22,8 +22,9 @@ logging.basicConfig(
 
 for logger_name, logger in logging.Logger.manager.loggerDict.items():
     if isinstance(logger, logging.Logger):
-        if logger_name != "__main__":  
+        if logger_name != "__main__":
             logger.setLevel(logging.WARNING)
+
 
 class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
@@ -52,7 +53,7 @@ class Transaction(pd.core.series.Series):
     @classmethod
     def fromString(cls, line: str):
         """ returns a Transaction from a csv string
-        
+
         >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39")
         Transaction(
         Date/Time: 2021-01-29 19:31:00,
@@ -72,7 +73,7 @@ class Transaction(pd.core.series.Series):
         def addEuroConversion(df):
             """ adds new columns called "AmountEuro" and "FeesEuro" to the DataFrame"""
             c = CurrencyConverter(fallback_on_missing_rate=True,
-                                fallback_on_wrong_date=True)
+                                  fallback_on_wrong_date=True)
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
             df['AmountEuro'] = df.apply(lambda x: c.convert(
@@ -96,10 +97,7 @@ class Transaction(pd.core.series.Series):
 
         return Transaction(df.iloc[0])
 
-   
-
-
-    def getYear(self) -> str: 
+    def getYear(self) -> str:
         """returns the year as string from a csv entry
 
         >>> h = History.fromFile("test/merged.csv")
@@ -135,11 +133,10 @@ class Transaction(pd.core.series.Series):
         temp = self.loc["Date/Time"]
         return str(temp)
 
-
     def isType(self, type_column: str, valid_values: set) -> bool:
         value = self.loc[type_column]
         return value in valid_values
-    
+
     def isOption(self) -> bool:
         """returns true if the transaction is an option
 
@@ -157,11 +154,10 @@ class Transaction(pd.core.series.Series):
         valid_subcodes = {"Sell to Open", "Buy to Open", "Sell to Close", "Buy to Close"}
         return self.isType("Call/Put", valid_options) and self.isType("Transaction Subcode", valid_subcodes)
 
-
     def isStock(self) -> bool:
         """returns true if the symbol is a stock ticker
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[13]).isStock()
         False
@@ -195,7 +191,7 @@ class Transaction(pd.core.series.Series):
     def getType(self) -> PositionType:
         """returns put, call or stock
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[10]).getType().name
         'stock'
@@ -236,7 +232,7 @@ class Transaction(pd.core.series.Series):
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> Transaction(h.iloc[11]).getSymbol()
         'NKLA'
@@ -276,7 +272,7 @@ class Transaction(pd.core.series.Series):
         6
         >>> Transaction(h.iloc[195]).getQuantity()
         -6
-        
+
         # expiry
         >>> Transaction.fromString("01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...39").getQuantity()
         1
@@ -299,10 +295,10 @@ class Transaction(pd.core.series.Series):
                 "Assignment": 1,
                 "Expiration": 1  # This is wrong. It's stateful and depends on the previous trade
             }
-            
+
             if subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
                 return 1 if buy_sell == "Buy" else -1
-            
+
             try:
                 return sign_mapping[subcode]
             except KeyError as exc:
@@ -311,7 +307,7 @@ class Transaction(pd.core.series.Series):
         valid_transaction_codes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in valid_transaction_codes:
             raise KeyError(f"Invalid Transaction Code: {self.loc['Transaction Code']}")
-        
+
         subcode = self.loc["Transaction Subcode"]
         buy_sell = self.loc["Buy/Sell"]
         sign = get_sign_based_on_subcode(subcode, buy_sell)
@@ -365,7 +361,8 @@ class Transaction(pd.core.series.Series):
         # Validate Transaction Code
         valid_transaction_codes = ["Trade", "Receive Deliver"]
         if self.loc["Transaction Code"] not in valid_transaction_codes:
-            raise KeyError(f"Transaction Code is '{self.loc['Transaction Code']}' and not in '{valid_transaction_codes}'.")
+            raise KeyError(
+                f"Transaction Code is '{self.loc['Transaction Code']}' and not in '{valid_transaction_codes}'.")
 
         if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
             self.loc["Quantity"] = quantity
@@ -373,7 +370,7 @@ class Transaction(pd.core.series.Series):
 
         self.loc["Quantity"] = abs(quantity)
         self.loc["Buy/Sell"] = "Sell" if quantity < 0 else "Buy"
-        
+
         subcode_mapping = {
             "Open": f"{self.loc['Buy/Sell']} to Open",
             "Close": f"{self.loc['Buy/Sell']} to Close"
@@ -382,8 +379,6 @@ class Transaction(pd.core.series.Series):
             self.loc["Transaction Subcode"] = subcode_mapping[self.loc["Open/Close"]]
         except KeyError as e:
             raise ValueError(f"Unexpected value in 'Open/Close': {self.loc['Open/Close']}") from e
-
-
 
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
@@ -398,7 +393,7 @@ class Transaction(pd.core.series.Series):
     def setValue(self, money: Money):
         """ sets the individual values for euro in AmountEuro and usd in Amount
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[10]).getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
@@ -414,7 +409,7 @@ class Transaction(pd.core.series.Series):
     def getFees(self) -> Money:
         """ returns the fees of the transaction at that specific point of time
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[10]).getFees())
         {'eur': 0.13179571663920922, 'usd': 0.16}
@@ -427,7 +422,7 @@ class Transaction(pd.core.series.Series):
     def setFees(self, money: Money):
         """ sets the individual values for euro in FeesEuro and usd 
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> t =  Transaction(h.iloc[10])
         >>> t.setFees(Money(usd=45, eur=20))
@@ -440,7 +435,7 @@ class Transaction(pd.core.series.Series):
     def getExpiry(self) -> datetime:
         """ returns the expiry date if it exists
 
-        
+
         >>> h = History.fromFile("test/merged.csv")
         >>> print(Transaction(h.iloc[0]).getExpiry())
         2021-01-15 00:00:00
