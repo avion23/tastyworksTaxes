@@ -353,7 +353,9 @@ class Tasty(object):
 
         # LFIN again
         >>> t = Tasty("test/merged2.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[679])) # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
+        
+        # Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20
+        >>> t.addPosition(Transaction.fromString("03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39"))
         >>> t.positions.iloc[0].Amount 
         -440.0
         >>> t.addPosition(Transaction(t.history.iloc[678])) # Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10
@@ -492,8 +494,6 @@ class Tasty(object):
 
                 # write back
                 self.positions.loc[index] = entry
-                logging.debug(
-                    f"entry quantity {entry.Quantity}, transaction quantity {transaction.Quantity}, trade quantity {trade.Quantity}")
 
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
