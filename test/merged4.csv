@@ -1,74 +1,74 @@
-Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-07/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,
-06/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,
-06/15/2023 10:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-6000,WIRE TRANSFER,
-06/15/2023 10:00 PM,Money Movement,Fee,,,,0,,,,,0.00,-25,DOMESTIC WIRE FEE,
-05/27/2023 3:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,
-05/23/2023 3:15 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,25.6,0.125,2560,Sold 100 SQQQ @ 25.60,
-05/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,
-05/06/2023 3:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-05/04/2023 2:55 PM,Trade,Sell to Close,IEP,Sell,Close,1,06/16/2023,45,C,0.77,0.142,77,Sold 1 IEP 06/16/23 Call 45.00 @ 0.77,
-05/02/2023 4:16 PM,Trade,Buy to Open,IEP,Buy,Open,1,06/16/2023,45,C,2.7,1.13,-270,Bought 1 IEP 06/16/23 Call 45.00 @ 2.70,
-04/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
-04/14/2023 10:00 PM,Receive Deliver,Assignment,SQQQ,,,1,04/21/2023,42,P,,0.00,0,Removal of option due to assignment,
-04/14/2023 10:00 PM,Receive Deliver,Buy to Open,SQQQ,Buy,Open,100,,,,42,5.00,-4200,Buy to Open 100 SQQQ @ 42.00,
-03/25/2023 2:03 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,
-03/23/2023 2:01 PM,Trade,Sell to Close,SQ,Sell,Close,100,,,,58.9,0.145,5890,Sold 100 SQ @ 58.90,
-03/23/2023 1:38 PM,Trade,Buy to Open,SQ,Buy,Open,100,,,,58.53,0.08,-5853,Bought 100 SQ @ 58.53,
-03/18/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-03/16/2023 9:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,
-03/13/2023 5:37 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,04/21/2023,42,P,5.9,1.142,590,Sold 1 SQQQ 04/21/23 Put 42.00 @ 5.90,
-03/11/2023 2:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-03/07/2023 3:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,04/21/2023,38,P,4,0.26,-800,Bought 2 SQQQ 04/21/23 Put 38.00 @ 4.00,
-03/06/2023 3:43 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,04/21/2023,38,P,5.2,2.275,1040,Sold 2 SQQQ 04/21/23 Put 38.00 @ 5.20,
-02/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,
-01/30/2023 8:40 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,03/17/2023,45,P,7.05,0.24,-1410,Bought 2 SQQQ 03/17/23 Put 45.00 @ 7.05,
-01/27/2023 3:29 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,03/17/2023,45,P,7.85,2.285,1570,Sold 2 SQQQ 03/17/23 Put 45.00 @ 7.85,
-01/18/2023 6:06 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,02/17/2023,48,P,4.5,0.24,-900,Bought 2 SQQQ 02/17/23 Put 48.00 @ 4.50,
-01/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,
-01/14/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-01/13/2023 3:23 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,02/17/2023,48,P,4.7,2.275,940,Sold 2 SQQQ 02/17/23 Put 48.00 @ 4.70,
-12/30/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.07,INTEREST ON CREDIT BALANCE,
-12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,16,01/20/2023,7.5,P,1.5,1.89,-2400,Bought 16 PLTR 01/20/23 Put 7.50 @ 1.50,
-12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,
-12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,2,01/20/2023,7.5,P,1.5,0.24,-300,Bought 2 PLTR 01/20/23 Put 7.50 @ 1.50,
-12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,
-12/17/2022 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-12/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
-12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,4,01/20/2023,7.5,P,0.87,0.489,348,Sold 4 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/20/2023,7.5,P,0.87,0.132,87,Sold 1 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,1.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 3:46 PM,Trade,Sell to Open,PLTR,Sell,Open,9,01/20/2023,7.5,P,0.87,10.10,783,Sold 9 PLTR 01/20/23 Put 7.50 @ 0.87,
-12/16/2022 2:31 PM,Trade,Sell to Close,WELL,Sell,Close,1,01/20/2023,65,P,1.9,0.132,190,Sold 1 WELL 01/20/23 Put 65.00 @ 1.90,
-12/14/2022 5:44 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,01/20/2023,43,P,4.4,0.24,-880,Bought 2 SQQQ 01/20/23 Put 43.00 @ 4.40,
-12/13/2022 2:51 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,40.09,0.376,8018,Sold 200 SQQQ @ 40.09,
-12/13/2022 2:50 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,01/20/2023,43,P,6.05,2.274,1210,Sold 2 SQQQ 01/20/23 Put 43.00 @ 6.05,
-12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,
-12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,
-12/07/2022 3:03 PM,Trade,Buy to Open,WELL,Buy,Open,1,01/20/2023,65,P,3.5,1.12,-350,Bought 1 WELL 01/20/23 Put 65.00 @ 3.50,
-11/28/2022 3:12 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,12/23/2022,52,P,8.8,0.24,-1760,Bought 2 SQQQ 12/23/22 Put 52.00 @ 8.80,
-11/22/2022 2:38 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,12/23/2022,52,P,7.9,0.12,-790,Bought 1 SQQQ 12/23/22 Put 52.00 @ 7.90,
-11/19/2022 3:39 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,
-11/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,
-11/14/2022 5:36 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,12/23/2022,52,P,10.5,1.152,1050,Sold 1 SQQQ 12/23/22 Put 52.00 @ 10.50,
-11/10/2022 7:28 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,12/23/2022,52,P,8,2.284,1600,Sold 2 SQQQ 12/23/22 Put 52.00 @ 8.00,
-11/09/2022 5:03 PM,Trade,Buy to Close,PLTR,Buy,Close,10,12/23/2022,7.5,P,0.8,1.18,-800,Bought 10 PLTR 12/23/22 Put 7.50 @ 0.80,
-11/07/2022 6:23 PM,Trade,Sell to Open,PLTR,Sell,Open,10,12/23/2022,7.5,P,0.96,11.232,960,Sold 10 PLTR 12/23/22 Put 7.50 @ 0.96,
-11/03/2022 1:30 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,61.02,0.233,6102,Sold 100 SQQQ @ 61.02,
-10/26/2022 3:06 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,51.4,0.213,5140,Sold 100 SQQQ @ 51.40,
-10/25/2022 4:53 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,49.27,0.08,-4927,Bought 100 SQQQ @ 49.27,
-10/17/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,
-10/17/2022 6:37 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,57.85,0.08,-5785,Bought 100 SQQQ @ 57.85,
-10/15/2022 2:43 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,
-10/14/2022 8:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,11/25/2022,64,P,8.95,0.13,-895,Bought 1 SQQQ 11/25/22 Put 64.00 @ 8.95,
-10/14/2022 2:31 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,11/25/2022,64,P,12.8,1.162,1280,Sold 1 SQQQ 11/25/22 Put 64.00 @ 12.80,
-10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,
-10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,
-10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,
-10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,
-09/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,
+Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account ReferenceIndividual...39
+07/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...39
+06/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,Individual...39
+06/15/2023 10:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-6000,WIRE TRANSFER,Individual...39
+06/15/2023 10:00 PM,Money Movement,Fee,,,,0,,,,,0.00,-25,DOMESTIC WIRE FEE,Individual...39
+05/27/2023 3:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+05/23/2023 3:15 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,25.6,0.125,2560,Sold 100 SQQQ @ 25.60,Individual...39
+05/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...39
+05/06/2023 3:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+05/04/2023 2:55 PM,Trade,Sell to Close,IEP,Sell,Close,1,06/16/2023,45,C,0.77,0.142,77,Sold 1 IEP 06/16/23 Call 45.00 @ 0.77,Individual...39
+05/02/2023 4:16 PM,Trade,Buy to Open,IEP,Buy,Open,1,06/16/2023,45,C,2.7,1.13,-270,Bought 1 IEP 06/16/23 Call 45.00 @ 2.70,Individual...39
+04/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,Individual...39
+04/14/2023 10:00 PM,Receive Deliver,Assignment,SQQQ,,,1,04/21/2023,42,P,,0.00,0,Removal of option due to assignment,Individual...39
+04/14/2023 10:00 PM,Receive Deliver,Buy to Open,SQQQ,Buy,Open,100,,,,42,5.00,-4200,Buy to Open 100 SQQQ @ 42.00,Individual...39
+03/25/2023 2:03 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...39
+03/23/2023 2:01 PM,Trade,Sell to Close,SQ,Sell,Close,100,,,,58.9,0.145,5890,Sold 100 SQ @ 58.90,Individual...39
+03/23/2023 1:38 PM,Trade,Buy to Open,SQ,Buy,Open,100,,,,58.53,0.08,-5853,Bought 100 SQ @ 58.53,Individual...39
+03/18/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+03/16/2023 9:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.11,INTEREST ON CREDIT BALANCE,Individual...39
+03/13/2023 5:37 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,04/21/2023,42,P,5.9,1.142,590,Sold 1 SQQQ 04/21/23 Put 42.00 @ 5.90,Individual...39
+03/11/2023 2:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+03/07/2023 3:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,04/21/2023,38,P,4,0.26,-800,Bought 2 SQQQ 04/21/23 Put 38.00 @ 4.00,Individual...39
+03/06/2023 3:43 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,04/21/2023,38,P,5.2,2.275,1040,Sold 2 SQQQ 04/21/23 Put 38.00 @ 5.20,Individual...39
+02/16/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...39
+01/30/2023 8:40 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,03/17/2023,45,P,7.05,0.24,-1410,Bought 2 SQQQ 03/17/23 Put 45.00 @ 7.05,Individual...39
+01/27/2023 3:29 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,03/17/2023,45,P,7.85,2.285,1570,Sold 2 SQQQ 03/17/23 Put 45.00 @ 7.85,Individual...39
+01/18/2023 6:06 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,02/17/2023,48,P,4.5,0.24,-900,Bought 2 SQQQ 02/17/23 Put 48.00 @ 4.50,Individual...39
+01/17/2023 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...39
+01/14/2023 2:50 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+01/13/2023 3:23 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,02/17/2023,48,P,4.7,2.275,940,Sold 2 SQQQ 02/17/23 Put 48.00 @ 4.70,Individual...39
+12/30/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.07,INTEREST ON CREDIT BALANCE,Individual...39
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,16,01/20/2023,7.5,P,1.5,1.89,-2400,Bought 16 PLTR 01/20/23 Put 7.50 @ 1.50,Individual...39
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,Individual...39
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,2,01/20/2023,7.5,P,1.5,0.24,-300,Bought 2 PLTR 01/20/23 Put 7.50 @ 1.50,Individual...39
+12/28/2022 5:39 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/20/2023,7.5,P,1.5,0.12,-150,Bought 1 PLTR 01/20/23 Put 7.50 @ 1.50,Individual...39
+12/17/2022 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+12/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,Individual...39
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,4,01/20/2023,7.5,P,0.87,0.489,348,Sold 4 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,0.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/20/2023,7.5,P,0.87,0.132,87,Sold 1 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 3:47 PM,Trade,Sell to Open,PLTR,Sell,Open,2,01/20/2023,7.5,P,0.87,1.254,174,Sold 2 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 3:46 PM,Trade,Sell to Open,PLTR,Sell,Open,9,01/20/2023,7.5,P,0.87,10.10,783,Sold 9 PLTR 01/20/23 Put 7.50 @ 0.87,Individual...39
+12/16/2022 2:31 PM,Trade,Sell to Close,WELL,Sell,Close,1,01/20/2023,65,P,1.9,0.132,190,Sold 1 WELL 01/20/23 Put 65.00 @ 1.90,Individual...39
+12/14/2022 5:44 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,01/20/2023,43,P,4.4,0.24,-880,Bought 2 SQQQ 01/20/23 Put 43.00 @ 4.40,Individual...39
+12/13/2022 2:51 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,40.09,0.376,8018,Sold 200 SQQQ @ 40.09,Individual...39
+12/13/2022 2:50 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,01/20/2023,43,P,6.05,2.274,1210,Sold 2 SQQQ 01/20/23 Put 43.00 @ 6.05,Individual...39
+12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,Individual...39
+12/13/2022 2:50 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,39.98,0.08,-3998,Bought 100 SQQQ @ 39.98,Individual...39
+12/07/2022 3:03 PM,Trade,Buy to Open,WELL,Buy,Open,1,01/20/2023,65,P,3.5,1.12,-350,Bought 1 WELL 01/20/23 Put 65.00 @ 3.50,Individual...39
+11/28/2022 3:12 PM,Trade,Buy to Close,SQQQ,Buy,Close,2,12/23/2022,52,P,8.8,0.24,-1760,Bought 2 SQQQ 12/23/22 Put 52.00 @ 8.80,Individual...39
+11/22/2022 2:38 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,12/23/2022,52,P,7.9,0.12,-790,Bought 1 SQQQ 12/23/22 Put 52.00 @ 7.90,Individual...39
+11/19/2022 3:39 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...39
+11/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...39
+11/14/2022 5:36 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,12/23/2022,52,P,10.5,1.152,1050,Sold 1 SQQQ 12/23/22 Put 52.00 @ 10.50,Individual...39
+11/10/2022 7:28 PM,Trade,Sell to Open,SQQQ,Sell,Open,2,12/23/2022,52,P,8,2.284,1600,Sold 2 SQQQ 12/23/22 Put 52.00 @ 8.00,Individual...39
+11/09/2022 5:03 PM,Trade,Buy to Close,PLTR,Buy,Close,10,12/23/2022,7.5,P,0.8,1.18,-800,Bought 10 PLTR 12/23/22 Put 7.50 @ 0.80,Individual...39
+11/07/2022 6:23 PM,Trade,Sell to Open,PLTR,Sell,Open,10,12/23/2022,7.5,P,0.96,11.232,960,Sold 10 PLTR 12/23/22 Put 7.50 @ 0.96,Individual...39
+11/03/2022 1:30 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,61.02,0.233,6102,Sold 100 SQQQ @ 61.02,Individual...39
+10/26/2022 3:06 PM,Trade,Sell to Close,SQQQ,Sell,Close,100,,,,51.4,0.213,5140,Sold 100 SQQQ @ 51.40,Individual...39
+10/25/2022 4:53 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,49.27,0.08,-4927,Bought 100 SQQQ @ 49.27,Individual...39
+10/17/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...39
+10/17/2022 6:37 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,57.85,0.08,-5785,Bought 100 SQQQ @ 57.85,Individual...39
+10/15/2022 2:43 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...39
+10/14/2022 8:59 PM,Trade,Buy to Close,SQQQ,Buy,Close,1,11/25/2022,64,P,8.95,0.13,-895,Bought 1 SQQQ 11/25/22 Put 64.00 @ 8.95,Individual...39
+10/14/2022 2:31 PM,Trade,Sell to Open,SQQQ,Sell,Open,1,11/25/2022,64,P,12.8,1.162,1280,Sold 1 SQQQ 11/25/22 Put 64.00 @ 12.80,Individual...39
+10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,Individual...39
+10/13/2022 4:20 PM,Trade,Buy to Close,SPLG,Buy,Close,1,11/18/2022,45,P,3.05,0.13,-305,Bought 1 SPLG 11/18/22 Put 45.00 @ 3.05,Individual...39
+10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,Individual...39
+10/13/2022 2:50 PM,Trade,Sell to Open,SPLG,Sell,Open,1,11/18/2022,45,P,3.9,1.142,390,Sold 1 SPLG 11/18/22 Put 45.00 @ 3.90,Individual...39
+09/16/2022 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.13,INTEREST ON CREDIT BALANCE,Individual...39
 09/12/2022 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,10,09/23/2022,8,P,0.41,1.29,-410,Bought 10 PLTR 09/23/22 Put 8.00 @ 0.41,Individual...39
 09/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,7,09/23/2022,8,P,0.72,7.935,504,Sold 7 PLTR 09/23/22 Put 8.00 @ 0.72,Individual...39
 09/01/2022 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,09/23/2022,8,P,0.72,1.142,72,Sold 1 PLTR 09/23/22 Put 8.00 @ 0.72,Individual...39
@@ -996,4 +996,3 @@ Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quanti
 03/12/2018 5:08 PM,Trade,Sell to Open,LFIN,Sell,Open,2,06/15/2018,30,C,7.1,2.324,1420,Sold 2 LFIN 06/15/18 Call 30.00 @ 7.10,Individual...39
 03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39
 03/08/2018 11:00 PM,Money Movement,Transfer,,,,0,,,,,0.00,1200,Wire Funds Received,Individual...39
-
