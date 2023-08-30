@@ -386,6 +386,8 @@ class Tasty:
         -1023.0
         >>> len(t.positions.index)
         0
+        >>> t.closedTrades.iloc[-1]["Quantity"]
+        1
 
         # SPRT
         >>> t = Tasty("test/merged2.csv")
@@ -408,6 +410,8 @@ class Tasty:
         0
         >>> t.closedTrades["Amount"].sum()
         469.99999999999994
+        >>> t.closedTrades.iloc[-1]["Quantity"]
+        289
         """
 
         def appendTrade(trade, target_df):
@@ -439,7 +443,7 @@ class Tasty:
                         f"Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | "
                         f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
                     )
-                    if entry["Transaction Subcode"] == "Buy to Open" and entry.getType() in [PositionType.call, PositionType.put]:
+                    if entry["Transaction Subcode"] == "Buy to Open" and entry.isOption():
                         logging.debug(
                             f"Expiry for long position: Symbol: {entry['Symbol']}, Qty: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record this as total loss.")
                         trade["worthlessExpiry"] = True
@@ -482,7 +486,7 @@ class Tasty:
                     percentage * transaction["FeesEuro"]
 
                 # update the old values
-                trade["Quantity"] = int(tradeQuantity)
+                trade["Quantity"] = int(-tradeQuantity)
                 transaction.setQuantity(newTransactionQuantity)
                 entry.setQuantity(newPositionQuantity)
 
@@ -492,6 +496,7 @@ class Tasty:
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
                 if tradeQuantity != 0:
+                    # logging.debug(str(trade))
                     self.closedTrades = appendTrade(trade, self.closedTrades)
 
                     logging.info(
@@ -689,17 +694,21 @@ class Tasty:
         >>> years = t.getYearlyTrades()
         >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd == 0
         True
+        >>> years[0]
+
         """
         m = Money()
         m.usd = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] == True),
+            (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] is True),
             'Amount'].sum()
 
         m.eur = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] == True),
+            (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] is True),
             'AmountEuro'].sum()
+        # worthless_trades = trades
+        # print(worthless_trades)
         return m
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
