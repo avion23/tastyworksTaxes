@@ -252,7 +252,7 @@ class Tasty:
         >>> t.positions.iloc[0]["Quantity"]
         1
         >>> t.closedTrades.iloc[0]["Quantity"]
-        -1
+        1
 
 
         # close this up and check if it's gone from the positions
@@ -260,7 +260,7 @@ class Tasty:
         >>> t.positions.size
         0
         >>> t.closedTrades.iloc[1]["Quantity"]
-        -1
+        1
 
         # add nearly equal position but with different strike
         >>> t.addPosition(Transaction(t.history.iloc[333]))
