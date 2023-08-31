@@ -276,7 +276,7 @@ class Tasty:
         >>> t.positions.iloc[1].Quantity
         1
         >>> t.positions.iloc[1].Strike
-        5
+        5.0
 
 
         # multiple options of the same type
@@ -495,6 +495,7 @@ class Tasty:
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
                 if tradeQuantity != 0:
+                    # logging.debug(trade)
                     self.closedTrades = appendTrade(trade, self.closedTrades)
 
                     logging.info(
