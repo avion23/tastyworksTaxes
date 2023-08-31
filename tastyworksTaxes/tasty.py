@@ -614,10 +614,8 @@ class Tasty:
         >>> [t.getCombinedSum(y) for y in years][0].usd != 0
         True
         """
-        m: Money = Money()
-        m.usd = trades['Amount'].sum()
-        m.eur = trades['AmountEuro'].sum()
-        return m
+        return Money(usd=trades['Amount'].sum(), eur=trades['AmountEuro'].sum())
+
 
     def getStockSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
@@ -629,12 +627,8 @@ class Tasty:
         >>> [t.getStockSum(y) for y in years][0].usd
         -5396.0
         """
-        m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] ==
-                            PositionType.stock), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] ==
-                            PositionType.stock), 'AmountEuro'].sum()
-        return m
+        stock_trades = trades[trades['callPutStock'] == PositionType.stock]
+        return Money(usd=stock_trades['Amount'].sum(), eur=stock_trades['AmountEuro'].sum())
 
     def getOptionSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all option trades in the corresponding dataframe
@@ -646,12 +640,8 @@ class Tasty:
         >>> [t.getOptionSum(y) for y in years][0].usd
         3728.0
         """
-        m: Money = Money()
-        m.usd = trades.loc[(trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put), 'Amount'].sum()
-        m.eur = trades.loc[(trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put), 'AmountEuro'].sum()
-        return m
+        option_trades = trades[trades['callPutStock'].isin([PositionType.call, PositionType.put])]
+        return Money(usd=option_trades['Amount'].sum(), eur=option_trades['AmountEuro'].sum())
 
     def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all positive option trades in the corresponding dataframe
