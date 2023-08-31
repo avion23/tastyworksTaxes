@@ -626,6 +626,8 @@ class Tasty:
         >>> years = t.getYearlyTrades()
         >>> [t.getStockSum(y) for y in years][0].usd != 0
         True
+        >>> [t.getStockSum(y) for y in years][0].usd
+        -5396.0
         """
         m: Money = Money()
         m.usd = trades.loc[(trades['callPutStock'] ==
@@ -639,8 +641,10 @@ class Tasty:
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getOptionSum(y) for y in years][0].usd != 0
+        >>> [t.getOptionSum(y) for y in years][0].usd > 0
         True
+        >>> [t.getOptionSum(y) for y in years][0].usd
+        3728.0
         """
         m: Money = Money()
         m.usd = trades.loc[(trades['callPutStock'] == PositionType.call) | (
