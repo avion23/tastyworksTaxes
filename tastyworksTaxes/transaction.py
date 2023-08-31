@@ -33,35 +33,30 @@ class Transaction(pd.core.series.Series):
         super().__init__(*args, **kwargs, dtype='object')
 
     def __repr__(self):
-        excluded_attrs = ['Fees', 'AmountEuro', 'FeesEuro']
+        excluded_attrs = ['Fees', 'FeesEuro']
+        key_mapping = {'Transaction Code': 'TCode', 'Transaction Subcode': 'TSubcode'}
         repr_str = "Transaction("
-        attributes = [f"{attr}: {self.get(attr, 'N/A')}" for attr in self.keys() if attr not in excluded_attrs]
-        repr_str += '\n'.join(attributes)
+        
+        attributes = []
+        for attr in self.keys():
+            if attr in excluded_attrs:
+                continue
+            value = self.get(attr, 'N/A')
+            if attr == 'AmountEuro':
+                value = f"{value:.2f}" 
+            attributes.append(f"{key_mapping.get(attr, attr)}: \"{value}\"")
+        
+        repr_str += ', '.join(attributes)  
         repr_str += ')'
         return repr_str
-
-
 
 
     @classmethod
     def fromString(cls, line: str):
         """ returns a Transaction from a csv string
 
-        >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39")
-        Transaction(Date/Time: 2021-01-29 19:31:00
-        Transaction Code: Trade
-        Transaction Subcode: Sell to Open
-        Symbol: UVXY
-        Buy/Sell: Sell
-        Open/Close: Open
-        Quantity: 1
-        Expiration Date: 2021-01-29 00:00:00
-        Strike: 14.5
-        Call/Put: P
-        Price: 0.56
-        Amount: 56.0
-        Description: Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56)
-        """
+        >>> Transaction.fromString("01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...39")  # doctest: +NORMALIZE_WHITESPACE
+        Transaction(Date/Time: "2021-01-29 19:31:00", TCode: "Trade", TSubcode: "Sell to Open", Symbol: "UVXY", Buy/Sell: "Sell", Open/Close: "Open", Quantity: "1", Expiration Date: "2021-01-29 00:00:00", Strike: "14.5", Call/Put: "P", Price: "0.56", Amount: "56.0", Description: "Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56", AmountEuro: "46.14")        """
         def addEuroConversion(df):
             """ adds new columns called "AmountEuro" and "FeesEuro" to the DataFrame"""
             c = CurrencyConverter(fallback_on_missing_rate=True,
