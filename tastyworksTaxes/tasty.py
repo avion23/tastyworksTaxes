@@ -584,7 +584,7 @@ class Tasty:
 
     def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> len(t.getYearlyTrades())
         6
@@ -603,7 +603,7 @@ class Tasty:
 
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getCombinedSum(y) for y in years][0].usd != 0
@@ -614,7 +614,7 @@ class Tasty:
 
     def getStockSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getStockSum(y) for y in years][0].usd != 0
@@ -627,7 +627,7 @@ class Tasty:
 
     def getOptionSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all option trades in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getOptionSum(y) for y in years][0].usd > 0
@@ -640,7 +640,7 @@ class Tasty:
 
     def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all positive option trades in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getLongOptionsProfits(y) for y in years][0].usd > 0
@@ -659,7 +659,7 @@ class Tasty:
 
     def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all negative option trades in the corresponding dataframe, but without total losses
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getLongOptionLosses(y) for y in years][1].usd != 0
@@ -690,7 +690,7 @@ class Tasty:
         because only then we know if we get no money for the assignment or not.
         Also it's untested
 
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd
@@ -708,7 +708,7 @@ class Tasty:
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all positive option trades for short options in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getShortOptionProfits(y) for y in years][1].usd != 0
@@ -725,7 +725,7 @@ class Tasty:
 
     def getShortOptionLosses(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all negative option trades for short options in the corresponding dataframe
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getShortOptionLosses(y) for y in years][1].usd != 0
@@ -748,7 +748,7 @@ class Tasty:
         - sum the positives
         - and take the min from the absolute value of both. That is how much they cancel each other out
 
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getOptionDifferential(y) for y in years][0].usd != 0
@@ -773,7 +773,7 @@ class Tasty:
 
     def getStockLoss(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of the negative stock trades
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getStockLoss(y) for y in years][0].usd != 0
@@ -788,7 +788,7 @@ class Tasty:
 
     def getStockFees(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all fees on stocks
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getStockLoss(y) for y in years][0].usd != 0
@@ -803,7 +803,7 @@ class Tasty:
 
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all other fees
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getOtherFees(y) for y in years][0].usd != 0
@@ -817,7 +817,7 @@ class Tasty:
 
     def getStockProfits(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of the positive stock trades
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getStockProfits(y) for y in years][3].usd != 0
@@ -831,7 +831,7 @@ class Tasty:
 
     def getFeesSum(self, trades: pd.DataFrame) -> Money:
         """ sums up the yearly fees in the closed trades. So so on a yearly basis. Returns the fees 
-        >>> t = Tasty("test/merged2.csv")
+        >>> t = Tasty()
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
         >>> [t.getFeesSum(y) for y in years][0].usd != 0
