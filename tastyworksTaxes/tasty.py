@@ -675,9 +675,9 @@ class Tasty:
         """
         m: Money = Money()
         m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] < 0) & (trades['Quantity'] > 0), 'Amount'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] > 0) & (trades['Quantity'] > 0) &  (not trades['worthlessExpiry']), 'Amount'].sum()
         m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] < 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
+            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] > 0) & (trades['Quantity'] > 0) &  (not trades['worthlessExpiry']), 'AmountEuro'].sum()
         return m
 
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
@@ -691,23 +691,19 @@ class Tasty:
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd == 0
-        True
-        >>> years[0]
-
+        >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd
+        -702.0
         """
         m = Money()
         m.usd = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] is True),
+            (trades['Amount'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']),
             'Amount'].sum()
 
         m.eur = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry'] is True),
+            (trades['AmountEuro'] != 0) & (trades['Quantity'] > 0) & (trades['worthlessExpiry']),
             'AmountEuro'].sum()
-        # worthless_trades = trades
-        # print(worthless_trades)
         return m
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
