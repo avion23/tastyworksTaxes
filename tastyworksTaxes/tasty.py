@@ -541,14 +541,11 @@ class Tasty:
 
 
         """
-
         newPositionQuantity = oldPositionQuantity + transactionQuantity
-        tradeQuantity = 0
-        if abs(newPositionQuantity) < abs(oldPositionQuantity):
-            tradeQuantity = min(abs(transactionQuantity),
-                                abs(oldPositionQuantity))
-            tradeQuantity = int(math.copysign(
-                tradeQuantity, transactionQuantity))
+        # Define the condition for updating tradeQuantity.
+        shouldUpdate = (abs(newPositionQuantity) < abs(oldPositionQuantity) and 
+                        oldPositionQuantity * transactionQuantity < 0)
+        tradeQuantity = transactionQuantity if shouldUpdate else 0
         newTransactionQuantity = transactionQuantity - \
             (newPositionQuantity - oldPositionQuantity)
         return (newPositionQuantity, newTransactionQuantity, tradeQuantity)
