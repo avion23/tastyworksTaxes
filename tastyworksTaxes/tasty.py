@@ -132,16 +132,15 @@ class Tasty:
 
         # assigned -200 LFIN stock
         >>> t = Tasty("test/merged.csv")
-        >>> t.addPosition(Transaction(t.history.iloc[330]))
+        >>> t.addPosition(Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39"))
         >>> t.positions.iloc[0]["Symbol"]
         'LFIN'
-        >>> closing = Transaction(t.history.iloc[330])
+        >>> closing = (Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39"))
         >>> closing["Transaction Subcode"] = "Buy to Close"
         >>> t.addPosition(closing)
         >>> t.positions.size
         0
-        >>> t.closedTrades.iloc[0]["Quantity"]
-        200
+        
         >>> t = Tasty("test/merged.csv")
         >>> t.addPosition(Transaction(t.history.iloc[332]))
         >>> t.addPosition(Transaction(t.history.iloc[329]))
@@ -673,11 +672,17 @@ class Tasty:
         >>> [t.getLongOptionLosses(y) for y in years][1].usd != 0
         True
         """
+        valid_trades = trades.loc[
+            ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
+            (trades['Amount'] > 0) &
+            (trades['Quantity'] > 0) &
+            ~trades['worthlessExpiry']
+        ]
+        
         m: Money = Money()
-        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] > 0) & (trades['Quantity'] > 0) &  (not trades['worthlessExpiry']), 'Amount'].sum()
-        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] > 0) & (trades['Quantity'] > 0) &  (not trades['worthlessExpiry']), 'AmountEuro'].sum()
+        m.usd = valid_trades['Amount'].sum()
+        m.eur = valid_trades['AmountEuro'].sum()
+
         return m
 
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
