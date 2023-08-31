@@ -415,12 +415,11 @@ class Tasty:
         """
 
         def appendTrade(trade, target_df):
-            if 'worthlessExpiry' in target_df.columns:
-                target_df['worthlessExpiry'] = target_df['worthlessExpiry'].astype(bool)
-            trade_df = trade.to_frame().T
-            if 'worthlessExpiry' in trade_df.columns:
-                trade_df['worthlessExpiry'] = trade_df['worthlessExpiry'].astype(bool)
-            return pd.concat([target_df, trade_df])
+            trade_df = pd.DataFrame([trade])
+            combined_df = pd.concat([target_df, trade_df])
+            if 'worthlessExpiry' in combined_df.columns:
+                combined_df['worthlessExpiry'] = combined_df['worthlessExpiry'].astype(bool)
+            return combined_df
 
         for index, row in self.positions.iterrows():
             entry = Transaction(row)
@@ -496,7 +495,6 @@ class Tasty:
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
                 if tradeQuantity != 0:
-                    # logging.debug(str(trade))
                     self.closedTrades = appendTrade(trade, self.closedTrades)
 
                     logging.info(
