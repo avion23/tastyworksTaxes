@@ -654,15 +654,19 @@ class Tasty:
         >>> t = Tasty("test/merged2.csv")
         >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
         >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionsProfits(y) for y in years][0].usd != 0
+        >>> [t.getLongOptionsProfits(y) for y in years][0].usd > 0
         True
+        >>> [t.getLongOptionsProfits(y) for y in years][0].usd
+        2977.0
         """
-        m: Money = Money()
-        m.usd = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['Amount'] > 0) & (trades['Quantity'] > 0), 'Amount'].sum()
-        m.eur = trades.loc[((trades['callPutStock'] == PositionType.call) | (
-            trades['callPutStock'] == PositionType.put)) & (trades['AmountEuro'] > 0) & (trades['Quantity'] > 0), 'AmountEuro'].sum()
-        return m
+        valid_trades = trades[
+                trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
+                (trades['Amount'] > 0) & 
+                (trades['Quantity'] > 0) &
+                ~trades['worthlessExpiry']
+            ]
+
+        return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
 
     def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all negative option trades in the corresponding dataframe, but without total losses
@@ -671,10 +675,14 @@ class Tasty:
         >>> years = t.getYearlyTrades()
         >>> [t.getLongOptionLosses(y) for y in years][1].usd != 0
         True
+        >>> [t.getLongOptionLosses(y) for y in years][1].usd < 0
+        True
+        >>> [t.getLongOptionLosses(y) for y in years][0].usd 
+        -193.0
         """
         valid_trades = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['Amount'] > 0) &
+            (trades['Amount'] < 0) &
             (trades['Quantity'] > 0) &
             ~trades['worthlessExpiry']
         ]
