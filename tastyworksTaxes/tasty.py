@@ -542,13 +542,17 @@ class Tasty:
 
         """
         newPositionQuantity = oldPositionQuantity + transactionQuantity
-        # Define the condition for updating tradeQuantity.
-        shouldUpdate = (abs(newPositionQuantity) < abs(oldPositionQuantity) and 
-                        oldPositionQuantity * transactionQuantity < 0)
-        tradeQuantity = transactionQuantity if shouldUpdate else 0
-        newTransactionQuantity = transactionQuantity - \
-            (newPositionQuantity - oldPositionQuantity)
+
+        if oldPositionQuantity * transactionQuantity < 0:
+            tradeQuantity = min(abs(oldPositionQuantity), abs(transactionQuantity))
+            tradeQuantity = tradeQuantity if transactionQuantity > 0 else -tradeQuantity
+            newTransactionQuantity = transactionQuantity - tradeQuantity
+        else:
+            tradeQuantity = 0
+            newTransactionQuantity = 0  # Ensure it's set to 0 when both quantities have the same sign
+
         return (newPositionQuantity, newTransactionQuantity, tradeQuantity)
+
 
     def print(self):
         """pretty prints the status"""
