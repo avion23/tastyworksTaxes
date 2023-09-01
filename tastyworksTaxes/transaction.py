@@ -344,13 +344,16 @@ class Transaction(pd.core.series.Series):
         >>> t.getQuantity()
         -3
         """
-        # Validate Transaction Code
+        # Cache frequently accessed values
+        transaction_code = self.loc["Transaction Code"]
+        transaction_subcode = self.loc["Transaction Subcode"]
+        open_close = self.loc["Open/Close"]
+        
         valid_transaction_codes = ["Trade", "Receive Deliver"]
-        if self.loc["Transaction Code"] not in valid_transaction_codes:
-            raise KeyError(
-                f"Transaction Code is '{self.loc['Transaction Code']}' and not in '{valid_transaction_codes}'.")
+        if transaction_code not in valid_transaction_codes:
+            raise KeyError(f"Transaction Code is '{transaction_code}' and not in '{valid_transaction_codes}'.")
 
-        if self.loc["Transaction Code"] == "Receive Deliver" and self.loc["Transaction Subcode"] in ["Assignment", "Expiration"]:
+        if transaction_code == "Receive Deliver" and transaction_subcode in ["Assignment", "Expiration"]:
             self.loc["Quantity"] = quantity
             return
 
@@ -361,10 +364,11 @@ class Transaction(pd.core.series.Series):
             "Open": f"{self.loc['Buy/Sell']} to Open",
             "Close": f"{self.loc['Buy/Sell']} to Close"
         }
-        try:
-            self.loc["Transaction Subcode"] = subcode_mapping[self.loc["Open/Close"]]
-        except KeyError as e:
-            raise ValueError(f"Unexpected value in 'Open/Close': {self.loc['Open/Close']}") from e
+        
+        if open_close in subcode_mapping:
+            self.loc["Transaction Subcode"] = subcode_mapping[open_close]
+        else:
+            raise ValueError(f"Unexpected value in 'Open/Close': {open_close}")
 
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
