@@ -855,7 +855,7 @@ class Tasty:
         self.processTransactionHistory()
         trades = self.getYearlyTrades()
         # add in the fees of the individual trades
-        fees = [self.getFeesSum(y) for y in trades]
+        fees = [- self.getFeesSum(y) for y in trades]
         for index, key in enumerate(self.yearValues):
             m = Money()
             m.usd = fees[index].usd
@@ -877,8 +877,8 @@ class Tasty:
                 trades[index])
             ret[key].stockProfits = self.getStockProfits(trades[index])
             ret[key].stockLoss = self.getStockLoss(trades[index])
-            ret[key].stockFees = self.getStockFees(trades[index])
-            ret[key].otherFees = self.getOtherFees(trades[index])
+            ret[key].stockFees = - self.getStockFees(trades[index])
+            ret[key].otherFees = - self.getOtherFees(trades[index])
 
         return ret
 
