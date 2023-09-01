@@ -456,32 +456,25 @@ class Tasty:
                 (newPositionQuantity, newTransactionQuantity, tradeQuantity) = Tasty._updatePosition(
                     entry.getQuantity(), transaction.getQuantity())
 
-                # percentage which is used in a trade
+                # Calculate percentageClosed once and derive related percentages
                 percentageClosed = abs(tradeQuantity / entry.getQuantity())
-                trade["Amount"] = percentageClosed * \
-                    entry["Amount"] + transaction["Amount"]
-                trade["AmountEuro"] = percentageClosed * \
-                    entry["AmountEuro"] + transaction["AmountEuro"]
-                trade["Fees"] = percentageClosed * \
-                    entry["Fees"] + transaction["Fees"]
-                trade["FeesEuro"] = percentageClosed * \
-                    entry["FeesEuro"] + transaction["FeesEuro"]
+                remainingPercentage = 1 - percentageClosed
+                percentage = (transaction.getQuantity() - tradeQuantity) / transaction.getQuantity()
+
+                # Update trade dictionary
+                tradeKeys = ["Amount", "AmountEuro", "Fees", "FeesEuro"]
+                for key in tradeKeys:
+                    trade[key] = percentageClosed * entry[key] + transaction[key]
+
                 trade["Symbol"] = transaction.getSymbol()
                 trade["callPutStock"] = transaction.getType()
                 trade["Opening Date"] = entry.getDateTime()
                 trade["Closing Date"] = transaction.getDateTime()
 
-                percentage = (transaction.getQuantity() -
-                              tradeQuantity) / transaction.getQuantity()
+                # Update entry dictionary
+                for key in tradeKeys:
+                    entry[key] = remainingPercentage * entry[key] + percentage * transaction[key]
 
-                entry["Amount"] = (1-percentageClosed) * entry["Amount"] + \
-                    percentage * transaction["Amount"]
-                entry["AmountEuro"] = (1-percentageClosed) * entry["AmountEuro"] + \
-                    percentage * transaction["AmountEuro"]
-                entry["Fees"] = (1-percentageClosed) * entry["Fees"] + \
-                    percentage * transaction["Fees"]
-                entry["FeesEuro"] = (1-percentageClosed) * entry["FeesEuro"] + \
-                    percentage * transaction["FeesEuro"]
 
                 # update the old values
                 trade["Quantity"] = int(-tradeQuantity)
