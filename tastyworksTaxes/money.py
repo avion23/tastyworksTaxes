@@ -74,6 +74,17 @@ class Money:
         m.eur = self.eur - x.eur
         m.usd = self.usd - x.usd
         return m
+    
+    def __neg__(self):
+        """Returns a new Money instance with negated eur and usd values.
+
+        >>> m = Money(eur=10, usd=20)
+        >>> n = -m
+        >>> print(n)
+        {'eur': -10, 'usd': -20}
+        """
+        return Money(eur=-self.eur, usd=-self.usd)
+
 
 if __name__ == "__main__":
     import doctest

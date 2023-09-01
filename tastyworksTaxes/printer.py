@@ -489,9 +489,9 @@ class Printer(object):
                 "grossOptionDifferential": "Max Optionen-Delta",
             },
             "Gebühren & Verluste": {
-                "fee": "Gebühren",
+                "fee": "Summe Gebühren Aktien + Optionen",
                 "stockFees": "Aktiengebühren",
-                "otherFees": "Andere Gebühren",
+                "otherFees": "Optionsgebühren",
             }
         }
         locale.setlocale(locale.LC_ALL, 'de_DE')
