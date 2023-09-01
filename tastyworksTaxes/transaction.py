@@ -28,6 +28,7 @@ for logger_name, logger in logging.Logger.manager.loggerDict.items():
 
 class Transaction(pd.core.series.Series):
     """a single entry from the transaction history"""
+    c = CurrencyConverter(fallback_on_missing_rate=True, fallback_on_wrong_date=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, dtype='object')
@@ -59,14 +60,11 @@ class Transaction(pd.core.series.Series):
         Transaction(Date/Time: "2021-01-29 19:31:00", TCode: "Trade", TSubcode: "Sell to Open", Symbol: "UVXY", Buy/Sell: "Sell", Open/Close: "Open", Quantity: "1", Expiration Date: "2021-01-29 00:00:00", Strike: "14.5", Call/Put: "P", Price: "0.56", Amount: "56.0", Description: "Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56", AmountEuro: "46.14")        """
         def addEuroConversion(df):
             """ adds new columns called "AmountEuro" and "FeesEuro" to the DataFrame"""
-            c = CurrencyConverter(fallback_on_missing_rate=True,
-                                  fallback_on_wrong_date=True)
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
-            df['AmountEuro'] = df.apply(lambda x: c.convert(
-                x['Amount'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
-            df['FeesEuro'] = df.apply(lambda x: c.convert(
-                x['Fees'], 'USD', 'EUR', date=x['Date/Time']), axis=1)
+            
+            df['AmountEuro'] = df.apply(lambda row: cls.c.convert(row['Amount'], 'USD', 'EUR', date=row['Date/Time']), axis=1)
+            df['FeesEuro'] = df.apply(lambda row: cls.c.convert(row['Fees'], 'USD', 'EUR', date=row['Date/Time']), axis=1)
 
         header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
         csv = header + "\n" + line
