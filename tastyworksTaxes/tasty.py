@@ -671,7 +671,7 @@ class Tasty:
         """
         valid_trades = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['Amount'] < 0) &
+            (trades['Amount'] <= 0) &
             (trades['Quantity'] > 0) &
             ~trades['worthlessExpiry']
         ]
@@ -698,7 +698,7 @@ class Tasty:
         """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-                (trades['Amount'] < 0) & 
+                (trades['Amount'] <= 0) & 
                 (trades['Quantity'] > 0) & 
                 trades['worthlessExpiry']
             ]
@@ -733,8 +733,8 @@ class Tasty:
         """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-                (trades['Amount'] < 0) & 
-                (trades['Quantity'] < 0)
+                (trades['Amount'] <= 0) & 
+                (trades['Quantity'] <= 0)
             ]
 
         return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
@@ -757,13 +757,13 @@ class Tasty:
         option_filter = trades['callPutStock'].isin([PositionType.call, PositionType.put])
         
         negative = Money(
-            usd=trades.loc[option_filter & (trades['Amount'] < 0), 'Amount'].sum(),
-            eur=trades.loc[option_filter & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+            usd=trades.loc[option_filter & (trades['Amount'] <= 0), 'Amount'].sum(),
+            eur=trades.loc[option_filter & (trades['AmountEuro'] <= 0), 'AmountEuro'].sum()
         )
         
         positive = Money(
-            usd=trades.loc[option_filter & (trades['Amount'] >= 0), 'Amount'].sum(),
-            eur=trades.loc[option_filter & (trades['AmountEuro'] >= 0), 'AmountEuro'].sum()
+            usd=trades.loc[option_filter & (trades['Amount'] > 0), 'Amount'].sum(),
+            eur=trades.loc[option_filter & (trades['AmountEuro'] > 0), 'AmountEuro'].sum()
         )
 
         return Money(
@@ -782,8 +782,8 @@ class Tasty:
         stock_filter = trades['callPutStock'] == PositionType.stock
 
         return Money(
-            usd=trades.loc[stock_filter & (trades['Amount'] < 0), 'Amount'].sum(),
-            eur=trades.loc[stock_filter & (trades['AmountEuro'] < 0), 'AmountEuro'].sum()
+            usd=trades.loc[stock_filter & (trades['Amount'] <= 0), 'Amount'].sum(),
+            eur=trades.loc[stock_filter & (trades['AmountEuro'] <= 0), 'AmountEuro'].sum()
         )
 
     def getStockFees(self, trades: pd.DataFrame) -> Money:
