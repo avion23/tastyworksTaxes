@@ -1,3 +1,9 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+
 from tastyworksTaxes.values import Values
 from tabulate import tabulate
 from unittest.mock import Mock, patch
@@ -6,12 +12,7 @@ from dataclasses import dataclass
 import pprint
 import logging
 import pandas as pd
-import os
-import sys
 import locale
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
