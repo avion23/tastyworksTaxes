@@ -84,9 +84,8 @@ class Transaction(pd.core.series.Series):
     def getYear(self) -> str:
         """returns the year as string from a csv entry
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[-1]).getYear()
-        2018
+        >>> Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").getYear()
+        2020
         """
         temp = self.loc["Date/Time"].year
         if temp < 2010:
@@ -100,9 +99,8 @@ class Transaction(pd.core.series.Series):
     def getDate(self) -> str:
         """returns 2018-04-02 date format
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[-1]).getDate())
-        2018-03-08
+        >>> print(Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").getDate())
+        2020-12-29
         """
         temp = self.loc["Date/Time"].date()
         return str(temp)
@@ -110,9 +108,8 @@ class Transaction(pd.core.series.Series):
     def getDateTime(self) -> str:
         """returns the exact date
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[-1]).getDateTime())
-        2018-03-08 23:00:00
+        >>> print(Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").getDateTime())
+        2020-12-29 15:36:00
         """
         temp = self.loc["Date/Time"]
         return str(temp)
@@ -124,14 +121,13 @@ class Transaction(pd.core.series.Series):
     def isOption(self) -> bool:
         """returns true if the transaction is an option
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[0]).isOption()
+        >>> Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").isOption()
         True
 
-        # is an assignment
-        >>> Transaction(h.iloc[13]).isOption()
+        # is an assignment  
+        >>> Transaction.fromString("12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...39").isOption()
         False
-        >>> Transaction(h.iloc[20]).isOption()
+        >>> Transaction.fromString("12/17/2020 8:57 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,27,P,3.2,0.14,-320,Bought 1 PLTR 01/15/21 Put 27.00 @ 3.20,Individual...39").isOption()
         True
         """
         valid_options = {"P", "C"}
@@ -141,11 +137,9 @@ class Transaction(pd.core.series.Series):
     def isStock(self) -> bool:
         """returns true if the symbol is a stock ticker
 
-
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[13]).isStock()
+        >>> Transaction.fromString("12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...39").isStock()  
         False
-        >>> Transaction(h.iloc[10]).isStock()
+        >>> Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").isStock()
         True
         """
         return not not self.getSymbol() and pd.isnull(self["Strike"])
