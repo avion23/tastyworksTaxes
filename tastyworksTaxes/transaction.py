@@ -208,20 +208,19 @@ class Transaction(pd.core.series.Series):
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
 
-        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction.fromString("12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...39").getSymbol()
         'NKLA'
-        >>> Transaction(h.iloc[11]).getQuantity()
+        >>> Transaction.fromString("12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...39").getQuantity()
         -1
-        >>> Transaction(h.iloc[10]).getQuantity()
+        >>> Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getQuantity()
         200
-        >>> Transaction(h.iloc[123]).getQuantity()
+        >>> Transaction.fromString("09/21/2020 3:34 PM,Trade,Buy to Close,KODK,Buy,Close,300,,,,10.070,0.240,-3021,Bought 300 KODK @ 10.07,Individual...39").getQuantity()
         300
-        >>> Transaction(h.iloc[270]).getQuantity()
+        >>> Transaction.fromString("08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,100,,,,160.73,0.432,16073,Sold 100 BABA @ 160.73,Individual...39").getQuantity()
         -100
-        >>> Transaction(h.iloc[330]).getQuantity()
+        >>> Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39").getQuantity()
         -200
-        >>> Transaction(h.iloc[329]).getQuantity()
+        >>> Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Assignment,LFIN,,,2,06/15/2018,30,C,,0.00,0,Removal of option due to assignment,Individual...39").getQuantity()
         2
 
         # expiration
@@ -240,9 +239,8 @@ class Transaction(pd.core.series.Series):
         >>> Transaction(h.iloc[45]).getQuantity()
         100
 
-
         # Stock merger
-        >>> h = History.fromFile("test/merged3.csv")
+        >>> h = History.fromFile("test/merged3.csv") 
         >>> Transaction(h.iloc[194]).getQuantity()
         6
         >>> Transaction(h.iloc[195]).getQuantity()
