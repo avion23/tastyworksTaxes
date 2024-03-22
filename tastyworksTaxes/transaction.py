@@ -146,7 +146,7 @@ class Transaction(pd.core.series.Series):
 
     def getSymbol(self) -> str:
         """returns the Ticker symbol
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction.fromString("12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...39").getSymbol()
         'PCG'
 
@@ -168,7 +168,7 @@ class Transaction(pd.core.series.Series):
     def getType(self) -> PositionType:
         """returns put, call or stock
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getType().name
         'stock'
         >>> Transaction(h.iloc[13]).getType().name
@@ -208,7 +208,7 @@ class Transaction(pd.core.series.Series):
     def getQuantity(self) -> int:
         """ returns the size of the transaction if applicable
 
-
+        >>> h = History.fromFile("test/merged.csv")
         >>> Transaction.fromString("12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...39").getSymbol()
         'NKLA'
         >>> Transaction(h.iloc[11]).getQuantity()
@@ -359,23 +359,29 @@ class Transaction(pd.core.series.Series):
         else:
             raise ValueError(f"Unexpected value in 'Open/Close': {open_close}")
 
+
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
 
         >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
+
+        >>> t =  Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39")
+        >>> t.setValue(Money(usd=45, eur=20))
+        >>> print(t.getValue())
+        {'eur': 20, 'usd': 45}
         """
         v = Money(row=self)
         return v
 
+
     def setValue(self, money: Money):
         """ sets the individual values for euro in AmountEuro and usd in Amount
-
 
         >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
 
-        >>> t =  Transaction(h.iloc[10])
+        >>> t =  Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39")
         >>> t.setValue(Money(usd=45, eur=20))
         >>> print(t.getValue())
         {'eur': 20, 'usd': 45}
@@ -383,9 +389,9 @@ class Transaction(pd.core.series.Series):
         self["Amount"] = money.usd
         self["AmountEuro"] = money.eur
 
+
     def getFees(self) -> Money:
         """ returns the fees of the transaction at that specific point of time
-
 
         >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getFees())
         {'eur': 0.13179571663920922, 'usd': 0.16}
@@ -395,9 +401,9 @@ class Transaction(pd.core.series.Series):
         v.eur = self["FeesEuro"]
         return v
 
+
     def setFees(self, money: Money):
         """ sets the individual values for euro in FeesEuro and usd 
-
 
         >>> t =  Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39")
         >>> t.setFees(Money(usd=45, eur=20))
@@ -407,23 +413,21 @@ class Transaction(pd.core.series.Series):
         self["Fees"] = money.usd
         self["FeesEuro"] = money.eur
 
+
     def getExpiry(self) -> datetime:
         """ returns the expiry date if it exists
 
-
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[0]).getExpiry())
+        >>> print(Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").getExpiry())
         2021-01-15 00:00:00
         """
-
         d = self.loc["Expiration Date"]
         return d
+
 
     def getStrike(self) -> float:
         """ returns the strike of the option
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[0]).getStrike())
+        >>> print(Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39").getStrike())
         26.0
         """
         strike = self.loc["Strike"]
