@@ -147,8 +147,7 @@ class Transaction(pd.core.series.Series):
     def getSymbol(self) -> str:
         """returns the Ticker symbol
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[13]).getSymbol()
+        >>> Transaction.fromString("12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...39").getSymbol()
         'PCG'
 
         # Receive Deliver
@@ -170,8 +169,7 @@ class Transaction(pd.core.series.Series):
         """returns put, call or stock
 
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[10]).getType().name
+        >>> Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getType().name
         'stock'
         >>> Transaction(h.iloc[13]).getType().name
         'call'
@@ -211,8 +209,7 @@ class Transaction(pd.core.series.Series):
         """ returns the size of the transaction if applicable
 
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> Transaction(h.iloc[11]).getSymbol()
+        >>> Transaction.fromString("12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...39").getSymbol()
         'NKLA'
         >>> Transaction(h.iloc[11]).getQuantity()
         -1
@@ -365,8 +362,7 @@ class Transaction(pd.core.series.Series):
     def getValue(self) -> Money:
         """ returns the value of the transaction at that specific point of time
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[10]).getValue())
+        >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
         """
         v = Money(row=self)
@@ -376,8 +372,7 @@ class Transaction(pd.core.series.Series):
         """ sets the individual values for euro in AmountEuro and usd in Amount
 
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[10]).getValue())
+        >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getValue())
         {'eur': -2240.527182866557, 'usd': -2720.0}
 
         >>> t =  Transaction(h.iloc[10])
@@ -392,8 +387,7 @@ class Transaction(pd.core.series.Series):
         """ returns the fees of the transaction at that specific point of time
 
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> print(Transaction(h.iloc[10]).getFees())
+        >>> print(Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39").getFees())
         {'eur': 0.13179571663920922, 'usd': 0.16}
         """
         v = Money()
@@ -405,8 +399,7 @@ class Transaction(pd.core.series.Series):
         """ sets the individual values for euro in FeesEuro and usd 
 
 
-        >>> h = History.fromFile("test/merged.csv")
-        >>> t =  Transaction(h.iloc[10])
+        >>> t =  Transaction.fromString("12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...39")
         >>> t.setFees(Money(usd=45, eur=20))
         >>> print(t.getFees())
         {'eur': 20, 'usd': 45}
