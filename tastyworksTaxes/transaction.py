@@ -291,15 +291,15 @@ class Transaction(pd.core.series.Series):
     def setQuantity(self, quantity: int):
         """Update the 'Quantity' field and related transaction codes based on the provided quantity
         signage is decided with the subcode
-
+        
         >>> h = History.fromFile("test/merged.csv")
-        >>> t = Transaction(h.iloc[270])
+        >>> t = Transaction.fromString("08/08/2019 7:59 PM,Trade,Sell to Close,BABA,Sell,Close,100,,,,160.73,0.432,16073,Sold 100 BABA @ 160.73,Individual...39")
         >>> t.getQuantity()
         -100
         >>> t.setQuantity(200)
         >>> t.getQuantity()
         200
-        >>> t = Transaction(h.iloc[0])
+        >>> t = Transaction.fromString("12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...39")
         >>> t.getQuantity()
         -1
         >>> t.setQuantity(200)
