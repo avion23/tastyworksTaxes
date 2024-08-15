@@ -40,17 +40,8 @@ def safe_map(x: Union[str, float], mapping: Dict[str, str]) -> str:
 
 
 def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
-    """Convert the new TastyTrade format to the legacy format."""
     legacy_df = pd.DataFrame()
 
-    # Correct column order
-    legacy_columns = [
-        'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
-        'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
-        'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference'
-    ]
-
-    # Mapping and conversion
     legacy_df['Date/Time'] = pd.to_datetime(df['Date'],
                                             utc=True).dt.strftime('%m/%d/%Y %I:%M %p')
     legacy_df['Transaction Code'] = df['Type']
@@ -61,14 +52,14 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df['Expiration Date'] = df['Expiration Date'].fillna('')
     legacy_df['Strike'] = df['Strike Price'].fillna('')
     legacy_df['Call/Put'] = df['Call or Put'].apply(
-        lambda x: x[0] if pd.notna(x) else '')
-    legacy_df['Price'] = df['Average Price'].abs().fillna('')
+        lambda x: x[0] if pd.notna(x) and len(x) > 0 else '')
+    legacy_df['Price'] = pd.to_numeric(
+        df['Average Price'], errors='coerce').abs().fillna('')
     legacy_df['Fees'] = df['Fees'].fillna(0)
     legacy_df['Amount'] = df['Value'].fillna(0)
     legacy_df['Description'] = df['Description'].fillna('')
     legacy_df['Account Reference'] = 'Individual...39'
 
-    # Handle Buy/Sell and Open/Close
     is_trade = df['Type'].isin(['Trade', 'Receive Deliver'])
     legacy_df['Buy/Sell'] = ''
     legacy_df.loc[is_trade, 'Buy/Sell'] = df.loc[is_trade,
@@ -77,43 +68,49 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df.loc[is_trade, 'Open/Close'] = df.loc[is_trade,
                                                    'Action'].apply(lambda x: 'Open' if 'OPEN' in str(x).upper() else 'Close')
 
-    # Set Quantity to 0 for non-trade transactions
     legacy_df.loc[~is_trade, 'Quantity'] = 0
-
-    # Reorder columns
-    legacy_df = legacy_df.reindex(columns=legacy_columns)
 
     return legacy_df
 
 
 def convert_to_new_format(df: pd.DataFrame) -> pd.DataFrame:
-    """Convert the legacy format to the new TastyTrade format."""
-    new_df = df.rename(columns=LEGACY_TO_NEW_MAPPING)
-    new_df = new_df.reindex(columns=list(
-        LEGACY_TO_NEW_MAPPING.values()) + ADDITIONAL_NEW_FIELDS, fill_value='')
+    new_df = pd.DataFrame()
 
-    new_df['Action'] = df.apply(
-        lambda row: f"{'BUY' if row['Buy/Sell'] == 'Buy' else 'SELL'}_TO_{'OPEN' if row['Open/Close'] == 'Open' else 'CLOSE'}",
-        axis=1
-    )
+    new_df['Date'] = pd.to_datetime(
+        df['Date/Time'], format='%m/%d/%Y %I:%M %p').dt.strftime('%Y-%m-%dT%H:%M:%S+0000')
+    new_df['Type'] = df['Transaction Code']
+    new_df['Sub Type'] = df['Transaction Subcode']
+    new_df['Symbol'] = df['Symbol']
     new_df['Instrument Type'] = df.apply(
         lambda row: 'Equity Option' if pd.notna(
             row['Expiration Date']) and pd.notna(row['Strike']) else 'Equity',
         axis=1
     )
+    new_df['Quantity'] = df['Quantity']
+    new_df['Value'] = df['Amount']
+    new_df['Expiration Date'] = df['Expiration Date']
+    new_df['Strike Price'] = df['Strike']
+    new_df['Call or Put'] = df['Call/Put'].apply(lambda x: 'CALL' if str(
+        x).upper() == 'C' else 'PUT' if str(x).upper() == 'P' else '')
     new_df['Root Symbol'] = df['Symbol'].str.split().str[0]
     new_df['Underlying Symbol'] = new_df['Root Symbol']
-    new_df['Multiplier'] = new_df['Instrument Type'].map(
-        {'Equity Option': 100, 'Equity': 1})
     new_df['Currency'] = 'USD'
-    new_df['Order #'] = ''
+    new_df['Average Price'] = df['Price']
+    new_df['Fees'] = df['Fees']
+    new_df['Description'] = df['Description']
 
-    new_df['Date'] = pd.to_datetime(
-        new_df['Date'], utc=True).dt.strftime('%Y-%m-%dT%H:%M:%S%z')
+    new_df['Action'] = df.apply(
+        lambda row: f"{'BUY' if row['Buy/Sell'] == 'Buy' else 'SELL'}_TO_{'OPEN' if row['Open/Close'] == 'Open' else 'CLOSE'}" if row['Buy/Sell'] else '',
+        axis=1
+    )
 
-    if 'Average Price' not in new_df.columns:
-        new_df['Average Price'] = pd.to_numeric(
-            df['Amount'], errors='coerce') / pd.to_numeric(df['Quantity'], errors='coerce')
+    # Reconstruct full option symbol for equity options
+    is_option = new_df['Instrument Type'] == 'Equity Option'
+    new_df.loc[is_option, 'Symbol'] = new_df.loc[is_option].apply(
+        lambda row: f"{row['Symbol']}  {row['Expiration Date'].replace('/', '')[-6:]}{row['Call or Put'][0]}{int(float(row['Strike Price'])):08d}" if pd.notna(
+            row['Expiration Date']) and pd.notna(row['Strike Price']) and row['Call or Put'] else row['Symbol'],
+        axis=1
+    )
 
     return new_df
 
