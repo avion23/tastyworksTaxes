@@ -25,24 +25,8 @@ NEW_TO_LEGACY_MAPPING: Dict[str, str] = {
     'Quantity': 'Quantity'
 }
 
-LEGACY_TO_NEW_MAPPING: Dict[str, str] = {
-    v: k for k, v in NEW_TO_LEGACY_MAPPING.items()}
-
 ADDITIONAL_LEGACY_FIELDS: List[str] = [
     'Buy/Sell', 'Open/Close', 'Account Reference']
-ADDITIONAL_NEW_FIELDS: List[str] = [
-    'Action', 'Instrument Type', 'Multiplier', 'Root Symbol', 'Underlying Symbol', 'Order #', 'Currency'
-]
-
-
-def safe_map(x: Union[str, float], mapping: Dict[str, str]) -> str:
-    """Safely map a value to a new value using the provided mapping."""
-    if isinstance(x, str):
-        return mapping.get(x.upper(), 'Unknown')
-    return 'Unknown'
-
-
-
 
 def format_number(value, decimals: int = 2, include_commas: bool = False) -> str:
     if pd.isna(value) or value == '':
@@ -55,14 +39,11 @@ def format_number(value, decimals: int = 2, include_commas: bool = False) -> str
     except:
         return str(value)
 
-
 def parse_date(date_str: str) -> datetime:
     return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
 
-
 def format_date(dt: datetime) -> str:
     return dt.strftime('%m/%d/%Y %-I:%M %p')
-
 
 def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df = pd.DataFrame()
@@ -90,84 +71,28 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df['Description'] = df['Description']
     legacy_df['Account Reference'] = 'Individual...39'
 
-    column_order = [
-        'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
-        'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
-        'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference'
-    ]
+    column_order = ['Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol', 'Buy/Sell', 'Open/Close',
+                    'Quantity', 'Expiration Date', 'Strike', 'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference']
 
     return legacy_df.reindex(columns=column_order)
 
-def convert_to_new_format(df: pd.DataFrame) -> pd.DataFrame:
-    new_df = pd.DataFrame()
 
-    new_df['Date'] = pd.to_datetime(
-        df['Date/Time'], format='%m/%d/%Y %I:%M %p').dt.strftime('%Y-%m-%dT%H:%M:%S+0000')
-    new_df['Type'] = df['Transaction Code']
-    new_df['Sub Type'] = df['Transaction Subcode']
-    new_df['Symbol'] = df['Symbol']
-    new_df['Action'] = df.apply(lambda row: f"{row['Buy/Sell'].upper()}_TO_{row['Open/Close'].upper()}" if pd.notna(
-        row['Buy/Sell']) and row['Buy/Sell'] != '' else '', axis=1)
-    new_df['Instrument Type'] = df.apply(lambda row: 'Equity Option' if pd.notna(
-        row['Expiration Date']) and pd.notna(row['Strike']) else 'Equity', axis=1)
-    new_df['Quantity'] = df['Quantity']
-    new_df['Value'] = df['Amount'].apply(
-        lambda x: float(x.replace(',', '')) if x else None)
-    new_df['Expiration Date'] = df['Expiration Date']
-    new_df['Strike Price'] = df['Strike']
-    new_df['Call or Put'] = df['Call/Put'].apply(lambda x: 'CALL' if pd.notna(
-        x) and x.upper() == 'C' else 'PUT' if pd.notna(x) and x.upper() == 'P' else '')
-    new_df['Root Symbol'] = df['Symbol']
-    new_df['Underlying Symbol'] = df['Symbol']
-    new_df['Currency'] = 'USD'
-    new_df['Average Price'] = df['Price'].apply(
-        lambda x: abs(float(x.replace(',', ''))) if x else None)
-    new_df['Fees'] = df['Fees'].apply(lambda x: abs(float(x)) if x else None)
-    new_df['Description'] = df['Description']
+def convert_csv(input_file: str, output_file: str) -> None:
+    logger.info(f"Reading input file: {input_file}")
+    df = pd.read_csv(input_file)
 
-    column_order = [
-        'Date', 'Type', 'Sub Type', 'Symbol', 'Action', 'Instrument Type',
-        'Quantity', 'Value', 'Expiration Date', 'Strike Price', 'Call or Put',
-        'Root Symbol', 'Underlying Symbol', 'Currency', 'Average Price',
-        'Fees', 'Description'
-    ]
+    logger.info("Converting to legacy format")
+    converted_df = convert_to_legacy_format(df)
 
-    return new_df.reindex(columns=column_order)
-
-
-def convert_csv(input_file: str, output_file: str, conversion_direction: str) -> None:
-    """Convert CSV file between new TastyTrade and legacy formats."""
-    try:
-        df = pd.read_csv(input_file)
-        logger.info(f"Successfully read input file: {input_file}")
-    except Exception as e:
-        logger.error(f"Error reading input file: {e}")
-        raise
-
-    if conversion_direction == 'to_legacy':
-        converted_df = convert_to_legacy_format(df)
-    elif conversion_direction == 'to_new':
-        converted_df = convert_to_new_format(df)
-    else:
-        raise ValueError(
-            "Invalid conversion direction. Use 'to_legacy' or 'to_new'.")
-
-    try:
-        converted_df.to_csv(output_file, index=False)
-        logger.info(f"Successfully wrote output file: {output_file}")
-    except Exception as e:
-        logger.error(f"Error writing output file: {e}")
-        raise
+    logger.info(f"Writing output file: {output_file}")
+    converted_df.to_csv(output_file, index=False)
 
 
 def main() -> None:
-    """Main function to handle command-line interface and initiate conversion."""
     parser = argparse.ArgumentParser(
-        description="Convert CSV between new TastyTrade and legacy formats.")
+        description="Convert new TastyTrade CSV to legacy format.")
     parser.add_argument('input_file', help="Path to the input CSV file")
     parser.add_argument('output_file', help="Path to the output CSV file")
-    parser.add_argument('direction', choices=[
-                        'to_legacy', 'to_new'], help="Conversion direction")
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="Enable verbose logging")
 
@@ -177,9 +102,8 @@ def main() -> None:
         logger.setLevel(logging.DEBUG)
 
     logger.debug("Starting CSV conversion process")
-    convert_csv(args.input_file, args.output_file, args.direction)
+    convert_csv(args.input_file, args.output_file)
     logger.debug("CSV conversion process completed")
-
 
 if __name__ == "__main__":
     main()
