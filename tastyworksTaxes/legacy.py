@@ -49,7 +49,8 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df['Symbol'] = df['Underlying Symbol'].fillna(
         df['Symbol'].str.split().str[0])
     legacy_df['Quantity'] = df['Quantity'].fillna(0).astype(int)
-    legacy_df['Expiration Date'] = df['Expiration Date'].fillna('')
+    legacy_df['Expiration Date'] = pd.to_datetime(
+        df['Expiration Date'], format='%m/%d/%y', errors='coerce').dt.strftime('%m/%d/%Y')
     legacy_df['Strike'] = df['Strike Price'].fillna('')
     legacy_df['Call/Put'] = df['Call or Put'].apply(
         lambda x: x[0] if pd.notna(x) and len(x) > 0 else '')
@@ -69,6 +70,14 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
                                                    'Action'].apply(lambda x: 'Open' if 'OPEN' in str(x).upper() else 'Close')
 
     legacy_df.loc[~is_trade, 'Quantity'] = 0
+
+    column_order = [
+        'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
+        'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
+        'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference'
+    ]
+
+    legacy_df = legacy_df.reindex(columns=column_order)
 
     return legacy_df
 
