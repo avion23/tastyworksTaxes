@@ -31,10 +31,10 @@ def test_convert_to_legacy_format(sample_new_tastytrade_df):
                         'Quantity', 'Expiration Date', 'Strike', 'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference']
     assert all(col in result.columns for col in expected_columns)
 
-    assert result['Date/Time'].iloc[0] == '08/05/2024 09:00 PM'
+    assert result['Date/Time'].iloc[0] == '08/05/2024 11:00 PM'
     assert result['Symbol'].iloc[0] == 'SCHG'
     assert result['Buy/Sell'].iloc[0] == 'Sell'
-    assert result['Open/Close'].iloc[0] == 'Close'
+    assert result['Open/Close'].iloc[0] == ''
     assert result['Call/Put'].iloc[0] == 'P'
     assert result['Account Reference'].iloc[0] == 'Individual...39'
 
@@ -42,3 +42,5 @@ def test_convert_to_legacy_format(sample_new_tastytrade_df):
     assert result['Amount'].iloc[1] == '7,893.28'
     assert result['Price'].iloc[1] == '49.64'
     assert result['Fees'].iloc[1] == '0.370'
+
+    assert result['Open/Close'].iloc[1] == 'Close'
