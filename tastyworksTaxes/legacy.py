@@ -1,3 +1,4 @@
+from datetime import datetime
 import argparse
 import logging
 from typing import Dict, List, Union
@@ -39,37 +40,52 @@ def safe_map(x: Union[str, float], mapping: Dict[str, str]) -> str:
     return 'Unknown'
 
 
+
 def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
+    def parse_date(date_str: str) -> datetime:
+        return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
+
+    def format_date(dt: datetime) -> str:
+        return dt.strftime('%m/%d/%Y %-I:%M %p')
+
+    def format_number(value, decimals: int = 2, include_commas: bool = False) -> str:
+        if pd.isna(value):
+            return ''
+        try:
+            num = float(value)
+            formatted = f'{abs(num):.{decimals}f}'
+            if include_commas:
+                parts = formatted.split('.')
+                parts[0] = f'{int(parts[0]):,}'
+                formatted = '.'.join(parts)
+            return f'-{formatted}' if num < 0 else formatted
+        except ValueError:
+            return str(value)
+
     legacy_df = pd.DataFrame()
 
-    legacy_df['Date/Time'] = pd.to_datetime(df['Date'],
-                                            utc=True).dt.strftime('%m/%d/%Y %I:%M %p')
+    legacy_df['Date/Time'] = df['Date'].apply(parse_date).apply(format_date)
     legacy_df['Transaction Code'] = df['Type']
     legacy_df['Transaction Subcode'] = df['Sub Type']
-    legacy_df['Symbol'] = df['Underlying Symbol'].fillna(
-        df['Symbol'].str.split().str[0])
+    legacy_df['Symbol'] = df['Symbol'].str.split().str[0]
+    legacy_df['Buy/Sell'] = df['Action'].str.split(
+        '_TO_').str[0].str.capitalize()
+    legacy_df['Open/Close'] = df['Action'].str.split(
+        '_TO_').str[1].str.capitalize()
     legacy_df['Quantity'] = df['Quantity'].fillna(0).astype(int)
     legacy_df['Expiration Date'] = pd.to_datetime(
         df['Expiration Date'], format='%m/%d/%y', errors='coerce').dt.strftime('%m/%d/%Y')
-    legacy_df['Strike'] = df['Strike Price'].fillna('')
-    legacy_df['Call/Put'] = df['Call or Put'].apply(
-        lambda x: x[0] if pd.notna(x) and len(x) > 0 else '')
-    legacy_df['Price'] = pd.to_numeric(
-        df['Average Price'], errors='coerce').abs().fillna('')
-    legacy_df['Fees'] = df['Fees'].fillna(0)
-    legacy_df['Amount'] = df['Value'].fillna(0)
-    legacy_df['Description'] = df['Description'].fillna('')
+    legacy_df['Strike'] = df['Strike Price'].apply(lambda x: format_number(
+        x, decimals=0) if pd.notna(x) and float(x).is_integer() else format_number(x, decimals=1))
+    legacy_df['Call/Put'] = df['Call or Put'].str[0]
+    legacy_df['Price'] = df.apply(lambda row: format_number(row['Average Price'], decimals=2, include_commas=True)
+                                  if row['Type'] == 'Trade' else format_number(row['Average Price'], decimals=2), axis=1)
+    legacy_df['Fees'] = df['Fees'].apply(lambda x: format_number(
+        float(x), decimals=3) if pd.notna(x) else '0.000')
+    legacy_df['Amount'] = df['Value'].apply(
+        lambda x: format_number(x, decimals=2, include_commas=True))
+    legacy_df['Description'] = df['Description']
     legacy_df['Account Reference'] = 'Individual...39'
-
-    is_trade = df['Type'].isin(['Trade', 'Receive Deliver'])
-    legacy_df['Buy/Sell'] = ''
-    legacy_df.loc[is_trade, 'Buy/Sell'] = df.loc[is_trade,
-                                                 'Action'].apply(lambda x: 'Buy' if 'BUY' in str(x).upper() else 'Sell')
-    legacy_df['Open/Close'] = ''
-    legacy_df.loc[is_trade, 'Open/Close'] = df.loc[is_trade,
-                                                   'Action'].apply(lambda x: 'Open' if 'OPEN' in str(x).upper() else 'Close')
-
-    legacy_df.loc[~is_trade, 'Quantity'] = 0
 
     column_order = [
         'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
@@ -77,9 +93,7 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
         'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference'
     ]
 
-    legacy_df = legacy_df.reindex(columns=column_order)
-
-    return legacy_df
+    return legacy_df.reindex(columns=column_order)
 
 
 def convert_to_new_format(df: pd.DataFrame) -> pd.DataFrame:
