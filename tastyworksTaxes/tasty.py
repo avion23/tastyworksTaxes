@@ -660,7 +660,7 @@ class Tasty:
         """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-                (trades['Amount'] > 0) & 
+            (trades['AmountEuro'] > 0) &
                 (trades['Quantity'] > 0) &
                 ~trades['worthlessExpiry']
             ]
@@ -681,7 +681,7 @@ class Tasty:
         """
         valid_trades = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
-            (trades['Amount'] <= 0) &
+            (trades['AmountEuro'] <= 0) &
             (trades['Quantity'] > 0) &
             ~trades['worthlessExpiry']
         ]
@@ -708,7 +708,7 @@ class Tasty:
         """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-                (trades['Amount'] <= 0) & 
+            (trades['AmountEuro'] <= 0) &
                 (trades['Quantity'] > 0) & 
                 trades['worthlessExpiry']
             ]
@@ -726,7 +726,7 @@ class Tasty:
         """
         valid_trades = trades[
             trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-            (trades['Amount'] > 0) & 
+            (trades['AmountEuro'] > 0) &
             (trades['Quantity'] < 0)
         ]
 
@@ -743,7 +743,7 @@ class Tasty:
         """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
-                (trades['Amount'] <= 0) & 
+            (trades['AmountEuro'] <= 0) &
                 (trades['Quantity'] <= 0)
             ]
 
@@ -833,7 +833,9 @@ class Tasty:
         >>> [t.getStockProfits(y) for y in years][3].usd != 0
         True
         """
-        stock_positive_filter = (trades['callPutStock'] == PositionType.stock) & (trades['Amount'] > 0)
+        stock_positive_filter = (trades['callPutStock'] == PositionType.stock) & (
+            trades['AmountEuro'] > 0)
+
         return Money(
             usd=trades.loc[stock_positive_filter, 'Amount'].sum(),
             eur=trades.loc[stock_positive_filter, 'AmountEuro'].sum()
