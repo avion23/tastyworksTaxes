@@ -19,6 +19,7 @@ class Values(object):
     fee: Money = Money()
     deposit: Money = Money()
     creditInterest: Money = Money()
+    securitiesLendingIncome: Money = Money()
     debitInterest: Money = Money()
     dividend: Money = Money()
     stockAndOptionsSum: Money = Money()

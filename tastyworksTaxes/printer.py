@@ -156,6 +156,8 @@ class GermanTaxReport(object):
     kap_kap_inv_verlustvortrag: float = 0
     cash_balance_usd: float = 0
     net_liquidating_value: float = 0
+    wertpapierleihe_einkommen: float = 0
+
 
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
@@ -223,6 +225,7 @@ class GermanTaxReport(object):
         ret += f"{'KAP+KAP-INV Verlustvortrag':<40}{self.kap_kap_inv_verlustvortrag: .2f}\n"
         ret += f"{'Cash Balance USD':<40}{self.cash_balance_usd: .2f}\n"
         ret += f"{'Net Liquidating Value':<40}{self.net_liquidating_value: .2f}\n"
+        ret += f"{'Wertpapierleihe Einkommen':<40}{self.wertpapierleihe_einkommen: .2f}\n"
         return ret
 
 
@@ -291,6 +294,8 @@ class EnglishTaxReport(object):
     kap_kap_inv_loss_carryforward: float = 0
     cash_balance_usd: float = 0
     net_liquidating_value: float = 0
+    securities_lending_income: float = 0
+
 
     def __str__(self) -> str:
         """ returns a tabulized string representation of the object
@@ -348,6 +353,8 @@ class EnglishTaxReport(object):
         ret += f"{'kap kap inv loss carryforward':<40}{self.kap_kap_inv_loss_carryforward: .2f}\n"
         ret += f"{'cash balance usd':<40}{self.cash_balance_usd: .2f}\n"
         ret += f"{'net liquidating value':<40}{self.net_liquidating_value: .2f}\n"
+        ret += f"{'securities lending income':<40}{self.securities_lending_income: .2f}\n"
+
         return ret
 
 
@@ -458,6 +465,7 @@ class Printer(object):
         report.aktiengewinne_z20 = self.values.stockProfits.eur
         report.aktienverluste_z23 = self.values.stockLoss.eur
         report.sonstige_verluste = self.values.otherLoss.eur
+        report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
         # for attr, value in self.values:
         #     print(f"{attr}: {value}")
         return report
@@ -474,7 +482,8 @@ class Printer(object):
             "Zinsen & Dividenden": {
                 "creditInterest": "Guthabenzinsen",
                 "debitInterest": "Sollzinsen",
-                "dividend": "Dividendenzahlungen"
+                "dividend": "Dividendenzahlungen",
+                "securitiesLendingIncome": "Wertpapierleihe-Einkommen"
             },
             "Aktien & Optionen": {
                 "stockAndOptionsSum": "Summe Aktien und Optionen",
