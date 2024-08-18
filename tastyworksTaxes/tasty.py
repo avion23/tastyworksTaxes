@@ -106,7 +106,11 @@ class Tasty:
         >>> str(t.year(2021).deposit)
         "{'eur': 3957.8528167261256, 'usd': 4770.4}"
 
-
+        # Test for Fully Paid Stock Lending Income
+        >>> lending_income_transaction = Transaction.fromString("08/13/2024 11:00 PM,Money Movement,Fully Paid Stock Lending Income,,,,0,,,,,0.00,0.20,FULLYPAID LENDING REBATE,Individual...39")
+        >>> t.moneyMovement(lending_income_transaction)
+        >>> str(t.year(2024).securitiesLendingIncome)
+        "{'eur': 0.18298261665141813, 'usd': 0.2}"
         """
         t = Transaction(row)
         m = Money(row=row)
@@ -134,6 +138,8 @@ class Tasty:
             self.year(t.getYear()).debitInterest += m
         elif t.loc["Transaction Subcode"] == "Dividend":
             self.year(t.getYear()).dividend += m
+        elif t.loc["Transaction Subcode"] == "Fully Paid Stock Lending Income":
+            self.year(t.getYear()).securitiesLendingIncome += m
         else:
             raise KeyError(
                 f"Found unknown money movement subcode: '{t.loc['Transaction Subcode']}'")
