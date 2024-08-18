@@ -70,15 +70,23 @@ class Tasty:
         >>> str(t.year(2018).fee)
         "{'eur': -35.02348938927588, 'usd': -43.24}"
 
-        # deposit
-        >>> t.moneyMovement(t.history.iloc[262])
-        >>> str(t.year(2019).deposit)
-        "{'eur': 0.009070294784580499, 'usd': 0.01}"
-
         # credit interest
-        >>> t.moneyMovement(t.history.iloc[8])
+        >>> credit_interest_transaction = Transaction.fromString("12/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.000,0.030,INTEREST ON CREDIT BALANCE,Individual...39")
+        >>> t.moneyMovement(credit_interest_transaction)
         >>> str(t.year(2020).creditInterest)
         "{'eur': 0.02461235540241201, 'usd': 0.03}"
+
+        # credit interest but through deposit
+        >>> deposit_transaction = Transaction.fromString("10/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.000,0.010,INTEREST ON CREDIT BALANCE,Individual...39")
+        >>> t.moneyMovement(deposit_transaction)
+        >>> str(t.year(2019).creditInterest)
+        "{'eur': 0.009070294784580499, 'usd': 0.01}"
+
+        # Test for general deposit
+        >>> deposit_transaction = Transaction.fromString("03/07/2024 8:03 PM,Money Movement,Deposit,,,,0,,,,,0.00,1000.00,DEPOSIT,Individual...39")
+        >>> t.moneyMovement(deposit_transaction)
+        >>> str(t.year(2024).deposit)
+        "{'eur': 917.8522257916476, 'usd': 1000.0}"
 
         # debit interest
         >>> t = Tasty("test/merged2.csv")
@@ -115,8 +123,11 @@ class Tasty:
             self.year(t.getYear()).balanceAdjustment += m
         elif t.loc["Transaction Subcode"] == "Fee":
             self.year(t.getYear()).fee += m
-        elif t.loc["Transaction Subcode"] == "Deposit" and t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
-            self.year(t.getYear()).deposit += m
+        elif t.loc["Transaction Subcode"] == "Deposit":
+            if t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
+                self.year(t.getYear()).creditInterest += m
+            else:
+                self.year(t.getYear()).deposit += m
         elif t.loc["Transaction Subcode"] == "Credit Interest":
             self.year(t.getYear()).creditInterest += m
         elif t.loc["Transaction Subcode"] == "Debit Interest":
@@ -124,8 +135,8 @@ class Tasty:
         elif t.loc["Transaction Subcode"] == "Dividend":
             self.year(t.getYear()).dividend += m
         else:
-            raise KeyError("Found unknown money movement subcode: '{}'".format(
-                t.loc["Transaction Subcode"]))
+            raise KeyError(
+                f"Found unknown money movement subcode: '{t.loc['Transaction Subcode']}'")
 
     def receiveDelivery(self, row):
         """ sub function to process the column namend "Receive Deliver" in the csv file
