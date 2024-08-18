@@ -1,10 +1,10 @@
-from decimal import Decimal, ROUND_HALF_UP
-from zoneinfo import ZoneInfo
 from datetime import datetime
 import argparse
 import logging
-from typing import Dict, List, Union
+from typing import Dict, List
 import pandas as pd
+
+# tastyworks only exports 1000 rows at a time.
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -28,54 +28,112 @@ NEW_TO_LEGACY_MAPPING: Dict[str, str] = {
 ADDITIONAL_LEGACY_FIELDS: List[str] = [
     'Buy/Sell', 'Open/Close', 'Account Reference']
 
-def format_number(value, decimals: int = 2, include_commas: bool = False) -> str:
-    if pd.isna(value) or value == '':
+
+def parse_date(date_str):
+    if isinstance(date_str, pd.Series):
+        return date_str.apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %-I:%M %p'))
+    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %-I:%M %p')
+
+
+def extract_symbol(symbol) -> str:
+    if pd.isna(symbol) or symbol == '':
+        return ''
+    parts = str(symbol).split()
+    return parts[0] if parts else ''
+
+
+def determine_buy_sell(sub_type: str) -> str:
+    if 'Buy' in sub_type:
+        return 'Buy'
+    elif 'Sell' in sub_type:
+        return 'Sell'
+    return ''
+
+
+def determine_open_close(action: str) -> str:
+    return action.split('_TO_')[-1].capitalize() if pd.notna(action) else ''
+
+
+def format_strike_price(strike) -> str:
+    if pd.isna(strike) or strike == '':
         return ''
     try:
-        num = Decimal(str(value)).quantize(
-            Decimal(f'0.{"0" * decimals}'), rounding=ROUND_HALF_UP)
-        formatted = f'{abs(num):,}' if include_commas else f'{abs(num)}'
-        return f'-{formatted}' if num < 0 else formatted
-    except:
-        return str(value)
+        return f"{float(strike):.0f}"
+    except ValueError:
+        return str(strike)
 
-def parse_date(date_str: str) -> datetime:
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
 
-def format_date(dt: datetime) -> str:
-    return dt.strftime('%m/%d/%Y %-I:%M %p')
+def is_option(symbol: str) -> bool:
+    return len(str(symbol).split()) > 1
+
+
+def format_price(price, is_option: bool) -> str:
+    if pd.isna(price) or price == '--' or price == 0:
+        return ''
+    price_float = abs(float(str(price).replace(',', '')))
+    if is_option:
+        return f"{price_float / 100:.2f}"
+    return f"{price_float}".rstrip('0').rstrip('.')
+
+
+def format_fees(fees: float) -> str:
+    if pd.isna(fees) or fees == '--' or fees == 0:
+        return '0.00'
+    fee_float = abs(float(str(fees).replace(',', '')))
+    return f"{fee_float:.3f}"
+
+
+def format_amount(amount) -> str:
+    if pd.isna(amount):
+        return ''
+    amount_float = float(str(amount).replace(',', ''))
+    return f"{amount_float:.0f}" if amount_float.is_integer() else f"{amount_float:.2f}"
 
 def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df = pd.DataFrame()
 
-    legacy_df['Date/Time'] = df['Date'].apply(parse_date).apply(format_date)
+    legacy_df['Date/Time'] = df['Date'].apply(parse_date)
     legacy_df['Transaction Code'] = df['Type']
     legacy_df['Transaction Subcode'] = df['Sub Type']
-    legacy_df['Symbol'] = df['Symbol'].str.split().str[0]
-    legacy_df['Buy/Sell'] = df['Action'].str.split(
-        '_TO_').str[0].str.capitalize()
-    legacy_df['Open/Close'] = df['Action'].str.split(
-        '_TO_').str[1].str.capitalize()
-    legacy_df['Quantity'] = df['Quantity'].fillna(0).astype(int)
+    legacy_df['Symbol'] = df['Symbol'].apply(
+        extract_symbol) if 'Symbol' in df else ''
+    legacy_df['Buy/Sell'] = df['Sub Type'].apply(determine_buy_sell)
+    legacy_df['Open/Close'] = df['Action'].apply(
+        determine_open_close) if 'Action' in df else ''
+    legacy_df['Quantity'] = df['Quantity'] if 'Quantity' in df else 0
     legacy_df['Expiration Date'] = pd.to_datetime(
-        df['Expiration Date'], format='%m/%d/%y', errors='coerce').dt.strftime('%m/%d/%Y')
-    legacy_df['Strike'] = df['Strike Price'].apply(lambda x: format_number(x, decimals=0) if pd.notna(
-        x) and x != '' and float(x).is_integer() else format_number(x, decimals=1))
-    legacy_df['Call/Put'] = df['Call or Put'].str[0]
-    legacy_df['Price'] = df.apply(lambda row: format_number(row['Average Price'], decimals=2, include_commas=True)
-                                  if row['Type'] == 'Trade' else format_number(row['Average Price'], decimals=2), axis=1)
-    legacy_df['Fees'] = df['Fees'].apply(
-        lambda x: format_number(-float(x), decimals=3) if pd.notna(x) and x != '' else '0.000')
-    legacy_df['Amount'] = df['Value'].apply(
-        lambda x: format_number(x, decimals=2, include_commas=True))
+        df['Expiration Date'], format='%m/%d/%y', errors='coerce').dt.strftime('%m/%d/%Y') if 'Expiration Date' in df else ''
+    legacy_df['Strike'] = df['Strike Price'].apply(
+        format_strike_price) if 'Strike Price' in df else ''
+    legacy_df['Call/Put'] = df['Call or Put'].str[0] if 'Call or Put' in df else ''
+
+    # Handle 'Price' calculation more gracefully
+    if 'Average Price' in df.columns:
+        legacy_df['Price'] = df.apply(
+            lambda row: format_price(
+                row['Average Price'], is_option(row.get('Symbol', '')))
+            if row['Type'] != 'Receive Deliver' else '',
+            axis=1
+        )
+    else:
+        legacy_df['Price'] = ''
+
+    legacy_df['Fees'] = df['Fees'].apply(format_fees)
+    legacy_df['Amount'] = df['Value'].apply(format_amount)
     legacy_df['Description'] = df['Description']
     legacy_df['Account Reference'] = 'Individual...39'
+
+    # Handle special case for "Receive Deliver, Sell to Open" transactions
+    mask = (legacy_df['Transaction Code'] == 'Receive Deliver') & (
+        legacy_df['Transaction Subcode'] == 'Sell to Open')
+    if 'Average Price' in df.columns:
+        legacy_df.loc[mask, 'Price'] = df.loc[mask, 'Average Price'].apply(
+            lambda x: format_price(x, False) if pd.notnull(x) else '')
 
     column_order = ['Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol', 'Buy/Sell', 'Open/Close',
                     'Quantity', 'Expiration Date', 'Strike', 'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference']
 
     return legacy_df.reindex(columns=column_order)
-
 
 def convert_csv(input_file: str, output_file: str) -> None:
     logger.info(f"Reading input file: {input_file}")
@@ -87,8 +145,9 @@ def convert_csv(input_file: str, output_file: str) -> None:
     logger.info(f"Writing output file: {output_file}")
     converted_df.to_csv(output_file, index=False)
 
-
 def main() -> None:
+    logger.warning(
+        "There is an factor of 8 in the fees. The newly exported data from Tastyworks has this offset compared to my old legacy format data.")
     parser = argparse.ArgumentParser(
         description="Convert new TastyTrade CSV to legacy format.")
     parser.add_argument('input_file', help="Path to the input CSV file")

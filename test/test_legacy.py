@@ -3,44 +3,97 @@ import pandas as pd
 from tastyworksTaxes.legacy import convert_to_legacy_format
 
 @pytest.fixture
-def sample_new_tastytrade_df():
-    return pd.DataFrame({
-        'Date': ['2024-08-05T23:00:00+0200', '2024-07-19T20:22:12+0200', '2024-07-16T23:00:00+0200'],
-        'Type': ['Receive Deliver', 'Trade', 'Money Movement'],
-        'Sub Type': ['Assignment', 'Sell to Close', 'Credit Interest'],
-        'Action': ['', 'SELL_TO_CLOSE', ''],
-        'Symbol': ['SCHG  240816P00103000', 'PULS', ''],
-        'Instrument Type': ['Equity Option', 'Equity', ''],
-        'Quantity': [1, 159, 0],
-        'Value': [0.00, 7893.28, 0.02],
-        'Expiration Date': ['8/16/24', '', ''],
-        'Strike Price': [103, '', ''],
-        'Call or Put': ['PUT', '', ''],
-        'Root Symbol': ['SCHG', 'PULS', ''],
-        'Underlying Symbol': ['SCHG', 'PULS', ''],
-        'Currency': ['USD', 'USD', 'USD'],
-        'Average Price': [0.00, 49.64, ''],
-        'Fees': [0.00, -0.37, 0.00],
-        'Description': ['Removal of option due to assignment', 'Sold 159 PULS @ 49.64', 'INTEREST ON CREDIT BALANCE']
-    })
+def create_input_df():
+    def _create_input_df(data):
+        return pd.DataFrame([data])
+    return _create_input_df
 
-def test_convert_to_legacy_format(sample_new_tastytrade_df):
-    result = convert_to_legacy_format(sample_new_tastytrade_df)
 
-    expected_columns = ['Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol', 'Buy/Sell', 'Open/Close',
-                        'Quantity', 'Expiration Date', 'Strike', 'Call/Put', 'Price', 'Fees', 'Amount', 'Description', 'Account Reference']
-    assert all(col in result.columns for col in expected_columns)
+def test_option_assignment(create_input_df):
+    input_data = {
+        'Date': '2018-03-19T22:00:00+0100',
+        'Type': 'Receive Deliver',
+        'Sub Type': 'Assignment',
+        'Action': '',
+        'Symbol': 'LFIN  180615C00030000',
+        'Quantity': 2,
+        'Value': '0.00',
+        'Average Price': 0.00,
+        'Fees': 0.00,
+        'Expiration Date': '6/15/18',
+        'Strike Price': 30,
+        'Call or Put': 'CALL',
+        'Description': 'Removal of option due to assignment'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
 
-    assert result['Date/Time'].iloc[0] == '08/05/2024 11:00 PM'
-    assert result['Symbol'].iloc[0] == 'SCHG'
-    assert result['Buy/Sell'].iloc[0] == 'Sell'
+    assert result['Transaction Code'].iloc[0] == 'Receive Deliver'
+    assert result['Transaction Subcode'].iloc[0] == 'Assignment'
+    assert result['Symbol'].iloc[0] == 'LFIN'
+    assert result['Buy/Sell'].iloc[0] == ''
     assert result['Open/Close'].iloc[0] == ''
-    assert result['Call/Put'].iloc[0] == 'P'
-    assert result['Account Reference'].iloc[0] == 'Individual...39'
+    assert result['Quantity'].iloc[0] == 2
+    assert result['Expiration Date'].iloc[0] == '06/15/2018'
+    assert result['Strike'].iloc[0] == '30'
+    assert result['Call/Put'].iloc[0] == 'C'
+    assert result['Price'].iloc[0] == ''
+    assert float(result['Fees'].iloc[0]) == 0.00
+    assert float(result['Amount'].iloc[0]) == 0.00
 
-    assert result['Quantity'].iloc[1] == 159
-    assert result['Amount'].iloc[1] == '7,893.28'
-    assert result['Price'].iloc[1] == '49.64'
-    assert result['Fees'].iloc[1] == '0.370'
 
-    assert result['Open/Close'].iloc[1] == 'Close'
+def test_equity_sell_to_open(create_input_df):
+    input_data = {
+        'Date': '2018-03-19T22:00:00+0100',
+        'Type': 'Receive Deliver',
+        'Sub Type': 'Sell to Open',
+        'Action': 'SELL_TO_OPEN',
+        'Symbol': 'LFIN',
+        'Quantity': 200,
+        'Value': '6,000.00',
+        'Average Price': 30.00,
+        'Fees': -5.16,
+        'Description': 'Sell to Open 200 LFIN @ 30.00'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Transaction Code'].iloc[0] == 'Receive Deliver'
+    assert result['Transaction Subcode'].iloc[0] == 'Sell to Open'
+    assert result['Symbol'].iloc[0] == 'LFIN'
+    assert result['Buy/Sell'].iloc[0] == 'Sell'
+    assert result['Open/Close'].iloc[0] == 'Open'
+    assert result['Quantity'].iloc[0] == 200
+    assert result['Price'].iloc[0] == '30'
+    assert float(result['Fees'].iloc[0]) == 5.16
+    assert float(result['Amount'].iloc[0]) == 6000.00
+    # Expect empty string for equity
+    assert result['Expiration Date'].iloc[0] == ''
+    assert result['Strike'].iloc[0] == ''  # Expect empty string for equity
+    assert result['Call/Put'].iloc[0] == ''  # Expect empty string for equity
+
+
+def test_money_movement(create_input_df):
+    input_data = {
+        'Date': '2018-05-18T23:00:00+0200',
+        'Type': 'Money Movement',
+        'Sub Type': 'Transfer',
+        'Value': '1,149.50',
+        'Fees': 0.00,
+        'Description': 'Wire Funds Received'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Transaction Code'].iloc[0] == 'Money Movement'
+    assert result['Transaction Subcode'].iloc[0] == 'Transfer'
+    assert result['Symbol'].iloc[0] == ''
+    assert result['Buy/Sell'].iloc[0] == ''
+    assert result['Open/Close'].iloc[0] == ''
+    assert result['Quantity'].iloc[0] == 0
+    assert result['Price'].iloc[0] == ''
+    assert float(result['Fees'].iloc[0]) == 0.00
+    assert float(result['Amount'].iloc[0]) == 1149.50
+    assert result['Expiration Date'].iloc[0] == ''
+    assert result['Strike'].iloc[0] == ''
+    assert result['Call/Put'].iloc[0] == ''
