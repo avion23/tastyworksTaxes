@@ -31,8 +31,8 @@ ADDITIONAL_LEGACY_FIELDS: List[str] = [
 
 def parse_date(date_str):
     if isinstance(date_str, pd.Series):
-        return date_str.apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %-I:%M %p'))
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %-I:%M %p')
+        return date_str.apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %I:%M %p'))
+    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z').strftime('%m/%d/%Y %I:%M %p')
 
 
 def extract_symbol(symbol) -> str:
