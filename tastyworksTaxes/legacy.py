@@ -109,12 +109,11 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
         format_strike_price) if 'Strike Price' in df else ''
     legacy_df['Call/Put'] = df['Call or Put'].str[0] if 'Call or Put' in df else ''
 
-    # Handle 'Price' calculation more gracefully
     if 'Average Price' in df.columns:
         legacy_df['Price'] = df.apply(
             lambda row: format_price(
                 row['Average Price'], is_option(row.get('Symbol', '')))
-            if row['Type'] != 'Receive Deliver' else '',
+            if pd.notnull(row['Average Price']) and row['Average Price'] != 0 else '',
             axis=1
         )
     else:
