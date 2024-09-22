@@ -70,10 +70,11 @@ def is_option(symbol: str) -> bool:
 def format_price(price, is_option: bool) -> str:
     if pd.isna(price) or price == '--' or price == 0:
         return ''
-    price_float = abs(float(str(price).replace(',', '')))
+    price_str = str(price).replace(',', '')
     if is_option:
-        return f"{price_float / 100:.2f}"
-    return f"{price_float}".rstrip('0').rstrip('.')
+        option_price = float(price_str) / 100
+        return f"{option_price:.5f}".rstrip('0').rstrip('.')
+    return price_str.rstrip('0').rstrip('.')
 
 
 def format_fees(fees: float) -> str:
@@ -88,6 +89,7 @@ def format_amount(amount) -> str:
         return ''
     amount_float = float(str(amount).replace(',', ''))
     return f"{amount_float:.0f}" if amount_float.is_integer() else f"{amount_float:.2f}"
+
 
 def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df = pd.DataFrame()
@@ -135,6 +137,7 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
 
     return legacy_df.reindex(columns=column_order)
 
+
 def convert_csv(input_file: str, output_file: str) -> None:
     logger.info(f"Reading input file: {input_file}")
     df = pd.read_csv(input_file)
@@ -144,6 +147,7 @@ def convert_csv(input_file: str, output_file: str) -> None:
 
     logger.info(f"Writing output file: {output_file}")
     converted_df.to_csv(output_file, index=False)
+
 
 def main() -> None:
     logger.warning(
@@ -163,6 +167,7 @@ def main() -> None:
     logger.debug("Starting CSV conversion process")
     convert_csv(args.input_file, args.output_file)
     logger.debug("CSV conversion process completed")
+
 
 if __name__ == "__main__":
     main()
