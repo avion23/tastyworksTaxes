@@ -119,3 +119,24 @@ def test_option_sell_to_open(create_input_df):
     result = convert_to_legacy_format(input_df)
 
     assert result['Price'].iloc[0] == '1.71875'
+
+
+def test_receive_deliver_with_price(create_input_df):
+    input_data = {
+        'Date': '2021-07-30T23:00:00+0200',
+        'Type': 'Receive Deliver',
+        'Sub Type': 'Sell to Close',
+        'Action': 'SELL_TO_CLOSE',
+        'Symbol': 'X',
+        'Quantity': 1000,
+        'Value': '25000.00',
+        'Average Price': 25.00,
+        'Fees': -5.25,
+        'Description': 'Sell to Close 1000 X @ 25.00'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Price'].iloc[0] == '25'
+    assert result['Fees'].iloc[0] == '5.250'
+    assert result['Amount'].iloc[0] == '25000'
