@@ -97,3 +97,25 @@ def test_money_movement(create_input_df):
     assert result['Expiration Date'].iloc[0] == ''
     assert result['Strike'].iloc[0] == ''
     assert result['Call/Put'].iloc[0] == ''
+
+
+def test_option_sell_to_open(create_input_df):
+    input_data = {
+        'Date': '2024-03-07T18:03:58+0100',
+        'Type': 'Trade',
+        'Sub Type': 'Sell to Open',
+        'Action': 'SELL_TO_OPEN',
+        'Symbol': './ZBM4 OZBK4 240426P113',
+        'Quantity': 2,
+        'Value': '343.75',
+        'Average Price': 171.875,
+        'Fees': -2.34,
+        'Expiration Date': '4/26/24',
+        'Strike Price': 113,
+        'Call or Put': 'PUT',
+        'Description': 'Sold 2 /ZBM4 OZBK4 04/26/24 Put 113\'00 @ 0.171875'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Price'].iloc[0] == '1.71875'
