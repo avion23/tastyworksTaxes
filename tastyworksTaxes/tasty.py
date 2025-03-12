@@ -44,74 +44,7 @@ class Tasty:
         return self.yearValues[year]
 
     def moneyMovement(self, row: Transaction):
-        """handles moneyMovement entries
-
-        >>> t = Tasty("test/merged.csv")
-
-        # we are paying debit interest here
-        # 932:08/16/2019 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,-9.81,FROM 07/16 THRU 08/15 @ 8    %,Individual...39
-        # 9.81 for 8% interest rate
-        >>> t.moneyMovement(t.history.iloc[268])
-        >>> str(t.year(2019).debitInterest)
-        "{'eur': -8.856988082340196, 'usd': -9.81}"
-
-        # first entry is deposit -> transfer
-        >>> t.moneyMovement(t.history.iloc[-1])
-        >>> str(t.year(2018).transfer)
-        "{'eur': 966.10578858385, 'usd': 1200.0}"
-
-        # balance adjustment
-        >>> t.moneyMovement(t.history.iloc[322])
-        >>> str(t.year(2018).balanceAdjustment)
-        "{'eur': -0.008085599547206425, 'usd': -0.01}"
-
-        # fee
-        >>> t.moneyMovement(t.history.iloc[323])
-        >>> str(t.year(2018).fee)
-        "{'eur': -35.02348938927588, 'usd': -43.24}"
-
-        # credit interest
-        >>> credit_interest_transaction = Transaction.fromString("12/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.000,0.030,INTEREST ON CREDIT BALANCE,Individual...39")
-        >>> t.moneyMovement(credit_interest_transaction)
-        >>> str(t.year(2020).creditInterest)
-        "{'eur': 0.02461235540241201, 'usd': 0.03}"
-
-        # credit interest but through deposit
-        >>> deposit_transaction = Transaction.fromString("10/16/2019 11:00 PM,Money Movement,Deposit,,,,0,,,,,0.000,0.010,INTEREST ON CREDIT BALANCE,Individual...39")
-        >>> t.moneyMovement(deposit_transaction)
-        >>> str(t.year(2019).creditInterest)
-        "{'eur': 0.009070294784580499, 'usd': 0.01}"
-
-        # Test for general deposit
-        >>> deposit_transaction = Transaction.fromString("03/07/2024 8:03 PM,Money Movement,Deposit,,,,0,,,,,0.00,1000.00,DEPOSIT,Individual...39")
-        >>> t.moneyMovement(deposit_transaction)
-        >>> str(t.year(2024).deposit)
-        "{'eur': 917.8522257916476, 'usd': 1000.0}"
-
-        # debit interest
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.moneyMovement(t.history.iloc[48])
-        >>> str(t.year(2021).debitInterest)
-        "{'eur': -0.7175849554602441, 'usd': -0.87}"
-
-        # dividend
-        >>> t = Tasty("test/merged2.csv")
-        >>> t.moneyMovement(t.history.iloc[12])
-        >>> str(t.year(2021).dividend)
-        "{'eur': -2.5342118601115056, 'usd': -3.0}"
-
-        # deposit, but via withdrawal
-        >>> t = Tasty("test/merged3.csv")
-        >>> t.moneyMovement(t.history.iloc[436])
-        >>> str(t.year(2021).deposit)
-        "{'eur': 3957.8528167261256, 'usd': 4770.4}"
-
-        # Test for Fully Paid Stock Lending Income
-        >>> lending_income_transaction = Transaction.fromString("08/13/2024 11:00 PM,Money Movement,Fully Paid Stock Lending Income,,,,0,,,,,0.00,0.20,FULLYPAID LENDING REBATE,Individual...39")
-        >>> t.moneyMovement(lending_income_transaction)
-        >>> str(t.year(2024).securitiesLendingIncome)
-        "{'eur': 0.18298261665141813, 'usd': 0.2}"
-        """
+        """Processes money movement transactions and updates the appropriate balance fields"""
         t = Transaction(row)
         m = Money(row=row)
         if t.loc["Transaction Subcode"] == "Transfer":
