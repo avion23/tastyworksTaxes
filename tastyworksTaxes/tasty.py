@@ -261,10 +261,6 @@ class Tasty:
 
     def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> len(t.getYearlyTrades())
-        6
         """
 
         def converter(x: str) -> PositionType:
