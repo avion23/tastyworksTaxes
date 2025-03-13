@@ -262,7 +262,6 @@ class Tasty:
     def getYearlyTrades(self) -> List[pd.DataFrame]:
         """ returns the yearly trades which have been saved so far as pandas dataframe
         """
-
         def converter(x: str) -> PositionType:
             if isinstance(x, PositionType):
                 return x
