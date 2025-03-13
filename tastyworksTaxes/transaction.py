@@ -69,7 +69,7 @@ class Transaction(pd.core.series.Series):
         df['Amount'] = df['Amount'].astype(float)
 
         addEuroConversion(df)
-        return Transaction(df.iloc[0])
+        return Transaction(df.squeeze())
 
     def getYear(self) -> str:
         temp = self.loc["Date/Time"].year

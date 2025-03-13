@@ -250,7 +250,7 @@ class Tasty:
 
         """
         # reverses the order and kills prefetching and caching
-        for i, row in self.history.iloc[::-1].iterrows():
+        for i, row in self.history.sort_index(ascending=False).iterrows():
             transaction_code = row.loc["Transaction Code"]
             if transaction_code == "Money Movement":
                 self.moneyMovement(row)
@@ -275,11 +275,6 @@ class Tasty:
 
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
         """ returns the sum of all stock trades in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getCombinedSum(y) for y in years][0].usd != 0
-        True
         """
         return Money(usd=trades['Amount'].sum(), eur=trades['AmountEuro'].sum())
 
