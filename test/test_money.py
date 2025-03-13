@@ -43,18 +43,21 @@ def test_money_fromUsdToEur():
 
 # Tasty money_movement tests
 def test_debit_interest():
-    t = Tasty("test/merged2.csv")
-    t.moneyMovement(t.history.iloc[48])
+    t = Tasty()
+    debit_interest_tx = Transaction.fromString("06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...39")
+    t.moneyMovement(debit_interest_tx)
     assert clean_numpy_str(str(t.year(2021).debitInterest)) == "{'eur': -0.7175849554602441, 'usd': -0.87}"
 
 def test_dividend():
-    t = Tasty("test/merged2.csv")
-    t.moneyMovement(t.history.iloc[12])
+    t = Tasty()
+    dividend_tx = Transaction.fromString("07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,-3,UWM HOLDINGS CORPORATION,Individual...39")
+    t.moneyMovement(dividend_tx)
     assert clean_numpy_str(str(t.year(2021).dividend)) == "{'eur': -2.5342118601115056, 'usd': -3.0}"
 
 def test_deposit():
-    t = Tasty("test/merged3.csv")
-    t.moneyMovement(t.history.iloc[436])
+    t = Tasty()
+    deposit_tx = Transaction.fromString("03/01/2021 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4770.4,Wire Funds Received,Individual...39")
+    t.moneyMovement(deposit_tx)
     assert clean_numpy_str(str(t.year(2021).deposit)) == "{'eur': 3957.8528167261256, 'usd': 4770.4}"
 
 def test_securities_lending_income():

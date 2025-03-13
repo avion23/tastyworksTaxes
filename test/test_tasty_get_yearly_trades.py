@@ -88,9 +88,9 @@ class TestTastyGetYearlyTrades:
         
         assert len(yearly_trades) == 3
         
-        year_2018_trades = next((trades for trades in yearly_trades if trades['year'].iloc[0] == 2018), None)
-        year_2019_trades = next((trades for trades in yearly_trades if trades['year'].iloc[0] == 2019), None)
-        year_2021_trades = next((trades for trades in yearly_trades if trades['year'].iloc[0] == 2021), None)
+        year_2018_trades = [df for df in yearly_trades if df['year'].values[0] == 2018][0]
+        year_2019_trades = [df for df in yearly_trades if df['year'].values[0] == 2019][0]
+        year_2021_trades = [df for df in yearly_trades if df['year'].values[0] == 2021][0]
         
         assert year_2018_trades is not None
         assert year_2019_trades is not None
@@ -100,6 +100,6 @@ class TestTastyGetYearlyTrades:
         assert len(year_2019_trades) == 1
         assert len(year_2021_trades) == 1
         
-        assert year_2018_trades.iloc[0]['Symbol'] == 'LFIN'
-        assert year_2019_trades.iloc[0]['Symbol'] == 'TSLA'
-        assert year_2021_trades.iloc[0]['Symbol'] == 'BB'
+        assert year_2018_trades['Symbol'].values[0] == 'LFIN'
+        assert year_2019_trades['Symbol'].values[0] == 'TSLA'
+        assert year_2021_trades['Symbol'].values[0] == 'BB'

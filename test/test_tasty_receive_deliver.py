@@ -9,7 +9,7 @@ class TestTastyReceiveDeliver:
     def test_assigned_stock(self):
         t = Tasty()
         t.addPosition(Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39"))
-        assert t.positions.iloc[0]["Symbol"] == 'LFIN'
+        assert Transaction(t.positions.squeeze()).getSymbol() == 'LFIN'
         
         closing = Transaction.fromString("03/19/2018 10:00 PM,Receive Deliver,Sell to Open,LFIN,Sell,Open,200,,,,30,5.164,6000,Sell to Open 200 LFIN @ 30.00,Individual...39")
         closing["Transaction Subcode"] = "Buy to Close"
