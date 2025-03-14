@@ -45,77 +45,106 @@ class Tasty:
     def moneyMovement(self, row: Transaction):
         t = Transaction(row)
         m = Money(row=row)
-        if t.loc["Transaction Subcode"] == "Transfer":
+        
+        def handle_transfer(t, m):
             self.year(t.getYear()).transfer += m
-        elif t.loc["Transaction Subcode"] == "Withdrawal":
+            
+        def handle_withdrawal(t, m):
             if "Wire Funds Received" in t.loc["Description"]:
                 self.year(t.getYear()).deposit += m
             elif "FROM" in t.loc["Description"] and "THRU" in t.loc["Description"] and t.loc["Description"].index("FROM") < t.loc["Description"].index("THRU"):
                 self.year(t.getYear()).debitInterest += m
             else:
                 self.year(t.getYear()).withdrawal += m
-        elif t.loc["Transaction Subcode"] == "Balance Adjustment":
+                
+        def handle_balance_adjustment(t, m):
             self.year(t.getYear()).balanceAdjustment += m
-        elif t.loc["Transaction Subcode"] == "Fee":
+            
+        def handle_fee(t, m):
             self.year(t.getYear()).fee += m
-        elif t.loc["Transaction Subcode"] == "Deposit":
+            
+        def handle_deposit(t, m):
             if t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
                 self.year(t.getYear()).creditInterest += m
             else:
                 self.year(t.getYear()).deposit += m
-        elif t.loc["Transaction Subcode"] == "Credit Interest":
+                
+        def handle_credit_interest(t, m):
             self.year(t.getYear()).creditInterest += m
-        elif t.loc["Transaction Subcode"] == "Debit Interest":
+            
+        def handle_debit_interest(t, m):
             self.year(t.getYear()).debitInterest += m
-        elif t.loc["Transaction Subcode"] == "Dividend":
+            
+        def handle_dividend(t, m):
             self.year(t.getYear()).dividend += m
-        elif t.loc["Transaction Subcode"] == "Fully Paid Stock Lending Income":
+            
+        def handle_stock_lending(t, m):
             self.year(t.getYear()).securitiesLendingIncome += m
+        
+        handlers = {
+            "Transfer": handle_transfer,
+            "Withdrawal": handle_withdrawal,
+            "Balance Adjustment": handle_balance_adjustment,
+            "Fee": handle_fee,
+            "Deposit": handle_deposit,
+            "Credit Interest": handle_credit_interest,
+            "Debit Interest": handle_debit_interest,
+            "Dividend": handle_dividend,
+            "Fully Paid Stock Lending Income": handle_stock_lending
+        }
+        
+        subcode = t.loc["Transaction Subcode"]
+        if subcode in handlers:
+            handlers[subcode](t, m)
         else:
-            raise KeyError(
-                f"Found unknown money movement subcode: '{t.loc['Transaction Subcode']}'")
+            raise KeyError(f"Found unknown money movement subcode: '{subcode}'")
 
     def receiveDelivery(self, row):
         t = Transaction(row)
-        if t.loc["Transaction Subcode"] == "Buy to Open":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Sell to Close":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Buy to Close":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Sell to Open":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Assignment":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Expiration":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Reverse Split":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Symbol Change":
+        
+        def handle_symbol_change(t):
             logging.warning(
                 f"Symbol Change not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Stock Merger":
+            
+        def handle_stock_merger(t):
             logging.warning(
                 f"Stock Merger not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
+        
+        handlers = {
+            "Buy to Open": self.addPosition,
+            "Sell to Close": self.addPosition,
+            "Buy to Close": self.addPosition,
+            "Sell to Open": self.addPosition,
+            "Assignment": self.addPosition,
+            "Expiration": self.addPosition,
+            "Reverse Split": self.addPosition,
+            "Symbol Change": handle_symbol_change,
+            "Stock Merger": handle_stock_merger
+        }
+        
+        subcode = t.loc["Transaction Subcode"]
+        if subcode in handlers:
+            handlers[subcode](t)
         else:
-            raise ValueError("unknown subcode for receive deliver: {}".format(
-                t.loc["Transaction Subcode"]))
+            raise ValueError(f"Unknown subcode for receive deliver: {subcode}")
 
     def trade(self, row):
         t = Transaction(row)
-        if t.loc["Transaction Subcode"] == "Buy to Open":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Sell to Close":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Buy to Close":
-            self.addPosition(t)
-        elif t.loc["Transaction Subcode"] == "Sell to Open":
-            self.addPosition(t)
+        
+        handlers = {
+            "Buy to Open": self.addPosition,
+            "Sell to Close": self.addPosition,
+            "Buy to Close": self.addPosition,
+            "Sell to Open": self.addPosition
+        }
+        
+        subcode = t.loc["Transaction Subcode"]
+        if subcode in handlers:
+            handlers[subcode](t)
         else:
-            raise ValueError("unknown subcode for Trade:{}".format(
-                t.loc["Transaction Subcode"]))
+            raise ValueError(f"Unknown subcode for Trade: {subcode}")
 
     def addPosition(self, transaction):
 
