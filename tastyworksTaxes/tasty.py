@@ -38,13 +38,11 @@ class Tasty:
         self.positions: pd.DataFrame = pd.DataFrame()
 
     def year(self, year):
-        """used to access the dictionary and create the year if it doesn't exist        """
         if not year in self.yearValues:
             self.yearValues[year] = Values()
         return self.yearValues[year]
 
     def moneyMovement(self, row: Transaction):
-        """Processes money movement transactions and updates the appropriate balance fields"""
         t = Transaction(row)
         m = Money(row=row)
         if t.loc["Transaction Subcode"] == "Transfer":
@@ -78,8 +76,6 @@ class Tasty:
                 f"Found unknown money movement subcode: '{t.loc['Transaction Subcode']}'")
 
     def receiveDelivery(self, row):
-        """ sub function to process the column namend "Receive Deliver" in the csv file
-        """
         t = Transaction(row)
         if t.loc["Transaction Subcode"] == "Buy to Open":
             self.addPosition(t)
@@ -122,8 +118,6 @@ class Tasty:
                 t.loc["Transaction Subcode"]))
 
     def addPosition(self, transaction):
-        """ adds a position to the internal ledger. If it resolves against a previous position, profit and loss is calculated and recorded
-        """
 
         def appendTrade(trade, target_df):
             trade_df = pd.DataFrame([trade])
@@ -216,8 +210,6 @@ class Tasty:
 
     @classmethod
     def _updatePosition(cls, oldPositionQuantity, transactionQuantity):
-        """ helper method to calculate the resulting size of a position
-        """
         newPositionQuantity = oldPositionQuantity + transactionQuantity
 
         if oldPositionQuantity * transactionQuantity < 0:
@@ -232,24 +224,11 @@ class Tasty:
 
 
     def print(self):
-        """pretty prints the status"""
         for key, value in self.yearValues.items():
             print("Year " + str(key) + ":")
             print(value)
 
     def processTransactionHistory(self):
-        """ takes the history and calculates the closed trades in self.closedTrades
-
-        # >>> t = Tasty("test/merged4.csv")
-        # >>> t.processTransactionHistory()
-        # >>> t.print()
-        # >>> t.closedTrades
-        # >>> t.positions
-
-        # >>> t.closedTrades.to_csv("test.csv", index=False)
-
-        """
-        # reverses the order and kills prefetching and caching
         for i, row in self.history.sort_index(ascending=False).iterrows():
             transaction_code = row.loc["Transaction Code"]
             if transaction_code == "Money Movement":
@@ -260,8 +239,6 @@ class Tasty:
                 self.trade(row)
 
     def getYearlyTrades(self) -> List[pd.DataFrame]:
-        """ returns the yearly trades which have been saved so far as pandas dataframe
-        """
         def converter(x: str) -> PositionType:
             if isinstance(x, PositionType):
                 return x
@@ -396,18 +373,8 @@ class Tasty:
         )
 
     def run(self):
-        """ runs all functions for all years on the passed transaction file
-
-
-        # >>> t = Tasty("test/merged3.csv")
-        # >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        # >>> pprint.PrettyPrinter(indent=True, compact=False)
-        # >>> ret = t.run()
-        # >>> print(pprint.pformat(ret))
-        """
         self.processTransactionHistory()
         trades = self.getYearlyTrades()
-        # add in the fees of the individual trades
         fees = [- self.getFeesSum(y) for y in trades]
         for index, key in enumerate(self.yearValues):
             m = Money()
