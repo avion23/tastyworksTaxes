@@ -2,8 +2,6 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
-
 from tastyworksTaxes.values import Values
 from tabulate import tabulate
 from unittest.mock import Mock, patch
@@ -19,7 +17,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.WARNING,
     datefmt='%Y-%m-%d %H:%M:%S')
-for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
+for key in logging.Logger.manager.loggerDict:
     temp = logging.getLogger(key)
     temp.propagate = True
     temp.setLevel(logging.INFO)
@@ -158,14 +156,7 @@ class GermanTaxReport(object):
     net_liquidating_value: float = 0
     wertpapierleihe_einkommen: float = 0
 
-
     def __str__(self) -> str:
-        """ returns a tabulized string representation of the object
-
-
-        # test output by filling the object with ascending numbers
-        # >>> print(GermanTaxReport(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58))
-        """
         ret: str = ""
         ret += f"{'Einzahlungen':<40}{self.einzahlungen: .2f}\n"
         ret += f"{'Auszahlungen':<40}{self.auszahlungen: .2f}\n"
@@ -229,13 +220,9 @@ class GermanTaxReport(object):
         return ret
 
 
-@ dataclass_json
-@ dataclass
+@dataclass_json
+@dataclass
 class EnglishTaxReport(object):
-    """ this is the same as the german tax report, but with english variable names.
-
-    It also includes a translation function to convert to the german tax report
-    """
     deposits: float = 0
     withdrawals: float = 0
     broker_fees: float = 0
@@ -296,12 +283,7 @@ class EnglishTaxReport(object):
     net_liquidating_value: float = 0
     securities_lending_income: float = 0
 
-
     def __str__(self) -> str:
-        """ returns a tabulized string representation of the object
-
-        # >>> print(EnglishTaxReport(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48))
-        """
         ret: str = ""
         ret += f"{'deposits':<40}{self.deposits: .2f}\n"
         ret += f"{'withdrawals':<40}{self.withdrawals: .2f}\n"
@@ -354,110 +336,22 @@ class EnglishTaxReport(object):
         ret += f"{'cash balance usd':<40}{self.cash_balance_usd: .2f}\n"
         ret += f"{'net liquidating value':<40}{self.net_liquidating_value: .2f}\n"
         ret += f"{'securities lending income':<40}{self.securities_lending_income: .2f}\n"
-
         return ret
 
 
 class Printer(object):
-    """ Print the tax report to the console 
-
-    Used to convert our internal dictionary to a format which is similar to tastyworks-pnl
-    """
-
     def __init__(self, values: Values, closedTrades: pd.DataFrame) -> None:
         self.values = values
         self.closedTrades = closedTrades
 
     def generateEnglishTaxReport(self) -> EnglishTaxReport:
-        """ Returns a tax report in English """
         report = EnglishTaxReport()
-
         return report
 
     def generateGermanTaxReport(self) -> GermanTaxReport:
-        """ Returns a tax report in German 
-
-
-        class Values:
-        store all data here
-        withdrawal: Money = Money()
-        transfer: Money = Money()
-        balanceAdjustment: Money = Money()
-        fee: Money = Money()
-        deposit: Money = Money()
-        creditInterest: Money = Money()
-        debitInterest: Money = Money()
-        dividend: Money = Money()
-        stockAndOptionsSum: Money = Money()
-        stockSum: Money = Money()
-        optionSum: Money = Money()
-        grossOptionsDifferential: Money = Money()
-        stockProfits: Money = Money()
-        stockLoss: Money = Money()
-        otherLoss: Money = Money()
-        stockFees: Money = Money()
-        otherFees: Money = Money()
-        """
         report = GermanTaxReport()
         report.einzahlungen = self.values.deposit.eur
         report.auszahlungen = self.values.withdrawal.eur
-
-        report.alle_gebuehren_in_usd = 0
-        report.alle_gebuehren_in_euro = 0
-        report.waehrungsgewinne_usd = 0
-        report.waehrungsgewinne_usd_steuerfrei = 0
-        report.waehrungsgewinne_usd_gesamt = 0
-        report.krypto_gewinne = 0
-        report.krypto_verluste = 0
-        report.anlage_so = 0
-        report.anlage_so_steuerbetrag = 0
-        report.anlage_so_verlustvortrag = 0
-        report.investmentfondsgewinne = 0
-        report.investmentfondsverluste = 0
-        report.anlage_kap_inv = 0
-        report.aktiengewinne_z20 = 0
-        report.aktienverluste_z23 = 0
-        report.aktien_gesamt = 0
-        report.aktien_steuerbetrag = 0
-        report.aktien_verlustvortrag = 0
-        report.sonstige_gewinne = 0
-        report.sonstige_verluste = 0
-        report.sonstige_gesamt = 0
-        report.stillhalter_gewinne = 0
-        report.stillhalter_verluste = 0
-        report.stillhalter_gesamt = 0
-        report.durchschnitt_behaltene_praemien_pro_tag = 0
-        report.stillhalter_gewinne_calls_fifo = 0
-        report.stillhalter_verluste_calls_fifo = 0
-        report.stillhalter_calls_gesamt_fifo = 0
-        report.stillhalter_gewinne_puts_fifo = 0
-        report.stillhalter_verluste_puts_fifo = 0
-        report.stillhalter_puts_gesamt_fifo = 0
-        report.stillhalter_gewinne_fifo = 0
-        report.stillhalter_verluste_fifo = 0
-        report.stillhalter_gesamt_fifo = 0
-        report.long_optionen_gewinne = 0
-        report.long_optionen_verluste = 0
-        report.long_optionen_gesamt = 0
-        report.future_gewinne = 0
-        report.future_verluste = 0
-        report.future_gesamt = 0
-        report.zusatzliche_ordergebuehren = 0
-        report.dividenden = 0
-        report.bezahlte_dividenden = 0
-        report.quellensteuer_z41 = 0
-        report.zinseinnahmen = 0
-        report.zinsausgaben = 0
-        report.zinsen_gesamt = 0
-        report.z19_auslaendische_kapitalertraege = 0
-        report.z21_termingeschaefsgewinne_stillhalter = 0
-        report.z24_termingeschaefte_verluste = 0
-        report.kap_kap_inv = 0
-        report.kap_kap_inv_kerst_soli = 0
-        report.kap_kap_inv_verlustvortrag = 0
-        report.cash_balance_usd = 0
-        report.net_liquidating_value = 0
-
         report.zinseinnahmen = self.values.creditInterest.eur
         report.zinsausgaben = self.values.debitInterest.eur
         report.dividenden = self.values.dividend.eur
@@ -466,12 +360,9 @@ class Printer(object):
         report.aktienverluste_z23 = self.values.stockLoss.eur
         report.sonstige_verluste = self.values.otherLoss.eur
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
-        # for attr, value in self.values:
-        #     print(f"{attr}: {value}")
         return report
 
     def generateDummyReport(self):
-        """Generate the formatted report."""
         CATEGORIES = {
             "Transaktionen": {
                 "withdrawal": "Abhebungen",
@@ -506,7 +397,6 @@ class Printer(object):
         }
         locale.setlocale(locale.LC_ALL, 'de_DE')
 
-
         values_attrs = vars(self.values)
         all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
 
@@ -519,23 +409,13 @@ class Printer(object):
             for attr, translation in translations.items():
                 value = values_attrs.get(attr)
                 if value:
-                    # Use locale.format_string to format the value with a comma as the decimal separator
                     formatted_value = locale.format_string("%.2f", value.eur, grouping=True)
                     line = f"{translation.ljust(max_attr_width)}\t{formatted_value.rjust(max_value_width)}\n"
                     report.append(line)
 
-        # Check if all items have been printed
         printed_keys = set(attr for translations in CATEGORIES.values() for attr in translations.keys())
         missing_keys = set(values_attrs.keys()) - printed_keys
         if missing_keys:
             raise ValueError(f"The following keys were not printed: {', '.join(missing_keys)}")
 
         return ''.join(report)
-
-
-
-
-if __name__ == "__main__":
-    import doctest
-    # doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    doctest.testmod()
