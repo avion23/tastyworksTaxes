@@ -199,6 +199,4 @@ class Transaction(pd.core.series.Series):
         strike = self.loc["Strike"]
         return strike
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+
