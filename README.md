@@ -67,9 +67,11 @@ The project uses pytest for test-driven development. To run tests, use:
 
     pytest test/
 
-The project also incorporates doctest to test interactive examples within docstrings. These tests can be triggered by executing:
+For verbose debugging output, use:
 
-    python -m doctest tastyworksTaxes/*.py
+    python -m pytest test -s --log-cli-level=DEBUG
+
+
 
 ## Known Issues
 - I am not an expert, there is tax law I don't know

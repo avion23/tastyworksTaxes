@@ -209,7 +209,7 @@ class TestTransaction:
         assert fees.eur == 20
 
     def test_special_transaction_cases(self):
-        """Test special transaction cases from doctest examples"""
+        """Test special transaction cases"""
         # Test LFIN Call
         lfin_call = Transaction.fromString("03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39")
         assert lfin_call.getSymbol() == "LFIN"
