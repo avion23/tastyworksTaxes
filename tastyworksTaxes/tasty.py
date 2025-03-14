@@ -436,8 +436,4 @@ class Tasty:
         return ret
 
 
-if __name__ == "__main__":
-    import doctest
 
-    doctest.testmod(extraglobs={"t": Tasty("test/merged.csv")})
-    # doctest.run_docstring_examples(Tasty.run, globals())
