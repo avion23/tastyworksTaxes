@@ -18,16 +18,8 @@ import json
 
 
 
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.DEBUG,
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-
-for logger_name, logger in logging.Logger.manager.loggerDict.items():
-    if isinstance(logger, logging.Logger):
-        if logger_name != "__main__":
-            logger.setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Tasty:
@@ -103,12 +95,12 @@ class Tasty:
         t = Transaction(row)
         
         def handle_symbol_change(t):
-            logging.warning(
+            logger.warning(
                 f"Symbol Change not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
             
         def handle_stock_merger(t):
-            logging.warning(
+            logger.warning(
                 f"Stock Merger not implemented yet: {t['Description']}. This is wrongly counted as a sale for tax purposes.")
             self.addPosition(t)
         
@@ -171,18 +163,18 @@ class Tasty:
                     opposite_sign = -1 if entry.getQuantity() > 0 else 1
                     transaction.setQuantity(opposite_sign * abs(transaction.getQuantity()))
 
-                    logging.debug(
+                    logger.debug(
                         f"Removal due to expiration detected. Quantity adjusted from {quantityOld} to {transaction.getQuantity()}. "
                         f"Details: Symbol: {transaction['Symbol']}, Strike: {transaction['Strike']}, Type: {transaction['Call/Put']} | "
                         f"Previous Transaction: Symbol: {entry['Symbol']}, Quantity: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}"
                     )
                     if entry["Transaction Subcode"] == "Buy to Open" and entry.isOption():
-                        logging.debug(
+                        logger.debug(
                             f"Expiry for long position: Symbol: {entry['Symbol']}, Qty: {entry.getQuantity()}, Strike: {entry['Strike']}, Type: {entry['Call/Put']}. Value: {entry.getValue().usd} USD. Record this as total loss.")
                         trade["worthlessExpiry"] = True
 
-                logging.info(
-                    f"{entry.getDateTime()} found an open position: {entry.getQuantity()} {entry.getSymbol()} and adding {transaction.getQuantity()}")
+                logger.info(
+                    f"{entry.getDateTime():<19} found an open position: {entry.getQuantity():>4} {entry.getSymbol():<6} and adding {transaction.getQuantity():>4}")
 
                 if transaction.getType() in [PositionType.call, PositionType.put]:
                     trade["Expiry"] = transaction.getExpiry()
@@ -225,15 +217,15 @@ class Tasty:
                     # logging.debug(trade)
                     self.closedTrades = appendTrade(trade, self.closedTrades)
 
-                    logging.info(
-                        "{} - {} closing {} {}".format(
+                    logger.info(
+                        "{:<19} - {:<19} closing {:>4} {:<6}".format(
                             trade["Opening Date"], trade["Closing Date"], trade["Quantity"], trade["Symbol"])
                     )
         if transaction.getQuantity() != 0:
             if transaction["Transaction Subcode"] == "Buy to Close" or transaction["Transaction Subcode"] == "Sell to Close" or transaction["Transaction Subcode"] == "Assignment" or transaction["Transaction Subcode"] == "Reverse Split" and transaction["Open/Close"] == "Close":
                 raise ValueError(
                     "Tried to close a position but no previous position found for {}\nCurrent Positions:\n {}".format(transaction, self.positions))
-            logging.info("{} Adding '{}' of '{}' to the open positions".format(transaction.getDateTime(),
+            logger.info("{:<19} Adding '{:>4}' of '{:<6}' to the open positions".format(transaction.getDateTime(),
                                                                                transaction.getQuantity(), transaction.getSymbol()))
             self.positions = appendTrade(transaction, self.positions)
 

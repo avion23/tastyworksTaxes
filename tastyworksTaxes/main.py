@@ -6,15 +6,14 @@ import argparse
 import logging
 import pathlib
 
-from tasty import Tasty
+from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.printer import Printer
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.WARNING,
-    datefmt='%Y-%m-%d %H:%M:%S')
+    format='%(message)s',
+    level=logging.INFO)
 for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
     temp = logging.getLogger(key)
     temp.propagate = True
