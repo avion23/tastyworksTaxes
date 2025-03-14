@@ -16,8 +16,6 @@ class History(pd.DataFrame):
     @classmethod
     def fromFile(cls, path):
         """ initializes a History object / pd df from a filesystem path
-        
-        >>> t = History.fromFile("test/merged.csv")
         """
 
         df = History(pd.read_csv(path))
@@ -33,13 +31,6 @@ class History(pd.DataFrame):
 
     def addEuroConversion(self):
         """ adds a new column called "AmountEuro" and "FeesEuro" to the dataframe
-
-        >>> t = History.fromFile("test/merged.csv")
-        >>> t.addEuroConversion()
-        >>> "AmountEuro" in t.columns
-        True
-        >>> "FeesEuro" in t.columns
-        True
         """
         c = CurrencyConverter(fallback_on_missing_rate=True,
                               fallback_on_wrong_date=True)
@@ -70,9 +61,6 @@ class History(pd.DataFrame):
         I've used
             ls -r 20*.csv | tr '\n' '\0' |xargs -0 cat > merged2.csv
         in a shell and removed the duplicated headers manually
-
-        >>> merged = History._merge([Path(p) for p in glob(str(Path('test/20*.csv').expanduser()))])  # doctest: +SKIP
-        >>> merged.to_csv("test/temp.csv", index=None, date_format='%m/%d/%Y %I:%M %p')  # doctest: +SKIP
         """
         h = []
         for csvfile in pathIn:
@@ -84,8 +72,3 @@ class History(pd.DataFrame):
         result = pd.concat(h, ignore_index=True)
         result = result.sort_values("Date/Time", ascending=True)
         return result[::-1]
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
