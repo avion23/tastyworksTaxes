@@ -274,8 +274,6 @@ class Tasty:
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
 
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all stock trades in the corresponding dataframe
-        """
         return Money(usd=trades['Amount'].sum(), eur=trades['AmountEuro'].sum())
 
 
