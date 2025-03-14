@@ -38,13 +38,6 @@ class Values(object):
 
     def __str__(self):
         """pretty prints all the contained Values
-        >>> values = Values()
-
         """
         j = self.to_json()
         return str(json.dumps(j, indent=4, sort_keys=True))
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
