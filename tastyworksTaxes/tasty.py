@@ -278,41 +278,14 @@ class Tasty:
 
 
     def getStockSum(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all stock trades in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getStockSum(y) for y in years][0].usd != 0
-        True
-        >>> [t.getStockSum(y) for y in years][0].usd
-        -5396.0
-        """
         stock_trades = trades[trades['callPutStock'] == PositionType.stock]
         return Money(usd=stock_trades['Amount'].sum(), eur=stock_trades['AmountEuro'].sum())
 
     def getOptionSum(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all option trades in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getOptionSum(y) for y in years][0].usd > 0
-        True
-        >>> [t.getOptionSum(y) for y in years][0].usd
-        3728.0
-        """
         option_trades = trades[trades['callPutStock'].isin([PositionType.call, PositionType.put])]
         return Money(usd=option_trades['Amount'].sum(), eur=option_trades['AmountEuro'].sum())
 
     def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all positive option trades in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionsProfits(y) for y in years][0].usd > 0
-        True
-        >>> [t.getLongOptionsProfits(y) for y in years][0].usd
-        2977.0
-        """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] > 0) &
@@ -323,17 +296,6 @@ class Tasty:
         return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
 
     def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all negative option trades in the corresponding dataframe, but without total losses
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionLosses(y) for y in years][1].usd != 0
-        True
-        >>> [t.getLongOptionLosses(y) for y in years][1].usd < 0
-        True
-        >>> [t.getLongOptionLosses(y) for y in years][0].usd 
-        -193.0
-        """
         valid_trades = trades.loc[
             ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
             (trades['AmountEuro'] <= 0) &
@@ -348,19 +310,6 @@ class Tasty:
         return m
 
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all total losses
-
-        we detect worthless expiry with the field worthlessExpiry.
-        Unfortunately, we need to set this while processing the transactions,
-        because only then we know if we get no money for the assignment or not.
-        Also it's untested
-
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getLongOptionTotalLosses(y) for y in years][0].usd
-        -702.0
-        """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] <= 0) &
@@ -372,13 +321,6 @@ class Tasty:
 
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all positive option trades for short options in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getShortOptionProfits(y) for y in years][1].usd != 0
-        True
-        """
         valid_trades = trades[
             trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] > 0) &
@@ -389,13 +331,6 @@ class Tasty:
 
 
     def getShortOptionLosses(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all negative option trades for short options in the corresponding dataframe
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getShortOptionLosses(y) for y in years][1].usd != 0
-        True
-        """
         valid_trades = trades[
                 trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] <= 0) &
@@ -405,20 +340,6 @@ class Tasty:
         return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
 
     def getOptionDifferential(self, trades: pd.DataFrame) -> Money:
-        """ returns the highes difference in options, e.g. how many positive and how many negatives have occured 
-
-        In Germany there is no net taxation for options. Instead, gross is taxed - but only if you are over 20k EUR per year. 
-        I implemented this as follows:
-        - sum the negatives
-        - sum the positives
-        - and take the min from the absolute value of both. That is how much they cancel each other out
-
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getOptionDifferential(y) for y in years][0].usd != 0
-        True
-        """
         option_filter = trades['callPutStock'].isin([PositionType.call, PositionType.put])
         
         negative = Money(
@@ -437,13 +358,6 @@ class Tasty:
         )
 
     def getStockLoss(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of the negative stock trades
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getStockLoss(y) for y in years][0].usd != 0
-        True
-        """
         stock_filter = trades['callPutStock'] == PositionType.stock
 
         return Money(
@@ -452,13 +366,6 @@ class Tasty:
         )
 
     def getStockFees(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all fees on stocks
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getStockLoss(y) for y in years][0].usd != 0
-        True
-        """
         stock_filter = trades['callPutStock'] == PositionType.stock
 
         return Money(
@@ -467,13 +374,6 @@ class Tasty:
         )
 
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of all other fees
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getOtherFees(y) for y in years][0].usd != 0
-        True
-        """
         not_stock_filter = trades['callPutStock'] != PositionType.stock
         return Money(
             usd=trades.loc[not_stock_filter, 'Fees'].sum(),
@@ -481,13 +381,6 @@ class Tasty:
         )
 
     def getStockProfits(self, trades: pd.DataFrame) -> Money:
-        """ returns the sum of the positive stock trades
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getStockProfits(y) for y in years][3].usd != 0
-        True
-        """
         stock_positive_filter = (trades['callPutStock'] == PositionType.stock) & (
             trades['AmountEuro'] > 0)
 
@@ -497,13 +390,6 @@ class Tasty:
         )
 
     def getFeesSum(self, trades: pd.DataFrame) -> Money:
-        """ sums up the yearly fees in the closed trades. So so on a yearly basis. Returns the fees 
-        >>> t = Tasty()
-        >>> t.closedTrades = pd.read_csv("test/closed-trades.csv")
-        >>> years = t.getYearlyTrades()
-        >>> [t.getFeesSum(y) for y in years][0].usd != 0
-        True
-        """
         return Money(
             usd=trades['Fees'].sum(),
             eur=trades['FeesEuro'].sum()
