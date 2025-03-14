@@ -64,8 +64,7 @@ class History(pd.DataFrame):
         """
         h = []
         for csvfile in pathIn:
-            temp = pd.read_csv(csvfile,
-                               parse_dates=["Date/Time"], index_col=False)
+            temp = pd.read_csv(csvfile, index_col=False)
             temp["Date/Time"] = pd.to_datetime(temp['Date/Time'],
                                                format='%m/%d/%Y %I:%M %p')
             h.append(temp)
