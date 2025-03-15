@@ -55,23 +55,45 @@ pip install -r requirements.txt
 - If you use the new platform, you need to convert the new data format to the old format using the `legacy.py` tool.
 - New data format might be mergable automatically.
 
+### Converting New Format to Legacy Format
+
+For the new platform data format, use the legacy converter:
+
+```bash
+python tastyworksTaxes/legacy.py <new-format.csv> <output-legacy-format.csv>
+```
+
 ## Usage
 
 After installing the dependencies, you can run the main program using:
 
-    python tastyworksTaxes/main.py [ --write-closed-trades <output-file.csv> ] <tastyworks-data.csv>
+```bash
+python tastyworksTaxes/main.py [--write-closed-trades <output-file.csv>] <tastyworks-data.csv>
+```
+
+### Merging Multiple CSV Files
+
+If you have multiple export files from Tastyworks due to the 1000 row limit, you can merge them before processing:
+
+```bash
+cat file1.csv file2.csv file3.csv > merged.csv
+# Remove duplicate headers before processing
+awk '!seen[$0]++' merged.csv > merged_clean.csv
+```
 
 ### Test-Driven Development
 
 The project uses pytest for test-driven development. To run tests, use:
 
-    pytest test/
+```bash
+pytest test/
+```
 
 For verbose debugging output, use:
 
-    python -m pytest test -s --log-cli-level=DEBUG
-
-
+```bash
+python -m pytest test -s --log-cli-level=DEBUG
+```
 
 ## Known Issues
 - I am not an expert, there is tax law I don't know
@@ -84,7 +106,7 @@ For verbose debugging output, use:
 
 ## Contributing
 
-Contributions are welcome, this software was a lot of work. Try opening an issue or better a pull request
+Contributions are welcome, this software was a lot of work. Try opening an issue or better a pull request.
 
 ## License
 
