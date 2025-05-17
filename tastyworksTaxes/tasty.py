@@ -142,6 +142,10 @@ class Tasty:
 
         def appendTrade(trade, target_df):
             trade_df = pd.DataFrame([trade])
+            if 'Fees' in trade_df.columns:
+                trade_df['Fees'] = trade_df['Fees'].astype(float)
+            if 'FeesEuro' in trade_df.columns:
+                trade_df['FeesEuro'] = trade_df['FeesEuro'].astype(float)
             combined_df = pd.concat([target_df, trade_df])
             if 'worthlessExpiry' in combined_df.columns:
                 combined_df['worthlessExpiry'] = combined_df['worthlessExpiry'].astype(bool)
@@ -205,11 +209,19 @@ class Tasty:
 
                 # update the old values
                 trade["Quantity"] = int(-tradeQuantity)
-                transaction.setQuantity(newTransactionQuantity)
-                entry.setQuantity(newPositionQuantity)
+                transaction.setQuantity(int(newTransactionQuantity))
+                entry.setQuantity(int(newPositionQuantity))
 
-                # write back
-                self.positions.loc[index] = entry
+                if 'Fees' in self.positions.columns and index in self.positions.index:
+                    self.positions.loc[index, 'Fees'] = float(entry['Fees'])
+                if 'FeesEuro' in self.positions.columns and index in self.positions.index:
+                    self.positions.loc[index, 'FeesEuro'] = float(entry['FeesEuro'])
+                if 'Quantity' in self.positions.columns and index in self.positions.index:
+                    self.positions.loc[index, 'Quantity'] = int(entry['Quantity'])
+                    
+                for col in entry.index:
+                    if col not in ['Fees', 'FeesEuro', 'Quantity']:
+                        self.positions.loc[index, col] = entry[col]
 
                 if math.isclose(entry.Quantity, 0):
                     self.positions.drop(index, inplace=True)
@@ -241,7 +253,7 @@ class Tasty:
             tradeQuantity = 0
             newTransactionQuantity = 0  # Ensure it's set to 0 when both quantities have the same sign
 
-        return (newPositionQuantity, newTransactionQuantity, tradeQuantity)
+        return (int(newPositionQuantity), int(newTransactionQuantity), int(tradeQuantity))
 
 
     def print(self):

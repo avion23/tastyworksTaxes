@@ -157,10 +157,10 @@ class Transaction(pd.core.series.Series):
             raise KeyError(f"Transaction Code is '{transaction_code}' and not in '{valid_transaction_codes}'.")
 
         if transaction_code == "Receive Deliver" and transaction_subcode in ["Assignment", "Expiration"]:
-            self.loc["Quantity"] = quantity
+            self.loc["Quantity"] = int(quantity)
             return
 
-        self.loc["Quantity"] = abs(quantity)
+        self.loc["Quantity"] = int(abs(quantity))
         self.loc["Buy/Sell"] = "Sell" if quantity < 0 else "Buy"
 
         subcode_mapping = {
