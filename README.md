@@ -4,15 +4,7 @@ Automate the calculation of yearly taxes for a tastyworks export in the context 
 
 ⚠️ **Note:** This software is currently a work in progress. While extensive test driven development has been done with real data, users should be cautious and verify results independently.
 
-🚨 **WARNING ON TAXES FOR OPTIONS TRADING**
-
-If you have over 20,000 EUR in annual revenue from options trading, you will be taxed on this revenue even if you did not actually earn a profit! 
-
-Losses from "terminating transactions" (Termingeschäfte) such as options are subject to a 20,000 EUR deduction limit per year in Germany. This is as per § 20 Abs. 6 Satz 5 EStG (Einkommensteuergesetz).
-
-Any losses above 20,000 EUR cannot be deducted from taxable income and are carried forward to future years.
-
-This means with options trading revenue over 20,000 EUR, you may pay taxes on that revenue even if your actual profit is lower due to undeductible losses.
+❗ **UPDATE (December 2024)**: The 20,000 EUR limit on offsetting losses from options trading has been abolished. The German Bundesrat approved this change on November 22, 2024 (Jahressteuergesetz 2024). Losses from derivatives can now be fully offset against capital gains, with retroactive application to all open cases. This follows the Federal Fiscal Court ruling that the previous restriction was unconstitutional.
 
 **Development Status**:
 - Currently, the program does not differentiate between various asset classes; it only recognizes stocks and options. This does not accurately reflect all trading scenarios.
