@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from tastyworksTaxes.money import Money
 import json
-from unittest.mock import Mock, patch
+
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
 

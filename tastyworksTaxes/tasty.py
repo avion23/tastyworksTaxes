@@ -10,11 +10,9 @@ from tastyworksTaxes.history import History
 import pandas as pd
 from typing import List, Callable, Optional, Dict
 
-import pprint
 import pathlib
 import math
 import logging
-import json
 
 
 
@@ -272,6 +270,9 @@ class Tasty:
                 self.trade(row)
 
     def getYearlyTrades(self) -> List[pd.DataFrame]:
+        if self.closedTrades.empty:
+            return []
+            
         def converter(x: str) -> PositionType:
             if isinstance(x, PositionType):
                 return x
@@ -283,127 +284,104 @@ class Tasty:
         trades['callPutStock'] = trades['callPutStock'].apply(converter)  # type: ignore
         return [trades[trades['year'] == y] for y in trades['year'].unique()]
 
+    def _sumMoney(self, trades: pd.DataFrame, filter_condition=None) -> Money:
+        """Helper to sum Amount and AmountEuro with optional filter"""
+        if trades.empty:
+            return Money()
+        filtered_trades = trades[filter_condition] if filter_condition is not None else trades
+        return Money(usd=filtered_trades['Amount'].sum(), eur=filtered_trades['AmountEuro'].sum())
+
     def getCombinedSum(self, trades: pd.DataFrame) -> Money:
-        return Money(usd=trades['Amount'].sum(), eur=trades['AmountEuro'].sum())
+        return self._sumMoney(trades)
 
 
     def getStockSum(self, trades: pd.DataFrame) -> Money:
-        stock_trades = trades[trades['callPutStock'] == PositionType.stock]
-        return Money(usd=stock_trades['Amount'].sum(), eur=stock_trades['AmountEuro'].sum())
+        return self._sumMoney(trades, trades['callPutStock'] == PositionType.stock)
 
     def getOptionSum(self, trades: pd.DataFrame) -> Money:
-        option_trades = trades[trades['callPutStock'].isin([PositionType.call, PositionType.put])]
-        return Money(usd=option_trades['Amount'].sum(), eur=option_trades['AmountEuro'].sum())
+        return self._sumMoney(trades, trades['callPutStock'].isin([PositionType.call, PositionType.put]))
 
     def getLongOptionsProfits(self, trades: pd.DataFrame) -> Money:
-        valid_trades = trades[
-                trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
+        condition = (
+            trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] > 0) &
-                (trades['Quantity'] > 0) &
-                ~trades['worthlessExpiry']
-            ]
-
-        return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
+            (trades['Quantity'] > 0) &
+            ~trades['worthlessExpiry']
+        )
+        return self._sumMoney(trades, condition)
 
     def getLongOptionLosses(self, trades: pd.DataFrame) -> Money:
-        valid_trades = trades.loc[
-            ((trades['callPutStock'] == PositionType.call) | (trades['callPutStock'] == PositionType.put)) &
+        condition = (
+            trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] <= 0) &
             (trades['Quantity'] > 0) &
             ~trades['worthlessExpiry']
-        ]
-        
-        m: Money = Money()
-        m.usd = valid_trades['Amount'].sum()
-        m.eur = valid_trades['AmountEuro'].sum()
-
-        return m
+        )
+        return self._sumMoney(trades, condition)
 
     def getLongOptionTotalLosses(self, trades: pd.DataFrame) -> Money:
-        valid_trades = trades[
-                trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
+        condition = (
+            trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] <= 0) &
-                (trades['Quantity'] > 0) & 
-                trades['worthlessExpiry']
-            ]
-
-        return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
-
+            (trades['Quantity'] > 0) &
+            trades['worthlessExpiry']
+        )
+        return self._sumMoney(trades, condition)
 
     def getShortOptionProfits(self, trades: pd.DataFrame) -> Money:
-        valid_trades = trades[
+        condition = (
             trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] > 0) &
             (trades['Quantity'] < 0)
-        ]
-
-        return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
-
+        )
+        return self._sumMoney(trades, condition)
 
     def getShortOptionLosses(self, trades: pd.DataFrame) -> Money:
-        valid_trades = trades[
-                trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
+        condition = (
+            trades['callPutStock'].isin([PositionType.call, PositionType.put]) &
             (trades['AmountEuro'] <= 0) &
-                (trades['Quantity'] <= 0)
-            ]
-
-        return Money(usd=valid_trades['Amount'].sum(), eur=valid_trades['AmountEuro'].sum())
+            (trades['Quantity'] <= 0)
+        )
+        return self._sumMoney(trades, condition)
 
     def getOptionDifferential(self, trades: pd.DataFrame) -> Money:
         option_filter = trades['callPutStock'].isin([PositionType.call, PositionType.put])
+        option_trades = trades[option_filter]
         
-        negative = Money(
-            usd=trades.loc[option_filter & (trades['Amount'] <= 0), 'Amount'].sum(),
-            eur=trades.loc[option_filter & (trades['AmountEuro'] <= 0), 'AmountEuro'].sum()
-        )
-        
-        positive = Money(
-            usd=trades.loc[option_filter & (trades['Amount'] > 0), 'Amount'].sum(),
-            eur=trades.loc[option_filter & (trades['AmountEuro'] > 0), 'AmountEuro'].sum()
-        )
+        if option_trades.empty:
+            return Money()
+            
+        negative_sum = self._sumMoney(trades, option_filter & (trades['AmountEuro'] <= 0))
+        positive_sum = self._sumMoney(trades, option_filter & (trades['AmountEuro'] > 0))
 
         return Money(
-            usd=min(abs(negative.usd), abs(positive.usd)),
-            eur=min(abs(negative.eur), abs(positive.eur))
+            usd=min(abs(negative_sum.usd), abs(positive_sum.usd)),
+            eur=min(abs(negative_sum.eur), abs(positive_sum.eur))
         )
 
     def getStockLoss(self, trades: pd.DataFrame) -> Money:
-        stock_filter = trades['callPutStock'] == PositionType.stock
+        condition = (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] <= 0)
+        return self._sumMoney(trades, condition)
 
-        return Money(
-            usd=trades.loc[stock_filter & (trades['Amount'] <= 0), 'Amount'].sum(),
-            eur=trades.loc[stock_filter & (trades['AmountEuro'] <= 0), 'AmountEuro'].sum()
-        )
+    def _sumFees(self, trades: pd.DataFrame, filter_condition=None) -> Money:
+        """Helper to sum Fees and FeesEuro with optional filter"""
+        if trades.empty:
+            return Money()
+        filtered_trades = trades[filter_condition] if filter_condition is not None else trades
+        return Money(usd=filtered_trades['Fees'].sum(), eur=filtered_trades['FeesEuro'].sum())
 
     def getStockFees(self, trades: pd.DataFrame) -> Money:
-        stock_filter = trades['callPutStock'] == PositionType.stock
-
-        return Money(
-            usd=trades.loc[stock_filter, 'Fees'].sum(),
-            eur=trades.loc[stock_filter, 'FeesEuro'].sum()
-        )
+        return self._sumFees(trades, trades['callPutStock'] == PositionType.stock)
 
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
-        not_stock_filter = trades['callPutStock'] != PositionType.stock
-        return Money(
-            usd=trades.loc[not_stock_filter, 'Fees'].sum(),
-            eur=trades.loc[not_stock_filter, 'FeesEuro'].sum()
-        )
+        return self._sumFees(trades, trades['callPutStock'] != PositionType.stock)
 
     def getStockProfits(self, trades: pd.DataFrame) -> Money:
-        stock_positive_filter = (trades['callPutStock'] == PositionType.stock) & (
-            trades['AmountEuro'] > 0)
-
-        return Money(
-            usd=trades.loc[stock_positive_filter, 'Amount'].sum(),
-            eur=trades.loc[stock_positive_filter, 'AmountEuro'].sum()
-        )
+        condition = (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] > 0)
+        return self._sumMoney(trades, condition)
 
     def getFeesSum(self, trades: pd.DataFrame) -> Money:
-        return Money(
-            usd=trades['Fees'].sum(),
-            eur=trades['FeesEuro'].sum()
-        )
+        return self._sumFees(trades)
 
     def run(self):
         self.processTransactionHistory()

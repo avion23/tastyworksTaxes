@@ -91,7 +91,7 @@ def format_amount(amount) -> str:
     return f"{amount_float:.0f}" if amount_float.is_integer() else f"{amount_float:.2f}"
 
 
-def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
+def convert_to_legacy_format(df: pd.DataFrame, account_ref: str = 'Individual...39') -> pd.DataFrame:
     legacy_df = pd.DataFrame()
 
     legacy_df['Date/Time'] = df['Date'].apply(parse_date)
@@ -122,7 +122,7 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     legacy_df['Fees'] = df['Fees'].apply(format_fees)
     legacy_df['Amount'] = df['Value'].apply(format_amount)
     legacy_df['Description'] = df['Description']
-    legacy_df['Account Reference'] = 'Individual...39'
+    legacy_df['Account Reference'] = account_ref
 
     # Handle special case for "Receive Deliver, Sell to Open" transactions
     mask = (legacy_df['Transaction Code'] == 'Receive Deliver') & (
@@ -137,12 +137,12 @@ def convert_to_legacy_format(df: pd.DataFrame) -> pd.DataFrame:
     return legacy_df.reindex(columns=column_order)
 
 
-def convert_csv(input_file: str, output_file: str) -> None:
+def convert_csv(input_file: str, output_file: str, account_ref: str = 'Individual...39') -> None:
     logger.info(f"Reading input file: {input_file}")
     df = pd.read_csv(input_file)
 
     logger.info("Converting to legacy format")
-    converted_df = convert_to_legacy_format(df)
+    converted_df = convert_to_legacy_format(df, account_ref)
 
     logger.info(f"Writing output file: {output_file}")
     converted_df.to_csv(output_file, index=False)
@@ -155,6 +155,8 @@ def main() -> None:
         description="Convert new TastyTrade CSV to legacy format.")
     parser.add_argument('input_file', help="Path to the input CSV file")
     parser.add_argument('output_file', help="Path to the output CSV file")
+    parser.add_argument('-a', '--account-ref', default='Individual...39',
+                        help="Account reference to use (default: Individual...39)")
     parser.add_argument('-v', '--verbose', action='store_true',
                         help="Enable verbose logging")
 
@@ -164,7 +166,7 @@ def main() -> None:
         logger.setLevel(logging.DEBUG)
 
     logger.debug("Starting CSV conversion process")
-    convert_csv(args.input_file, args.output_file)
+    convert_csv(args.input_file, args.output_file, args.account_ref)
     logger.debug("CSV conversion process completed")
 
 

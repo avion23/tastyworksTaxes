@@ -26,11 +26,6 @@ if not logger.handlers:
 logger.setLevel(logging.DEBUG)
 
 
-def function_proper(param1, param2) -> None:
-    # CODE...
-    pass
-
-
 def init_argparse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument(

@@ -6,10 +6,8 @@ from datetime import datetime
 import logging
 import pandas as pd
 from io import StringIO
-from currency_converter import CurrencyConverter
-
 from tastyworksTaxes.history import History
-from tastyworksTaxes.money import Money
+from tastyworksTaxes.money import Money, convert_usd_to_eur
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
 logging.basicConfig(
@@ -24,7 +22,6 @@ for logger_name, logger in logging.Logger.manager.loggerDict.items():
             logger.setLevel(logging.WARNING)
 
 class Transaction(pd.core.series.Series):
-    c = CurrencyConverter(fallback_on_missing_rate=True, fallback_on_wrong_date=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs, dtype='object')
@@ -53,8 +50,8 @@ class Transaction(pd.core.series.Series):
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
             
-            df['AmountEuro'] = df.apply(lambda row: cls.c.convert(row['Amount'], 'USD', 'EUR', date=row['Date/Time']), axis=1)
-            df['FeesEuro'] = df.apply(lambda row: cls.c.convert(row['Fees'], 'USD', 'EUR', date=row['Date/Time']), axis=1)
+            df['AmountEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1)
+            df['FeesEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1)
 
         header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
         csv = header + "\n" + line

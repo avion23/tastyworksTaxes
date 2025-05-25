@@ -3,11 +3,8 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from tastyworksTaxes.values import Values
-from tabulate import tabulate
-from unittest.mock import Mock, patch
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
-import pprint
 import logging
 import pandas as pd
 import locale
@@ -27,6 +24,11 @@ if not logger.handlers:
     handler = logging.StreamHandler()
     logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
+
+
+def _format_report_line(label: str, value: float, width: int = 40) -> str:
+    """Helper to format tax report lines consistently"""
+    return f"{label:<{width}}{value: .2f}\n"
 
 
 @dataclass_json
@@ -157,67 +159,68 @@ class GermanTaxReport(object):
     wertpapierleihe_einkommen: float = 0
 
     def __str__(self) -> str:
-        ret: str = ""
-        ret += f"{'Einzahlungen':<40}{self.einzahlungen: .2f}\n"
-        ret += f"{'Auszahlungen':<40}{self.auszahlungen: .2f}\n"
-        ret += f"{'Brokergebühren':<40}{self.brokergebuehren: .2f}\n"
-        ret += f"{'Alle Gebühren in USD':<40}{self.alle_gebuehren_in_usd: .2f}\n"
-        ret += f"{'Alle Gebühren in EUR':<40}{self.alle_gebuehren_in_euro: .2f}\n"
-        ret += f"{'Währungsgewinne USD':<40}{self.waehrungsgewinne_usd: .2f}\n"
-        ret += f"{'Währungsgewinne USD steuerfrei':<40}{self.waehrungsgewinne_usd_steuerfrei: .2f}\n"
-        ret += f"{'Währungsgewinne USD Gesamt':<40}{self.waehrungsgewinne_usd_gesamt: .2f}\n"
-        ret += f"{'Krypto Gewinne':<40}{self.krypto_gewinne: .2f}\n"
-        ret += f"{'Krypto Verluste':<40}{self.krypto_verluste: .2f}\n"
-        ret += f"{'Anlage SO':<40}{self.anlage_so: .2f}\n"
-        ret += f"{'Anlage SO Steuerbetrag':<40}{self.anlage_so_steuerbetrag: .2f}\n"
-        ret += f"{'Anlage SO Verlustvortrag':<40}{self.anlage_so_verlustvortrag: .2f}\n"
-        ret += f"{'Investmentfondsgewinne':<40}{self.investmentfondsgewinne: .2f}\n"
-        ret += f"{'Investmentfondsverluste':<40}{self.investmentfondsverluste: .2f}\n"
-        ret += f"{'Anlage KAP+INV':<40}{self.anlage_kap_inv: .2f}\n"
-        ret += f"{'Aktiengewinne Z20':<40}{self.aktiengewinne_z20: .2f}\n"
-        ret += f"{'Aktienverluste Z23':<40}{self.aktienverluste_z23: .2f}\n"
-        ret += f"{'Aktien Gesamt':<40}{self.aktien_gesamt: .2f}\n"
-        ret += f"{'Aktien Steuerbetrag':<40}{self.aktien_steuerbetrag: .2f}\n"
-        ret += f"{'Aktien Verlustvortrag':<40}{self.aktien_verlustvortrag: .2f}\n"
-        ret += f"{'Sonstige Gewinne':<40}{self.sonstige_gewinne: .2f}\n"
-        ret += f"{'Sonstige Verluste':<40}{self.sonstige_verluste: .2f}\n"
-        ret += f"{'Sonstige Gesamt':<40}{self.sonstige_gesamt: .2f}\n"
-        ret += f"{'Stillhalter Gewinne':<40}{self.stillhalter_gewinne: .2f}\n"
-        ret += f"{'Stillhalter Verluste':<40}{self.stillhalter_verluste: .2f}\n"
-        ret += f"{'Stillhalter Gesamt':<40}{self.stillhalter_gesamt: .2f}\n"
-        ret += f"{'Durchschnitt behaltene Prämien pro Tag':<40}{self.durchschnitt_behaltene_praemien_pro_tag: .2f}\n"
-        ret += f"{'Stillhalter Gewinne Calls (FIFO)':<40}{self.stillhalter_gewinne_calls_fifo: .2f}\n"
-        ret += f"{'Stillhalter Verluste Calls (FIFO)':<40}{self.stillhalter_verluste_calls_fifo: .2f}\n"
-        ret += f"{'Stillhalter Calls Gesamt (FIFO)':<40}{self.stillhalter_calls_gesamt_fifo: .2f}\n"
-        ret += f"{'Stillhalter Gewinne Puts (FIFO)':<40}{self.stillhalter_gewinne_puts_fifo: .2f}\n"
-        ret += f"{'Stillhalter Verluste Puts (FIFO)':<40}{self.stillhalter_verluste_puts_fifo: .2f}\n"
-        ret += f"{'Stillhalter Puts Gesamt (FIFO)':<40}{self.stillhalter_puts_gesamt_fifo: .2f}\n"
-        ret += f"{'Stillhalter-Gewinne (FIFO)':<40}{self.stillhalter_gewinne_fifo: .2f}\n"
-        ret += f"{'Stillhalter-Verluste (FIFO)':<40}{self.stillhalter_verluste_fifo: .2f}\n"
-        ret += f"{'Stillhalter-Gesamt (FIFO)':<40}{self.stillhalter_gesamt_fifo: .2f}\n"
-        ret += f"{'Long-Optionen-Gewinne':<40}{self.long_optionen_gewinne: .2f}\n"
-        ret += f"{'Long-Optionen-Verluste':<40}{self.long_optionen_verluste: .2f}\n"
-        ret += f"{'Long-Optionen-Gesamt':<40}{self.long_optionen_gesamt: .2f}\n"
-        ret += f"{'Future-Gewinne ':<40}{self.future_gewinne: .2f}\n"
-        ret += f"{'Future-Verluste':<40}{self.future_verluste: .2f}\n"
-        ret += f"{'Future-Gesamt':<40}{self.future_gesamt: .2f}\n"
-        ret += f"{'zusätzliche Ordergebühren':<40}{self.zusatzliche_ordergebuehren: .2f}\n"
-        ret += f"{'Dividenden':<40}{self.dividenden: .2f}\n"
-        ret += f"{'bezahlte Dividenden':<40}{self.bezahlte_dividenden: .2f}\n"
-        ret += f"{'Quellensteuer':<40}{self.quellensteuer_z41: .2f}\n"
-        ret += f"{'Zinseinnahmen':<40}{self.zinseinnahmen: .2f}\n"
-        ret += f"{'Zinsausgaben':<40}{self.zinsausgaben: .2f}\n"
-        ret += f"{'Zinsen insgesamt':<40}{self.zinsen_gesamt: .2f}\n"
-        ret += f"{'Z19 Ausländische Kapitalerträge':<40}{self.z19_auslaendische_kapitalertraege: .2f}\n"
-        ret += f"{'Z21 Termingeschäfte+Stillhalter':<40}{self.z21_termingeschaefsgewinne_stillhalter: .2f}\n"
-        ret += f"{'Z24 Termingeschäftsverluste':<40}{self.z24_termingeschaefte_verluste: .2f}\n"
-        ret += f"{'KAP+KAP-INV':<40}{self.kap_kap_inv: .2f}\n"
-        ret += f"{'KAP+KAP-INV KErSt+Soli':<40}{self.kap_kap_inv_kerst_soli: .2f}\n"
-        ret += f"{'KAP+KAP-INV Verlustvortrag':<40}{self.kap_kap_inv_verlustvortrag: .2f}\n"
-        ret += f"{'Cash Balance USD':<40}{self.cash_balance_usd: .2f}\n"
-        ret += f"{'Net Liquidating Value':<40}{self.net_liquidating_value: .2f}\n"
-        ret += f"{'Wertpapierleihe Einkommen':<40}{self.wertpapierleihe_einkommen: .2f}\n"
-        return ret
+        fields = [
+            ('Einzahlungen', self.einzahlungen),
+            ('Auszahlungen', self.auszahlungen),
+            ('Brokergebühren', self.brokergebuehren),
+            ('Alle Gebühren in USD', self.alle_gebuehren_in_usd),
+            ('Alle Gebühren in EUR', self.alle_gebuehren_in_euro),
+            ('Währungsgewinne USD', self.waehrungsgewinne_usd),
+            ('Währungsgewinne USD steuerfrei', self.waehrungsgewinne_usd_steuerfrei),
+            ('Währungsgewinne USD Gesamt', self.waehrungsgewinne_usd_gesamt),
+            ('Krypto Gewinne', self.krypto_gewinne),
+            ('Krypto Verluste', self.krypto_verluste),
+            ('Anlage SO', self.anlage_so),
+            ('Anlage SO Steuerbetrag', self.anlage_so_steuerbetrag),
+            ('Anlage SO Verlustvortrag', self.anlage_so_verlustvortrag),
+            ('Investmentfondsgewinne', self.investmentfondsgewinne),
+            ('Investmentfondsverluste', self.investmentfondsverluste),
+            ('Anlage KAP+INV', self.anlage_kap_inv),
+            ('Aktiengewinne Z20', self.aktiengewinne_z20),
+            ('Aktienverluste Z23', self.aktienverluste_z23),
+            ('Aktien Gesamt', self.aktien_gesamt),
+            ('Aktien Steuerbetrag', self.aktien_steuerbetrag),
+            ('Aktien Verlustvortrag', self.aktien_verlustvortrag),
+            ('Sonstige Gewinne', self.sonstige_gewinne),
+            ('Sonstige Verluste', self.sonstige_verluste),
+            ('Sonstige Gesamt', self.sonstige_gesamt),
+            ('Stillhalter Gewinne', self.stillhalter_gewinne),
+            ('Stillhalter Verluste', self.stillhalter_verluste),
+            ('Stillhalter Gesamt', self.stillhalter_gesamt),
+            ('Durchschnitt behaltene Prämien pro Tag', self.durchschnitt_behaltene_praemien_pro_tag),
+            ('Stillhalter Gewinne Calls (FIFO)', self.stillhalter_gewinne_calls_fifo),
+            ('Stillhalter Verluste Calls (FIFO)', self.stillhalter_verluste_calls_fifo),
+            ('Stillhalter Calls Gesamt (FIFO)', self.stillhalter_calls_gesamt_fifo),
+            ('Stillhalter Gewinne Puts (FIFO)', self.stillhalter_gewinne_puts_fifo),
+            ('Stillhalter Verluste Puts (FIFO)', self.stillhalter_verluste_puts_fifo),
+            ('Stillhalter Puts Gesamt (FIFO)', self.stillhalter_puts_gesamt_fifo),
+            ('Stillhalter-Gewinne (FIFO)', self.stillhalter_gewinne_fifo),
+            ('Stillhalter-Verluste (FIFO)', self.stillhalter_verluste_fifo),
+            ('Stillhalter-Gesamt (FIFO)', self.stillhalter_gesamt_fifo),
+            ('Long-Optionen-Gewinne', self.long_optionen_gewinne),
+            ('Long-Optionen-Verluste', self.long_optionen_verluste),
+            ('Long-Optionen-Gesamt', self.long_optionen_gesamt),
+            ('Future-Gewinne', self.future_gewinne),
+            ('Future-Verluste', self.future_verluste),
+            ('Future-Gesamt', self.future_gesamt),
+            ('zusätzliche Ordergebühren', self.zusatzliche_ordergebuehren),
+            ('Dividenden', self.dividenden),
+            ('bezahlte Dividenden', self.bezahlte_dividenden),
+            ('Quellensteuer', self.quellensteuer_z41),
+            ('Zinseinnahmen', self.zinseinnahmen),
+            ('Zinsausgaben', self.zinsausgaben),
+            ('Zinsen insgesamt', self.zinsen_gesamt),
+            ('Z19 Ausländische Kapitalerträge', self.z19_auslaendische_kapitalertraege),
+            ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne_stillhalter),
+            ('Z24 Termingeschäftsverluste', self.z24_termingeschaefte_verluste),
+            ('KAP+KAP-INV', self.kap_kap_inv),
+            ('KAP+KAP-INV KErSt+Soli', self.kap_kap_inv_kerst_soli),
+            ('KAP+KAP-INV Verlustvortrag', self.kap_kap_inv_verlustvortrag),
+            ('Cash Balance USD', self.cash_balance_usd),
+            ('Net Liquidating Value', self.net_liquidating_value),
+            ('Wertpapierleihe Einkommen', self.wertpapierleihe_einkommen),
+        ]
+        return ''.join(_format_report_line(label, value) for label, value in fields)
 
 
 @dataclass_json
@@ -284,59 +287,60 @@ class EnglishTaxReport(object):
     securities_lending_income: float = 0
 
     def __str__(self) -> str:
-        ret: str = ""
-        ret += f"{'deposits':<40}{self.deposits: .2f}\n"
-        ret += f"{'withdrawals':<40}{self.withdrawals: .2f}\n"
-        ret += f"{'broker fees':<40}{self.broker_fees: .2f}\n"
-        ret += f"{'all fees in USD':<40}{self.all_fees_in_usd: .2f}\n"
-        ret += f"{'all fees in EUR':<40}{self.all_fees_in_euro: .2f}\n"
-        ret += f"{'currency gains usd':<40}{self.currency_gains_usd: .2f}\n"
-        ret += f"{'currency gains usd tax free':<40}{self.currency_gains_usd_tax_free: .2f}\n"
-        ret += f"{'currency gains usd total':<40}{self.currency_gains_usd_total: .2f}\n"
-        ret += f"{'crypto gains':<40}{self.crypto_gains: .2f}\n"
-        ret += f"{'crypto losses':<40}{self.crypto_losses: .2f}\n"
-        ret += f"{'investment so':<40}{self.investment_so: .2f}\n"
-        ret += f"{'investment so tax amount':<40}{self.investment_so_tax_amount: .2f}\n"
-        ret += f"{'investment so loss carryforward':<40}{self.investment_so_loss_carryforward: .2f}\n"
-        ret += f"{'investment fund gains':<40}{self.investment_fund_gains: .2f}\n"
-        ret += f"{'investment fund losses':<40}{self.investment_fund_losses: .2f}\n"
-        ret += f"{'investment kap inv':<40}{self.investment_kap_inv: .2f}\n"
-        ret += f"{'stock gains z20':<40}{self.stock_gains_z20: .2f}\n"
-        ret += f"{'stock losses z23':<40}{self.stock_losses_z23: .2f}\n"
-        ret += f"{'stock total':<40}{self.stock_total: .2f}\n"
-        ret += f"{'stock tax amount':<40}{self.stock_tax_amount: .2f}\n"
-        ret += f"{'stock loss carryforward':<40}{self.stock_loss_carryforward: .2f}\n"
-        ret += f"{'other gains':<40}{self.other_gains: .2f}\n"
-        ret += f"{'other losses':<40}{self.other_losses: .2f}\n"
-        ret += f"{'other total':<40}{self.other_total: .2f}\n"
-        ret += f"{'option holder gains':<40}{self.option_holder_gains: .2f}\n"
-        ret += f"{'option holder losses':<40}{self.option_holder_losses: .2f}\n"
-        ret += f"{'option holder total':<40}{self.option_holder_total: .2f}\n"
-        ret += f"{'average held premium per day':<40}{self.average_held_premium_per_day: .2f}\n"
-        ret += f"{'option holder gains calls fifo':<40}{self.option_holder_gains_calls_fifo: .2f}\n"
-        ret += f"{'option holder losses calls fifo':<40}{self.option_holder_losses_calls_fifo: .2f}\n"
-        ret += f"{'option holder calls total fifo':<40}{self.option_holder_calls_total_fifo: .2f}\n"
-        ret += f"{'option holder gains puts fifo':<40}{self.option_holder_gains_puts_fifo: .2f}\n"
-        ret += f"{'option holder losses puts fifo':<40}{self.option_holder_losses_puts_fifo: .2f}\n"
-        ret += f"{'option holder puts total fifo':<40}{self.option_holder_puts_total_fifo: .2f}\n"
-        ret += f"{'option holder gains fifo':<40}{self.option_holder_gains_fifo: .2f}\n"
-        ret += f"{'option holder losses fifo':<40}{self.option_holder_losses_fifo: .2f}\n"
-        ret += f"{'option holder total fifo':<40}{self.option_holder_total_fifo: .2f}\n"
-        ret += f"{'long option gains':<40}{self.long_option_gains: .2f}\n"
-        ret += f"{'long option losses':<40}{self.long_option_losses: .2f}\n"
-        ret += f"{'long option total':<40}{self.long_option_total: .2f}\n"
-        ret += f"{'future gains':<40}{self.future_gains: .2f}\n"
-        ret += f"{'future losses':<40}{self.future_losses: .2f}\n"
-        ret += f"{'future total':<40}{self.future_total: .2f}\n"
-        ret += f"{'z21 term gains option holder':<40}{self.z21_term_gains_option_holder: .2f}\n"
-        ret += f"{'z24 term losses':<40}{self.z24_term_losses: .2f}\n"
-        ret += f"{'kap kap inv':<40}{self.kap_kap_inv: .2f}\n"
-        ret += f"{'kap kap inv kerst soli':<40}{self.kap_kap_inv_kerst_soli: .2f}\n"
-        ret += f"{'kap kap inv loss carryforward':<40}{self.kap_kap_inv_loss_carryforward: .2f}\n"
-        ret += f"{'cash balance usd':<40}{self.cash_balance_usd: .2f}\n"
-        ret += f"{'net liquidating value':<40}{self.net_liquidating_value: .2f}\n"
-        ret += f"{'securities lending income':<40}{self.securities_lending_income: .2f}\n"
-        return ret
+        fields = [
+            ('deposits', self.deposits),
+            ('withdrawals', self.withdrawals),
+            ('broker fees', self.broker_fees),
+            ('all fees in USD', self.all_fees_in_usd),
+            ('all fees in EUR', self.all_fees_in_euro),
+            ('currency gains usd', self.currency_gains_usd),
+            ('currency gains usd tax free', self.currency_gains_usd_tax_free),
+            ('currency gains usd total', self.currency_gains_usd_total),
+            ('crypto gains', self.crypto_gains),
+            ('crypto losses', self.crypto_losses),
+            ('investment so', self.investment_so),
+            ('investment so tax amount', self.investment_so_tax_amount),
+            ('investment so loss carryforward', self.investment_so_loss_carryforward),
+            ('investment fund gains', self.investment_fund_gains),
+            ('investment fund losses', self.investment_fund_losses),
+            ('investment kap inv', self.investment_kap_inv),
+            ('stock gains z20', self.stock_gains_z20),
+            ('stock losses z23', self.stock_losses_z23),
+            ('stock total', self.stock_total),
+            ('stock tax amount', self.stock_tax_amount),
+            ('stock loss carryforward', self.stock_loss_carryforward),
+            ('other gains', self.other_gains),
+            ('other losses', self.other_losses),
+            ('other total', self.other_total),
+            ('option holder gains', self.option_holder_gains),
+            ('option holder losses', self.option_holder_losses),
+            ('option holder total', self.option_holder_total),
+            ('average held premium per day', self.average_held_premium_per_day),
+            ('option holder gains calls fifo', self.option_holder_gains_calls_fifo),
+            ('option holder losses calls fifo', self.option_holder_losses_calls_fifo),
+            ('option holder calls total fifo', self.option_holder_calls_total_fifo),
+            ('option holder gains puts fifo', self.option_holder_gains_puts_fifo),
+            ('option holder losses puts fifo', self.option_holder_losses_puts_fifo),
+            ('option holder puts total fifo', self.option_holder_puts_total_fifo),
+            ('option holder gains fifo', self.option_holder_gains_fifo),
+            ('option holder losses fifo', self.option_holder_losses_fifo),
+            ('option holder total fifo', self.option_holder_total_fifo),
+            ('long option gains', self.long_option_gains),
+            ('long option losses', self.long_option_losses),
+            ('long option total', self.long_option_total),
+            ('future gains', self.future_gains),
+            ('future losses', self.future_losses),
+            ('future total', self.future_total),
+            ('z21 term gains option holder', self.z21_term_gains_option_holder),
+            ('z24 term losses', self.z24_term_losses),
+            ('kap kap inv', self.kap_kap_inv),
+            ('kap kap inv kerst soli', self.kap_kap_inv_kerst_soli),
+            ('kap kap inv loss carryforward', self.kap_kap_inv_loss_carryforward),
+            ('cash balance usd', self.cash_balance_usd),
+            ('net liquidating value', self.net_liquidating_value),
+            ('securities lending income', self.securities_lending_income),
+        ]
+        return ''.join(_format_report_line(label, value) for label, value in fields)
 
 
 class Printer(object):
@@ -346,6 +350,16 @@ class Printer(object):
 
     def generateEnglishTaxReport(self) -> EnglishTaxReport:
         report = EnglishTaxReport()
+        report.deposits = self.values.deposit.eur
+        report.withdrawals = self.values.withdrawal.eur
+        report.interest_income = self.values.creditInterest.eur
+        report.interest_expenses = self.values.debitInterest.eur
+        report.dividends = self.values.dividend.eur
+        report.additional_order_fees = self.values.otherFees.eur
+        report.stock_gains_z20 = self.values.stockProfits.eur
+        report.stock_losses_z23 = self.values.stockLoss.eur
+        report.other_losses = self.values.otherLoss.eur
+        report.securities_lending_income = self.values.securitiesLendingIncome.eur
         return report
 
     def generateGermanTaxReport(self) -> GermanTaxReport:
