@@ -5,6 +5,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import datetime
 from currency_converter import CurrencyConverter
 
+# Shared currency converter instance
+_converter = CurrencyConverter(fallback_on_missing_rate=True, fallback_on_wrong_date=True)
+
+def convert_usd_to_eur(amount: float, date) -> float:
+    """Centralized USD to EUR conversion"""
+    return _converter.convert(amount, 'USD', 'EUR', date=date)
+
 class Money:
     """replaces eur and usd"""
     
@@ -28,9 +35,7 @@ class Money:
     def fromUsdToEur(self, date):
         """converts from USD to eur at a certain date"""
         d = datetime.datetime.strptime(date, "%Y-%m-%d").date()
-        c = CurrencyConverter(fallback_on_missing_rate=True)
-        usd = c.convert(self.usd, "USD", "EUR", date=d)
-        self.eur = usd
+        self.eur = convert_usd_to_eur(self.usd, d)
 
     def __repr__(self):
         return str({'eur': self.eur, 'usd': self.usd})
