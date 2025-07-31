@@ -21,9 +21,9 @@ Automate the calculation of yearly taxes for a tastyworks export in the context 
 **Options**:
 
 - Each option trade is settled individually, no combined calculation for complex strategies.
-- For writing (selling) options, the full premium received is immediately taxed at the time of sale.
-- For closing out a written option, the premium paid is deducted and lowers the taxable income.
+- For writing (selling) options, gains/losses are calculated when the position is closed, either by buying back the option or through expiration/assignment.
 - For buying options, gains/losses are calculated similar to stocks based on sale proceeds less purchase costs using the FIFO method.
+- The FIFO method is used to match opening and closing transactions for accurate profit/loss calculation.
 
 ## Installation & Setup
 
@@ -89,9 +89,8 @@ python -m pytest test -s --log-cli-level=DEBUG
 
 ## Known Issues
 - I am not an expert, there is tax law I don't know
-- No special treatment for ETF
 - ETF advance tax payment ("Vorabpauschale") is not implemented. This is a yearly fictitious taxable income on accumulating ETFs, calculated as 70% of the base interest rate × fund value at start of year, minus actual distributions. Required by German tax law since 2018 to prevent tax deferral.
-- Partial exemption rates ("Teilfreistellung") for different fund types are not implemented (e.g. 30% for equity funds, 15% for mixed funds)
+- Partial exemption rates ("Teilfreistellung") are only implemented for equity ETFs (30%). Mixed funds (15%) and real estate funds (60%/80%) will generate warnings but are not automatically handled.
 - Symbol changes currently count as sales. While this simplification doesn't matter if you sell within the same year, it's simply wrong.
 - I am not sure about fee calculations.
 - In the case of short selling stocks (beyond an annual limit), 30% of the price is taxed with the capital gains tax as a substitute assessment base (§ 43a Absatz 2 Satz 7 EStG), and only offset with the covering. This is not implemented.

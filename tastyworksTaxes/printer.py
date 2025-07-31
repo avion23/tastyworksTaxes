@@ -392,7 +392,7 @@ class Printer(object):
             },
             "Aktien & Optionen": {
                 "stockAndOptionsSum": "Summe Aktien und Optionen",
-                "equityEtfProfits": "Aktien-ETF Gewinne (Teilfreistellung)",
+                "equityEtfProfits": "Aktien-ETF steuerpflichtige Gewinne (nach Teilfreistellung)",
                 "otherStockAndBondProfits": "Andere Aktien- und Anleihen-Gewinne",
                 "totalTaxableStockAndEtfProfits": "Gesamt steuerpflichtige Aktien-/ETF-Gewinne",
                 "stockAndEtfLosses": "Aktien- und ETF-Verluste",
