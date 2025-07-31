@@ -404,7 +404,6 @@ class Tasty:
         return Money(usd=total_usd, eur=total_eur)
 
     def getEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
-        self._checkAssetClassifications(trades)
         
         if trades.empty:
             return Money()
@@ -470,6 +469,7 @@ class Tasty:
         ret = dict()
         for index, key in enumerate(self.yearValues):
             yearly_trades_df = trades[index]
+            self._checkAssetClassifications(yearly_trades_df)
             values_obj = self.yearValues[key]
             
             values_obj.stockAndOptionsSum = self.getCombinedSum(yearly_trades_df)

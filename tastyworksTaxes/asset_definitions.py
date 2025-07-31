@@ -3,7 +3,7 @@ from tastyworksTaxes.position import PositionType
 ASSET_DEFINITIONS = {
     PositionType.stock: {
         'EQUITY_ETF': {
-            'symbols': {'SCHG', 'TECL', 'QQQ', 'SPY', 'VTI', 'VXUS'},
+            'symbols': {'SCHG', 'TECL', 'QQQ', 'SPY', 'VTI', 'VXUS', 'TQQQ'},
             'properties': {'teilfreistellung_pct': 30},
             'tax_category': 'KAP-INV'
         },
