@@ -28,7 +28,10 @@ class Tasty:
         "VGSH": "BOND_ETF",
         "ICSH": "BOND_ETF",
     }
-    EQUITY_ETF_EXEMPTION_RATE = 0.70
+    
+    IMMOBILIENFONDS_SYMBOLS = set()
+    MISCHFONDS_SYMBOLS = set()
+    EQUITY_ETF_TAXABLE_PORTION = 0.70
 
     def __init__(self, path: Optional[pathlib.Path] = None) -> None:
         self.yearValues: Dict = {}
@@ -381,8 +384,40 @@ class Tasty:
 
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
         return self._sumFees(trades, trades['callPutStock'] != PositionType.stock)
+    
+    def _checkUnknownFundTypes(self, trades: pd.DataFrame) -> None:
+        stock_trades = trades[trades['callPutStock'] == PositionType.stock]
+        if stock_trades.empty:
+            return
+            
+        all_known_symbols = set(self.ASSET_CLASSIFICATION.keys()) | self.IMMOBILIENFONDS_SYMBOLS | self.MISCHFONDS_SYMBOLS
+        unknown_symbols = set(stock_trades['Symbol'].unique()) - all_known_symbols
+        
+        for symbol in unknown_symbols:
+            symbol_trades = stock_trades[stock_trades['Symbol'] == symbol]
+            if not symbol_trades.empty:
+                logger.warning(f"Unknown fund/stock type for symbol '{symbol}' - treating as regular stock. "
+                             f"If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.")
+    
+    def _checkSpecialFundTypes(self, trades: pd.DataFrame) -> None:
+        stock_trades = trades[trades['callPutStock'] == PositionType.stock]
+        if stock_trades.empty:
+            return
+            
+        immobilien_found = self.IMMOBILIENFONDS_SYMBOLS & set(stock_trades['Symbol'].unique())
+        if immobilien_found:
+            logger.warning(f"Immobilienfonds detected: {', '.join(immobilien_found)}. "
+                         f"These require special Teilfreistellung rates (60%/80%) not currently implemented.")
+                         
+        misch_found = self.MISCHFONDS_SYMBOLS & set(stock_trades['Symbol'].unique())
+        if misch_found:
+            logger.warning(f"Mischfonds detected: {', '.join(misch_found)}. "
+                         f"These require 15% Teilfreistellung rate not currently implemented.")
 
     def getEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
+        self._checkUnknownFundTypes(trades)
+        self._checkSpecialFundTypes(trades)
+        
         equity_etf_symbols = [
             symbol for symbol, asset_type in self.ASSET_CLASSIFICATION.items() 
             if asset_type == 'EQUITY_ETF'
@@ -400,12 +435,12 @@ class Tasty:
         if profitable_etf_trades.empty:
             return Money()
 
-        logger.debug(f"Applying {1 - self.EQUITY_ETF_EXEMPTION_RATE:.0%} Teilfreistellung to {len(profitable_etf_trades)} trades.")
+        logger.debug(f"Applying {1 - self.EQUITY_ETF_TAXABLE_PORTION:.0%} Teilfreistellung to {len(profitable_etf_trades)} trades.")
         
-        exempted_usd = (profitable_etf_trades['Amount'] * self.EQUITY_ETF_EXEMPTION_RATE).sum()
-        exempted_eur = (profitable_etf_trades['AmountEuro'] * self.EQUITY_ETF_EXEMPTION_RATE).sum()
+        taxable_usd = (profitable_etf_trades['Amount'] * self.EQUITY_ETF_TAXABLE_PORTION).sum()
+        taxable_eur = (profitable_etf_trades['AmountEuro'] * self.EQUITY_ETF_TAXABLE_PORTION).sum()
         
-        return Money(usd=exempted_usd, eur=exempted_eur)
+        return Money(usd=taxable_usd, eur=taxable_eur)
 
     def getOtherStockAndBondProfits(self, trades: pd.DataFrame) -> Money:
         equity_etf_symbols = [
