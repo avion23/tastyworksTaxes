@@ -140,3 +140,86 @@ def test_receive_deliver_with_price(create_input_df):
     assert result['Price'].iloc[0] == '25'
     assert result['Fees'].iloc[0] == '5.250'
     assert result['Amount'].iloc[0] == '25000'
+
+
+def test_new_format_with_commissions_and_fees(create_input_df):
+    input_data = {
+        'Date': '2024-11-20T16:06:06+0100',
+        'Type': 'Trade',
+        'Sub Type': 'Sell to Open',
+        'Action': 'SELL_TO_OPEN',
+        'Symbol': 'TQQQ  241220P00079500',
+        'Quantity': 1,
+        'Value': '710.00',
+        'Average Price': 710.00,
+        'Commissions': -1.00,
+        'Fees': -0.15,
+        'Expiration Date': '12/20/24',
+        'Strike Price': 79.5,
+        'Call or Put': 'PUT',
+        'Description': 'Sold 1 TQQQ 12/20/24 Put 79.50 @ 7.10'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Fees'].iloc[0] == '1.150'
+    assert result['Symbol'].iloc[0] == 'TQQQ'
+    assert result['Strike'].iloc[0] == '80'
+    assert result['Call/Put'].iloc[0] == 'P'
+
+
+def test_new_format_with_zero_commissions(create_input_df):
+    input_data = {
+        'Date': '2024-12-26T17:24:42+0100',
+        'Type': 'Trade',
+        'Sub Type': 'Buy to Open',
+        'Action': 'BUY_TO_OPEN',
+        'Symbol': 'PULS',
+        'Quantity': 183,
+        'Value': '-9,103.72',
+        'Average Price': -49.75,
+        'Commissions': 0.00,
+        'Fees': -0.15,
+        'Description': 'Bought 183 PULS @ 49.75'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Fees'].iloc[0] == '0.150'
+    assert result['Symbol'].iloc[0] == 'PULS'
+
+
+def test_new_format_with_string_commissions(create_input_df):
+    input_data = {
+        'Date': '2024-12-31T23:00:00+0100',
+        'Type': 'Money Movement',
+        'Sub Type': 'Dividend',
+        'Symbol': 'TECL',
+        'Value': '-0.02',
+        'Commissions': '--',
+        'Fees': 0.00,
+        'Description': 'DIREXION DAILY TECHNOLOGY'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+
+    assert result['Fees'].iloc[0] == '0.00'
+    assert result['Symbol'].iloc[0] == 'TECL'
+
+
+def test_legacy_format_without_commissions_column(create_input_df):
+    input_data = {
+        'Date': '2018-03-19T22:00:00+0100',
+        'Type': 'Trade',
+        'Sub Type': 'Buy to Close',
+        'Symbol': 'LFIN',
+        'Quantity': 100,
+        'Value': '1000.00',
+        'Fees': -2.50,
+        'Description': 'Buy to Close 100 LFIN @ 10.00'
+    }
+    input_df = create_input_df(input_data)
+    result = convert_to_legacy_format(input_df)
+    
+    assert result['Fees'].iloc[0] == '2.500'
+    assert result['Symbol'].iloc[0] == 'LFIN'
