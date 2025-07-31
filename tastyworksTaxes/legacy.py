@@ -119,7 +119,13 @@ def convert_to_legacy_format(df: pd.DataFrame, account_ref: str = 'Individual...
     else:
         legacy_df['Price'] = ''
 
-    legacy_df['Fees'] = df['Fees'].apply(format_fees)
+    if 'Commissions' in df.columns:
+        commissions = pd.to_numeric(df['Commissions'], errors='coerce').fillna(0).abs()
+        fees = pd.to_numeric(df['Fees'], errors='coerce').fillna(0).abs()
+        df['CombinedFees'] = commissions + fees
+        legacy_df['Fees'] = df['CombinedFees'].apply(format_fees)
+    else:
+        legacy_df['Fees'] = df['Fees'].apply(format_fees)
     legacy_df['Amount'] = df['Value'].apply(format_amount)
     legacy_df['Description'] = df['Description']
     legacy_df['Account Reference'] = account_ref
@@ -149,8 +155,6 @@ def convert_csv(input_file: str, output_file: str, account_ref: str = 'Individua
 
 
 def main() -> None:
-    logger.warning(
-        "There is an factor of 8 in the fees. The newly exported data from Tastyworks has this offset compared to my old legacy format data.")
     parser = argparse.ArgumentParser(
         description="Convert new TastyTrade CSV to legacy format.")
     parser.add_argument('input_file', help="Path to the input CSV file")
