@@ -356,8 +356,8 @@ class Printer(object):
         report.interest_expenses = self.values.debitInterest.eur
         report.dividends = self.values.dividend.eur
         report.additional_order_fees = self.values.otherFees.eur
-        report.stock_gains_z20 = self.values.stockProfits.eur
-        report.stock_losses_z23 = self.values.stockLoss.eur
+        report.stock_gains_z20 = self.values.totalTaxableStockAndEtfProfits.eur
+        report.stock_losses_z23 = self.values.stockAndEtfLosses.eur
         report.other_losses = self.values.otherLoss.eur
         report.securities_lending_income = self.values.securitiesLendingIncome.eur
         return report
@@ -370,8 +370,8 @@ class Printer(object):
         report.zinsausgaben = self.values.debitInterest.eur
         report.dividenden = self.values.dividend.eur
         report.zusatzliche_ordergebuehren = self.values.otherFees.eur
-        report.aktiengewinne_z20 = self.values.stockProfits.eur
-        report.aktienverluste_z23 = self.values.stockLoss.eur
+        report.aktiengewinne_z20 = self.values.totalTaxableStockAndEtfProfits.eur
+        report.aktienverluste_z23 = self.values.stockAndEtfLosses.eur
         report.sonstige_verluste = self.values.otherLoss.eur
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
         return report
@@ -392,9 +392,10 @@ class Printer(object):
             },
             "Aktien & Optionen": {
                 "stockAndOptionsSum": "Summe Aktien und Optionen",
-                "stockSum": "Summe Aktienhandel",
-                "stockProfits": "Aktiengewinne",
-                "stockLoss": "Aktienverluste",
+                "equityEtfProfits": "Aktien-ETF Gewinne (Teilfreistellung)",
+                "otherStockAndBondProfits": "Andere Aktien- und Anleihen-Gewinne",
+                "totalTaxableStockAndEtfProfits": "Gesamt steuerpflichtige Aktien-/ETF-Gewinne",
+                "stockAndEtfLosses": "Aktien- und ETF-Verluste",
                 "optionSum": "Summe Optionshandel",
                 "longOptionProfits": "Long Optionen Gewinne",
                 "longOptionLosses": "Long Optionen Verluste",

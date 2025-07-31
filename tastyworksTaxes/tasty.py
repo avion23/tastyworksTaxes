@@ -21,6 +21,15 @@ logger.setLevel(logging.INFO)
 
 
 class Tasty:
+    ASSET_CLASSIFICATION = {
+        "SCHG": "EQUITY_ETF",
+        "TECL": "EQUITY_ETF",
+        "PULS": "BOND_ETF",
+        "VGSH": "BOND_ETF",
+        "ICSH": "BOND_ETF",
+    }
+    EQUITY_ETF_EXEMPTION_RATE = 0.70
+
     def __init__(self, path: Optional[pathlib.Path] = None) -> None:
         self.yearValues: Dict = {}
         self.history: History = History.fromFile(path) if path else History()
@@ -295,9 +304,6 @@ class Tasty:
         return self._sumMoney(trades)
 
 
-    def getStockSum(self, trades: pd.DataFrame) -> Money:
-        return self._sumMoney(trades, trades['callPutStock'] == PositionType.stock)
-
     def getOptionSum(self, trades: pd.DataFrame) -> Money:
         return self._sumMoney(trades, trades['callPutStock'].isin([PositionType.call, PositionType.put]))
 
@@ -376,8 +382,47 @@ class Tasty:
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
         return self._sumFees(trades, trades['callPutStock'] != PositionType.stock)
 
-    def getStockProfits(self, trades: pd.DataFrame) -> Money:
-        condition = (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] > 0)
+    def getEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
+        equity_etf_symbols = [
+            symbol for symbol, asset_type in self.ASSET_CLASSIFICATION.items() 
+            if asset_type == 'EQUITY_ETF'
+        ]
+        
+        if not equity_etf_symbols:
+            return Money()
+            
+        is_equity_etf = trades['Symbol'].isin(equity_etf_symbols)
+        is_stock = trades['callPutStock'] == PositionType.stock
+        is_profit = trades['AmountEuro'] > 0
+        
+        profitable_etf_trades = trades[is_equity_etf & is_stock & is_profit]
+        
+        if profitable_etf_trades.empty:
+            return Money()
+
+        logger.debug(f"Applying {1 - self.EQUITY_ETF_EXEMPTION_RATE:.0%} Teilfreistellung to {len(profitable_etf_trades)} trades.")
+        
+        exempted_usd = (profitable_etf_trades['Amount'] * self.EQUITY_ETF_EXEMPTION_RATE).sum()
+        exempted_eur = (profitable_etf_trades['AmountEuro'] * self.EQUITY_ETF_EXEMPTION_RATE).sum()
+        
+        return Money(usd=exempted_usd, eur=exempted_eur)
+
+    def getOtherStockAndBondProfits(self, trades: pd.DataFrame) -> Money:
+        equity_etf_symbols = [
+            symbol for symbol, asset_type in self.ASSET_CLASSIFICATION.items() 
+            if asset_type == 'EQUITY_ETF'
+        ]
+        
+        is_stock_or_bond = trades['callPutStock'] == PositionType.stock
+        is_not_equity_etf = ~trades['Symbol'].isin(equity_etf_symbols)
+        is_profit = trades['AmountEuro'] > 0
+
+        other_profitable_trades = trades[is_stock_or_bond & is_not_equity_etf & is_profit]
+        
+        return self._sumMoney(other_profitable_trades)
+
+    def getStockAndEtfLosses(self, trades: pd.DataFrame) -> Money:
+        condition = (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] <= 0)
         return self._sumMoney(trades, condition)
 
     def getFeesSum(self, trades: pd.DataFrame) -> Money:
@@ -395,21 +440,30 @@ class Tasty:
 
         ret = dict()
         for index, key in enumerate(self.yearValues):
-            ret[key] = self.yearValues[key]
-            ret[key].stockAndOptionsSum = self.getCombinedSum(trades[index])
-            ret[key].stockSum = self.getStockSum(trades[index])
-            ret[key].optionSum = self.getOptionSum(trades[index])
-            ret[key].longOptionProfits = self.getLongOptionsProfits(trades[index])
-            ret[key].longOptionLosses = self.getLongOptionLosses(trades[index])
-            ret[key].longOptionTotalLosses = self.getLongOptionTotalLosses(trades[index])
-            ret[key].shortOptionProfits = self.getShortOptionProfits(trades[index])
-            ret[key].shortOptionLosses = self.getShortOptionLosses(trades[index])
-            ret[key].grossOptionDifferential = self.getOptionDifferential(
-                trades[index])
-            ret[key].stockProfits = self.getStockProfits(trades[index])
-            ret[key].stockLoss = self.getStockLoss(trades[index])
-            ret[key].stockFees = - self.getStockFees(trades[index])
-            ret[key].otherFees = - self.getOtherFees(trades[index])
+            yearly_trades_df = trades[index]
+            values_obj = self.yearValues[key]
+            
+            values_obj.stockAndOptionsSum = self.getCombinedSum(yearly_trades_df)
+            values_obj.equityEtfProfits = self.getEquityEtfProfits(yearly_trades_df)
+            values_obj.otherStockAndBondProfits = self.getOtherStockAndBondProfits(yearly_trades_df)
+            values_obj.stockAndEtfLosses = self.getStockAndEtfLosses(yearly_trades_df)
+            
+            values_obj.totalTaxableStockAndEtfProfits = Money(
+                usd=values_obj.equityEtfProfits.usd + values_obj.otherStockAndBondProfits.usd,
+                eur=values_obj.equityEtfProfits.eur + values_obj.otherStockAndBondProfits.eur
+            )
+            
+            values_obj.optionSum = self.getOptionSum(yearly_trades_df)
+            values_obj.longOptionProfits = self.getLongOptionsProfits(yearly_trades_df)
+            values_obj.longOptionLosses = self.getLongOptionLosses(yearly_trades_df)
+            values_obj.longOptionTotalLosses = self.getLongOptionTotalLosses(yearly_trades_df)
+            values_obj.shortOptionProfits = self.getShortOptionProfits(yearly_trades_df)
+            values_obj.shortOptionLosses = self.getShortOptionLosses(yearly_trades_df)
+            values_obj.grossOptionDifferential = self.getOptionDifferential(yearly_trades_df)
+            values_obj.stockFees = - self.getStockFees(yearly_trades_df)
+            values_obj.otherFees = - self.getOtherFees(yearly_trades_df)
+
+            ret[key] = values_obj
 
         return ret
 
