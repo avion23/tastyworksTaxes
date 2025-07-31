@@ -23,6 +23,7 @@ class Values(object):
     debitInterest: Money = Money()
     dividend: Money = Money()
     stockAndOptionsSum: Money = Money()
+    equityEtfGrossProfits: Money = Money()
     equityEtfProfits: Money = Money()
     otherStockAndBondProfits: Money = Money()
     totalTaxableStockAndEtfProfits: Money = Money()
