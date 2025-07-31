@@ -7,6 +7,7 @@ from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
+from tastyworksTaxes.asset_classifier import AssetClassifier
 import pandas as pd
 from typing import List, Callable, Optional, Dict
 
@@ -21,23 +22,12 @@ logger.setLevel(logging.INFO)
 
 
 class Tasty:
-    ASSET_CLASSIFICATION = {
-        "SCHG": "EQUITY_ETF",
-        "TECL": "EQUITY_ETF",
-        "PULS": "BOND_ETF",
-        "VGSH": "BOND_ETF",
-        "ICSH": "BOND_ETF",
-    }
-    
-    IMMOBILIENFONDS_SYMBOLS = set()
-    MISCHFONDS_SYMBOLS = set()
-    EQUITY_ETF_TAXABLE_PORTION = 0.70
-
     def __init__(self, path: Optional[pathlib.Path] = None) -> None:
         self.yearValues: Dict = {}
         self.history: History = History.fromFile(path) if path else History()
         self.closedTrades: pd.DataFrame = pd.DataFrame()
         self.positions: pd.DataFrame = pd.DataFrame()
+        self.classifier = AssetClassifier()
 
     def year(self, year):
         if not year in self.yearValues:
@@ -385,76 +375,60 @@ class Tasty:
     def getOtherFees(self, trades: pd.DataFrame) -> Money:
         return self._sumFees(trades, trades['callPutStock'] != PositionType.stock)
     
-    def _checkUnknownFundTypes(self, trades: pd.DataFrame) -> None:
+    def _checkAssetClassifications(self, trades: pd.DataFrame) -> None:
         stock_trades = trades[trades['callPutStock'] == PositionType.stock]
         if stock_trades.empty:
             return
-            
-        all_known_symbols = set(self.ASSET_CLASSIFICATION.keys()) | self.IMMOBILIENFONDS_SYMBOLS | self.MISCHFONDS_SYMBOLS
-        unknown_symbols = set(stock_trades['Symbol'].unique()) - all_known_symbols
         
-        for symbol in unknown_symbols:
-            symbol_trades = stock_trades[stock_trades['Symbol'] == symbol]
-            if not symbol_trades.empty:
-                logger.warning(f"Unknown fund/stock type for symbol '{symbol}' - treating as regular stock. "
-                             f"If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.")
-    
-    def _checkSpecialFundTypes(self, trades: pd.DataFrame) -> None:
-        stock_trades = trades[trades['callPutStock'] == PositionType.stock]
-        if stock_trades.empty:
-            return
-            
-        immobilien_found = self.IMMOBILIENFONDS_SYMBOLS & set(stock_trades['Symbol'].unique())
-        if immobilien_found:
-            logger.warning(f"Immobilienfonds detected: {', '.join(immobilien_found)}. "
-                         f"These require special Teilfreistellung rates (60%/80%) not currently implemented.")
-                         
-        misch_found = self.MISCHFONDS_SYMBOLS & set(stock_trades['Symbol'].unique())
-        if misch_found:
-            logger.warning(f"Mischfonds detected: {', '.join(misch_found)}. "
-                         f"These require 15% Teilfreistellung rate not currently implemented.")
+        unique_symbols = stock_trades['Symbol'].unique()
+        self.classifier.check_unsupported_assets(unique_symbols)
 
     def getEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
-        self._checkUnknownFundTypes(trades)
-        self._checkSpecialFundTypes(trades)
+        self._checkAssetClassifications(trades)
         
-        equity_etf_symbols = [
-            symbol for symbol, asset_type in self.ASSET_CLASSIFICATION.items() 
-            if asset_type == 'EQUITY_ETF'
+        if trades.empty:
+            return Money()
+        
+        profitable_trades = trades[
+            (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] > 0)
         ]
         
-        if not equity_etf_symbols:
-            return Money()
+        total_taxable_eur = 0.0
+        total_taxable_usd = 0.0
+        
+        for _, trade in profitable_trades.iterrows():
+            classification = self.classifier.classify(trade['Symbol'], trade['callPutStock'])
             
-        is_equity_etf = trades['Symbol'].isin(equity_etf_symbols)
-        is_stock = trades['callPutStock'] == PositionType.stock
-        is_profit = trades['AmountEuro'] > 0
+            if classification == 'EQUITY_ETF':
+                exemption_pct = self.classifier.get_exemption_percentage(classification)
+                taxable_portion = 1.0 - (exemption_pct / 100.0)
+                
+                total_taxable_eur += trade['AmountEuro'] * taxable_portion
+                total_taxable_usd += trade['Amount'] * taxable_portion
+                
+                logger.debug(f"Applied {exemption_pct}% Teilfreistellung to {trade['Symbol']}")
         
-        profitable_etf_trades = trades[is_equity_etf & is_stock & is_profit]
-        
-        if profitable_etf_trades.empty:
-            return Money()
-
-        logger.debug(f"Applying {1 - self.EQUITY_ETF_TAXABLE_PORTION:.0%} Teilfreistellung to {len(profitable_etf_trades)} trades.")
-        
-        taxable_usd = (profitable_etf_trades['Amount'] * self.EQUITY_ETF_TAXABLE_PORTION).sum()
-        taxable_eur = (profitable_etf_trades['AmountEuro'] * self.EQUITY_ETF_TAXABLE_PORTION).sum()
-        
-        return Money(usd=taxable_usd, eur=taxable_eur)
+        return Money(usd=total_taxable_usd, eur=total_taxable_eur)
 
     def getOtherStockAndBondProfits(self, trades: pd.DataFrame) -> Money:
-        equity_etf_symbols = [
-            symbol for symbol, asset_type in self.ASSET_CLASSIFICATION.items() 
-            if asset_type == 'EQUITY_ETF'
+        if trades.empty:
+            return Money()
+        
+        profitable_trades = trades[
+            (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] > 0)
         ]
         
-        is_stock_or_bond = trades['callPutStock'] == PositionType.stock
-        is_not_equity_etf = ~trades['Symbol'].isin(equity_etf_symbols)
-        is_profit = trades['AmountEuro'] > 0
-
-        other_profitable_trades = trades[is_stock_or_bond & is_not_equity_etf & is_profit]
+        total_eur = 0.0
+        total_usd = 0.0
         
-        return self._sumMoney(other_profitable_trades)
+        for _, trade in profitable_trades.iterrows():
+            classification = self.classifier.classify(trade['Symbol'], trade['callPutStock'])
+            
+            if classification not in ['EQUITY_ETF']:
+                total_eur += trade['AmountEuro']
+                total_usd += trade['Amount']
+        
+        return Money(usd=total_usd, eur=total_eur)
 
     def getStockAndEtfLosses(self, trades: pd.DataFrame) -> Money:
         condition = (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] <= 0)
