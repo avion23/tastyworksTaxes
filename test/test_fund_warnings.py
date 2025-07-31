@@ -22,7 +22,7 @@ class TestTastyWithAssetClassifier:
         ])
         
         with caplog.at_level(logging.WARNING):
-            tasty_instance.getEquityEtfProfits(trades)
+            tasty_instance._checkAssetClassifications(trades)
         
         assert "Unknown fund/stock type" in caplog.text
         assert "UNKNOWN_FUND" in caplog.text
