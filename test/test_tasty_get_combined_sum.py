@@ -70,7 +70,6 @@ class TestTastyFinancialCalculations:
 
     @pytest.mark.parametrize("method_name,expected_usd,expected_eur", [
         ("getCombinedSum", -2518.0, -2059.88),
-        ("getStockSum", -5396.0, -4401.11),
         ("getOptionSum", 2878.0, 2341.23)
     ])
     def test_money_calculations_with_sample_df(self, method_name, expected_usd, expected_eur, sample_df):
@@ -81,6 +80,20 @@ class TestTastyFinancialCalculations:
         assert isinstance(result, Money)
         assert result.usd == expected_usd
         assert round(result.eur, 2) == expected_eur
+        
+    def test_stock_calculations_with_sample_df(self, sample_df):
+        t = Tasty()
+        equity_etf_profits = t.getEquityEtfProfits(sample_df)
+        other_profits = t.getOtherStockAndBondProfits(sample_df) 
+        losses = t.getStockAndEtfLosses(sample_df)
+        
+        total_stock = Money(
+            usd=equity_etf_profits.usd + other_profits.usd + losses.usd,
+            eur=equity_etf_profits.eur + other_profits.eur + losses.eur
+        )
+        
+        assert total_stock.usd == -5396.0
+        assert round(total_stock.eur, 2) == -4401.11
         
     def test_getCombinedSum_minimal_data(self):
         t = Tasty()
@@ -297,24 +310,34 @@ class TestTastyFinancialCalculations:
         assert result.usd == expected_usd
         assert round(result.eur, 2) == expected_eur
         
-    def test_getStockProfits(self):
+    def test_stock_profits_calculation(self):
         t = Tasty()
         data = [
             {
                 'Amount': 350.0,
                 'AmountEuro': 284.90,
-                'callPutStock': PositionType.stock
+                'callPutStock': PositionType.stock,
+                'Symbol': 'AAPL'
             },
             {
                 'Amount': -200.0,
                 'AmountEuro': -162.85,
-                'callPutStock': PositionType.stock
+                'callPutStock': PositionType.stock,
+                'Symbol': 'MSFT'
             }
         ]
         
-        result = t.getStockProfits(pd.DataFrame(data))
-        assert result.usd == 350.0
-        assert round(result.eur, 2) == 284.90
+        df = pd.DataFrame(data)
+        equity_etf_profits = t.getEquityEtfProfits(df)
+        other_profits = t.getOtherStockAndBondProfits(df)
+        
+        total_profits = Money(
+            usd=equity_etf_profits.usd + other_profits.usd,
+            eur=equity_etf_profits.eur + other_profits.eur
+        )
+        
+        assert total_profits.usd == 350.0
+        assert round(total_profits.eur, 2) == 284.90
         
     def test_getFeesSum(self):
         t = Tasty()

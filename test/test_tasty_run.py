@@ -40,10 +40,12 @@ class TestTastyRun:
         result = t.run()
         
         assert len(result) > 0
-        assert any(hasattr(year_value, 'stockSum') for year_value in result.values())
+        assert any(hasattr(year_value, 'equityEtfProfits') for year_value in result.values())
         
         for year, value in result.items():
             assert isinstance(year, int)
             assert isinstance(value.stockAndOptionsSum, Money)
-            assert isinstance(value.stockSum, Money)
+            assert isinstance(value.equityEtfProfits, Money)
+            assert isinstance(value.otherStockAndBondProfits, Money)
+            assert isinstance(value.stockAndEtfLosses, Money)
             assert isinstance(value.optionSum, Money)
