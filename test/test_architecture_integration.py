@@ -39,6 +39,40 @@ class TestArchitectureIntegration:
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01
     
+    def test_gross_equity_etf_profits_calculation(self, tasty_instance):
+        trades = pd.DataFrame([
+            {
+                'Symbol': 'SCHG',
+                'callPutStock': PositionType.stock,
+                'AmountEuro': 100.0,
+                'Amount': 120.0
+            },
+            {
+                'Symbol': 'TECL',
+                'callPutStock': PositionType.stock,
+                'AmountEuro': 200.0,
+                'Amount': 240.0
+            },
+            {
+                'Symbol': 'AAPL',
+                'callPutStock': PositionType.stock,
+                'AmountEuro': 50.0,
+                'Amount': 60.0
+            }
+        ])
+        
+        gross_result = tasty_instance.getGrossEquityEtfProfits(trades)
+        taxable_result = tasty_instance.getEquityEtfProfits(trades)
+        
+        expected_gross_eur = 100.0 + 200.0
+        expected_gross_usd = 120.0 + 240.0
+        
+        assert abs(gross_result.eur - expected_gross_eur) < 0.01
+        assert abs(gross_result.usd - expected_gross_usd) < 0.01
+        
+        assert abs(taxable_result.eur - (expected_gross_eur * 0.70)) < 0.01
+        assert abs(taxable_result.usd - (expected_gross_usd * 0.70)) < 0.01
+    
     def test_other_stock_and_bond_profits_excludes_equity_etfs(self, tasty_instance):
         trades = pd.DataFrame([
             {

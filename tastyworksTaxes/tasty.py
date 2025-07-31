@@ -383,6 +383,26 @@ class Tasty:
         unique_symbols = stock_trades['Symbol'].unique()
         self.classifier.check_unsupported_assets(unique_symbols)
 
+    def getGrossEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
+        if trades.empty:
+            return Money()
+        
+        profitable_trades = trades[
+            (trades['callPutStock'] == PositionType.stock) & (trades['AmountEuro'] > 0)
+        ]
+        
+        total_eur = 0.0
+        total_usd = 0.0
+        
+        for _, trade in profitable_trades.iterrows():
+            classification = self.classifier.classify(trade['Symbol'], trade['callPutStock'])
+            
+            if classification == 'EQUITY_ETF':
+                total_eur += trade['AmountEuro']
+                total_usd += trade['Amount']
+        
+        return Money(usd=total_usd, eur=total_eur)
+
     def getEquityEtfProfits(self, trades: pd.DataFrame) -> Money:
         self._checkAssetClassifications(trades)
         
@@ -453,6 +473,7 @@ class Tasty:
             values_obj = self.yearValues[key]
             
             values_obj.stockAndOptionsSum = self.getCombinedSum(yearly_trades_df)
+            values_obj.equityEtfGrossProfits = self.getGrossEquityEtfProfits(yearly_trades_df)
             values_obj.equityEtfProfits = self.getEquityEtfProfits(yearly_trades_df)
             values_obj.otherStockAndBondProfits = self.getOtherStockAndBondProfits(yearly_trades_df)
             values_obj.stockAndEtfLosses = self.getStockAndEtfLosses(yearly_trades_df)
