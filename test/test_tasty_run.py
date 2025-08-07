@@ -7,12 +7,43 @@ import pprint
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.values import Values
+from tastyworksTaxes.fifo_processor import TradeResult
+from tastyworksTaxes.position import PositionType
 
 class TestTastyRun:
     def test_tasty_run_with_merged_data(self):
         t = Tasty()
         t.processTransactionHistory = MagicMock()
-        t.closedTrades = pd.read_csv("test/closed-trades.csv")
+        
+        sample_trades = [
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.call,
+                opening_date='2018-03-12 17:08:00',
+                closing_date='2018-03-19 22:00:00',
+                quantity=-2,
+                profit_usd=1420.0,
+                profit_eur=1154.28,
+                fees_usd=2.324,
+                fees_eur=1.89,
+                worthless_expiry=False,
+                strike=30.0,
+                expiry='2018-06-15'
+            ),
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.stock,
+                opening_date='2018-03-19 22:00:00',
+                closing_date='2018-03-21 18:42:00',
+                quantity=-100,
+                profit_usd=-2676.0,
+                profit_eur=-2182.65,
+                fees_usd=2.662,
+                fees_eur=2.16,
+                worthless_expiry=False
+            )
+        ]
+        t.position_manager.closed_trades = sample_trades
         
         result = t.run()
         
@@ -35,7 +66,6 @@ class TestTastyRun:
     
     def test_run_with_real_csv_data(self):
         t = Tasty(pathlib.Path("test/merged3.csv"))
-        t.closedTrades = pd.read_csv("test/closed-trades.csv")
         
         result = t.run()
         

@@ -4,88 +4,99 @@ import pandas as pd
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.fifo_processor import TradeResult
+from tastyworksTaxes.trade_calculator import (
+    calculate_combined_sum, calculate_option_sum, calculate_long_option_profits,
+    calculate_long_option_losses, calculate_long_option_total_losses,
+    calculate_short_option_profits, calculate_short_option_losses,
+    calculate_option_differential, calculate_stock_loss, calculate_stock_fees,
+    calculate_other_fees, calculate_fees_sum, calculate_gross_equity_etf_profits,
+    calculate_equity_etf_profits, calculate_other_stock_and_bond_profits
+)
 
 class TestTastyFinancialCalculations:
     @pytest.fixture
-    def sample_df(self):
-        data = [
-            {
-                'Amount': 1420.0,
-                'AmountEuro': 1154.28,
-                'Symbol': 'LFIN',
-                'callPutStock': PositionType.call,
-                'Closing Date': '2018-03-19 22:00:00',
-                'worthlessExpiry': False,
-                'Expiry': '2018-06-15',
-                'Strike': 30.0,
-                'Fees': 2.324,
-                'FeesEuro': 1.89,
-                'Opening Date': '2018-03-12 17:08:00',
-                'Quantity': -2
-            },
-            {
-                'Amount': 1458.0,
-                'AmountEuro': 1186.95,
-                'Symbol': 'LFIN',
-                'callPutStock': PositionType.call,
-                'Closing Date': '2018-03-21 18:42:00',
-                'worthlessExpiry': False,
-                'Expiry': '2018-06-15',
-                'Strike': 40.0,
-                'Fees': 1.32,
-                'FeesEuro': 1.07,
-                'Opening Date': '2018-03-12 17:08:00',
-                'Quantity': 1
-            },
-            {
-                'Amount': -2676.0,
-                'AmountEuro': -2182.65,
-                'Symbol': 'LFIN',
-                'callPutStock': PositionType.stock,
-                'Closing Date': '2018-03-21 18:42:00',
-                'worthlessExpiry': False,
-                'Expiry': '',
-                'Strike': '',
-                'Fees': 2.662,
-                'FeesEuro': 2.16,
-                'Opening Date': '2018-03-19 22:00:00',
-                'Quantity': -100
-            },
-            {
-                'Amount': -2720.0,
-                'AmountEuro': -2218.46,
-                'Symbol': 'LFIN',
-                'callPutStock': PositionType.stock,
-                'Closing Date': '2018-03-21 19:59:00',
-                'worthlessExpiry': False,
-                'Expiry': '',
-                'Strike': '',
-                'Fees': 2.662,
-                'FeesEuro': 2.16,
-                'Opening Date': '2018-03-19 22:00:00',
-                'Quantity': -100
-            }
+    def sample_trades(self):
+        return [
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.call,
+                opening_date='2018-03-12 17:08:00',
+                closing_date='2018-03-19 22:00:00',
+                quantity=-2,
+                profit_usd=1420.0,
+                profit_eur=1154.28,
+                fees_usd=2.324,
+                fees_eur=1.89,
+                worthless_expiry=False,
+                strike=30.0,
+                expiry='2018-06-15'
+            ),
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.call,
+                opening_date='2018-03-12 17:08:00',
+                closing_date='2018-03-21 18:42:00',
+                quantity=1,
+                profit_usd=1458.0,
+                profit_eur=1186.95,
+                fees_usd=1.32,
+                fees_eur=1.07,
+                worthless_expiry=False,
+                strike=40.0,
+                expiry='2018-06-15'
+            ),
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.stock,
+                opening_date='2018-03-19 22:00:00',
+                closing_date='2018-03-21 18:42:00',
+                quantity=-100,
+                profit_usd=-2676.0,
+                profit_eur=-2182.65,
+                fees_usd=2.662,
+                fees_eur=2.16,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='LFIN',
+                position_type=PositionType.stock,
+                opening_date='2018-03-19 22:00:00',
+                closing_date='2018-03-21 19:59:00',
+                quantity=-100,
+                profit_usd=-2720.0,
+                profit_eur=-2218.46,
+                fees_usd=2.662,
+                fees_eur=2.16,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
-        return pd.DataFrame(data)
 
     @pytest.mark.parametrize("method_name,expected_usd,expected_eur", [
-        ("getCombinedSum", -2518.0, -2059.88),
-        ("getOptionSum", 2878.0, 2341.23)
+        ("calculate_combined_sum", -2518.0, -2059.88),
+        ("calculate_option_sum", 2878.0, 2341.23)
     ])
-    def test_money_calculations_with_sample_df(self, method_name, expected_usd, expected_eur, sample_df):
-        t = Tasty()
-        method = getattr(t, method_name)
-        result = method(sample_df)
+    def test_money_calculations_with_sample_df(self, method_name, expected_usd, expected_eur, sample_trades):
+        function_map = {
+            "calculate_combined_sum": calculate_combined_sum,
+            "calculate_option_sum": calculate_option_sum
+        }
+        method = function_map[method_name]
+        result = method(sample_trades)
         
         assert isinstance(result, Money)
         assert result.usd == expected_usd
         assert round(result.eur, 2) == expected_eur
         
-    def test_stock_calculations_with_sample_df(self, sample_df):
+    def test_stock_calculations_with_sample_df(self, sample_trades):
         t = Tasty()
-        equity_etf_profits = t.getEquityEtfProfits(sample_df)
-        other_profits = t.getOtherStockAndBondProfits(sample_df) 
-        losses = t.getStockAndEtfLosses(sample_df)
+        equity_etf_profits = calculate_equity_etf_profits(sample_trades, t.classifier)
+        other_profits = calculate_other_stock_and_bond_profits(sample_trades, t.classifier) 
+        losses = calculate_stock_loss(sample_trades)
         
         total_stock = Money(
             usd=equity_etf_profits.usd + other_profits.usd + losses.usd,
@@ -96,175 +107,304 @@ class TestTastyFinancialCalculations:
         assert round(total_stock.eur, 2) == -4401.11
         
     def test_getCombinedSum_minimal_data(self):
-        t = Tasty()
-        data = [
-            {'Amount': 1458.0, 'AmountEuro': 1186.95},
-            {'Amount': -2676.0, 'AmountEuro': -2182.65}
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=1458.0,
+                profit_eur=1186.95,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=-2676.0,
+                profit_eur=-2182.65,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getCombinedSum(pd.DataFrame(data))
+        result = calculate_combined_sum(trades)
         assert result.usd == -1218.0
         assert result.eur == -995.7
         
     def test_getLongOptionsProfits(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 1457.0,
-                'AmountEuro': 1186.14,
-                'callPutStock': PositionType.call,
-                'Quantity': 1,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': 1520.0,
-                'AmountEuro': 1236.45,
-                'callPutStock': PositionType.put,
-                'Quantity': 2,
-                'worthlessExpiry': False
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=1457.0,
+                profit_eur=1186.14,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=1520.0,
+                profit_eur=1236.45,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getLongOptionsProfits(pd.DataFrame(data))
+        result = calculate_long_option_profits(trades)
         assert result.usd == 2977.0
         assert round(result.eur, 2) == 2422.59
         
     def test_getLongOptionLosses(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': -193.0,
-                'AmountEuro': -157.05,
-                'callPutStock': PositionType.put,
-                'Quantity': 2,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': 245.0,
-                'AmountEuro': 199.35,
-                'callPutStock': PositionType.call,
-                'Quantity': 1,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': -702.0,
-                'AmountEuro': -571.20,
-                'callPutStock': PositionType.call,
-                'Quantity': 2,
-                'worthlessExpiry': True
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=-193.0,
+                profit_eur=-157.05,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=245.0,
+                profit_eur=199.35,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=-702.0,
+                profit_eur=-571.20,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=True,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getLongOptionLosses(pd.DataFrame(data))
+        result = calculate_long_option_losses(trades)
         assert result.usd == -193.0
         assert round(result.eur, 2) == -157.05
         
     def test_getLongOptionTotalLosses(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': -193.0,
-                'AmountEuro': -157.05,
-                'callPutStock': PositionType.put,
-                'Quantity': 2,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': -702.0,
-                'AmountEuro': -571.20,
-                'callPutStock': PositionType.call,
-                'Quantity': 2,
-                'worthlessExpiry': True
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=-193.0,
+                profit_eur=-157.05,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=-702.0,
+                profit_eur=-571.20,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=True,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getLongOptionTotalLosses(pd.DataFrame(data))
+        result = calculate_long_option_total_losses(trades)
         assert result.usd == -702.0
         assert round(result.eur, 2) == -571.20
         
     def test_getShortOptionProfits(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 145.0,
-                'AmountEuro': 118.05,
-                'callPutStock': PositionType.call,
-                'Quantity': -1,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': -55.0,
-                'AmountEuro': -44.75,
-                'callPutStock': PositionType.put,
-                'Quantity': -2,
-                'worthlessExpiry': False
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=-1,
+                profit_usd=145.0,
+                profit_eur=118.05,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=-2,
+                profit_usd=-55.0,
+                profit_eur=-44.75,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getShortOptionProfits(pd.DataFrame(data))
+        result = calculate_short_option_profits(trades)
         assert result.usd == 145.0
         assert round(result.eur, 2) == 118.05
         
     def test_getShortOptionLosses(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 145.0,
-                'AmountEuro': 118.05,
-                'callPutStock': PositionType.call,
-                'Quantity': -1,
-                'worthlessExpiry': False
-            },
-            {
-                'Amount': -55.0,
-                'AmountEuro': -44.75,
-                'callPutStock': PositionType.put,
-                'Quantity': -2,
-                'worthlessExpiry': False
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=-1,
+                profit_usd=145.0,
+                profit_eur=118.05,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=-2,
+                profit_usd=-55.0,
+                profit_eur=-44.75,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getShortOptionLosses(pd.DataFrame(data))
+        result = calculate_short_option_losses(trades)
         assert result.usd == -55.0
         assert round(result.eur, 2) == -44.75
         
     def test_getOptionDifferential(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 145.0,
-                'AmountEuro': 118.05,
-                'callPutStock': PositionType.call,
-                'Quantity': -1
-            },
-            {
-                'Amount': -100.0,
-                'AmountEuro': -81.45,
-                'callPutStock': PositionType.put,
-                'Quantity': 2
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=-1,
+                profit_usd=145.0,
+                profit_eur=118.05,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=2,
+                profit_usd=-100.0,
+                profit_eur=-81.45,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getOptionDifferential(pd.DataFrame(data))
+        result = calculate_option_differential(trades)
         assert result.usd == 100.0
         assert round(result.eur, 2) == 81.45
         
     def test_getStockLoss(self):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 350.0,
-                'AmountEuro': 284.90,
-                'callPutStock': PositionType.stock
-            },
-            {
-                'Amount': -200.0,
-                'AmountEuro': -162.85,
-                'callPutStock': PositionType.stock
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=350.0,
+                profit_eur=284.90,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=-200.0,
+                profit_eur=-162.85,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getStockLoss(pd.DataFrame(data))
+        result = calculate_stock_loss(trades)
         assert result.usd == -200.0
         assert round(result.eur, 2) == -162.85
         
@@ -273,63 +413,110 @@ class TestTastyFinancialCalculations:
         ("getOtherFees", 4.0, 3.25)
     ])
     def test_fee_calculations(self, fee_method, expected_usd, expected_eur):
-        t = Tasty()
-        data = [
-            {
-                'Amount': 350.0,
-                'AmountEuro': 284.90,
-                'callPutStock': PositionType.stock,
-                'Fees': 1.25,
-                'FeesEuro': 1.02
-            },
-            {
-                'Amount': 145.0,
-                'AmountEuro': 118.05,
-                'callPutStock': PositionType.call,
-                'Fees': 2.25,
-                'FeesEuro': 1.83
-            },
-            {
-                'Amount': -200.0,
-                'AmountEuro': -162.85,
-                'callPutStock': PositionType.stock,
-                'Fees': 1.35,
-                'FeesEuro': 1.10
-            },
-            {
-                'Amount': -100.0,
-                'AmountEuro': -81.45,
-                'callPutStock': PositionType.put,
-                'Fees': 1.75,
-                'FeesEuro': 1.42
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=350.0,
+                profit_eur=284.90,
+                fees_usd=1.25,
+                fees_eur=1.02,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=145.0,
+                profit_eur=118.05,
+                fees_usd=2.25,
+                fees_eur=1.83,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=-200.0,
+                profit_eur=-162.85,
+                fees_usd=1.35,
+                fees_eur=1.10,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.put,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=-100.0,
+                profit_eur=-81.45,
+                fees_usd=1.75,
+                fees_eur=1.42,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        method = getattr(t, fee_method)
-        result = method(pd.DataFrame(data))
+        function_map = {
+            "getStockFees": calculate_stock_fees,
+            "getOtherFees": calculate_other_fees
+        }
+        method = function_map[fee_method]
+        result = method(trades)
         assert result.usd == expected_usd
         assert round(result.eur, 2) == expected_eur
         
     def test_stock_profits_calculation(self):
         t = Tasty()
-        data = [
-            {
-                'Amount': 350.0,
-                'AmountEuro': 284.90,
-                'callPutStock': PositionType.stock,
-                'Symbol': 'AAPL'
-            },
-            {
-                'Amount': -200.0,
-                'AmountEuro': -162.85,
-                'callPutStock': PositionType.stock,
-                'Symbol': 'MSFT'
-            }
+        trades = [
+            TradeResult(
+                symbol='AAPL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=350.0,
+                profit_eur=284.90,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='MSFT',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=-200.0,
+                profit_eur=-162.85,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        df = pd.DataFrame(data)
-        equity_etf_profits = t.getEquityEtfProfits(df)
-        other_profits = t.getOtherStockAndBondProfits(df)
+        t = Tasty()
+        equity_etf_profits = calculate_equity_etf_profits(trades, t.classifier)
+        other_profits = calculate_other_stock_and_bond_profits(trades, t.classifier)
         
         total_profits = Money(
             usd=equity_etf_profits.usd + other_profits.usd,
@@ -340,22 +527,51 @@ class TestTastyFinancialCalculations:
         assert round(total_profits.eur, 2) == 284.90
         
     def test_getFeesSum(self):
-        t = Tasty()
-        data = [
-            {
-                'Fees': 1.25,
-                'FeesEuro': 1.02
-            },
-            {
-                'Fees': 2.25,
-                'FeesEuro': 1.83
-            },
-            {
-                'Fees': 1.75,
-                'FeesEuro': 1.42
-            }
+        trades = [
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=0,
+                profit_eur=0,
+                fees_usd=1.25,
+                fees_eur=1.02,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=0,
+                profit_eur=0,
+                fees_usd=2.25,
+                fees_eur=1.83,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TEST',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=0,
+                profit_eur=0,
+                fees_usd=1.75,
+                fees_eur=1.42,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
         ]
         
-        result = t.getFeesSum(pd.DataFrame(data))
+        result = calculate_fees_sum(trades)
         assert result.usd == 5.25
         assert round(result.eur, 2) == 4.27

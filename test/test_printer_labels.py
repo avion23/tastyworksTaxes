@@ -9,8 +9,8 @@ class TestPrinterLabels:
         values = Values()
         values.equityEtfProfits = Money(usd=100.0, eur=80.0)
         
-        empty_df = pd.DataFrame()
-        printer = Printer(values, empty_df)
+        empty_trades = []
+        printer = Printer(values, empty_trades)
         
         report = printer.generateDummyReport()
         
@@ -27,8 +27,8 @@ class TestPrinterLabels:
         values.otherStockAndBondProfits = Money(usd=50.0, eur=40.0)
         values.stockAndEtfLosses = Money(usd=-20.0, eur=-16.0)
         
-        empty_df = pd.DataFrame()
-        printer = Printer(values, empty_df)
+        empty_trades = []
+        printer = Printer(values, empty_trades)
         
         report = printer.generateDummyReport()
         
