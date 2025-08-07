@@ -3,6 +3,11 @@ import pandas as pd
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.money import Money
+from tastyworksTaxes.fifo_processor import TradeResult
+from tastyworksTaxes.trade_calculator import (
+    calculate_gross_equity_etf_profits, calculate_equity_etf_profits,
+    calculate_other_stock_and_bond_profits
+)
 
 class TestArchitectureIntegration:
     @pytest.fixture
@@ -10,28 +15,52 @@ class TestArchitectureIntegration:
         return Tasty()
     
     def test_equity_etf_profits_with_new_architecture(self, tasty_instance):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'SCHG',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            },
-            {
-                'Symbol': 'TECL',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 200.0,
-                'Amount': 240.0
-            },
-            {
-                'Symbol': 'AAPL',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 50.0,
-                'Amount': 60.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='SCHG',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TECL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=240.0,
+                profit_eur=200.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='AAPL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=60.0,
+                profit_eur=50.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
-        result = tasty_instance.getEquityEtfProfits(trades)
+        result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
         expected_eur = (100.0 + 200.0) * 0.70
         expected_usd = (120.0 + 240.0) * 0.70
@@ -40,29 +69,53 @@ class TestArchitectureIntegration:
         assert abs(result.usd - expected_usd) < 0.01
     
     def test_gross_equity_etf_profits_calculation(self, tasty_instance):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'SCHG',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            },
-            {
-                'Symbol': 'TECL',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 200.0,
-                'Amount': 240.0
-            },
-            {
-                'Symbol': 'AAPL',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 50.0,
-                'Amount': 60.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='SCHG',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='TECL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=240.0,
+                profit_eur=200.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='AAPL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=60.0,
+                profit_eur=50.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
-        gross_result = tasty_instance.getGrossEquityEtfProfits(trades)
-        taxable_result = tasty_instance.getEquityEtfProfits(trades)
+        gross_result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
+        taxable_result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
         expected_gross_eur = 100.0 + 200.0
         expected_gross_usd = 120.0 + 240.0
@@ -74,28 +127,52 @@ class TestArchitectureIntegration:
         assert abs(taxable_result.usd - (expected_gross_usd * 0.70)) < 0.01
     
     def test_other_stock_and_bond_profits_excludes_equity_etfs(self, tasty_instance):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'SCHG',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            },
-            {
-                'Symbol': 'AAPL',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 50.0,
-                'Amount': 60.0
-            },
-            {
-                'Symbol': 'PULS',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 75.0,
-                'Amount': 90.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='SCHG',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='AAPL',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=60.0,
+                profit_eur=50.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='PULS',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=90.0,
+                profit_eur=75.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
-        result = tasty_instance.getOtherStockAndBondProfits(trades)
+        result = calculate_other_stock_and_bond_profits(trades, tasty_instance.classifier)
         
         expected_eur = 50.0 + 75.0
         expected_usd = 60.0 + 90.0
@@ -115,20 +192,36 @@ class TestArchitectureIntegration:
         assert tasty_instance.classifier.get_exemption_percentage('REAL_ESTATE_ETF') == 60
     
     def test_mixed_and_real_estate_funds_work_with_classification(self, tasty_instance):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'AOM',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            },
-            {
-                'Symbol': 'VNQ',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 200.0,
-                'Amount': 240.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='AOM',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            ),
+            TradeResult(
+                symbol='VNQ',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=240.0,
+                profit_eur=200.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
         aom_classification = tasty_instance.classifier.classify('AOM', PositionType.stock)
         vnq_classification = tasty_instance.classifier.classify('VNQ', PositionType.stock)

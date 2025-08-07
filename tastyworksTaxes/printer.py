@@ -344,9 +344,9 @@ class EnglishTaxReport(object):
 
 
 class Printer(object):
-    def __init__(self, values: Values, closedTrades: pd.DataFrame) -> None:
+    def __init__(self, values: Values, closed_trades: list) -> None:
         self.values = values
-        self.closedTrades = closedTrades
+        self.closed_trades = closed_trades
 
     def generateEnglishTaxReport(self) -> EnglishTaxReport:
         report = EnglishTaxReport()

@@ -14,13 +14,10 @@ class TestTastyReverseSplit:
         """
         t = Tasty()
         
-        # Add a single position
-        t.addPosition(Transaction.fromString("04/23/2020 7:30 PM,Trade,Buy to Open,USO,Buy,Open,6,07/17/2020,2,P,0.29,6.83,-174,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...39"))
-        assert len(t.positions) == 1
+        t.position_manager.add_position(Transaction.fromString("04/23/2020 7:30 PM,Trade,Buy to Open,USO,Buy,Open,6,07/17/2020,2,P,0.29,6.83,-174,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...39"))
+        assert len(t.position_manager.open_lots) == 1
         
-        # Process a reverse split transaction
-        t.addPosition(Transaction.fromString("04/29/2020 12:35 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.29,0.0,174,Sold 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...39"))
+        t.position_manager.add_position(Transaction.fromString("04/29/2020 12:35 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.29,0.0,174,Sold 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...39"))
         
-        # Verify the position was closed
-        assert len(t.positions) == 0
-        assert len(t.closedTrades) == 1
+        assert len(t.position_manager.open_lots) == 0
+        assert len(t.position_manager.closed_trades) == 1

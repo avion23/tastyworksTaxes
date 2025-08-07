@@ -13,6 +13,7 @@ class TestAssetClassifier:
         assert classifier.classify('SCHG', PositionType.stock) == 'EQUITY_ETF'
         assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
         assert classifier.classify('QQQ', PositionType.stock) == 'EQUITY_ETF'
+        assert classifier.classify('TQQQ', PositionType.stock) == 'EQUITY_ETF'
     
     def test_classify_bond_etf(self, classifier):
         assert classifier.classify('PULS', PositionType.stock) == 'BOND_ETF'

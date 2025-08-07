@@ -46,17 +46,21 @@ def main() -> None:
         print(f"Values for year {year} in Euro:")
         # for attr, value in vars(values).items():
             # print(f"{attr}: {value}")
-        p = Printer(values=values, closedTrades=t.closedTrades)
+        p = Printer(values=values, closed_trades=t.position_manager.closed_trades)
         print(p.generateDummyReport())
     if args.write_closed_trades:
         logging.info(
             f"Writing closed trades to: '{args.write_closed_trades}'")
-        closedTrades = t.closedTrades
-        if not closedTrades.empty:
-            closedTrades.to_csv(args.write_closed_trades, index=False)
+        closed_trades = t.position_manager.closed_trades
+        if closed_trades:
+            import pandas as pd
+            from dataclasses import asdict
+            trades_data = [asdict(trade) for trade in closed_trades]
+            df = pd.DataFrame(trades_data)
+            df.to_csv(args.write_closed_trades, index=False)
         else:
             logging.error(
-                "The closed trades dataframe is empty. Not saving to file.")
+                "The closed trades list is empty. Not saving to file.")
     logging.info("Done")
 
 

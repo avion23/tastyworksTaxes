@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.fifo_processor import TradeResult
 
 class TestTastyWithAssetClassifier:
     @pytest.fixture
@@ -12,14 +13,22 @@ class TestTastyWithAssetClassifier:
         return Tasty()
     
     def test_asset_classification_warnings_in_equity_etf_profits(self, tasty_instance, caplog):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'UNKNOWN_FUND',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='UNKNOWN_FUND',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
         with caplog.at_level(logging.WARNING):
             tasty_instance._checkAssetClassifications(trades)
@@ -28,21 +37,29 @@ class TestTastyWithAssetClassifier:
         assert "UNKNOWN_FUND" in caplog.text
     
     def test_warnings_called_via_check_asset_classifications(self, tasty_instance):
-        trades = pd.DataFrame([
-            {
-                'Symbol': 'UNKNOWN_FUND',
-                'callPutStock': PositionType.stock,
-                'AmountEuro': 100.0,
-                'Amount': 120.0
-            }
-        ])
+        trades = [
+            TradeResult(
+                symbol='UNKNOWN_FUND',
+                position_type=PositionType.stock,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=120.0,
+                profit_eur=100.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
         with patch.object(tasty_instance.classifier, 'check_unsupported_assets') as mock_check:
             tasty_instance._checkAssetClassifications(trades)
             mock_check.assert_called_once()
     
     def test_no_warnings_for_empty_trades(self, tasty_instance, caplog):
-        empty_trades = pd.DataFrame(columns=['Symbol', 'callPutStock', 'AmountEuro'])
+        empty_trades = []
         
         with caplog.at_level(logging.WARNING):
             tasty_instance._checkAssetClassifications(empty_trades)
@@ -50,13 +67,22 @@ class TestTastyWithAssetClassifier:
         assert len(caplog.records) == 0
     
     def test_no_warnings_for_option_trades(self, tasty_instance, caplog):
-        option_trades = pd.DataFrame([
-            {
-                'Symbol': 'UNKNOWN_OPTION',
-                'callPutStock': PositionType.call,
-                'AmountEuro': 50.0
-            }
-        ])
+        option_trades = [
+            TradeResult(
+                symbol='UNKNOWN_OPTION',
+                position_type=PositionType.call,
+                opening_date='2020-01-01 00:00:00',
+                closing_date='2020-01-02 00:00:00',
+                quantity=1,
+                profit_usd=50.0,
+                profit_eur=50.0,
+                fees_usd=0,
+                fees_eur=0,
+                worthless_expiry=False,
+                strike=None,
+                expiry=None
+            )
+        ]
         
         with caplog.at_level(logging.WARNING):
             tasty_instance._checkAssetClassifications(option_trades)

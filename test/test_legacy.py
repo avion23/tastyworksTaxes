@@ -67,7 +67,6 @@ def test_equity_sell_to_open(create_input_df):
     assert result['Price'].iloc[0] == '30'
     assert float(result['Fees'].iloc[0]) == 5.16
     assert float(result['Amount'].iloc[0]) == 6000.00
-    # Expect empty string for equity
     assert result['Expiration Date'].iloc[0] == ''
     assert result['Strike'].iloc[0] == ''  # Expect empty string for equity
     assert result['Call/Put'].iloc[0] == ''  # Expect empty string for equity

@@ -13,7 +13,6 @@ def clean_numpy_str(s):
     """Remove np.float64 from string representation"""
     return re.sub(r'np\.float64\(([^)]+)\)', r'\1', s)
 
-# Money class tests
 def test_money_init_and_repr():
     m = Money(eur=10.5, usd=12.7)
     assert clean_numpy_str(str(m)) == "{'eur': 10.5, 'usd': 12.7}"
@@ -38,10 +37,8 @@ def test_money_neg():
 def test_money_fromUsdToEur():
     c = Money(usd=100)
     c.fromUsdToEur(date='2010-11-21')
-    # Check approximate value due to possible rate differences
     assert 73 <= c.eur <= 74
 
-# Tasty money_movement tests
 def test_debit_interest():
     t = Tasty()
     debit_interest_tx = Transaction.fromString("06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...39")
@@ -65,17 +62,7 @@ def test_securities_lending_income():
     lending_income_transaction = Transaction.fromString(
         "08/13/2024 11:00 PM,Money Movement,Fully Paid Stock Lending Income,,,,0,,,,,0.00,0.20,FULLYPAID LENDING REBATE,Individual...39")
     t.moneyMovement(lending_income_transaction)
-    # Don't check exact value due to possible currency rate differences
     lending_income = t.year(2024).securitiesLendingIncome
     assert 0.18 <= float(clean_numpy_str(str(lending_income)).split(':')[1].split(',')[0]) <= 0.19
     assert "'usd': 0.2" in clean_numpy_str(str(lending_income))
 
-# Tasty updatePosition tests
-def test_update_position_calculations():
-    assert Tasty._updatePosition(1, 1) == (2, 0, 0)
-    assert Tasty._updatePosition(1, -1) == (0, 0, -1)
-    assert Tasty._updatePosition(1, 0) == (1, 0, 0)
-    assert Tasty._updatePosition(-1, 1) == (0, 0, 1)
-    assert Tasty._updatePosition(-3, 1) == (-2, 0, 1)
-    assert Tasty._updatePosition(-3, 2) == (-1, 0, 2)
-    assert Tasty._updatePosition(-16, 5) == (-11, 0, 5)

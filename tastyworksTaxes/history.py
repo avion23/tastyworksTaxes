@@ -42,9 +42,6 @@ class History(pd.DataFrame):
             raise ValueError(
                 "Couldn't find the first column labeled Date/Time in the csv file")
 
-        if not self["Date/Time"].is_monotonic_decreasing:
-            raise ValueError(
-                "The 'Date/Time' column is not monotonically decreasing. We can't sort the file because the timestamps are not unique. Please do it manually.")
 
     # _merge method removed - was problematic due to non-unique timestamps
     # Use manual CSV concatenation: ls -r 20*.csv | tr '\n' '\0' |xargs -0 cat > merged.csv
