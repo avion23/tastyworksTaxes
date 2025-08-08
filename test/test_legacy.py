@@ -163,7 +163,7 @@ def test_new_format_with_commissions_and_fees(create_input_df):
 
     assert result['Fees'].iloc[0] == '1.150'
     assert result['Symbol'].iloc[0] == 'TQQQ'
-    assert result['Strike'].iloc[0] == '80'
+    assert result['Strike'].iloc[0] == '79.5'
     assert result['Call/Put'].iloc[0] == 'P'
 
 

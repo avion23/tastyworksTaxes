@@ -29,7 +29,7 @@ class PositionManager:
                 # Assuming the first match is the correct one in a chronological scan.
                 lot_to_remove = matching_lots[0]
                 self.open_lots.remove(lot_to_remove)
-                logger.debug(f"Symbol Change: Consumed lot {lot_to_remove.symbol} in preparation for mutation.")
+                logger.debug(f"Symbol Change: Removed lot {lot_to_remove.symbol} qty={lot_to_remove.quantity} basis={lot_to_remove.amount_usd:.2f}")
 
             # If this is the "open" leg, we treat it as a normal opening trade.
             # Crucially, its cost basis (amount) will be the opposite of the "close" leg,
@@ -38,6 +38,7 @@ class PositionManager:
             # that will be matched against the final, real closing trade.
             else: # It's an opening transaction
                 self._open_position(transaction)
+                logger.debug(f"Symbol Change: Added new lot {transaction.getSymbol()} qty={transaction.getQuantity()} basis={transaction.getValue().usd:.2f}")
             
             # In either case, we stop processing here for Symbol Change events.
             return
@@ -97,12 +98,16 @@ class PositionManager:
                 
             closable_quantity = lot.get_closable_quantity(quantity_to_close)
             
+            opening_was_long = (lot.quantity > 0)
+            lot_before = f"{lot.quantity} @ {lot.amount_usd:.2f}"
             consumed_values = lot.consume(closable_quantity)
+            lot_after = f"{lot.quantity} @ {lot.amount_usd:.2f}" if not lot.is_empty() else "empty"
             
-            trade_result = FifoProcessor.create_trade_result(lot, transaction, closable_quantity, consumed_values)
+            trade_result = FifoProcessor.create_trade_result(lot, transaction, closable_quantity, consumed_values, opening_was_long)
             self.closed_trades.append(trade_result)
             
             logger.info(f"{trade_result.opening_date:<19} - {trade_result.closing_date:<19} closing {trade_result.quantity:>4} {trade_result.symbol:<6}")
+            logger.debug(f"Consumed {closable_quantity} from lot: {lot_before} -> {lot_after}")
             
             if lot.is_empty():
                 lots_to_remove.append(lot)
@@ -126,6 +131,11 @@ class PositionManager:
         for lot in self.open_lots:
             if lot.matches(symbol, position_type, strike, expiry, call_put):
                 matching_lots.append(lot)
+        
+        if not matching_lots:
+            logger.warning(f"No matching lots found for {symbol} {position_type} {strike} {expiry} {call_put}. Open lots: {len(self.open_lots)}")
+        else:
+            logger.debug(f"Found {len(matching_lots)} matching lots for {symbol} {position_type}")
         
         return sorted(matching_lots, key=lambda x: x.date)
     
@@ -162,14 +172,17 @@ class PositionManager:
             logger.warning(f"Using hardcoded ratio for {symbol_to_split}")
         
         if ratio is not None:
-            logger.warning(f"Applying reverse split ratio {ratio} to all open '{symbol_to_split}' lots.")
+            affected_lots = [lot for lot in self.open_lots if lot.symbol == symbol_to_split]
+            logger.warning(f"Applying reverse split ratio {ratio} to {len(affected_lots)} open '{symbol_to_split}' lots.")
             
-            for lot in self.open_lots:
-                if lot.symbol == symbol_to_split:
-                    lot.adjust_for_split(ratio)
+            for lot in affected_lots:
+                old_qty = lot.quantity
+                old_strike = getattr(lot, 'strike', None)
+                lot.adjust_for_split(ratio)
+                logger.debug(f"Split adjusted lot: qty {old_qty} -> {lot.quantity}, strike {old_strike} -> {getattr(lot, 'strike', None)}")
             return True # Event was handled successfully.
         else:
-            logger.warning(f"Reverse split for {symbol_to_split} was not handled due to unparsable description: {description}")
+            logger.error(f"CRITICAL: Reverse split for {symbol_to_split} could not be parsed from description: '{description}'. This may result in incorrect position tracking. Manual verification required.")
             return False # Fall back to standard trade processing.
     
     

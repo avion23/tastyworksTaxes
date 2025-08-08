@@ -45,9 +45,10 @@ class Tasty:
             self.year(t.getYear()).transfer += m
             
         def handle_withdrawal(t, m):
+            import re
             if "Wire Funds Received" in t.loc["Description"]:
                 self.year(t.getYear()).deposit += m
-            elif "FROM" in t.loc["Description"] and "THRU" in t.loc["Description"] and t.loc["Description"].index("FROM") < t.loc["Description"].index("THRU"):
+            elif re.match(r'.*FROM \d{2}/\d{2} THRU \d{2}/\d{2} @.*', t.loc["Description"]):
                 self.year(t.getYear()).debitInterest += m
             else:
                 self.year(t.getYear()).withdrawal += m
@@ -92,7 +93,8 @@ class Tasty:
         if subcode in handlers:
             handlers[subcode](t, m)
         else:
-            raise KeyError(f"Found unknown money movement subcode: '{subcode}'")
+            raise ValueError(f"CRITICAL: Unknown money movement subcode '{subcode}' in transaction: {t.loc['Description']}. "
+                           f"This could affect tax calculations. Please add handler for this subcode or verify it should be ignored.")
 
 
     def print(self):
@@ -120,14 +122,11 @@ class Tasty:
         
         trades_by_year = defaultdict(list)
         for trade in self.position_manager.closed_trades:
-            try:
-                if isinstance(trade.closing_date, str):
-                    year = datetime.strptime(trade.closing_date, '%Y-%m-%d %H:%M:%S').year
-                else:
-                    year = trade.closing_date.year
-                trades_by_year[year].append(trade)
-            except Exception:
-                continue
+            if isinstance(trade.closing_date, str):
+                year = datetime.strptime(trade.closing_date, '%Y-%m-%d %H:%M:%S').year
+            else:
+                year = trade.closing_date.year
+            trades_by_year[year].append(trade)
         
         return dict(trades_by_year)
     
