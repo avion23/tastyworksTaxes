@@ -10,20 +10,6 @@ import pandas as pd
 import locale
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.WARNING,
-    datefmt='%Y-%m-%d %H:%M:%S')
-for key in logging.Logger.manager.loggerDict:
-    temp = logging.getLogger(key)
-    temp.propagate = True
-    temp.setLevel(logging.INFO)
-    if temp.name == "converter":
-        temp.setLevel(logging.DEBUG)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
 
 
 def _format_report_line(label: str, value: float, width: int = 40) -> str:
@@ -411,7 +397,10 @@ class Printer(object):
                 "otherFees": "Optionsgebühren",
             }
         }
-        locale.setlocale(locale.LC_ALL, 'de_DE')
+        try:
+            locale.setlocale(locale.LC_ALL, 'de_DE.UTF-8')
+        except Exception:
+            locale.setlocale(locale.LC_ALL, '')  # system default
 
         values_attrs = vars(self.values)
         all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}

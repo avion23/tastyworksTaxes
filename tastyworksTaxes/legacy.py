@@ -58,7 +58,7 @@ def format_strike_price(strike) -> str:
     if pd.isna(strike) or strike == '':
         return ''
     try:
-        return f"{float(strike):.0f}"
+        return f"{float(strike):g}"
     except ValueError:
         return str(strike)
 

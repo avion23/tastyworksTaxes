@@ -10,16 +10,7 @@ from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money, convert_usd_to_eur
 from tastyworksTaxes.position import Option, Position, PositionType, Stock
 
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.DEBUG,
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-
-for logger_name, logger in logging.Logger.manager.loggerDict.items():
-    if isinstance(logger, logging.Logger):
-        if logger_name != "__main__":
-            logger.setLevel(logging.WARNING)
+logger = logging.getLogger(__name__)
 
 class Transaction(pd.core.series.Series):
 

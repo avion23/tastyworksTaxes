@@ -6,37 +6,37 @@ from tastyworksTaxes.money import Money
 import json
 
 from dataclasses_json import dataclass_json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass_json
 @dataclass
 class Values(object):
     """store all data here"""
-    withdrawal: Money = Money()
-    transfer: Money = Money()
-    balanceAdjustment: Money = Money()
-    fee: Money = Money()
-    deposit: Money = Money()
-    creditInterest: Money = Money()
-    securitiesLendingIncome: Money = Money()
-    debitInterest: Money = Money()
-    dividend: Money = Money()
-    stockAndOptionsSum: Money = Money()
-    equityEtfGrossProfits: Money = Money()
-    equityEtfProfits: Money = Money()
-    otherStockAndBondProfits: Money = Money()
-    totalTaxableStockAndEtfProfits: Money = Money()
-    stockAndEtfLosses: Money = Money()
-    optionSum: Money = Money()
-    longOptionProfits: Money = Money()
-    longOptionLosses: Money = Money()
-    longOptionTotalLosses: Money = Money()
-    shortOptionProfits: Money = Money()
-    shortOptionLosses: Money = Money()
-    grossOptionDifferential: Money = Money()
-    stockFees: Money = Money()
-    otherFees: Money = Money()
+    withdrawal: Money = field(default_factory=Money)
+    transfer: Money = field(default_factory=Money)
+    balanceAdjustment: Money = field(default_factory=Money)
+    fee: Money = field(default_factory=Money)
+    deposit: Money = field(default_factory=Money)
+    creditInterest: Money = field(default_factory=Money)
+    securitiesLendingIncome: Money = field(default_factory=Money)
+    debitInterest: Money = field(default_factory=Money)
+    dividend: Money = field(default_factory=Money)
+    stockAndOptionsSum: Money = field(default_factory=Money)
+    equityEtfGrossProfits: Money = field(default_factory=Money)
+    equityEtfProfits: Money = field(default_factory=Money)
+    otherStockAndBondProfits: Money = field(default_factory=Money)
+    totalTaxableStockAndEtfProfits: Money = field(default_factory=Money)
+    stockAndEtfLosses: Money = field(default_factory=Money)
+    optionSum: Money = field(default_factory=Money)
+    longOptionProfits: Money = field(default_factory=Money)
+    longOptionLosses: Money = field(default_factory=Money)
+    longOptionTotalLosses: Money = field(default_factory=Money)
+    shortOptionProfits: Money = field(default_factory=Money)
+    shortOptionLosses: Money = field(default_factory=Money)
+    grossOptionDifferential: Money = field(default_factory=Money)
+    stockFees: Money = field(default_factory=Money)
+    otherFees: Money = field(default_factory=Money)
 
     def __str__(self):
         """pretty prints all the contained Values

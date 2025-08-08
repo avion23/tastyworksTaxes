@@ -20,7 +20,7 @@ class TradeResult:
 
 class FifoProcessor:
     @staticmethod
-    def create_trade_result(opening_lot, closing_transaction, consumed_quantity, consumed_values):
+    def create_trade_result(opening_lot, closing_transaction, consumed_quantity, consumed_values, opening_was_long: bool):
         closing_amounts = FifoProcessor._calculate_closing_amounts(closing_transaction, consumed_quantity)
         
         signed_quantity = consumed_quantity if opening_lot.quantity > 0 else -consumed_quantity
@@ -35,8 +35,10 @@ class FifoProcessor:
             profit_eur=consumed_values[Fields.AMOUNT_EURO.value] + closing_amounts['amount_eur'],
             fees_usd=consumed_values[Fields.FEES.value] + closing_amounts['fees_usd'],
             fees_eur=consumed_values[Fields.FEES_EURO.value] + closing_amounts['fees_eur'],
-            worthless_expiry=(closing_transaction[Fields.TRANSACTION_SUBCODE.value] == TransactionSubcode.EXPIRATION.value 
-                            and opening_lot.quantity > 0),
+            worthless_expiry=(
+                closing_transaction[Fields.TRANSACTION_SUBCODE.value] == TransactionSubcode.EXPIRATION.value
+                and opening_was_long
+            ),
             strike=closing_transaction.getStrike() if closing_transaction.getType() != PositionType.stock else None,
             expiry=closing_transaction.getExpiry().strftime('%Y-%m-%d') if closing_transaction.getType() != PositionType.stock else None
         )

@@ -8,7 +8,7 @@ Automate the calculation of yearly taxes for a tastyworks export in the context 
 
 **Development Status**:
 - Currently, the program does not differentiate between various asset classes; it only recognizes stocks and options. This does not accurately reflect all trading scenarios.
-- Please triple-check your results. Accurately assigning losses, profits, fees, interest, etc., to their specific categories is challenging.
+- **Please triple-check your results.** Accurately assigning losses, profits, fees, interest, etc., to their specific categories is challenging and this software remains a work in progress.
 
 **Stocks**:
 
@@ -87,13 +87,26 @@ For verbose debugging output, use:
 python -m pytest test -s --log-cli-level=DEBUG
 ```
 
+## Recent Improvements
+
+- **Corporate Actions Fixed**: Symbol Changes and Stock Mergers now preserve original cost basis instead of incorrectly realizing gains/losses
+- **Enhanced Partial Exemptions**: Partial exemption (Teilfreistellung) calculation improved for equity ETFs (30%). Other fund types (Mixed, Real Estate) are correctly identified and generate warnings, but their specific exemption rates are not yet applied in the final tax summary
+- **Improved FIFO Processing**: Refactored to forward-chronological processing for more accurate trade matching
+
 ## Known Issues
-- I am not an expert, there is tax law I don't know
-- ETF advance tax payment ("Vorabpauschale") is not implemented. This is a yearly fictitious taxable income on accumulating ETFs, calculated as 70% of the base interest rate × fund value at start of year, minus actual distributions. Required by German tax law since 2018 to prevent tax deferral.
-- Partial exemption rates ("Teilfreistellung") are only implemented for equity ETFs (30%). Mixed funds (15%) and real estate funds (60%/80%) will generate warnings but are not automatically handled.
-- Symbol changes currently count as sales. While this simplification doesn't matter if you sell within the same year, it's simply wrong.
-- I am not sure about fee calculations.
-- In the case of short selling stocks (beyond an annual limit), 30% of the price is taxed with the capital gains tax as a substitute assessment base (§ 43a Absatz 2 Satz 7 EStG), and only offset with the covering. This is not implemented.
+
+⚠️ **Critical**: This software remains a work in progress. I am not a tax expert - there is tax law I don't fully understand.
+
+**Unimplemented Tax Requirements**:
+- ETF advance tax payment ("Vorabpauschale") is not implemented. This is yearly fictitious taxable income on accumulating ETFs (70% of base interest rate × fund value at start of year, minus distributions). Required by German tax law since 2018.
+- Short selling stocks beyond annual limits: 30% substitute assessment base (§ 43a Absatz 2 Satz 7 EStG) is not implemented.
+
+**Corporate Actions**:
+- While Symbol Changes and Stock Mergers are now handled correctly, **Reverse Splits with unrecognized description formats may be incorrectly processed as taxable trades**. These events should be manually verified.
+
+**Other Limitations**:
+- Fee calculations remain uncertain and should be double-checked
+- Partial exemption rates only cover equity ETFs - other fund types need manual handling
 
 ## Contributing
 

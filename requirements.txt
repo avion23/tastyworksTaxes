@@ -1,5 +1,4 @@
-dataclasses
+pandas
+currencyconverter
 dataclasses_json
-argparse
-pathlibprinter
 pytest

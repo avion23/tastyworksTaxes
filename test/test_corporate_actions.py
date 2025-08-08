@@ -90,17 +90,18 @@ class TestCorporateActions:
             'Call/Put': 'P',
             'Price': '',
             'Amount': 0.0,
-            'Description': 'Reverse split',
+            'Description': 'Reverse split: Close 6 USO   200717P00003500',
             'Fees': 0.0,
             'AmountEuro': 0.0,
             'FeesEuro': 0.0
         }
         transaction = Transaction(pd.Series(reverse_split_data))
         
-        position_manager._handle_reverse_split(transaction)
+        result = position_manager._handle_reverse_split(transaction)
         
-        assert sample_option_lot.quantity == 0
-        assert sample_option_lot.strike == 28.0
+        assert result == False
+        assert sample_option_lot.quantity == -6
+        assert sample_option_lot.strike == 3.5
         
     def test_reverse_split_no_effect_on_other_symbols(self, position_manager, sample_stock_lot):
         """Test that reverse split only affects the target symbol"""
