@@ -22,8 +22,8 @@ class FifoProcessor:
     @staticmethod
     def create_trade_result(opening_lot, closing_transaction, consumed_quantity, consumed_values, opening_was_long: bool):
         closing_amounts = FifoProcessor._calculate_closing_amounts(closing_transaction, consumed_quantity)
-        
-        signed_quantity = consumed_quantity if opening_lot.quantity > 0 else -consumed_quantity
+
+        signed_quantity = consumed_quantity if opening_was_long else -consumed_quantity
         
         trade_result = TradeResult(
             symbol=closing_transaction.getSymbol(),

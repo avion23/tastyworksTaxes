@@ -5,11 +5,11 @@ from tastyworksTaxes.transaction import Transaction
 def test_true_fifo_stock_logic():
     pm = PositionManager()
 
-    buy1_str = "01/01/2024 10:00 AM,Trade,Buy to Open,FIFO,Buy,Open,10,,,,,10.00,-100.00,Bought 10 FIFO @ 10,acc"
-    
-    buy2_str = "01/02/2024 10:00 AM,Trade,Buy to Open,FIFO,Buy,Open,10,,,,,10.00,-200.00,Bought 10 FIFO @ 20,acc"
-    
-    sell1_str = "01/03/2024 10:00 AM,Trade,Sell to Close,FIFO,Sell,Close,15,,,,,10.00,375.00,Sold 15 FIFO @ 25,acc"
+    buy1_str = "2024-01-01T10:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FIFO,Equity,Bought 10 FIFO @ 10,-100.00,10,,-1.00,9.0,,FIFO,FIFO,,,,123456,USD"
+
+    buy2_str = "2024-01-02T10:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FIFO,Equity,Bought 10 FIFO @ 20,-200.00,10,,-1.00,9.0,,FIFO,FIFO,,,,123456,USD"
+
+    sell1_str = "2024-01-03T10:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,FIFO,Equity,Sold 15 FIFO @ 25,375.00,15,,-1.00,9.0,,FIFO,FIFO,,,,123456,USD"
 
     pm.add_position(Transaction.fromString(buy1_str))
     pm.add_position(Transaction.fromString(buy2_str))
