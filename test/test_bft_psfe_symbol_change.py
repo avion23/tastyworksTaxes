@@ -53,7 +53,7 @@ class TestBftPsfeSymbolChange:
 
     def test_full_integration_with_tasty_class(self):
         """Test the BFT->PSFE scenario using the full merged3.csv data."""
-        t = Tasty(Path("test/merged3.csv"))
+        t = Tasty(Path("test/transactions_2018_to_2025.csv"))
 
         # This should no longer raise a ValueError
         result = t.run()

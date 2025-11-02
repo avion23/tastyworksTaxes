@@ -65,7 +65,7 @@ class TestTastyRun:
             assert isinstance(year_data.longOptionLosses, Money)
     
     def test_run_with_real_csv_data(self):
-        t = Tasty(pathlib.Path("test/merged3.csv"))
+        t = Tasty(pathlib.Path("test/transactions_2018_to_2025.csv"))
         
         result = t.run()
         

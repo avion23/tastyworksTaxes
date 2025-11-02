@@ -58,7 +58,7 @@ def test_deposit():
     assert clean_numpy_str(str(t.year(2021).deposit)) == "{'eur': 3957.8528167261256, 'usd': 4770.4}"
 
 def test_securities_lending_income():
-    t = Tasty("test/merged3.csv")
+    t = Tasty("test/transactions_2018_to_2025.csv")
     lending_income_transaction = Transaction.fromString(
         "2024-08-13T23:00:00+0000,Money Movement,Fully Paid Stock Lending Income,,,,FULLYPAID LENDING REBATE,0.20,0,,0,0.00,,,,,,,123456,USD")
     t.moneyMovement(lending_income_transaction)
