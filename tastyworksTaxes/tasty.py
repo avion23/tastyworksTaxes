@@ -1,11 +1,6 @@
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.transaction import Transaction
-from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.money import Money, convert_usd_to_eur
+from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position_manager import PositionManager
@@ -15,11 +10,10 @@ from tastyworksTaxes.trade_calculator import (
     calculate_long_option_losses, calculate_long_option_total_losses,
     calculate_short_option_profits, calculate_short_option_losses,
     calculate_option_differential, calculate_stock_loss, calculate_stock_fees,
-    calculate_other_fees, calculate_fees_sum, get_stock_trades, get_profitable_trades,
+    calculate_other_fees, calculate_fees_sum, get_stock_trades,
     calculate_gross_equity_etf_profits, calculate_equity_etf_profits,
     calculate_other_stock_and_bond_profits
 )
-import pandas as pd
 import logging
 
 logger = logging.getLogger(__name__)
@@ -106,7 +100,7 @@ class Tasty:
         chronological_history = self.history.sort_values(
             by=Fields.DATE_TIME.value, ascending=True, kind='stable'
         )
-        for i, row in chronological_history.iterrows():
+        for _, row in chronological_history.iterrows():
             transaction_code = row.loc["Transaction Code"]
             if transaction_code == TransactionCode.MONEY_MOVEMENT.value:
                 self.moneyMovement(row)

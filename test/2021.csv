@@ -1,252 +1,251 @@
-Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-07/07/2021 7:24 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,23,C,0.79,0.54,-316,Bought 4 CLF 07/23/21 Call 23.00 @ 0.79,Individual...60
-07/07/2021 4:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,3.15,1.142,315,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.15,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,289,,,,4.81,0.276,1390.09,Sold 289 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,5,,,,4.81,0.015,24.05,Sold 5 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,50,,,,4.81,0.056,240.5,Sold 50 SPRT @ 4.81,Individual...60
-07/07/2021 3:45 PM,Trade,Sell to Close,SPRT,Sell,Close,51,,,,4.81,0.057,245.31,Sold 51 SPRT @ 4.81,Individual...60
-07/07/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,1,08/20/2021,25,P,2.57,1.142,257,Sold 1 PLTR 08/20/21 Put 25.00 @ 2.57,Individual...60
-07/07/2021 3:43 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,23,C,0.88,4.558,352,Sold 4 CLF 07/23/21 Call 23.00 @ 0.88,Individual...60
-07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,20,UWM HOLDINGS CORPORATION,Individual...60
-07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,-3,UWM HOLDINGS CORPORATION,Individual...60
-07/06/2021 4:13 PM,Trade,Buy to Close,CLF,Buy,Close,4,07/23/2021,24,C,0.64,0.54,-256,Bought 4 CLF 07/23/21 Call 24.00 @ 0.64,Individual...60
-07/06/2021 3:43 PM,Trade,Buy to Close,PLTR,Buy,Close,3,07/16/2021,23,C,1.78,0.40,-534,Bought 3 PLTR 07/16/21 Call 23.00 @ 1.78,Individual...60
-07/03/2021 3:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,55,,,,3.87,0.044,-212.85,Bought 55 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,1,,,,3.87,0.001,-3.87,Bought 1 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,100,,,,3.87,0.08,-387,Bought 100 SPRT @ 3.87,Individual...60
-07/01/2021 9:03 PM,Trade,Buy to Open,SPRT,Buy,Open,44,,,,3.87,0.036,-170.28,Bought 44 SPRT @ 3.87,Individual...60
-07/01/2021 8:57 PM,Trade,Buy to Open,SPRT,Buy,Open,200,,,,3.87,0.16,-774,Bought 200 SPRT @ 3.87,Individual...60
-07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,1,07/16/2021,12.5,P,1.09,0.13,-109,Bought 1 BB 07/16/21 Put 12.50 @ 1.09,Individual...60
-07/01/2021 7:56 PM,Trade,Buy to Close,BB,Buy,Close,2,07/16/2021,12.5,P,1.09,0.27,-218,Bought 2 BB 07/16/21 Put 12.50 @ 1.09,Individual...60
-06/30/2021 4:17 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...60
-06/30/2021 4:13 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,10,C,0.12,0.13,-12,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,Individual...60
-06/29/2021 4:23 PM,Trade,Sell to Open,CLF,Sell,Open,4,07/23/2021,24,C,0.83,4.558,332,Sold 4 CLF 07/23/21 Call 24.00 @ 0.83,Individual...60
-06/28/2021 3:41 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/23/2021,24,C,0.82,0.27,-164,Bought 2 CLF 07/23/21 Call 24.00 @ 0.82,Individual...60
-06/26/2021 5:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-06/25/2021 9:59 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/30/2021,24,C,1.07,0.27,-214,Bought 2 CLF 07/30/21 Call 24.00 @ 1.07,Individual...60
-06/25/2021 4:12 PM,Trade,Buy to Close,BB,Buy,Close,1,07/30/2021,14.5,C,0.77,0.13,-77,Bought 1 BB 07/30/21 Call 14.50 @ 0.77,Individual...60
-06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,2,07/16/2021,12.5,P,1.49,2.284,298,Sold 2 BB 07/16/21 Put 12.50 @ 1.49,Individual...60
-06/25/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,07/16/2021,12.5,P,1.49,1.142,149,Sold 1 BB 07/16/21 Put 12.50 @ 1.49,Individual...60
-06/22/2021 5:23 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/23/2021,24,C,1.04,2.284,208,Sold 2 CLF 07/23/21 Call 24.00 @ 1.04,Individual...60
-06/22/2021 4:19 PM,Trade,Sell to Open,CLNE,Sell,Open,1,07/16/2021,14,C,0.8,1.142,80,Sold 1 CLNE 07/16/21 Call 14.00 @ 0.80,Individual...60
-06/22/2021 4:18 PM,Trade,Sell to Open,BB,Sell,Open,1,07/30/2021,14.5,C,1.21,1.142,121,Sold 1 BB 07/30/21 Call 14.50 @ 1.21,Individual...60
-06/22/2021 3:30 PM,Trade,Sell to Close,DKNG,Sell,Close,2,07/30/2021,40,P,0.83,0.284,166,Sold 2 DKNG 07/30/21 Put 40.00 @ 0.83,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Assignment,BB,,,5,06/18/2021,9,C,,0.00,0,Removal of option due to assignment,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Sell to Close,BB,Sell,Close,500,,,,9,5.09,4500,Sell to Close 500 BB @ 9.00,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Assignment,ME,,,1,06/18/2021,10,C,,0.00,0,Removal of option due to assignment,Individual...60
-06/18/2021 11:00 PM,Receive Deliver,Sell to Close,ME,Sell,Close,100,,,,10,5.022,1000,Sell to Close 100 ME @ 10.00,Individual...60
-06/18/2021 10:00 PM,Receive Deliver,Expiration,CLNE,,,1,06/18/2021,14,C,,0.00,0,Removal of 1.0 CLNE 06/18/21 Call 14.00 due to expiration.,Individual...60
-06/18/2021 10:00 PM,Receive Deliver,Expiration,CLF,,,2,06/18/2021,23,C,,0.00,0,Removal of 2.0 CLF 06/18/21 Call 23.00 due to expiration.,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Sell,Open,1,06/18/2021,10,C,,0.00,45,Symbol change:  Open 1.0 ME    210618C00010000,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Buy,Close,1,06/18/2021,10,C,,0.00,-45,Symbol change:  Close 1.0 VGAC  210618C00010000,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,ME,Buy,Open,100,,,,,0.00,-1750,Symbol change:  Open 100.0 ME,Individual...60
-06/18/2021 12:48 PM,Receive Deliver,Symbol Change,VGAC,Sell,Close,100,,,,,0.00,1750,Symbol change:  Close 100.0 VGAC,Individual...60
-06/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...60
-06/16/2021 4:44 PM,Trade,Buy to Close,CLOV,Buy,Close,2,06/18/2021,15.5,P,2.5,0.27,-500,Bought 2 CLOV 06/18/21 Put 15.50 @ 2.50,Individual...60
-06/15/2021 3:35 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/30/2021,24,C,2.1,2.284,420,Sold 2 CLF 07/30/21 Call 24.00 @ 2.10,Individual...60
-06/15/2021 3:32 PM,Trade,Buy to Open,DKNG,Buy,Open,2,07/30/2021,40,P,1.7,2.27,-340,Bought 2 DKNG 07/30/21 Put 40.00 @ 1.70,Individual...60
-06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...60
-06/15/2021 3:30 PM,Trade,Sell to Open,CLF,Sell,Open,1,06/18/2021,23,C,0.66,1.142,66,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,Individual...60
-06/14/2021 3:38 PM,Trade,Buy to Close,CLF,Buy,Close,2,07/02/2021,24.5,C,1.4,0.27,-280,Bought 2 CLF 07/02/21 Call 24.50 @ 1.40,Individual...60
-06/14/2021 3:32 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,14,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 14.00 @ 0.70,Individual...60
-06/12/2021 4:01 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...60
-06/11/2021 6:34 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,0.3,0.13,-30,Bought 1 CLNE 06/18/21 Call 15.00 @ 0.30,Individual...60
-06/10/2021 7:27 PM,Trade,Sell to Open,CLF,Sell,Open,2,07/02/2021,24.5,C,1.66,2.284,332,Sold 2 CLF 07/02/21 Call 24.50 @ 1.66,Individual...60
-06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...60
-06/10/2021 4:46 PM,Trade,Sell to Open,CLOV,Sell,Open,1,06/18/2021,15.5,P,2.6,1.142,260,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,Individual...60
-06/10/2021 3:49 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,0.7,1.142,70,Sold 1 CLNE 06/18/21 Call 15.00 @ 0.70,Individual...60
-06/10/2021 3:41 PM,Trade,Buy to Open,CLF,Buy,Open,2,01/21/2022,24,C,6.55,2.27,-1310,Bought 2 CLF 01/21/22 Call 24.00 @ 6.55,Individual...60
-06/10/2021 3:35 PM,Trade,Buy to Close,CLF,Buy,Close,3,07/23/2021,21,C,4.75,0.40,-1425,Bought 3 CLF 07/23/21 Call 21.00 @ 4.75,Individual...60
-06/09/2021 7:37 PM,Trade,Buy to Open,CLF,Buy,Open,200,,,,22.4884,0.16,-4497.68,Bought 200 CLF @ 22.49,Individual...60
-06/09/2021 7:34 PM,Trade,Sell to Open,CLF,Sell,Open,3,07/23/2021,21,C,4.15,3.416,1245,Sold 3 CLF 07/23/21 Call 21.00 @ 4.15,Individual...60
-06/09/2021 6:28 PM,Trade,Sell to Close,WISH,Sell,Close,100,,,,11.07,0.102,1107,Sold 100 WISH @ 11.07,Individual...60
-06/09/2021 4:16 PM,Trade,Buy to Close,CLNE,Buy,Close,1,06/18/2021,15,C,2.2,0.13,-220,Bought 1 CLNE 06/18/21 Call 15.00 @ 2.20,Individual...60
-06/09/2021 4:15 PM,Trade,Buy to Close,WISH,Buy,Close,1,06/18/2021,20,C,1.5,0.13,-150,Bought 1 WISH 06/18/21 Call 20.00 @ 1.50,Individual...60
-06/09/2021 4:02 PM,Trade,Sell to Close,WISH,Sell,Close,2,07/16/2021,10,C,4.8,0.284,960,Sold 2 WISH 07/16/21 Call 10.00 @ 4.80,Individual...60
-06/09/2021 3:56 PM,Trade,Sell to Open,CLNE,Sell,Open,1,06/18/2021,15,C,2.55,1.142,255,Sold 1 CLNE 06/18/21 Call 15.00 @ 2.55,Individual...60
-06/09/2021 3:49 PM,Trade,Buy to Open,CLNE,Buy,Open,100,,,,12.81,0.08,-1281,Bought 100 CLNE @ 12.81,Individual...60
-06/09/2021 3:46 PM,Trade,Sell to Open,WISH,Sell,Open,1,06/18/2021,20,C,2.2,1.142,220,Sold 1 WISH 06/18/21 Call 20.00 @ 2.20,Individual...60
-06/08/2021 8:11 PM,Trade,Buy to Open,WISH,Buy,Open,100,,,,9.48,0.08,-948,Bought 100 WISH @ 9.48,Individual...60
-06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,4,09/17/2021,10,C,2.85,0.558,1140,Sold 4 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...60
-06/08/2021 8:05 PM,Trade,Sell to Close,CLNE,Sell,Close,1,09/17/2021,10,C,2.85,0.142,285,Sold 1 CLNE 09/17/21 Call 10.00 @ 2.85,Individual...60
-06/08/2021 7:57 PM,Trade,Buy to Open,WISH,Buy,Open,2,07/16/2021,10,C,2.5,2.27,-500,Bought 2 WISH 07/16/21 Call 10.00 @ 2.50,Individual...60
-06/08/2021 6:13 PM,Trade,Sell to Close,CLOV,Sell,Close,2,11/19/2021,10,C,11.1,0.294,2220,Sold 2 CLOV 11/19/21 Call 10.00 @ 11.10,Individual...60
-06/08/2021 6:08 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,17,C,1.96,0.13,-196,Bought 1 BB 06/18/21 Call 17.00 @ 1.96,Individual...60
-06/07/2021 4:21 PM,Trade,Buy to Open,CLOV,Buy,Open,2,11/19/2021,10,C,2.65,2.27,-530,Bought 2 CLOV 11/19/21 Call 10.00 @ 2.65,Individual...60
-06/07/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,17,C,2.45,1.142,245,Sold 1 BB 06/18/21 Call 17.00 @ 2.45,Individual...60
-06/05/2021 2:10 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.05,Regulatory fee adjustment,Individual...60
-06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,30,P,4.7,0.13,-470,Bought 1 AMC 06/18/21 Put 30.00 @ 4.70,Individual...60
-06/04/2021 3:30 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/11/2021,30,P,2.51,0.13,-251,Bought 1 AMC 06/11/21 Put 30.00 @ 2.51,Individual...60
-06/03/2021 3:41 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,30,P,5.65,1.142,565,Sold 1 AMC 06/18/21 Put 30.00 @ 5.65,Individual...60
-06/03/2021 3:38 PM,Trade,Buy to Open,BB,Buy,Open,100,,,,17.9,0.08,-1790,Bought 100 BB @ 17.90,Individual...60
-06/03/2021 3:30 PM,Trade,Buy to Open,CLNE,Buy,Open,5,09/17/2021,10,C,1.25,5.67,-625,Bought 5 CLNE 09/17/21 Call 10.00 @ 1.25,Individual...60
-06/02/2021 5:49 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/11/2021,30,P,3.3,1.142,330,Sold 1 AMC 06/11/21 Put 30.00 @ 3.30,Individual...60
-06/02/2021 5:19 PM,Trade,Buy to Close,AMC,Buy,Close,1,06/18/2021,40,P,10.3,0.13,-1030,Bought 1 AMC 06/18/21 Put 40.00 @ 10.30,Individual...60
-06/02/2021 5:04 PM,Trade,Sell to Open,PLTR,Sell,Open,3,07/16/2021,23,C,1.99,3.416,597,Sold 3 PLTR 07/16/21 Call 23.00 @ 1.99,Individual...60
-06/02/2021 4:59 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,10,C,0.4,2.284,80,Sold 2 UWMC 07/16/21 Call 10.00 @ 0.40,Individual...60
-06/02/2021 4:48 PM,Trade,Sell to Open,AMC,Sell,Open,1,06/18/2021,40,P,11,1.142,1100,Sold 1 AMC 06/18/21 Put 40.00 @ 11.00,Individual...60
-06/01/2021 6:07 PM,Trade,Sell to Open,BB,Sell,Open,1,06/18/2021,9,C,2.28,1.142,228,Sold 1 BB 06/18/21 Call 9.00 @ 2.28,Individual...60
-05/28/2021 3:39 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...60
-05/28/2021 3:33 PM,Trade,Buy to Close,UWMC,Buy,Close,1,07/16/2021,9,C,0.8,0.13,-80,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,Individual...60
-05/27/2021 7:57 PM,Trade,Sell to Open,UWMC,Sell,Open,2,07/16/2021,9,C,0.85,2.284,170,Sold 2 UWMC 07/16/21 Call 9.00 @ 0.85,Individual...60
-05/22/2021 4:09 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,05/21/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Assignment,PLTR,,,2,05/21/2021,24,P,,0.00,0,Removal of option due to assignment,Individual...60
-05/21/2021 11:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,200,,,,24,5.00,-4800,Buy to Open 200 PLTR @ 24.00,Individual...60
-05/21/2021 6:10 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.69,0.27,-138,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.69,Individual...60
-05/20/2021 3:41 PM,Trade,Buy to Close,VIAC,Buy,Close,1,05/21/2021,45,P,3.6,0.13,-360,Bought 1 VIAC 05/21/21 Put 45.00 @ 3.60,Individual...60
-05/19/2021 4:34 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,22,C,0.9,0.13,-90,Bought 1 PLTR 06/18/21 Call 22.00 @ 0.90,Individual...60
-05/18/2021 9:04 PM,Trade,Buy to Close,PLTR,Buy,Close,2,06/18/2021,23,P,2.54,0.27,-508,Bought 2 PLTR 06/18/21 Put 23.00 @ 2.54,Individual...60
-05/18/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,22,C,1.25,1.142,125,Sold 1 PLTR 06/18/21 Call 22.00 @ 1.25,Individual...60
-05/18/2021 3:56 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.58,4.558,232,Sold 4 BB 06/18/21 Call 9.00 @ 0.58,Individual...60
-05/17/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.08,INTEREST ON CREDIT BALANCE,Individual...60
-05/17/2021 3:31 PM,Trade,Sell to Open,UWMC,Sell,Open,2,06/18/2021,8,C,0.95,2.284,190,Sold 2 UWMC 06/18/21 Call 8.00 @ 0.95,Individual...60
-05/15/2021 3:42 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/13/2021 4:11 PM,Trade,Sell to Open,VGAC,Sell,Open,1,06/18/2021,10,C,0.45,1.142,45,Sold 1 VGAC 06/18/21 Call 10.00 @ 0.45,Individual...60
-05/11/2021 3:54 PM,Trade,Buy to Close,WY,Buy,Close,1,05/21/2021,39,P,0.57,0.13,-57,Bought 1 WY 05/21/21 Put 39.00 @ 0.57,Individual...60
-05/08/2021 3:28 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-05/06/2021 9:50 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.9,1.142,390,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.90,Individual...60
-05/06/2021 4:22 PM,Trade,Buy to Close,UWMC,Buy,Close,2,06/18/2021,8,C,0.45,0.27,-90,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.45,Individual...60
-05/06/2021 3:59 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,23,P,3.45,1.142,345,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.45,Individual...60
-05/04/2021 3:44 PM,Trade,Sell to Open,PLTR,Sell,Open,2,05/21/2021,24,P,2.85,2.284,570,Sold 2 PLTR 05/21/21 Put 24.00 @ 2.85,Individual...60
-05/04/2021 3:41 PM,Trade,Buy to Close,PLTR,Buy,Close,1,06/18/2021,24,C,1.04,0.13,-104,Bought 1 PLTR 06/18/21 Call 24.00 @ 1.04,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,1,06/18/2021,9,C,0.57,0.13,-57,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/04/2021 3:30 PM,Trade,Buy to Close,BB,Buy,Close,2,06/18/2021,9,C,0.57,0.27,-114,Bought 2 BB 06/18/21 Call 9.00 @ 0.57,Individual...60
-05/01/2021 3:53 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/30/2021 4:14 PM,Trade,Sell to Open,WY,Sell,Open,1,05/21/2021,39,P,2.1,1.142,210,Sold 1 WY 05/21/21 Put 39.00 @ 2.10,Individual...60
-04/29/2021 8:17 PM,Trade,Buy to Close,MVIS,Buy,Close,1,05/21/2021,12,P,0.68,0.13,-68,Bought 1 MVIS 05/21/21 Put 12.00 @ 0.68,Individual...60
-04/29/2021 3:30 PM,Trade,Sell to Close,NOK,Sell,Close,1,01/21/2022,4,C,1.1,0.142,110,Sold 1 NOK 01/21/22 Call 4.00 @ 1.10,Individual...60
-04/26/2021 4:09 PM,Trade,Sell to Open,MVIS,Sell,Open,1,05/21/2021,12,P,0.86,1.142,86,Sold 1 MVIS 05/21/21 Put 12.00 @ 0.86,Individual...60
-04/24/2021 3:56 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-04/22/2021 4:54 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,24,P,2.02,0.13,-202,Bought 1 PLTR 05/21/21 Put 24.00 @ 2.02,Individual...60
-04/22/2021 4:05 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.65,1.142,65,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.65,Individual...60
-04/22/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,27,P,4.65,0.13,-465,Bought 1 PLTR 05/21/21 Put 27.00 @ 4.65,Individual...60
-04/21/2021 9:47 PM,Trade,Sell to Close,BB,Sell,Close,1,01/21/2022,12.5,C,0.94,0.142,94,Sold 1 BB 01/21/22 Call 12.50 @ 0.94,Individual...60
-04/21/2021 7:43 PM,Trade,Sell to Open,UWMC,Sell,Open,1,06/18/2021,8,C,0.61,1.142,61,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.61,Individual...60
-04/21/2021 5:57 PM,Trade,Sell to Open,BB,Sell,Open,4,06/18/2021,9,C,0.62,4.558,248,Sold 4 BB 06/18/21 Call 9.00 @ 0.62,Individual...60
-04/21/2021 5:55 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,22.5,P,1.67,0.13,-167,Bought 1 PLTR 05/21/21 Put 22.50 @ 1.67,Individual...60
-04/21/2021 5:14 PM,Trade,Sell to Open,PLTR,Sell,Open,1,06/18/2021,24,C,1.56,1.142,156,Sold 1 PLTR 06/18/21 Call 24.00 @ 1.56,Individual...60
-04/20/2021 5:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,22.5,P,2.35,1.142,235,Sold 1 PLTR 05/21/21 Put 22.50 @ 2.35,Individual...60
-04/19/2021 3:50 PM,Trade,Buy to Close,VGAC,Buy,Close,1,05/21/2021,10,C,0.1,0.13,-10,Bought 1 VGAC 05/21/21 Call 10.00 @ 0.10,Individual...60
-04/17/2021 5:29 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/16/2021 11:00 PM,Receive Deliver,Assignment,UWMC,,,2,04/16/2021,12.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-04/16/2021 11:00 PM,Receive Deliver,Buy to Open,UWMC,Buy,Open,200,,,,12.5,5.00,-2500,Buy to Open 200 UWMC @ 12.50,Individual...60
-04/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...60
-04/16/2021 10:00 PM,Receive Deliver,Expiration,BB,,,3,04/16/2021,12,C,,0.00,0,Removal of 3.0 BB 04/16/21 Call 12.00 due to expiration.,Individual...60
-04/16/2021 3:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,24,P,2.52,1.142,252,Sold 1 PLTR 05/21/21 Put 24.00 @ 2.52,Individual...60
-04/14/2021 11:00 PM,Receive Deliver,Assignment,BB,,,1,04/16/2021,12,P,,0.00,0,Removal of option due to assignment,Individual...60
-04/14/2021 11:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,100,,,,12,5.00,-1200,Buy to Open 100 BB @ 12.00,Individual...60
-04/14/2021 5:41 PM,Trade,Buy to Close,PSTH,Buy,Close,1,04/16/2021,30,P,5.2,0.13,-520,Bought 1 PSTH 04/16/21 Put 30.00 @ 5.20,Individual...60
-04/13/2021 7:52 PM,Trade,Buy to Close,PLTR,Buy,Close,1,05/21/2021,23,P,1.46,0.13,-146,Bought 1 PLTR 05/21/21 Put 23.00 @ 1.46,Individual...60
-04/12/2021 7:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,23,P,2.18,1.142,218,Sold 1 PLTR 05/21/21 Put 23.00 @ 2.18,Individual...60
-04/10/2021 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-04/09/2021 3:41 PM,Trade,Sell to Close,RIDE,Sell,Close,1,07/16/2021,15,P,4.95,0.142,495,Sold 1 RIDE 07/16/21 Put 15.00 @ 4.95,Individual...60
-04/07/2021 4:23 PM,Trade,Buy to Close,PSFE,Buy,Close,1,04/16/2021,15,P,0.8,0.13,-80,Bought 1 PSFE 04/16/21 Put 15.00 @ 0.80,Individual...60
-04/06/2021 9:50 PM,Trade,Sell to Open,VIAC,Sell,Open,1,05/21/2021,45,P,4.85,1.142,485,Sold 1 VIAC 05/21/21 Put 45.00 @ 4.85,Individual...60
-04/06/2021 7:20 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,24,C,0.7,0.13,-70,Bought 1 PLTR 04/16/21 Call 24.00 @ 0.70,Individual...60
-03/31/2021 9:51 PM,Trade,Sell to Open,VGAC,Sell,Open,1,05/21/2021,10,C,0.5,1.152,50,Sold 1 VGAC 05/21/21 Call 10.00 @ 0.50,Individual...60
-03/31/2021 3:48 PM,Trade,Buy to Close,KMPH,Buy,Close,1,04/16/2021,17.5,P,8.05,0.14,-805,Bought 1 KMPH 04/16/21 Put 17.50 @ 8.05,Individual...60
-03/31/2021 12:46 PM,Receive Deliver,Symbol Change,PSFE,Sell,Open,1,04/16/2021,15,P,,0.00,132,Symbol change:  Open 1.0 PSFE  210416P00015000,Individual...60
-03/31/2021 12:46 PM,Receive Deliver,Symbol Change,BFT,Buy,Close,1,04/16/2021,15,P,,0.00,-132,Symbol change:  Close 1.0 BFT   210416P00015000,Individual...60
-03/30/2021 3:43 PM,Trade,Buy to Close,MT,Buy,Close,1,04/16/2021,28,P,1.2,0.14,-120,Bought 1 MT 04/16/21 Put 28.00 @ 1.20,Individual...60
-03/27/2021 3:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-03/26/2021 8:11 PM,Trade,Sell to Open,BB,Sell,Open,3,04/16/2021,12,C,0.38,3.426,114,Sold 3 BB 04/16/21 Call 12.00 @ 0.38,Individual...60
-03/26/2021 2:32 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,24,C,1.13,1.152,113,Sold 1 PLTR 04/16/21 Call 24.00 @ 1.13,Individual...60
-03/23/2021 6:52 PM,Trade,Sell to Open,BB,Sell,Open,1,05/21/2021,12,P,2.58,1.152,258,Sold 1 BB 05/21/21 Put 12.00 @ 2.58,Individual...60
-03/20/2021 4:44 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Assignment,PLTR,,,1,03/19/2021,34,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Buy to Open,PLTR,Buy,Open,100,,,,34,5.00,-3400,Buy to Open 100 PLTR @ 34.00,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Assignment,VGAC,,,1,03/19/2021,17.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/19/2021 10:00 PM,Receive Deliver,Buy to Open,VGAC,Buy,Open,100,,,,17.5,5.00,-1750,Buy to Open 100 VGAC @ 17.50,Individual...60
-03/19/2021 4:25 PM,Trade,Sell to Close,BB,Sell,Close,3,03/19/2021,16,P,5,0.426,1500,Sold 3 BB 03/19/21 Put 16.00 @ 5.00,Individual...60
-03/19/2021 3:44 PM,Trade,Buy to Open,BB,Buy,Open,3,03/19/2021,16,P,4.95,3.41,-1485,Bought 3 BB 03/19/21 Put 16.00 @ 4.95,Individual...60
-03/19/2021 2:57 PM,Trade,Buy to Open,RIDE,Buy,Open,1,07/16/2021,15,P,4.75,1.14,-475,Bought 1 RIDE 07/16/21 Put 15.00 @ 4.75,Individual...60
-03/18/2021 10:00 PM,Receive Deliver,Assignment,BB,,,3,03/19/2021,16,P,,0.00,0,Removal of option due to assignment,Individual...60
-03/18/2021 10:00 PM,Receive Deliver,Buy to Open,BB,Buy,Open,300,,,,16,5.00,-4800,Buy to Open 300 BB @ 16.00,Individual...60
-03/18/2021 8:32 PM,Trade,Sell to Open,PSTH,Sell,Open,1,04/16/2021,30,P,5.4,1.152,540,Sold 1 PSTH 04/16/21 Put 30.00 @ 5.40,Individual...60
-03/18/2021 8:24 PM,Trade,Sell to Open,MT,Sell,Open,1,04/16/2021,28,P,1.9,1.152,190,Sold 1 MT 04/16/21 Put 28.00 @ 1.90,Individual...60
-03/18/2021 8:19 PM,Trade,Sell to Open,BFT,Sell,Open,1,04/16/2021,15,P,1.32,1.152,132,Sold 1 BFT 04/16/21 Put 15.00 @ 1.32,Individual...60
-03/18/2021 4:09 PM,Trade,Sell to Close,MT,Sell,Close,1,06/18/2021,25,C,4,0.152,400,Sold 1 MT 06/18/21 Call 25.00 @ 4.00,Individual...60
-03/17/2021 6:46 PM,Trade,Sell to Close,UWMC,Sell,Close,4,04/16/2021,11,C,0.64,0.558,256,Sold 4 UWMC 04/16/21 Call 11.00 @ 0.64,Individual...60
-03/17/2021 2:30 PM,Trade,Sell to Open,PLTR,Sell,Open,1,05/21/2021,27,P,5.25,1.152,525,Sold 1 PLTR 05/21/21 Put 27.00 @ 5.25,Individual...60
-03/17/2021 2:30 PM,Trade,Sell to Open,KMPH,Sell,Open,1,04/16/2021,17.5,P,8.35,1.152,835,Sold 1 KMPH 04/16/21 Put 17.50 @ 8.35,Individual...60
-03/16/2021 10:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.12,INTEREST ON CREDIT BALANCE,Individual...60
-03/16/2021 4:44 PM,Trade,Buy to Open,NOK,Buy,Open,1,01/21/2022,4,C,0.97,1.14,-97,Bought 1 NOK 01/21/22 Call 4.00 @ 0.97,Individual...60
-03/10/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,2.97,0.14,-297,Bought 1 PLTR 04/16/21 Put 25.00 @ 2.97,Individual...60
-03/05/2021 9:14 PM,Trade,Buy to Close,PSTH,Buy,Close,1,03/19/2021,30,P,3.95,0.14,-395,Bought 1 PSTH 03/19/21 Put 30.00 @ 3.95,Individual...60
-03/04/2021 6:55 PM,Trade,Sell to Close,SQQQ,Sell,Close,200,,,,15.72,0.204,3144,Sold 200 SQQQ @ 15.72,Individual...60
-03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...60
-03/04/2021 4:34 PM,Trade,Buy to Open,SQQQ,Buy,Open,100,,,,15.21,0.08,-1521,Bought 100 SQQQ @ 15.21,Individual...60
-03/04/2021 4:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,3.85,1.152,385,Sold 1 PLTR 04/16/21 Put 25.00 @ 3.85,Individual...60
-03/04/2021 4:03 PM,Trade,Sell to Open,UWMC,Sell,Open,2,04/16/2021,12.5,P,4.35,2.284,870,Sold 2 UWMC 04/16/21 Put 12.50 @ 4.35,Individual...60
-03/04/2021 3:57 PM,Trade,Buy to Open,UWMC,Buy,Open,4,04/16/2021,11,C,1.48,4.54,-592,Bought 4 UWMC 04/16/21 Call 11.00 @ 1.48,Individual...60
-03/03/2021 3:32 PM,Trade,Sell to Close,KT,Sell,Close,200,,,,11.68,0.204,2336,Sold 200 KT @ 11.68,Individual...60
-03/01/2021 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4770.4,Wire Funds Received,Individual...60
-03/01/2021 7:28 PM,Trade,Buy to Close,PLTR,Buy,Close,1,04/16/2021,25,P,3.2,0.14,-320,Bought 1 PLTR 04/16/21 Put 25.00 @ 3.20,Individual...60
-02/27/2021 5:52 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-02/26/2021 4:00 PM,Trade,Buy to Close,KT,Buy,Close,2,03/19/2021,12.5,C,0.2,0.27,-40,Bought 2 KT 03/19/21 Call 12.50 @ 0.20,Individual...60
-02/25/2021 6:10 PM,Trade,Sell to Open,PLTR,Sell,Open,1,04/16/2021,25,P,4.25,1.152,425,Sold 1 PLTR 04/16/21 Put 25.00 @ 4.25,Individual...60
-02/18/2021 3:31 PM,Trade,Buy to Close,APHA,Buy,Close,1,03/19/2021,26,P,7.25,0.14,-725,Bought 1 APHA 03/19/21 Put 26.00 @ 7.25,Individual...60
-02/18/2021 3:30 PM,Trade,Sell to Open,PSTH,Sell,Open,1,03/19/2021,30,P,4.5,1.152,450,Sold 1 PSTH 03/19/21 Put 30.00 @ 4.50,Individual...60
-02/18/2021 3:30 PM,Trade,Sell to Open,BB,Sell,Open,1,04/16/2021,12,P,2.45,1.152,245,Sold 1 BB 04/16/21 Put 12.00 @ 2.45,Individual...60
-02/16/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.09,INTEREST ON CREDIT BALANCE,Individual...60
-02/16/2021 3:32 PM,Trade,Sell to Open,KT,Sell,Open,2,03/19/2021,12.5,C,0.45,2.284,90,Sold 2 KT 03/19/21 Call 12.50 @ 0.45,Individual...60
-02/13/2021 4:47 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.06,Regulatory fee adjustment,Individual...60
-02/12/2021 3:43 PM,Trade,Buy to Open,KT,Buy,Open,170,,,,11.11,0.136,-1888.7,Bought 170 KT @ 11.11,Individual...60
-02/12/2021 3:41 PM,Trade,Buy to Open,KT,Buy,Open,30,,,,11.11,0.024,-333.3,Bought 30 KT @ 11.11,Individual...60
-02/12/2021 3:35 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...60
-02/11/2021 3:33 PM,Trade,Sell to Open,APHA,Sell,Open,1,03/19/2021,26,P,10.25,1.172,1025,Sold 1 APHA 03/19/21 Put 26.00 @ 10.25,Individual...60
-02/08/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.4,0.14,-940,Bought 1 GME 03/19/21 Put 40.00 @ 9.40,Individual...60
-02/08/2021 3:30 PM,Trade,Buy to Close,PLTR,Buy,Close,1,03/19/2021,34,P,4.3,0.14,-430,Bought 1 PLTR 03/19/21 Put 34.00 @ 4.30,Individual...60
-02/05/2021 7:38 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.05,1.172,1205,Sold 1 GME 03/19/21 Put 40.00 @ 12.05,Individual...60
-02/05/2021 4:01 PM,Trade,Sell to Open,VGAC,Sell,Open,1,03/19/2021,17.5,P,3.7,1.152,370,Sold 1 VGAC 03/19/21 Put 17.50 @ 3.70,Individual...60
-02/04/2021 9:47 PM,Trade,Sell to Close,CLOV,Sell,Close,10,02/19/2021,10,P,0.53,1.40,530,Sold 10 CLOV 02/19/21 Put 10.00 @ 0.53,Individual...60
-02/04/2021 8:33 PM,Trade,Sell to Close,CLOV,Sell,Close,1,03/19/2021,20,C,0.91,0.152,91,Sold 1 CLOV 03/19/21 Call 20.00 @ 0.91,Individual...60
-02/04/2021 8:33 PM,Trade,Buy to Close,CLOV,Buy,Close,1,03/19/2021,2.5,C,9.91,0.14,-991,Bought 1 CLOV 03/19/21 Call 2.50 @ 9.91,Individual...60
-02/04/2021 3:57 PM,Trade,Sell to Open,PLTR,Sell,Open,1,03/19/2021,34,P,6.3,1.162,630,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,2,02/19/2021,10,P,0.45,2.27,-90,Bought 2 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,1,03/19/2021,20,C,0.87,1.14,-87,Bought 1 CLOV 03/19/21 Call 20.00 @ 0.87,Individual...60
-02/04/2021 3:47 PM,Trade,Sell to Open,CLOV,Sell,Open,1,03/19/2021,2.5,C,9.92,1.172,992,Sold 1 CLOV 03/19/21 Call 2.50 @ 9.92,Individual...60
-02/04/2021 3:47 PM,Trade,Buy to Open,CLOV,Buy,Open,8,02/19/2021,10,P,0.45,9.09,-360,Bought 8 CLOV 02/19/21 Put 10.00 @ 0.45,Individual...60
-02/03/2021 4:42 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.55,0.14,-955,Bought 1 GME 03/19/21 Put 40.00 @ 9.55,Individual...60
-02/02/2021 8:32 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...60
-02/02/2021 5:34 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...60
-02/02/2021 3:44 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,12.1,1.172,1210,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,Individual...60
-02/01/2021 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,03/19/2021,40,P,9.6,0.14,-960,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,Individual...60
-01/31/2021 12:11 AM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-01/29/2021 10:15 PM,Receive Deliver,Expiration,UVXY,,,1,01/29/2021,14.5,P,,0.00,0,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,Individual...60
-01/29/2021 7:51 PM,Trade,Sell to Open,GME,Sell,Open,1,03/19/2021,40,P,13.3,1.172,1330,Sold 1 GME 03/19/21 Put 40.00 @ 13.30,Individual...60
-01/29/2021 7:31 PM,Trade,Sell to Open,UVXY,Sell,Open,1,01/29/2021,14.5,P,0.56,1.152,56,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,Individual...60
-01/27/2021 7:52 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...60
-01/27/2021 6:50 PM,Trade,Buy to Close,GME,Buy,Close,1,02/19/2021,42,P,6.25,0.14,-625,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,Individual...60
-01/27/2021 3:58 PM,Trade,Buy to Close,MT,Buy,Close,1,02/19/2021,26,P,5.4,0.14,-540,Bought 1 MT 02/19/21 Put 26.00 @ 5.40,Individual...60
-01/25/2021 6:04 PM,Trade,Buy to Open,BB,Buy,Open,1,01/21/2022,12.5,C,11.5,1.14,-1150,Bought 1 BB 01/21/22 Call 12.50 @ 11.50,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,THCB,Sell,Close,200,,,,15.13,0.254,3026,Sold 200 THCB @ 15.13,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/22/2021 3:30 PM,Trade,Sell to Close,BCRX,Sell,Close,1,03/19/2021,8,C,2.35,0.152,235,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,Individual...60
-01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,48,,,,10.14,0.065,486.72,Sold 48 UVXY @ 10.14,Individual...60
-01/21/2021 4:38 PM,Trade,Sell to Close,UVXY,Sell,Close,52,,,,10.14,0.068,527.28,Sold 52 UVXY @ 10.14,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/21/2021 3:34 PM,Trade,Sell to Open,BB,Sell,Open,1,03/19/2021,16,P,5.5,1.162,550,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,Individual...60
-01/20/2021 6:55 PM,Trade,Sell to Close,THCBW,Sell,Close,100,,,,4.17,0.102,417,Sold 100 THCBW @ 4.17,Individual...60
-01/20/2021 6:18 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,10.65,1.172,1065,Sold 1 GME 02/19/21 Put 42.00 @ 10.65,Individual...60
-01/19/2021 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-01/19/2021 8:16 PM,Trade,Sell to Open,GME,Sell,Open,1,02/19/2021,42,P,11,1.172,1100,Sold 1 GME 02/19/21 Put 42.00 @ 11.00,Individual...60
-01/19/2021 3:38 PM,Trade,Buy to Close,MGNI,Buy,Close,2,02/19/2021,30,P,2.98,0.27,-596,Bought 2 MGNI 02/19/21 Put 30.00 @ 2.98,Individual...60
-01/16/2021 4:32 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-01/15/2021 3:48 PM,Trade,Sell to Close,GME,Sell,Close,1,01/15/2021,32,P,0.48,0.152,48,Sold 1 GME 01/15/21 Put 32.00 @ 0.48,Individual...60
-01/13/2021 9:42 PM,Trade,Sell to Close,TLRY,Sell,Close,200,,,,14.96,0.254,2992,Sold 200 TLRY @ 14.96,Individual...60
-01/13/2021 5:58 PM,Trade,Buy to Open,GME,Buy,Open,1,01/15/2021,32,P,3.95,1.14,-395,Bought 1 GME 01/15/21 Put 32.00 @ 3.95,Individual...60
-01/12/2021 9:50 PM,Trade,Buy to Open,UVXY,Buy,Open,100,,,,10.52,0.08,-1052,Bought 100 UVXY @ 10.52,Individual...60
-01/11/2021 5:51 PM,Trade,Sell to Close,BB,Sell,Close,5,02/19/2021,7,C,1.09,0.71,545,Sold 5 BB 02/19/21 Call 7.00 @ 1.09,Individual...60
-
+Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency
+2021-07-07T19:24:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210723C00023000,Equity Option,Bought 4 CLF 07/23/21 Call 23.00 @ 0.79,-316,4,79.0,-1.00,0.54,100,CLF,CLF,7/23/21,23,CALL,123456,USD
+2021-07-07T16:44:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210820P00025000,Equity Option,Sold 1 PLTR 08/20/21 Put 25.00 @ 3.15,315,1,315.0,-1.00,0.1419999999999999,100,PLTR,PLTR,8/20/21,25,PUT,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 289 SPRT @ 4.81,1390.09,289,4.81,-1.00,0.276,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 5 SPRT @ 4.81,24.05,5,4.81,-1.00,0.015,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 5 SPRT @ 4.81,24.05,5,4.81,-1.00,0.015,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 50 SPRT @ 4.81,240.5,50,4.81,-1.00,0.056,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 50 SPRT @ 4.81,240.5,50,4.81,-1.00,0.056,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 50 SPRT @ 4.81,240.5,50,4.81,-1.00,0.056,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPRT,Equity,Sold 51 SPRT @ 4.81,245.31,51,4.81,-1.00,0.057,,SPRT,SPRT,,,,123456,USD
+2021-07-07T15:44:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210820P00025000,Equity Option,Sold 1 PLTR 08/20/21 Put 25.00 @ 2.57,257,1,257.0,-1.00,0.1419999999999999,100,PLTR,PLTR,8/20/21,25,PUT,123456,USD
+2021-07-07T15:43:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210723C00023000,Equity Option,Sold 4 CLF 07/23/21 Call 23.00 @ 0.88,352,4,88.0,-1.00,3.558,100,CLF,CLF,7/23/21,23,CALL,123456,USD
+2021-07-06T23:00:00+0000,Money Movement,Dividend,,UWMC,Equity,UWM HOLDINGS CORPORATION,20,0,,0,0.00,,UWMC,UWMC,,,,123456,USD
+2021-07-06T23:00:00+0000,Money Movement,Dividend,,UWMC,Equity,UWM HOLDINGS CORPORATION,-3,0,,0,0.00,,UWMC,UWMC,,,,123456,USD
+2021-07-06T16:13:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210723C00024000,Equity Option,Bought 4 CLF 07/23/21 Call 24.00 @ 0.64,-256,4,64.0,-1.00,0.54,100,CLF,CLF,7/23/21,24,CALL,123456,USD
+2021-07-06T15:43:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210716C00023000,Equity Option,Bought 3 PLTR 07/16/21 Call 23.00 @ 1.78,-534,3,178.0,-1.00,0.40,100,PLTR,PLTR,7/16/21,23,CALL,123456,USD
+2021-07-03T15:55:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,0.01,0,,0,0.00,,,,,,,123456,USD
+2021-07-01T21:03:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 55 SPRT @ 3.87,-212.85,55,3.87,-1.00,0.044,,SPRT,SPRT,,,,123456,USD
+2021-07-01T21:03:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 100 SPRT @ 3.87,-387,100,3.87,-1.00,0.08,,SPRT,SPRT,,,,123456,USD
+2021-07-01T21:03:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 1 SPRT @ 3.87,-3.87,1,3.87,-1.00,0.001,,SPRT,SPRT,,,,123456,USD
+2021-07-01T21:03:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 100 SPRT @ 3.87,-387,100,3.87,-1.00,0.08,,SPRT,SPRT,,,,123456,USD
+2021-07-01T21:03:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 44 SPRT @ 3.87,-170.28,44,3.87,-1.00,0.036,,SPRT,SPRT,,,,123456,USD
+2021-07-01T20:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 200 SPRT @ 3.87,-774,200,3.87,-1.00,0.16,,SPRT,SPRT,,,,123456,USD
+2021-07-01T19:56:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210716P00012500,Equity Option,Bought 1 BB 07/16/21 Put 12.50 @ 1.09,-109,1,109.00000000000001,-1.00,0.13,100,BB,BB,7/16/21,12.5,PUT,123456,USD
+2021-07-01T19:56:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210716P00012500,Equity Option,Bought 2 BB 07/16/21 Put 12.50 @ 1.09,-218,2,109.00000000000001,-1.00,0.27,100,BB,BB,7/16/21,12.5,PUT,123456,USD
+2021-06-30T16:17:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210716C00010000,Equity Option,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,-12,1,12.0,-1.00,0.13,100,UWMC,UWMC,7/16/21,10,CALL,123456,USD
+2021-06-30T16:13:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210716C00010000,Equity Option,Bought 1 UWMC 07/16/21 Call 10.00 @ 0.12,-12,1,12.0,-1.00,0.13,100,UWMC,UWMC,7/16/21,10,CALL,123456,USD
+2021-06-29T16:23:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210723C00024000,Equity Option,Sold 4 CLF 07/23/21 Call 24.00 @ 0.83,332,4,83.0,-1.00,3.558,100,CLF,CLF,7/23/21,24,CALL,123456,USD
+2021-06-28T15:41:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210723C00024000,Equity Option,Bought 2 CLF 07/23/21 Call 24.00 @ 0.82,-164,2,82.0,-1.00,0.27,100,CLF,CLF,7/23/21,24,CALL,123456,USD
+2021-06-26T17:00:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.03,0,,0,0.00,,,,,,,123456,USD
+2021-06-25T21:59:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210730C00024000,Equity Option,Bought 2 CLF 07/30/21 Call 24.00 @ 1.07,-214,2,107.0,-1.00,0.27,100,CLF,CLF,7/30/21,24,CALL,123456,USD
+2021-06-25T16:12:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210730C00014500,Equity Option,Bought 1 BB 07/30/21 Call 14.50 @ 0.77,-77,1,77.0,-1.00,0.13,100,BB,BB,7/30/21,14.5,CALL,123456,USD
+2021-06-25T15:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210716P00012500,Equity Option,Sold 2 BB 07/16/21 Put 12.50 @ 1.49,298,2,149.0,-1.00,1.2839999999999998,100,BB,BB,7/16/21,12.5,PUT,123456,USD
+2021-06-25T15:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210716P00012500,Equity Option,Sold 1 BB 07/16/21 Put 12.50 @ 1.49,149,1,149.0,-1.00,0.1419999999999999,100,BB,BB,7/16/21,12.5,PUT,123456,USD
+2021-06-22T17:23:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210723C00024000,Equity Option,Sold 2 CLF 07/23/21 Call 24.00 @ 1.04,208,2,104.0,-1.00,1.2839999999999998,100,CLF,CLF,7/23/21,24,CALL,123456,USD
+2021-06-22T16:19:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLNE  210716C00014000,Equity Option,Sold 1 CLNE 07/16/21 Call 14.00 @ 0.80,80,1,80.0,-1.00,0.1419999999999999,100,CLNE,CLNE,7/16/21,14,CALL,123456,USD
+2021-06-22T16:18:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210730C00014500,Equity Option,Sold 1 BB 07/30/21 Call 14.50 @ 1.21,121,1,121.0,-1.00,0.1419999999999999,100,BB,BB,7/30/21,14.5,CALL,123456,USD
+2021-06-22T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,DKNG  210730P00040000,Equity Option,Sold 2 DKNG 07/30/21 Put 40.00 @ 0.83,166,2,83.0,-1.00,0.284,100,DKNG,DKNG,7/30/21,40,PUT,123456,USD
+2021-06-18T23:00:00+0000,Receive Deliver,Assignment,,BB  210618C00009000,Equity Option,Removal of option due to assignment,0,5,,0,0.00,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-06-18T23:00:00+0000,Receive Deliver,Sell to Close,SELL_TO_CLOSE,BB,Equity,Sell to Close 500 BB @ 9.00,4500,500,9,-1.00,4.09,,BB,BB,,,,123456,USD
+2021-06-18T23:00:00+0000,Receive Deliver,Assignment,,ME  210618C00010000,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,ME,ME,6/18/21,10,CALL,123456,USD
+2021-06-18T23:00:00+0000,Receive Deliver,Sell to Close,SELL_TO_CLOSE,ME,Equity,Sell to Close 100 ME @ 10.00,1000,100,10,-1.00,4.022,,ME,ME,,,,123456,USD
+2021-06-18T22:00:00+0000,Receive Deliver,Expiration,,CLNE  210618C00014000,Equity Option,Removal of 1.0 CLNE 06/18/21 Call 14.00 due to expiration.,0,1,,0,0.00,100,CLNE,CLNE,6/18/21,14,CALL,123456,USD
+2021-06-18T22:00:00+0000,Receive Deliver,Expiration,,CLF  210618C00023000,Equity Option,Removal of 2.0 CLF 06/18/21 Call 23.00 due to expiration.,0,2,,0,0.00,100,CLF,CLF,6/18/21,23,CALL,123456,USD
+2021-06-18T12:48:00+0000,Receive Deliver,Symbol Change,SELL_TO_OPEN,ME  210618C00010000,Equity Option,Symbol change:  Open 1.0 ME    210618C00010000,45,1,,0,0.00,100,ME,ME,6/18/21,10,CALL,123456,USD
+2021-06-18T12:48:00+0000,Receive Deliver,Symbol Change,BUY_TO_CLOSE,VGAC  210618C00010000,Equity Option,Symbol change:  Close 1.0 VGAC  210618C00010000,-45,1,,0,0.00,100,VGAC,VGAC,6/18/21,10,CALL,123456,USD
+2021-06-18T12:48:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,ME,Equity,Symbol change:  Open 100.0 ME,-1750,100,,0,0.00,,ME,ME,,,,123456,USD
+2021-06-18T12:48:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,VGAC,Equity,Symbol change:  Close 100.0 VGAC,1750,100,,0,0.00,,VGAC,VGAC,,,,123456,USD
+2021-06-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.04,0,,0,0.00,,,,,,,123456,USD
+2021-06-16T23:00:00+0000,Money Movement,Debit Interest,,,,FROM 05/16 THRU 06/15 @ 8    %,-0.87,0,,0,0.00,,,,,,,123456,USD
+2021-06-16T16:44:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLOV  210618P00015500,Equity Option,Bought 2 CLOV 06/18/21 Put 15.50 @ 2.50,-500,2,250.0,-1.00,0.27,100,CLOV,CLOV,6/18/21,15.5,PUT,123456,USD
+2021-06-15T15:35:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210730C00024000,Equity Option,Sold 2 CLF 07/30/21 Call 24.00 @ 2.10,420,2,210.0,-1.00,1.2839999999999998,100,CLF,CLF,7/30/21,24,CALL,123456,USD
+2021-06-15T15:32:00+0000,Trade,Buy to Open,BUY_TO_OPEN,DKNG  210730P00040000,Equity Option,Bought 2 DKNG 07/30/21 Put 40.00 @ 1.70,-340,2,170.0,-1.00,1.27,100,DKNG,DKNG,7/30/21,40,PUT,123456,USD
+2021-06-15T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210618C00023000,Equity Option,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,66,1,66.0,-1.00,0.1419999999999999,100,CLF,CLF,6/18/21,23,CALL,123456,USD
+2021-06-15T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210618C00023000,Equity Option,Sold 1 CLF 06/18/21 Call 23.00 @ 0.66,66,1,66.0,-1.00,0.1419999999999999,100,CLF,CLF,6/18/21,23,CALL,123456,USD
+2021-06-14T15:38:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210702C00024500,Equity Option,Bought 2 CLF 07/02/21 Call 24.50 @ 1.40,-280,2,140.0,-1.00,0.27,100,CLF,CLF,7/2/21,24.5,CALL,123456,USD
+2021-06-14T15:32:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLNE  210618C00014000,Equity Option,Sold 1 CLNE 06/18/21 Call 14.00 @ 0.70,70,1,70.0,-1.00,0.1419999999999999,100,CLNE,CLNE,6/18/21,14,CALL,123456,USD
+2021-06-12T16:01:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.05,0,,0,0.00,,,,,,,123456,USD
+2021-06-11T18:34:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLNE  210618C00015000,Equity Option,Bought 1 CLNE 06/18/21 Call 15.00 @ 0.30,-30,1,30.0,-1.00,0.13,100,CLNE,CLNE,6/18/21,15,CALL,123456,USD
+2021-06-10T19:27:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210702C00024500,Equity Option,Sold 2 CLF 07/02/21 Call 24.50 @ 1.66,332,2,166.0,-1.00,1.2839999999999998,100,CLF,CLF,7/2/21,24.5,CALL,123456,USD
+2021-06-10T16:46:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLOV  210618P00015500,Equity Option,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,260,1,260.0,-1.00,0.1419999999999999,100,CLOV,CLOV,6/18/21,15.5,PUT,123456,USD
+2021-06-10T16:46:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLOV  210618P00015500,Equity Option,Sold 1 CLOV 06/18/21 Put 15.50 @ 2.60,260,1,260.0,-1.00,0.1419999999999999,100,CLOV,CLOV,6/18/21,15.5,PUT,123456,USD
+2021-06-10T15:49:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLNE  210618C00015000,Equity Option,Sold 1 CLNE 06/18/21 Call 15.00 @ 0.70,70,1,70.0,-1.00,0.1419999999999999,100,CLNE,CLNE,6/18/21,15,CALL,123456,USD
+2021-06-10T15:41:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLF  220121C00024000,Equity Option,Bought 2 CLF 01/21/22 Call 24.00 @ 6.55,-1310,2,655.0,-1.00,1.27,100,CLF,CLF,1/21/22,24,CALL,123456,USD
+2021-06-10T15:35:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLF  210723C00021000,Equity Option,Bought 3 CLF 07/23/21 Call 21.00 @ 4.75,-1425,3,475.0,-1.00,0.40,100,CLF,CLF,7/23/21,21,CALL,123456,USD
+2021-06-09T19:37:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLF,Equity,Bought 200 CLF @ 22.49,-4497.68,200,22.4884,-1.00,0.16,,CLF,CLF,,,,123456,USD
+2021-06-09T19:34:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLF  210723C00021000,Equity Option,Sold 3 CLF 07/23/21 Call 21.00 @ 4.15,1245,3,415.00000000000006,-1.00,2.416,100,CLF,CLF,7/23/21,21,CALL,123456,USD
+2021-06-09T18:28:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,WISH,Equity,Sold 100 WISH @ 11.07,1107,100,11.07,-1.00,0.102,,WISH,WISH,,,,123456,USD
+2021-06-09T16:16:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLNE  210618C00015000,Equity Option,Bought 1 CLNE 06/18/21 Call 15.00 @ 2.20,-220,1,220.00000000000003,-1.00,0.13,100,CLNE,CLNE,6/18/21,15,CALL,123456,USD
+2021-06-09T16:15:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,WISH  210618C00020000,Equity Option,Bought 1 WISH 06/18/21 Call 20.00 @ 1.50,-150,1,150.0,-1.00,0.13,100,WISH,WISH,6/18/21,20,CALL,123456,USD
+2021-06-09T16:02:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,WISH  210716C00010000,Equity Option,Sold 2 WISH 07/16/21 Call 10.00 @ 4.80,960,2,480.0,-1.00,0.284,100,WISH,WISH,7/16/21,10,CALL,123456,USD
+2021-06-09T15:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLNE  210618C00015000,Equity Option,Sold 1 CLNE 06/18/21 Call 15.00 @ 2.55,255,1,254.99999999999997,-1.00,0.1419999999999999,100,CLNE,CLNE,6/18/21,15,CALL,123456,USD
+2021-06-09T15:49:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLNE,Equity,Bought 100 CLNE @ 12.81,-1281,100,12.81,-1.00,0.08,,CLNE,CLNE,,,,123456,USD
+2021-06-09T15:46:00+0000,Trade,Sell to Open,SELL_TO_OPEN,WISH  210618C00020000,Equity Option,Sold 1 WISH 06/18/21 Call 20.00 @ 2.20,220,1,220.00000000000003,-1.00,0.1419999999999999,100,WISH,WISH,6/18/21,20,CALL,123456,USD
+2021-06-08T20:11:00+0000,Trade,Buy to Open,BUY_TO_OPEN,WISH,Equity,Bought 100 WISH @ 9.48,-948,100,9.48,-1.00,0.08,,WISH,WISH,,,,123456,USD
+2021-06-08T20:05:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CLNE  210917C00010000,Equity Option,Sold 4 CLNE 09/17/21 Call 10.00 @ 2.85,1140,4,285.0,-1.00,0.558,100,CLNE,CLNE,9/17/21,10,CALL,123456,USD
+2021-06-08T20:05:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CLNE  210917C00010000,Equity Option,Sold 1 CLNE 09/17/21 Call 10.00 @ 2.85,285,1,285.0,-1.00,0.142,100,CLNE,CLNE,9/17/21,10,CALL,123456,USD
+2021-06-08T19:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,WISH  210716C00010000,Equity Option,Bought 2 WISH 07/16/21 Call 10.00 @ 2.50,-500,2,250.0,-1.00,1.27,100,WISH,WISH,7/16/21,10,CALL,123456,USD
+2021-06-08T18:13:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CLOV  211119C00010000,Equity Option,Sold 2 CLOV 11/19/21 Call 10.00 @ 11.10,2220,2,1110.0,-1.00,0.294,100,CLOV,CLOV,11/19/21,10,CALL,123456,USD
+2021-06-08T18:08:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210618C00017000,Equity Option,Bought 1 BB 06/18/21 Call 17.00 @ 1.96,-196,1,196.0,-1.00,0.13,100,BB,BB,6/18/21,17,CALL,123456,USD
+2021-06-07T16:21:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLOV  211119C00010000,Equity Option,Bought 2 CLOV 11/19/21 Call 10.00 @ 2.65,-530,2,265.0,-1.00,1.27,100,CLOV,CLOV,11/19/21,10,CALL,123456,USD
+2021-06-07T15:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210618C00017000,Equity Option,Sold 1 BB 06/18/21 Call 17.00 @ 2.45,245,1,245.00000000000003,-1.00,0.1419999999999999,100,BB,BB,6/18/21,17,CALL,123456,USD
+2021-06-05T14:10:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.05,0,,0,0.00,,,,,,,123456,USD
+2021-06-04T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,AMC  210618P00030000,Equity Option,Bought 1 AMC 06/18/21 Put 30.00 @ 4.70,-470,1,470.0,-1.00,0.13,100,AMC,AMC,6/18/21,30,PUT,123456,USD
+2021-06-04T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,AMC  210611P00030000,Equity Option,Bought 1 AMC 06/11/21 Put 30.00 @ 2.51,-251,1,250.99999999999997,-1.00,0.13,100,AMC,AMC,6/11/21,30,PUT,123456,USD
+2021-06-03T15:41:00+0000,Trade,Sell to Open,SELL_TO_OPEN,AMC  210618P00030000,Equity Option,Sold 1 AMC 06/18/21 Put 30.00 @ 5.65,565,1,565.0,-1.00,0.1419999999999999,100,AMC,AMC,6/18/21,30,PUT,123456,USD
+2021-06-03T15:38:00+0000,Trade,Buy to Open,BUY_TO_OPEN,BB,Equity,Bought 100 BB @ 17.90,-1790,100,17.9,-1.00,0.08,,BB,BB,,,,123456,USD
+2021-06-03T15:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLNE  210917C00010000,Equity Option,Bought 5 CLNE 09/17/21 Call 10.00 @ 1.25,-625,5,125.0,-1.00,4.67,100,CLNE,CLNE,9/17/21,10,CALL,123456,USD
+2021-06-02T17:49:00+0000,Trade,Sell to Open,SELL_TO_OPEN,AMC  210611P00030000,Equity Option,Sold 1 AMC 06/11/21 Put 30.00 @ 3.30,330,1,330.0,-1.00,0.1419999999999999,100,AMC,AMC,6/11/21,30,PUT,123456,USD
+2021-06-02T17:19:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,AMC  210618P00040000,Equity Option,Bought 1 AMC 06/18/21 Put 40.00 @ 10.30,-1030,1,1030.0,-1.00,0.13,100,AMC,AMC,6/18/21,40,PUT,123456,USD
+2021-06-02T17:04:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210716C00023000,Equity Option,Sold 3 PLTR 07/16/21 Call 23.00 @ 1.99,597,3,199.0,-1.00,2.416,100,PLTR,PLTR,7/16/21,23,CALL,123456,USD
+2021-06-02T16:59:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210716C00010000,Equity Option,Sold 2 UWMC 07/16/21 Call 10.00 @ 0.40,80,2,40.0,-1.00,1.2839999999999998,100,UWMC,UWMC,7/16/21,10,CALL,123456,USD
+2021-06-02T16:48:00+0000,Trade,Sell to Open,SELL_TO_OPEN,AMC  210618P00040000,Equity Option,Sold 1 AMC 06/18/21 Put 40.00 @ 11.00,1100,1,1100.0,-1.00,0.1419999999999999,100,AMC,AMC,6/18/21,40,PUT,123456,USD
+2021-06-01T18:07:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210618C00009000,Equity Option,Sold 1 BB 06/18/21 Call 9.00 @ 2.28,228,1,227.99999999999997,-1.00,0.1419999999999999,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-05-28T15:39:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210716C00009000,Equity Option,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,-80,1,80.0,-1.00,0.13,100,UWMC,UWMC,7/16/21,9,CALL,123456,USD
+2021-05-28T15:33:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210716C00009000,Equity Option,Bought 1 UWMC 07/16/21 Call 9.00 @ 0.80,-80,1,80.0,-1.00,0.13,100,UWMC,UWMC,7/16/21,9,CALL,123456,USD
+2021-05-27T19:57:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210716C00009000,Equity Option,Sold 2 UWMC 07/16/21 Call 9.00 @ 0.85,170,2,85.0,-1.00,1.2839999999999998,100,UWMC,UWMC,7/16/21,9,CALL,123456,USD
+2021-05-22T16:09:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2021-05-21T23:00:00+0000,Receive Deliver,Assignment,,BB  210521P00012000,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,BB,BB,5/21/21,12,PUT,123456,USD
+2021-05-21T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,BB,Equity,Buy to Open 100 BB @ 12.00,-1200,100,12,-1.00,4.0,,BB,BB,,,,123456,USD
+2021-05-21T23:00:00+0000,Receive Deliver,Assignment,,PLTR  210521P00024000,Equity Option,Removal of option due to assignment,0,2,,0,0.00,100,PLTR,PLTR,5/21/21,24,PUT,123456,USD
+2021-05-21T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,PLTR,Equity,Buy to Open 200 PLTR @ 24.00,-4800,200,24,-1.00,4.0,,PLTR,PLTR,,,,123456,USD
+2021-05-21T18:10:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210618C00008000,Equity Option,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.69,-138,2,69.0,-1.00,0.27,100,UWMC,UWMC,6/18/21,8,CALL,123456,USD
+2021-05-20T15:41:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIAC  210521P00045000,Equity Option,Bought 1 VIAC 05/21/21 Put 45.00 @ 3.60,-360,1,360.0,-1.00,0.13,100,VIAC,VIAC,5/21/21,45,PUT,123456,USD
+2021-05-19T16:34:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210618C00022000,Equity Option,Bought 1 PLTR 06/18/21 Call 22.00 @ 0.90,-90,1,90.0,-1.00,0.13,100,PLTR,PLTR,6/18/21,22,CALL,123456,USD
+2021-05-18T21:04:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210618P00023000,Equity Option,Bought 2 PLTR 06/18/21 Put 23.00 @ 2.54,-508,2,254.0,-1.00,0.27,100,PLTR,PLTR,6/18/21,23,PUT,123456,USD
+2021-05-18T19:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210618C00022000,Equity Option,Sold 1 PLTR 06/18/21 Call 22.00 @ 1.25,125,1,125.0,-1.00,0.1419999999999999,100,PLTR,PLTR,6/18/21,22,CALL,123456,USD
+2021-05-18T15:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210618C00009000,Equity Option,Sold 4 BB 06/18/21 Call 9.00 @ 0.58,232,4,57.99999999999999,-1.00,3.558,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-05-17T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.08,0,,0,0.00,,,,,,,123456,USD
+2021-05-17T15:31:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210618C00008000,Equity Option,Sold 2 UWMC 06/18/21 Call 8.00 @ 0.95,190,2,95.0,-1.00,1.2839999999999998,100,UWMC,UWMC,6/18/21,8,CALL,123456,USD
+2021-05-15T15:42:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2021-05-13T16:11:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VGAC  210618C00010000,Equity Option,Sold 1 VGAC 06/18/21 Call 10.00 @ 0.45,45,1,45.0,-1.00,0.1419999999999999,100,VGAC,VGAC,6/18/21,10,CALL,123456,USD
+2021-05-11T15:54:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,WY  210521P00039000,Equity Option,Bought 1 WY 05/21/21 Put 39.00 @ 0.57,-57,1,56.99999999999999,-1.00,0.13,100,WY,WY,5/21/21,39,PUT,123456,USD
+2021-05-08T15:28:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2021-05-06T21:50:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210618P00023000,Equity Option,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.90,390,1,390.0,-1.00,0.1419999999999999,100,PLTR,PLTR,6/18/21,23,PUT,123456,USD
+2021-05-06T16:22:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,UWMC  210618C00008000,Equity Option,Bought 2 UWMC 06/18/21 Call 8.00 @ 0.45,-90,2,45.0,-1.00,0.27,100,UWMC,UWMC,6/18/21,8,CALL,123456,USD
+2021-05-06T15:59:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210618P00023000,Equity Option,Sold 1 PLTR 06/18/21 Put 23.00 @ 3.45,345,1,345.0,-1.00,0.1419999999999999,100,PLTR,PLTR,6/18/21,23,PUT,123456,USD
+2021-05-04T15:44:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210521P00024000,Equity Option,Sold 2 PLTR 05/21/21 Put 24.00 @ 2.85,570,2,285.0,-1.00,1.2839999999999998,100,PLTR,PLTR,5/21/21,24,PUT,123456,USD
+2021-05-04T15:41:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210618C00024000,Equity Option,Bought 1 PLTR 06/18/21 Call 24.00 @ 1.04,-104,1,104.0,-1.00,0.13,100,PLTR,PLTR,6/18/21,24,CALL,123456,USD
+2021-05-04T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210618C00009000,Equity Option,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,-57,1,56.99999999999999,-1.00,0.13,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-05-04T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210618C00009000,Equity Option,Bought 1 BB 06/18/21 Call 9.00 @ 0.57,-57,1,56.99999999999999,-1.00,0.13,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-05-04T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,BB  210618C00009000,Equity Option,Bought 2 BB 06/18/21 Call 9.00 @ 0.57,-114,2,56.99999999999999,-1.00,0.27,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-05-01T15:53:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2021-04-30T16:14:00+0000,Trade,Sell to Open,SELL_TO_OPEN,WY  210521P00039000,Equity Option,Sold 1 WY 05/21/21 Put 39.00 @ 2.10,210,1,210.0,-1.00,0.1419999999999999,100,WY,WY,5/21/21,39,PUT,123456,USD
+2021-04-29T20:17:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,MVIS  210521P00012000,Equity Option,Bought 1 MVIS 05/21/21 Put 12.00 @ 0.68,-68,1,68.0,-1.00,0.13,100,MVIS,MVIS,5/21/21,12,PUT,123456,USD
+2021-04-29T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NOK  220121C00004000,Equity Option,Sold 1 NOK 01/21/22 Call 4.00 @ 1.10,110,1,110.00000000000001,-1.00,0.142,100,NOK,NOK,1/21/22,4,CALL,123456,USD
+2021-04-26T16:09:00+0000,Trade,Sell to Open,SELL_TO_OPEN,MVIS  210521P00012000,Equity Option,Sold 1 MVIS 05/21/21 Put 12.00 @ 0.86,86,1,86.0,-1.00,0.1419999999999999,100,MVIS,MVIS,5/21/21,12,PUT,123456,USD
+2021-04-24T15:56:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.03,0,,0,0.00,,,,,,,123456,USD
+2021-04-22T16:54:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210521P00024000,Equity Option,Bought 1 PLTR 05/21/21 Put 24.00 @ 2.02,-202,1,202.0,-1.00,0.13,100,PLTR,PLTR,5/21/21,24,PUT,123456,USD
+2021-04-22T16:05:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210618C00008000,Equity Option,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.65,65,1,65.0,-1.00,0.1419999999999999,100,UWMC,UWMC,6/18/21,8,CALL,123456,USD
+2021-04-22T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210521P00027000,Equity Option,Bought 1 PLTR 05/21/21 Put 27.00 @ 4.65,-465,1,465.00000000000006,-1.00,0.13,100,PLTR,PLTR,5/21/21,27,PUT,123456,USD
+2021-04-21T21:47:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BB  220121C00012500,Equity Option,Sold 1 BB 01/21/22 Call 12.50 @ 0.94,94,1,94.0,-1.00,0.142,100,BB,BB,1/21/22,12.5,CALL,123456,USD
+2021-04-21T19:43:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210618C00008000,Equity Option,Sold 1 UWMC 06/18/21 Call 8.00 @ 0.61,61,1,61.0,-1.00,0.1419999999999999,100,UWMC,UWMC,6/18/21,8,CALL,123456,USD
+2021-04-21T17:57:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210618C00009000,Equity Option,Sold 4 BB 06/18/21 Call 9.00 @ 0.62,248,4,62.0,-1.00,3.558,100,BB,BB,6/18/21,9,CALL,123456,USD
+2021-04-21T17:55:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210521P00022500,Equity Option,Bought 1 PLTR 05/21/21 Put 22.50 @ 1.67,-167,1,167.0,-1.00,0.13,100,PLTR,PLTR,5/21/21,22.5,PUT,123456,USD
+2021-04-21T17:14:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210618C00024000,Equity Option,Sold 1 PLTR 06/18/21 Call 24.00 @ 1.56,156,1,156.0,-1.00,0.1419999999999999,100,PLTR,PLTR,6/18/21,24,CALL,123456,USD
+2021-04-20T17:35:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210521P00022500,Equity Option,Sold 1 PLTR 05/21/21 Put 22.50 @ 2.35,235,1,235.0,-1.00,0.1419999999999999,100,PLTR,PLTR,5/21/21,22.5,PUT,123456,USD
+2021-04-19T15:50:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VGAC  210521C00010000,Equity Option,Bought 1 VGAC 05/21/21 Call 10.00 @ 0.10,-10,1,10.0,-1.00,0.13,100,VGAC,VGAC,5/21/21,10,CALL,123456,USD
+2021-04-17T17:29:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2021-04-16T23:00:00+0000,Receive Deliver,Assignment,,UWMC  210416P00012500,Equity Option,Removal of option due to assignment,0,2,,0,0.00,100,UWMC,UWMC,4/16/21,12.5,PUT,123456,USD
+2021-04-16T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,UWMC,Equity,Buy to Open 200 UWMC @ 12.50,-2500,200,12.5,-1.00,4.0,,UWMC,UWMC,,,,123456,USD
+2021-04-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.12,0,,0,0.00,,,,,,,123456,USD
+2021-04-16T22:00:00+0000,Receive Deliver,Expiration,,BB  210416C00012000,Equity Option,Removal of 3.0 BB 04/16/21 Call 12.00 due to expiration.,0,3,,0,0.00,100,BB,BB,4/16/21,12,CALL,123456,USD
+2021-04-16T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210521P00024000,Equity Option,Sold 1 PLTR 05/21/21 Put 24.00 @ 2.52,252,1,252.0,-1.00,0.1419999999999999,100,PLTR,PLTR,5/21/21,24,PUT,123456,USD
+2021-04-14T23:00:00+0000,Receive Deliver,Assignment,,BB  210416P00012000,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,BB,BB,4/16/21,12,PUT,123456,USD
+2021-04-14T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,BB,Equity,Buy to Open 100 BB @ 12.00,-1200,100,12,-1.00,4.0,,BB,BB,,,,123456,USD
+2021-04-14T17:41:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PSTH  210416P00030000,Equity Option,Bought 1 PSTH 04/16/21 Put 30.00 @ 5.20,-520,1,520.0,-1.00,0.13,100,PSTH,PSTH,4/16/21,30,PUT,123456,USD
+2021-04-13T19:52:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210521P00023000,Equity Option,Bought 1 PLTR 05/21/21 Put 23.00 @ 1.46,-146,1,146.0,-1.00,0.13,100,PLTR,PLTR,5/21/21,23,PUT,123456,USD
+2021-04-12T19:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210521P00023000,Equity Option,Sold 1 PLTR 05/21/21 Put 23.00 @ 2.18,218,1,218.00000000000003,-1.00,0.1419999999999999,100,PLTR,PLTR,5/21/21,23,PUT,123456,USD
+2021-04-10T15:30:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2021-04-09T15:41:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,RIDE  210716P00015000,Equity Option,Sold 1 RIDE 07/16/21 Put 15.00 @ 4.95,495,1,495.0,-1.00,0.142,100,RIDE,RIDE,7/16/21,15,PUT,123456,USD
+2021-04-07T16:23:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PSFE  210416P00015000,Equity Option,Bought 1 PSFE 04/16/21 Put 15.00 @ 0.80,-80,1,80.0,-1.00,0.13,100,PSFE,PSFE,4/16/21,15,PUT,123456,USD
+2021-04-06T21:50:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIAC  210521P00045000,Equity Option,Sold 1 VIAC 05/21/21 Put 45.00 @ 4.85,485,1,484.99999999999994,-1.00,0.1419999999999999,100,VIAC,VIAC,5/21/21,45,PUT,123456,USD
+2021-04-06T19:20:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210416C00024000,Equity Option,Bought 1 PLTR 04/16/21 Call 24.00 @ 0.70,-70,1,70.0,-1.00,0.13,100,PLTR,PLTR,4/16/21,24,CALL,123456,USD
+2021-03-31T21:51:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VGAC  210521C00010000,Equity Option,Sold 1 VGAC 05/21/21 Call 10.00 @ 0.50,50,1,50.0,-1.00,0.1519999999999999,100,VGAC,VGAC,5/21/21,10,CALL,123456,USD
+2021-03-31T15:48:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KMPH  210416P00017500,Equity Option,Bought 1 KMPH 04/16/21 Put 17.50 @ 8.05,-805,1,805.0000000000001,-1.00,0.14,100,KMPH,KMPH,4/16/21,17.5,PUT,123456,USD
+2021-03-31T12:46:00+0000,Receive Deliver,Symbol Change,SELL_TO_OPEN,PSFE  210416P00015000,Equity Option,Symbol change:  Open 1.0 PSFE  210416P00015000,132,1,,0,0.00,100,PSFE,PSFE,4/16/21,15,PUT,123456,USD
+2021-03-31T12:46:00+0000,Receive Deliver,Symbol Change,BUY_TO_CLOSE,BFT  210416P00015000,Equity Option,Symbol change:  Close 1.0 BFT   210416P00015000,-132,1,,0,0.00,100,BFT,BFT,4/16/21,15,PUT,123456,USD
+2021-03-30T15:43:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,MT  210416P00028000,Equity Option,Bought 1 MT 04/16/21 Put 28.00 @ 1.20,-120,1,120.0,-1.00,0.14,100,MT,MT,4/16/21,28,PUT,123456,USD
+2021-03-27T15:20:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2021-03-26T20:11:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210416C00012000,Equity Option,Sold 3 BB 04/16/21 Call 12.00 @ 0.38,114,3,38.0,-1.00,2.426,100,BB,BB,4/16/21,12,CALL,123456,USD
+2021-03-26T14:32:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210416C00024000,Equity Option,Sold 1 PLTR 04/16/21 Call 24.00 @ 1.13,113,1,112.99999999999999,-1.00,0.1519999999999999,100,PLTR,PLTR,4/16/21,24,CALL,123456,USD
+2021-03-23T18:52:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210521P00012000,Equity Option,Sold 1 BB 05/21/21 Put 12.00 @ 2.58,258,1,258.0,-1.00,0.1519999999999999,100,BB,BB,5/21/21,12,PUT,123456,USD
+2021-03-20T16:44:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.04,0,,0,0.00,,,,,,,123456,USD
+2021-03-19T22:00:00+0000,Receive Deliver,Assignment,,PLTR  210319P00034000,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,PLTR,PLTR,3/19/21,34,PUT,123456,USD
+2021-03-19T22:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,PLTR,Equity,Buy to Open 100 PLTR @ 34.00,-3400,100,34,-1.00,4.0,,PLTR,PLTR,,,,123456,USD
+2021-03-19T22:00:00+0000,Receive Deliver,Assignment,,VGAC  210319P00017500,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,VGAC,VGAC,3/19/21,17.5,PUT,123456,USD
+2021-03-19T22:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,VGAC,Equity,Buy to Open 100 VGAC @ 17.50,-1750,100,17.5,-1.00,4.0,,VGAC,VGAC,,,,123456,USD
+2021-03-19T16:25:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BB  210319P00016000,Equity Option,Sold 3 BB 03/19/21 Put 16.00 @ 5.00,1500,3,500.0,-1.00,0.426,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-03-19T15:44:00+0000,Trade,Buy to Open,BUY_TO_OPEN,BB  210319P00016000,Equity Option,Bought 3 BB 03/19/21 Put 16.00 @ 4.95,-1485,3,495.0,-1.00,2.41,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-03-19T14:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,RIDE  210716P00015000,Equity Option,Bought 1 RIDE 07/16/21 Put 15.00 @ 4.75,-475,1,475.0,-1.00,0.1399999999999999,100,RIDE,RIDE,7/16/21,15,PUT,123456,USD
+2021-03-18T22:00:00+0000,Receive Deliver,Assignment,,BB  210319P00016000,Equity Option,Removal of option due to assignment,0,3,,0,0.00,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-03-18T22:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,BB,Equity,Buy to Open 300 BB @ 16.00,-4800,300,16,-1.00,4.0,,BB,BB,,,,123456,USD
+2021-03-18T20:32:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PSTH  210416P00030000,Equity Option,Sold 1 PSTH 04/16/21 Put 30.00 @ 5.40,540,1,540.0,-1.00,0.1519999999999999,100,PSTH,PSTH,4/16/21,30,PUT,123456,USD
+2021-03-18T20:24:00+0000,Trade,Sell to Open,SELL_TO_OPEN,MT  210416P00028000,Equity Option,Sold 1 MT 04/16/21 Put 28.00 @ 1.90,190,1,190.0,-1.00,0.1519999999999999,100,MT,MT,4/16/21,28,PUT,123456,USD
+2021-03-18T20:19:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BFT  210416P00015000,Equity Option,Sold 1 BFT 04/16/21 Put 15.00 @ 1.32,132,1,132.0,-1.00,0.1519999999999999,100,BFT,BFT,4/16/21,15,PUT,123456,USD
+2021-03-18T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,MT  210618C00025000,Equity Option,Sold 1 MT 06/18/21 Call 25.00 @ 4.00,400,1,400.0,-1.00,0.152,100,MT,MT,6/18/21,25,CALL,123456,USD
+2021-03-17T18:46:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,UWMC  210416C00011000,Equity Option,Sold 4 UWMC 04/16/21 Call 11.00 @ 0.64,256,4,64.0,-1.00,0.558,100,UWMC,UWMC,4/16/21,11,CALL,123456,USD
+2021-03-17T14:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210521P00027000,Equity Option,Sold 1 PLTR 05/21/21 Put 27.00 @ 5.25,525,1,525.0,-1.00,0.1519999999999999,100,PLTR,PLTR,5/21/21,27,PUT,123456,USD
+2021-03-17T14:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KMPH  210416P00017500,Equity Option,Sold 1 KMPH 04/16/21 Put 17.50 @ 8.35,835,1,835.0,-1.00,0.1519999999999999,100,KMPH,KMPH,4/16/21,17.5,PUT,123456,USD
+2021-03-16T22:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.12,0,,0,0.00,,,,,,,123456,USD
+2021-03-16T16:44:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NOK  220121C00004000,Equity Option,Bought 1 NOK 01/21/22 Call 4.00 @ 0.97,-97,1,97.0,-1.00,0.1399999999999999,100,NOK,NOK,1/21/22,4,CALL,123456,USD
+2021-03-10T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210416P00025000,Equity Option,Bought 1 PLTR 04/16/21 Put 25.00 @ 2.97,-297,1,297.0,-1.00,0.14,100,PLTR,PLTR,4/16/21,25,PUT,123456,USD
+2021-03-05T21:14:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PSTH  210319P00030000,Equity Option,Bought 1 PSTH 03/19/21 Put 30.00 @ 3.95,-395,1,395.0,-1.00,0.14,100,PSTH,PSTH,3/19/21,30,PUT,123456,USD
+2021-03-04T18:55:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SQQQ,Equity,Sold 200 SQQQ @ 15.72,3144,200,15.72,-1.00,0.204,,SQQQ,SQQQ,,,,123456,USD
+2021-03-04T16:34:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SQQQ,Equity,Bought 100 SQQQ @ 15.21,-1521,100,15.21,-1.00,0.08,,SQQQ,SQQQ,,,,123456,USD
+2021-03-04T16:34:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SQQQ,Equity,Bought 100 SQQQ @ 15.21,-1521,100,15.21,-1.00,0.08,,SQQQ,SQQQ,,,,123456,USD
+2021-03-04T16:10:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210416P00025000,Equity Option,Sold 1 PLTR 04/16/21 Put 25.00 @ 3.85,385,1,385.0,-1.00,0.1519999999999999,100,PLTR,PLTR,4/16/21,25,PUT,123456,USD
+2021-03-04T16:03:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UWMC  210416P00012500,Equity Option,Sold 2 UWMC 04/16/21 Put 12.50 @ 4.35,870,2,434.99999999999994,-1.00,1.2839999999999998,100,UWMC,UWMC,4/16/21,12.5,PUT,123456,USD
+2021-03-04T15:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,UWMC  210416C00011000,Equity Option,Bought 4 UWMC 04/16/21 Call 11.00 @ 1.48,-592,4,148.0,-1.00,3.54,100,UWMC,UWMC,4/16/21,11,CALL,123456,USD
+2021-03-03T15:32:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,KT,Equity,Sold 200 KT @ 11.68,2336,200,11.68,-1.00,0.204,,KT,KT,,,,123456,USD
+2021-03-01T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,4770.4,0,,0,0.00,,,,,,,123456,USD
+2021-03-01T19:28:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210416P00025000,Equity Option,Bought 1 PLTR 04/16/21 Put 25.00 @ 3.20,-320,1,320.0,-1.00,0.14,100,PLTR,PLTR,4/16/21,25,PUT,123456,USD
+2021-02-27T17:52:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.03,0,,0,0.00,,,,,,,123456,USD
+2021-02-26T16:00:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KT  210319C00012500,Equity Option,Bought 2 KT 03/19/21 Call 12.50 @ 0.20,-40,2,20.0,-1.00,0.27,100,KT,KT,3/19/21,12.5,CALL,123456,USD
+2021-02-25T18:10:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210416P00025000,Equity Option,Sold 1 PLTR 04/16/21 Put 25.00 @ 4.25,425,1,425.0,-1.00,0.1519999999999999,100,PLTR,PLTR,4/16/21,25,PUT,123456,USD
+2021-02-18T15:31:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,APHA  210319P00026000,Equity Option,Bought 1 APHA 03/19/21 Put 26.00 @ 7.25,-725,1,725.0,-1.00,0.14,100,APHA,APHA,3/19/21,26,PUT,123456,USD
+2021-02-18T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PSTH  210319P00030000,Equity Option,Sold 1 PSTH 03/19/21 Put 30.00 @ 4.50,450,1,450.0,-1.00,0.1519999999999999,100,PSTH,PSTH,3/19/21,30,PUT,123456,USD
+2021-02-18T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210416P00012000,Equity Option,Sold 1 BB 04/16/21 Put 12.00 @ 2.45,245,1,245.00000000000003,-1.00,0.1519999999999999,100,BB,BB,4/16/21,12,PUT,123456,USD
+2021-02-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.09,0,,0,0.00,,,,,,,123456,USD
+2021-02-16T15:32:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KT  210319C00012500,Equity Option,Sold 2 KT 03/19/21 Call 12.50 @ 0.45,90,2,45.0,-1.00,1.2839999999999998,100,KT,KT,3/19/21,12.5,CALL,123456,USD
+2021-02-13T16:47:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.06,0,,0,0.00,,,,,,,123456,USD
+2021-02-12T15:43:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KT,Equity,Bought 170 KT @ 11.11,-1888.7,170,11.11,-1.00,0.136,,KT,KT,,,,123456,USD
+2021-02-12T15:41:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KT,Equity,Bought 30 KT @ 11.11,-333.3,30,11.11,-1.00,0.024,,KT,KT,,,,123456,USD
+2021-02-12T15:35:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210319P00034000,Equity Option,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,630,1,630.0,-1.00,0.16199999999999992,100,PLTR,PLTR,3/19/21,34,PUT,123456,USD
+2021-02-11T15:33:00+0000,Trade,Sell to Open,SELL_TO_OPEN,APHA  210319P00026000,Equity Option,Sold 1 APHA 03/19/21 Put 26.00 @ 10.25,1025,1,1025.0,-1.00,0.17199999999999993,100,APHA,APHA,3/19/21,26,PUT,123456,USD
+2021-02-08T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210319P00040000,Equity Option,Bought 1 GME 03/19/21 Put 40.00 @ 9.40,-940,1,940.0,-1.00,0.14,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-08T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210319P00034000,Equity Option,Bought 1 PLTR 03/19/21 Put 34.00 @ 4.30,-430,1,430.0,-1.00,0.14,100,PLTR,PLTR,3/19/21,34,PUT,123456,USD
+2021-02-05T19:38:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210319P00040000,Equity Option,Sold 1 GME 03/19/21 Put 40.00 @ 12.05,1205,1,1205.0,-1.00,0.17199999999999993,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-05T16:01:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VGAC  210319P00017500,Equity Option,Sold 1 VGAC 03/19/21 Put 17.50 @ 3.70,370,1,370.0,-1.00,0.1519999999999999,100,VGAC,VGAC,3/19/21,17.5,PUT,123456,USD
+2021-02-04T21:47:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CLOV  210219P00010000,Equity Option,Sold 10 CLOV 02/19/21 Put 10.00 @ 0.53,530,10,53.0,-1.00,0.3999999999999999,100,CLOV,CLOV,2/19/21,10,PUT,123456,USD
+2021-02-04T20:33:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CLOV  210319C00020000,Equity Option,Sold 1 CLOV 03/19/21 Call 20.00 @ 0.91,91,1,91.0,-1.00,0.152,100,CLOV,CLOV,3/19/21,20,CALL,123456,USD
+2021-02-04T20:33:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CLOV  210319C00002500,Equity Option,Bought 1 CLOV 03/19/21 Call 2.50 @ 9.91,-991,1,991.0,-1.00,0.14,100,CLOV,CLOV,3/19/21,2.5,CALL,123456,USD
+2021-02-04T15:57:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210319P00034000,Equity Option,Sold 1 PLTR 03/19/21 Put 34.00 @ 6.30,630,1,630.0,-1.00,0.16199999999999992,100,PLTR,PLTR,3/19/21,34,PUT,123456,USD
+2021-02-04T15:47:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLOV  210219P00010000,Equity Option,Bought 2 CLOV 02/19/21 Put 10.00 @ 0.45,-90,2,45.0,-1.00,1.27,100,CLOV,CLOV,2/19/21,10,PUT,123456,USD
+2021-02-04T15:47:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLOV  210319C00020000,Equity Option,Bought 1 CLOV 03/19/21 Call 20.00 @ 0.87,-87,1,87.0,-1.00,0.1399999999999999,100,CLOV,CLOV,3/19/21,20,CALL,123456,USD
+2021-02-04T15:47:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CLOV  210319C00002500,Equity Option,Sold 1 CLOV 03/19/21 Call 2.50 @ 9.92,992,1,992.0,-1.00,0.17199999999999993,100,CLOV,CLOV,3/19/21,2.5,CALL,123456,USD
+2021-02-04T15:47:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CLOV  210219P00010000,Equity Option,Bought 8 CLOV 02/19/21 Put 10.00 @ 0.45,-360,8,45.0,-1.00,8.09,100,CLOV,CLOV,2/19/21,10,PUT,123456,USD
+2021-02-03T16:42:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210319P00040000,Equity Option,Bought 1 GME 03/19/21 Put 40.00 @ 9.55,-955,1,955.0000000000001,-1.00,0.14,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-02T20:32:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210319P00040000,Equity Option,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,1210,1,1210.0,-1.00,0.17199999999999993,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-02T17:34:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210319P00040000,Equity Option,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,-960,1,960.0,-1.00,0.14,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-02T15:44:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210319P00040000,Equity Option,Sold 1 GME 03/19/21 Put 40.00 @ 12.10,1210,1,1210.0,-1.00,0.17199999999999993,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-02-01T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210319P00040000,Equity Option,Bought 1 GME 03/19/21 Put 40.00 @ 9.60,-960,1,960.0,-1.00,0.14,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-01-31T00:11:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2021-01-29T22:15:00+0000,Receive Deliver,Expiration,,UVXY  210129P00014500,Equity Option,Removal of 1.0 UVXY 01/29/21 Put 14.50 due to expiration.,0,1,,0,0.00,100,UVXY,UVXY,1/29/21,14.5,PUT,123456,USD
+2021-01-29T19:51:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210319P00040000,Equity Option,Sold 1 GME 03/19/21 Put 40.00 @ 13.30,1330,1,1330.0,-1.00,0.17199999999999993,100,GME,GME,3/19/21,40,PUT,123456,USD
+2021-01-29T19:31:00+0000,Trade,Sell to Open,SELL_TO_OPEN,UVXY  210129P00014500,Equity Option,Sold 1 UVXY 01/29/21 Put 14.50 @ 0.56,56,1,56.00000000000001,-1.00,0.1519999999999999,100,UVXY,UVXY,1/29/21,14.5,PUT,123456,USD
+2021-01-27T19:52:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210219P00042000,Equity Option,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,-625,1,625.0,-1.00,0.14,100,GME,GME,2/19/21,42,PUT,123456,USD
+2021-01-27T18:50:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210219P00042000,Equity Option,Bought 1 GME 02/19/21 Put 42.00 @ 6.25,-625,1,625.0,-1.00,0.14,100,GME,GME,2/19/21,42,PUT,123456,USD
+2021-01-27T15:58:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,MT  210219P00026000,Equity Option,Bought 1 MT 02/19/21 Put 26.00 @ 5.40,-540,1,540.0,-1.00,0.14,100,MT,MT,2/19/21,26,PUT,123456,USD
+2021-01-25T18:04:00+0000,Trade,Buy to Open,BUY_TO_OPEN,BB  220121C00012500,Equity Option,Bought 1 BB 01/21/22 Call 12.50 @ 11.50,-1150,1,1150.0,-1.00,0.1399999999999999,100,BB,BB,1/21/22,12.5,CALL,123456,USD
+2021-01-22T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,THCB,Equity,Sold 200 THCB @ 15.13,3026,200,15.13,-1.00,0.254,,THCB,THCB,,,,123456,USD
+2021-01-22T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BCRX  210319C00008000,Equity Option,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,235,1,235.0,-1.00,0.152,100,BCRX,BCRX,3/19/21,8,CALL,123456,USD
+2021-01-22T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BCRX  210319C00008000,Equity Option,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,235,1,235.0,-1.00,0.152,100,BCRX,BCRX,3/19/21,8,CALL,123456,USD
+2021-01-22T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BCRX  210319C00008000,Equity Option,Sold 1 BCRX 03/19/21 Call 8.00 @ 2.35,235,1,235.0,-1.00,0.152,100,BCRX,BCRX,3/19/21,8,CALL,123456,USD
+2021-01-21T16:38:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,UVXY,Equity,Sold 48 UVXY @ 10.14,486.72,48,10.14,-1.00,0.065,,UVXY,UVXY,,,,123456,USD
+2021-01-21T16:38:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,UVXY,Equity,Sold 52 UVXY @ 10.14,527.28,52,10.14,-1.00,0.068,,UVXY,UVXY,,,,123456,USD
+2021-01-21T15:34:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210319P00016000,Equity Option,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,550,1,550.0,-1.00,0.16199999999999992,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-01-21T15:34:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210319P00016000,Equity Option,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,550,1,550.0,-1.00,0.16199999999999992,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-01-21T15:34:00+0000,Trade,Sell to Open,SELL_TO_OPEN,BB  210319P00016000,Equity Option,Sold 1 BB 03/19/21 Put 16.00 @ 5.50,550,1,550.0,-1.00,0.16199999999999992,100,BB,BB,3/19/21,16,PUT,123456,USD
+2021-01-20T18:55:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,THCBW,Equity,Sold 100 THCBW @ 4.17,417,100,4.17,-1.00,0.102,,THCBW,THCBW,,,,123456,USD
+2021-01-20T18:18:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210219P00042000,Equity Option,Sold 1 GME 02/19/21 Put 42.00 @ 10.65,1065,1,1065.0,-1.00,0.17199999999999993,100,GME,GME,2/19/21,42,PUT,123456,USD
+2021-01-19T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.02,0,,0,0.00,,,,,,,123456,USD
+2021-01-19T20:16:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210219P00042000,Equity Option,Sold 1 GME 02/19/21 Put 42.00 @ 11.00,1100,1,1100.0,-1.00,0.17199999999999993,100,GME,GME,2/19/21,42,PUT,123456,USD
+2021-01-19T15:38:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,MGNI  210219P00030000,Equity Option,Bought 2 MGNI 02/19/21 Put 30.00 @ 2.98,-596,2,298.0,-1.00,0.27,100,MGNI,MGNI,2/19/21,30,PUT,123456,USD
+2021-01-16T16:32:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,0.01,0,,0,0.00,,,,,,,123456,USD
+2021-01-15T15:48:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,GME  210115P00032000,Equity Option,Sold 1 GME 01/15/21 Put 32.00 @ 0.48,48,1,48.0,-1.00,0.152,100,GME,GME,1/15/21,32,PUT,123456,USD
+2021-01-13T21:42:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,TLRY,Equity,Sold 200 TLRY @ 14.96,2992,200,14.96,-1.00,0.254,,TLRY,TLRY,,,,123456,USD
+2021-01-13T17:58:00+0000,Trade,Buy to Open,BUY_TO_OPEN,GME  210115P00032000,Equity Option,Bought 1 GME 01/15/21 Put 32.00 @ 3.95,-395,1,395.0,-1.00,0.1399999999999999,100,GME,GME,1/15/21,32,PUT,123456,USD
+2021-01-12T21:50:00+0000,Trade,Buy to Open,BUY_TO_OPEN,UVXY,Equity,Bought 100 UVXY @ 10.52,-1052,100,10.52,-1.00,0.08,,UVXY,UVXY,,,,123456,USD
+2021-01-11T17:51:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,BB  210219C00007000,Equity Option,Sold 5 BB 02/19/21 Call 7.00 @ 1.09,545,5,109.00000000000001,-1.00,0.71,100,BB,BB,2/19/21,7,CALL,123456,USD

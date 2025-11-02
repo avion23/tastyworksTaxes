@@ -1,249 +1,249 @@
-Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...60
-12/29/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,26,P,2.46,1.152,246,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,Individual...60
-12/25/2020 3:21 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/24/2020 4:10 PM,Trade,Sell to Close,LOOP,Sell,Close,1,01/15/2021,7.5,P,0.68,0.152,68,Sold 1 LOOP 01/15/21 Put 7.50 @ 0.68,Individual...60
-12/23/2020 3:45 PM,Trade,Buy to Open,BB,Buy,Open,5,02/19/2021,7,C,1,5.68,-500,Bought 5 BB 02/19/21 Call 7.00 @ 1.00,Individual...60
-12/19/2020 6:24 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/17/2020 8:57 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,27,P,3.2,0.14,-320,Bought 1 PLTR 01/15/21 Put 27.00 @ 3.20,Individual...60
-12/17/2020 5:44 PM,Trade,Buy to Close,GME,Buy,Close,2,01/15/2021,14,P,1.79,0.27,-358,Bought 2 GME 01/15/21 Put 14.00 @ 1.79,Individual...60
-12/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-12/15/2020 9:24 PM,Trade,Buy to Open,LOOP,Buy,Open,1,01/15/2021,7.5,P,1.3,1.14,-130,Bought 1 LOOP 01/15/21 Put 7.50 @ 1.30,Individual...60
-12/15/2020 8:38 PM,Trade,Buy to Open,THCB,Buy,Open,200,,,,13.6,0.16,-2720,Bought 200 THCB @ 13.60,Individual...60
-12/14/2020 4:21 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,20,P,4.4,0.152,440,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,Individual...60
-12/12/2020 3:30 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-12/11/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,3,12/11/2020,10.5,C,,0.00,0,Removal of option due to assignment,Individual...60
-12/11/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,300,,,,10.5,5.106,3150,Sell to Close 300 PCG @ 10.50,Individual...60
-12/11/2020 3:36 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,27,P,4,1.152,400,Sold 1 PLTR 01/15/21 Put 27.00 @ 4.00,Individual...60
-12/10/2020 5:56 PM,Trade,Buy to Open,BCRX,Buy,Open,3,03/19/2021,8,C,1.75,3.41,-525,Bought 3 BCRX 03/19/21 Call 8.00 @ 1.75,Individual...60
-12/09/2020 4:14 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,20,P,4,1.14,-400,Bought 1 NKLA 01/15/21 Put 20.00 @ 4.00,Individual...60
-12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,29,,,,2.956,0.024,-85.724,Bought 29 THCBW @ 2.96,Individual...60
-12/09/2020 3:45 PM,Trade,Buy to Open,THCBW,Buy,Open,71,,,,2.96,0.057,-210.16,Bought 71 THCBW @ 2.96,Individual...60
-12/09/2020 3:44 PM,Trade,Sell to Open,GME,Sell,Open,2,01/15/2021,14,P,2.56,2.294,512,Sold 2 GME 01/15/21 Put 14.00 @ 2.56,Individual...60
-12/07/2020 7:03 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/15/2021,40,C,0.27,0.152,27,Sold 1 NKLA 01/15/21 Call 40.00 @ 0.27,Individual...60
-12/07/2020 7:03 PM,Trade,Buy to Close,NKLA,Buy,Close,1,01/15/2021,30,C,0.77,0.14,-77,Bought 1 NKLA 01/15/21 Call 30.00 @ 0.77,Individual...60
-12/07/2020 6:46 PM,Trade,Sell to Close,NKLA,Sell,Close,1,01/08/2021,28.5,P,10.4,0.172,1040,Sold 1 NKLA 01/08/21 Put 28.50 @ 10.40,Individual...60
-12/05/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-12/04/2020 4:12 PM,Trade,Sell to Close,KNDI,Sell,Close,3,01/15/2021,9,P,2.55,0.436,765,Sold 3 KNDI 01/15/21 Put 9.00 @ 2.55,Individual...60
-12/03/2020 3:42 PM,Trade,Buy to Close,PLTR,Buy,Close,1,01/15/2021,23,P,3.55,0.14,-355,Bought 1 PLTR 01/15/21 Put 23.00 @ 3.55,Individual...60
-12/02/2020 9:38 PM,Trade,Buy to Close,GME,Buy,Close,1,12/18/2020,17,P,2.96,0.14,-296,Bought 1 GME 12/18/20 Put 17.00 @ 2.96,Individual...60
-12/02/2020 7:38 PM,Trade,Sell to Open,PLTR,Sell,Open,1,01/15/2021,23,P,5,1.162,500,Sold 1 PLTR 01/15/21 Put 23.00 @ 5.00,Individual...60
-11/30/2020 4:46 PM,Trade,Buy to Open,KNDI,Buy,Open,3,01/15/2021,9,P,2.16,3.41,-648,Bought 3 KNDI 01/15/21 Put 9.00 @ 2.16,Individual...60
-11/28/2020 2:55 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-11/27/2020 5:00 PM,Trade,Sell to Open,GME,Sell,Open,1,12/18/2020,17,P,3.55,1.152,355,Sold 1 GME 12/18/20 Put 17.00 @ 3.55,Individual...60
-11/27/2020 3:37 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/15/2021,40,C,2.9,1.14,-290,Bought 1 NKLA 01/15/21 Call 40.00 @ 2.90,Individual...60
-11/27/2020 3:37 PM,Trade,Sell to Open,NKLA,Sell,Open,1,01/15/2021,30,C,6.5,1.162,650,Sold 1 NKLA 01/15/21 Call 30.00 @ 6.50,Individual...60
-11/27/2020 3:32 PM,Trade,Buy to Open,NKLA,Buy,Open,1,01/08/2021,28.5,P,5.45,1.14,-545,Bought 1 NKLA 01/08/21 Put 28.50 @ 5.45,Individual...60
-11/25/2020 6:33 PM,Trade,Buy to Close,AHT,Buy,Close,2,12/18/2020,5,P,2.4,0.27,-480,Bought 2 AHT 12/18/20 Put 5.00 @ 2.40,Individual...60
-11/23/2020 8:14 PM,Trade,Buy to Close,PLTR,Buy,Close,2,12/04/2020,19,P,0.96,0.27,-192,Bought 2 PLTR 12/04/20 Put 19.00 @ 0.96,Individual...60
-11/23/2020 4:12 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...60
-11/23/2020 4:08 PM,Trade,Sell to Open,AHT,Sell,Open,1,12/18/2020,5,P,2.72,1.152,272,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,Individual...60
-11/23/2020 3:30 PM,Trade,Sell to Close,TSLA,Sell,Close,1,12/31/2020,435,P,17.17,0.182,1717,Sold 1 TSLA 12/31/20 Put 435.00 @ 17.17,Individual...60
-11/23/2020 3:30 PM,Trade,Buy to Close,TSLA,Buy,Close,1,12/31/2020,455,P,24.13,0.14,-2413,Bought 1 TSLA 12/31/20 Put 455.00 @ 24.13,Individual...60
-11/21/2020 3:54 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-11/20/2020 6:33 PM,Trade,Sell to Open,PLTR,Sell,Open,2,12/04/2020,19,P,1.92,2.284,384,Sold 2 PLTR 12/04/20 Put 19.00 @ 1.92,Individual...60
-11/17/2020 7:24 PM,Trade,Sell to Close,PLTR,Sell,Close,2,12/04/2020,19,C,1.8,0.284,360,Sold 2 PLTR 12/04/20 Call 19.00 @ 1.80,Individual...60
-11/17/2020 5:01 PM,Trade,Buy to Open,PLTR,Buy,Open,2,12/04/2020,19,C,1.19,2.27,-238,Bought 2 PLTR 12/04/20 Call 19.00 @ 1.19,Individual...60
-11/17/2020 4:45 PM,Trade,Buy to Open,TSLA,Buy,Open,1,12/31/2020,435,P,34.81,1.14,-3481,Bought 1 TSLA 12/31/20 Put 435.00 @ 34.81,Individual...60
-11/17/2020 4:45 PM,Trade,Sell to Open,TSLA,Sell,Open,1,12/31/2020,455,P,45.9,1.252,4590,Sold 1 TSLA 12/31/20 Put 455.00 @ 45.90,Individual...60
-11/17/2020 4:02 PM,Trade,Buy to Close,KODK,Buy,Close,1,11/20/2020,10,P,3,0.14,-300,Bought 1 KODK 11/20/20 Put 10.00 @ 3.00,Individual...60
-11/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-11/16/2020 9:21 PM,Trade,Buy to Close,PLTR,Buy,Close,1,11/20/2020,15.5,P,0.5,0.14,-50,Bought 1 PLTR 11/20/20 Put 15.50 @ 0.50,Individual...60
-11/16/2020 3:37 PM,Trade,Sell to Open,PLTR,Sell,Open,1,11/20/2020,15.5,P,1,1.152,100,Sold 1 PLTR 11/20/20 Put 15.50 @ 1.00,Individual...60
-11/10/2020 5:12 PM,Trade,Sell to Close,RKT,Sell,Close,1,11/13/2020,23,C,0.91,0.152,91,Sold 1 RKT 11/13/20 Call 23.00 @ 0.91,Individual...60
-11/09/2020 7:42 PM,Trade,Buy to Open,RKT,Buy,Open,1,11/13/2020,23,C,1.03,1.14,-103,Bought 1 RKT 11/13/20 Call 23.00 @ 1.03,Individual...60
-11/09/2020 3:31 PM,Trade,Buy to Close,NKLA,Buy,Close,1,11/20/2020,22.5,P,3.3,0.14,-330,Bought 1 NKLA 11/20/20 Put 22.50 @ 3.30,Individual...60
-11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,12/11/2020,10.5,C,0.41,1.152,41,Sold 1 PCG 12/11/20 Call 10.50 @ 0.41,Individual...60
-11/09/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,12/11/2020,10.5,C,0.41,2.284,82,Sold 2 PCG 12/11/20 Call 10.50 @ 0.41,Individual...60
-10/30/2020 10:00 PM,Receive Deliver,Assignment,PCG,,,3,10/30/2020,11,P,,0.00,0,Removal of option due to assignment,Individual...60
-10/30/2020 10:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,300,,,,11,5.00,-3300,Buy to Open 300 PCG @ 11.00,Individual...60
-10/22/2020 3:33 PM,Trade,Sell to Open,PCG,Sell,Open,3,10/30/2020,11,P,0.74,3.426,222,Sold 3 PCG 10/30/20 Put 11.00 @ 0.74,Individual...60
-10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...60
-10/19/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,10/23/2020,10.5,P,0.19,0.14,-19,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,Individual...60
-10/17/2020 4:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-10/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.04,INTEREST ON CREDIT BALANCE,Individual...60
-10/15/2020 4:45 PM,Trade,Sell to Close,LOOP,Sell,Close,1,10/16/2020,7.5,P,0.4,0.152,40,Sold 1 LOOP 10/16/20 Put 7.50 @ 0.40,Individual...60
-10/15/2020 4:33 PM,Trade,Sell to Open,NKLA,Sell,Open,1,11/20/2020,22.5,P,3.7,1.152,370,Sold 1 NKLA 11/20/20 Put 22.50 @ 3.70,Individual...60
-10/15/2020 4:29 PM,Trade,Sell to Close,NKLA,Sell,Close,1,11/13/2020,24,P,4.16,0.152,416,Sold 1 NKLA 11/13/20 Put 24.00 @ 4.16,Individual...60
-10/15/2020 3:44 PM,Trade,Buy to Close,GME,Buy,Close,2,11/20/2020,13,P,2.02,0.27,-404,Bought 2 GME 11/20/20 Put 13.00 @ 2.02,Individual...60
-10/13/2020 3:39 PM,Trade,Buy to Open,LOOP,Buy,Open,1,10/16/2020,7.5,P,1.35,1.14,-135,Bought 1 LOOP 10/16/20 Put 7.50 @ 1.35,Individual...60
-10/12/2020 4:39 PM,Trade,Sell to Open,KODK,Sell,Open,1,11/20/2020,10,P,2.25,1.152,225,Sold 1 KODK 11/20/20 Put 10.00 @ 2.25,Individual...60
-10/12/2020 4:30 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/23/2020,10.5,P,0.46,2.284,92,Sold 2 PCG 10/23/20 Put 10.50 @ 0.46,Individual...60
-10/10/2020 4:20 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.03,Regulatory fee adjustment,Individual...60
-10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...60
-10/09/2020 8:46 PM,Trade,Sell to Open,GME,Sell,Open,1,11/20/2020,13,P,2.88,1.152,288,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,Individual...60
-10/09/2020 5:10 PM,Trade,Buy to Close,KODK,Buy,Close,1,10/16/2020,8.5,P,0.43,0.14,-43,Bought 1 KODK 10/16/20 Put 8.50 @ 0.43,Individual...60
-10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/16/2020,27.5,C,0.61,0.284,122,Sold 2 NKLA 10/16/20 Call 27.50 @ 0.61,Individual...60
-10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,2,10/16/2020,19.5,C,4.94,0.27,-988,Bought 2 NKLA 10/16/20 Call 19.50 @ 4.94,Individual...60
-10/07/2020 4:07 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/16/2020,27.5,C,0.6,0.152,60,Sold 1 NKLA 10/16/20 Call 27.50 @ 0.60,Individual...60
-10/07/2020 4:07 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/16/2020,19.5,C,4.93,0.14,-493,Bought 1 NKLA 10/16/20 Call 19.50 @ 4.93,Individual...60
-10/06/2020 6:02 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/09/2020,9,C,1.19,0.27,-238,Bought 2 PCG 10/09/20 Call 9.00 @ 1.19,Individual...60
-10/06/2020 6:02 PM,Trade,Sell to Close,PCG,Sell,Close,200,,,,10.17,0.234,2034,Sold 200 PCG @ 10.17,Individual...60
-10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 7:10 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:10 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 7:06 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,23.5,C,1.2,0.152,120,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,Individual...60
-10/05/2020 7:06 PM,Trade,Buy to Close,NKLA,Buy,Close,1,10/09/2020,17,C,6.04,0.14,-604,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,Individual...60
-10/05/2020 5:30 PM,Trade,Sell to Open,KODK,Sell,Open,1,10/16/2020,8.5,P,0.86,1.152,86,Sold 1 KODK 10/16/20 Put 8.50 @ 0.86,Individual...60
-10/05/2020 3:55 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/30/2020,9.5,C,1.15,0.426,345,Sold 3 KODK 10/30/20 Call 9.50 @ 1.15,Individual...60
-10/05/2020 3:55 PM,Trade,Buy to Close,KODK,Buy,Close,3,10/30/2020,5,C,3.83,0.41,-1149,Bought 3 KODK 10/30/20 Call 5.00 @ 3.83,Individual...60
-10/03/2020 3:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-10/01/2020 5:52 PM,Trade,Buy to Open,NKLA,Buy,Open,1,11/13/2020,24,P,5.95,1.14,-595,Bought 1 NKLA 11/13/20 Put 24.00 @ 5.95,Individual...60
-10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,23.5,C,2.63,1.14,-263,Bought 1 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,22,C,3.49,0.152,349,Sold 1 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...60
-10/01/2020 4:24 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,23.5,C,2.63,2.27,-526,Bought 2 NKLA 10/09/20 Call 23.50 @ 2.63,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Close,NKLA,Sell,Close,2,10/09/2020,22,C,3.49,0.294,698,Sold 2 NKLA 10/09/20 Call 22.00 @ 3.49,Individual...60
-10/01/2020 4:24 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/09/2020,9,C,0.62,2.284,124,Sold 2 PCG 10/09/20 Call 9.00 @ 0.62,Individual...60
-09/30/2020 5:11 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/16/2020,27.5,C,0.69,3.41,-207,Bought 3 NKLA 10/16/20 Call 27.50 @ 0.69,Individual...60
-09/30/2020 5:11 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/16/2020,19.5,C,3.01,3.436,903,Sold 3 NKLA 10/16/20 Call 19.50 @ 3.01,Individual...60
-09/29/2020 5:26 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...60
-09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,2,10/09/2020,17,C,3.01,2.294,602,Sold 2 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...60
-09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,2,10/09/2020,22,C,0.85,2.27,-170,Bought 2 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...60
-09/29/2020 4:30 PM,Trade,Sell to Open,NKLA,Sell,Open,1,10/09/2020,17,C,3.01,1.152,301,Sold 1 NKLA 10/09/20 Call 17.00 @ 3.01,Individual...60
-09/29/2020 4:30 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,22,C,0.85,1.14,-85,Bought 1 NKLA 10/09/20 Call 22.00 @ 0.85,Individual...60
-09/29/2020 4:06 PM,Trade,Sell to Close,NKLA,Sell,Close,3,10/02/2020,25,C,0.04,0.426,12,Sold 3 NKLA 10/02/20 Call 25.00 @ 0.04,Individual...60
-09/29/2020 4:06 PM,Trade,Buy to Close,NKLA,Buy,Close,3,10/02/2020,19.5,C,0.86,0.41,-258,Bought 3 NKLA 10/02/20 Call 19.50 @ 0.86,Individual...60
-09/29/2020 4:04 PM,Trade,Buy to Close,GME,Buy,Close,1,10/09/2020,10,P,0.6,0.14,-60,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,Individual...60
-09/28/2020 7:26 PM,Trade,Buy to Close,PCG,Buy,Close,2,10/02/2020,9.5,C,0.11,0.27,-22,Bought 2 PCG 10/02/20 Call 9.50 @ 0.11,Individual...60
-09/28/2020 6:47 PM,Trade,Sell to Open,GME,Sell,Open,2,10/09/2020,10,P,1.08,2.284,216,Sold 2 GME 10/09/20 Put 10.00 @ 1.08,Individual...60
-09/28/2020 3:32 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...60
-09/28/2020 3:30 PM,Trade,Buy to Close,GME,Buy,Close,1,10/02/2020,9,P,0.25,0.14,-25,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,Individual...60
-09/26/2020 3:59 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.04,Regulatory fee adjustment,Individual...60
-09/25/2020 5:17 PM,Trade,Sell to Open,NKLA,Sell,Open,3,10/02/2020,19.5,C,2.61,3.436,783,Sold 3 NKLA 10/02/20 Call 19.50 @ 2.61,Individual...60
-09/25/2020 5:17 PM,Trade,Buy to Open,NKLA,Buy,Open,3,10/02/2020,25,C,0.45,3.41,-135,Bought 3 NKLA 10/02/20 Call 25.00 @ 0.45,Individual...60
-09/24/2020 5:30 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.6,1.152,60,Sold 1 GME 10/02/20 Put 9.00 @ 0.60,Individual...60
-09/24/2020 5:28 PM,Trade,Sell to Open,GME,Sell,Open,1,10/02/2020,9,P,0.59,1.152,59,Sold 1 GME 10/02/20 Put 9.00 @ 0.59,Individual...60
-09/24/2020 5:01 PM,Trade,Sell to Close,NKLA,Sell,Close,1,10/09/2020,27,P,10.05,0.172,1005,Sold 1 NKLA 10/09/20 Put 27.00 @ 10.05,Individual...60
-09/23/2020 11:00 PM,Money Movement,Fee,KODK,,,0,,,,,0.00,-3.32,EASTMAN KODAK COMPANY,Individual...60
-09/23/2020 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,2315.31,Wire Funds Received a/o 9/22,Individual...60
-09/22/2020 7:51 PM,Trade,Sell to Open,PCG,Sell,Open,2,10/02/2020,9.5,C,0.41,2.284,82,Sold 2 PCG 10/02/20 Call 9.50 @ 0.41,Individual...60
-09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...60
-09/21/2020 3:48 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/25/2020,9.5,C,0.14,0.14,-14,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,Individual...60
-09/21/2020 3:45 PM,Trade,Buy to Open,NKLA,Buy,Open,1,10/09/2020,27,P,4.79,1.14,-479,Bought 1 NKLA 10/09/20 Put 27.00 @ 4.79,Individual...60
-09/21/2020 3:34 PM,Trade,Sell to Close,KODK,Sell,Close,3,10/16/2020,10,C,2.15,0.436,645,Sold 3 KODK 10/16/20 Call 10.00 @ 2.15,Individual...60
-09/21/2020 3:34 PM,Trade,Buy to Close,KODK,Buy,Close,300,,,,10.07,0.24,-3021,Bought 300 KODK @ 10.07,Individual...60
-09/19/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/17/2020 11:00 PM,Receive Deliver,Assignment,KODK,,,3,10/16/2020,2.5,C,,0.00,0,Removal of option due to assignment,Individual...60
-09/17/2020 11:00 PM,Receive Deliver,Sell to Open,KODK,Sell,Open,300,,,,2.5,5.056,750,Sell to Open 300 KODK @ 2.50,Individual...60
-09/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-09/16/2020 8:42 PM,Trade,Sell to Close,VIX,Sell,Close,2,09/30/2020,28,C,2.17,1.574,434,Sold 2 VIX 09/30/20 Call 28.00 @ 2.17,Individual...60
-09/16/2020 8:42 PM,Trade,Buy to Close,VIX,Buy,Close,2,09/30/2020,23,C,4.47,1.57,-894,Bought 2 VIX 09/30/20 Call 23.00 @ 4.47,Individual...60
-09/16/2020 4:56 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/30/2020,5,C,4.37,3.446,1311,Sold 3 KODK 10/30/20 Call 5.00 @ 4.37,Individual...60
-09/16/2020 4:56 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/30/2020,9.5,C,2.27,3.41,-681,Bought 3 KODK 10/30/20 Call 9.50 @ 2.27,Individual...60
-09/15/2020 6:22 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/25/2020,9.5,C,0.45,2.284,90,Sold 2 PCG 09/25/20 Call 9.50 @ 0.45,Individual...60
-09/14/2020 6:42 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/18/2020,10,P,0.56,0.14,-56,Bought 1 PCG 09/18/20 Put 10.00 @ 0.56,Individual...60
-09/12/2020 3:37 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/11/2020 7:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/18/2020,10,P,1.11,1.152,111,Sold 1 PCG 09/18/20 Put 10.00 @ 1.11,Individual...60
-09/11/2020 6:57 PM,Trade,Buy to Close,PCG,Buy,Close,2,09/18/2020,9,C,0.14,0.27,-28,Bought 2 PCG 09/18/20 Call 9.00 @ 0.14,Individual...60
-09/05/2020 4:00 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-09/04/2020 6:11 PM,Trade,Sell to Open,PCG,Sell,Open,2,09/18/2020,9,C,0.39,2.284,78,Sold 2 PCG 09/18/20 Call 9.00 @ 0.39,Individual...60
-09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,P,0.03,0.14,-3,Bought 1 PCG 09/04/20 Put 9.00 @ 0.03,Individual...60
-09/03/2020 5:19 PM,Trade,Buy to Close,PCG,Buy,Close,1,09/04/2020,9,C,0.23,0.14,-23,Bought 1 PCG 09/04/20 Call 9.00 @ 0.23,Individual...60
-08/31/2020 5:21 PM,Trade,Buy to Open,VIX,Buy,Open,2,09/30/2020,28,C,3.81,3.57,-762,Bought 2 VIX 09/30/20 Call 28.00 @ 3.81,Individual...60
-08/31/2020 5:21 PM,Trade,Sell to Open,VIX,Sell,Open,2,09/30/2020,23,C,6.16,3.574,1232,Sold 2 VIX 09/30/20 Call 23.00 @ 6.16,Individual...60
-08/31/2020 4:19 PM,Trade,Sell to Open,KODK,Sell,Open,3,10/16/2020,2.5,C,3.68,3.446,1104,Sold 3 KODK 10/16/20 Call 2.50 @ 3.68,Individual...60
-08/31/2020 4:19 PM,Trade,Buy to Open,KODK,Buy,Open,3,10/16/2020,10,C,0.77,3.41,-231,Bought 3 KODK 10/16/20 Call 10.00 @ 0.77,Individual...60
-08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,C,0.3,1.152,30,Sold 1 PCG 09/04/20 Call 9.00 @ 0.30,Individual...60
-08/31/2020 4:12 PM,Trade,Sell to Open,PCG,Sell,Open,1,09/04/2020,9,P,0.05,1.152,5,Sold 1 PCG 09/04/20 Put 9.00 @ 0.05,Individual...60
-08/28/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,08/28/2020,9.5,P,,0.00,0,Removal of option due to assignment,Individual...60
-08/28/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,9.5,5.00,-950,Buy to Open 100 PCG @ 9.50,Individual...60
-08/28/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,1,08/28/2020,9.5,C,,0.00,0,Removal of 1 PCG 08/28/20 Call 9.50 due to expiration.,Individual...60
-08/25/2020 3:39 PM,Trade,Sell to Close,VIX,Sell,Close,2,10/21/2020,21,P,0.3,1.574,60,Sold 2 VIX 10/21/20 Put 21.00 @ 0.30,Individual...60
-08/25/2020 3:39 PM,Trade,Buy to Close,VIX,Buy,Close,2,10/21/2020,26,P,2.05,1.57,-410,Bought 2 VIX 10/21/20 Put 26.00 @ 2.05,Individual...60
-08/22/2020 3:19 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,C,0.05,0.152,5,Sold 1 PCG 08/28/20 Call 9.50 @ 0.05,Individual...60
-08/20/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/28/2020,9.5,P,0.37,0.152,37,Sold 1 PCG 08/28/20 Put 9.50 @ 0.37,Individual...60
-08/17/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.02,INTEREST ON CREDIT BALANCE,Individual...60
-08/15/2020 9:13 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-08/14/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,2,08/14/2020,9,C,,0.00,0,Removal of option due to assignment,Individual...60
-08/14/2020 11:00 PM,Receive Deliver,Sell to Close,PCG,Sell,Close,200,,,,9,5.064,1800,Sell to Close 200 PCG @ 9.00,Individual...60
-08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,P,0.08,0.14,-8,Bought 1 PCG 08/14/20 Put 9.50 @ 0.08,Individual...60
-08/14/2020 6:07 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/14/2020,9.5,C,0.04,0.14,-4,Bought 1 PCG 08/14/20 Call 9.50 @ 0.04,Individual...60
-08/12/2020 5:29 PM,Trade,Sell to Open,PCG,Sell,Open,2,08/14/2020,9,C,0.31,2.284,62,Sold 2 PCG 08/14/20 Call 9.00 @ 0.31,Individual...60
-08/12/2020 4:04 PM,Trade,Sell to Close,KODK,Sell,Close,1,09/18/2020,17.5,C,0.92,0.152,92,Sold 1 KODK 09/18/20 Call 17.50 @ 0.92,Individual...60
-08/12/2020 4:04 PM,Trade,Buy to Close,KODK,Buy,Close,1,09/18/2020,7.5,C,3.56,0.14,-356,Bought 1 KODK 09/18/20 Call 7.50 @ 3.56,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,C,0.03,1.152,3,Sold 1 PCG 08/14/20 Call 9.50 @ 0.03,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/14/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/14/20 Put 9.50 @ 0.45,Individual...60
-08/10/2020 3:30 PM,Trade,Sell to Open,VIX,Sell,Open,2,10/21/2020,26,P,2.3,3.574,460,Sold 2 VIX 10/21/20 Put 26.00 @ 2.30,Individual...60
-08/10/2020 3:30 PM,Trade,Buy to Open,VIX,Buy,Open,2,10/21/2020,21,P,0.5,3.57,-100,Bought 2 VIX 10/21/20 Put 21.00 @ 0.50,Individual...60
-08/08/2020 3:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,P,0.36,0.14,-36,Bought 1 PCG 08/07/20 Put 9.50 @ 0.36,Individual...60
-08/07/2020 5:13 PM,Trade,Buy to Close,PCG,Buy,Close,1,08/07/2020,9.5,C,0.03,0.14,-3,Bought 1 PCG 08/07/20 Call 9.50 @ 0.03,Individual...60
-08/05/2020 7:22 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,8.91,0.08,-891,Bought 100 PCG @ 8.91,Individual...60
-08/04/2020 8:54 PM,Trade,Sell to Open,KODK,Sell,Open,1,09/18/2020,7.5,C,7.04,1.162,704,Sold 1 KODK 09/18/20 Call 7.50 @ 7.04,Individual...60
-08/04/2020 8:54 PM,Trade,Buy to Open,KODK,Buy,Open,1,09/18/2020,17.5,C,2.99,1.14,-299,Bought 1 KODK 09/18/20 Call 17.50 @ 2.99,Individual...60
-07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,P,0.45,1.152,45,Sold 1 PCG 08/07/20 Put 9.50 @ 0.45,Individual...60
-07/31/2020 6:15 PM,Trade,Sell to Open,PCG,Sell,Open,1,08/07/2020,9.5,C,0.08,1.152,8,Sold 1 PCG 08/07/20 Call 9.50 @ 0.08,Individual...60
-07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,10,P,0.76,0.14,-76,Bought 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...60
-07/31/2020 3:30 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.28,0.14,-28,Bought 1 PCG 07/31/20 Call 9.00 @ 0.28,Individual...60
-07/27/2020 4:12 PM,Trade,Buy to Close,PCG,Buy,Close,1,07/31/2020,9,C,0.36,0.14,-36,Bought 1 PCG 07/31/20 Call 9.00 @ 0.36,Individual...60
-07/25/2020 3:23 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,10,P,0.76,1.152,76,Sold 1 PCG 07/31/20 Put 10.00 @ 0.76,Individual...60
-07/20/2020 9:24 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.55,1.152,55,Sold 1 PCG 07/31/20 Call 9.00 @ 0.55,Individual...60
-07/20/2020 5:04 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/31/2020,9,C,0.39,1.152,39,Sold 1 PCG 07/31/20 Call 9.00 @ 0.39,Individual...60
-07/17/2020 11:00 PM,Receive Deliver,Assignment,PCG,,,1,07/17/2020,10,P,,0.00,0,Removal of option due to assignment,Individual...60
-07/17/2020 11:00 PM,Receive Deliver,Buy to Open,PCG,Buy,Open,100,,,,10,5.00,-1000,Buy to Open 100 PCG @ 10.00,Individual...60
-07/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.03,INTEREST ON CREDIT BALANCE,Individual...60
-07/08/2020 5:18 PM,Trade,Sell to Close,VIX,Sell,Close,1,09/16/2020,25,P,1.9,0.792,190,Sold 1 VIX 09/16/20 Put 25.00 @ 1.90,Individual...60
-07/08/2020 5:18 PM,Trade,Buy to Close,VIX,Buy,Close,1,09/16/2020,28,P,3.45,0.79,-345,Bought 1 VIX 09/16/20 Put 28.00 @ 3.45,Individual...60
-07/06/2020 4:02 PM,Trade,Sell to Open,PCG,Sell,Open,1,07/17/2020,10,P,0.77,1.152,77,Sold 1 PCG 07/17/20 Put 10.00 @ 0.77,Individual...60
-07/02/2020 8:38 PM,Trade,Buy to Open,VIX,Buy,Open,1,09/16/2020,25,P,2.45,1.79,-245,Bought 1 VIX 09/16/20 Put 25.00 @ 2.45,Individual...60
-07/02/2020 8:38 PM,Trade,Sell to Open,VIX,Sell,Open,1,09/16/2020,28,P,4.09,1.792,409,Sold 1 VIX 09/16/20 Put 28.00 @ 4.09,Individual...60
-07/02/2020 6:58 PM,Trade,Buy to Open,PCG,Buy,Open,100,,,,9.405,0.08,-940.5,Bought 100 PCG @ 9.40,Individual...60
-07/02/2020 3:34 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,28,C,3.22,0.792,322,Sold 1 VIX 07/22/20 Call 28.00 @ 3.22,Individual...60
-07/02/2020 3:34 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,24,C,5.07,0.79,-507,Bought 1 VIX 07/22/20 Call 24.00 @ 5.07,Individual...60
-07/02/2020 3:30 PM,Trade,Sell to Close,VIX,Sell,Close,1,08/19/2020,40,C,2.33,0.792,233,Sold 1 VIX 08/19/20 Call 40.00 @ 2.33,Individual...60
-07/02/2020 3:30 PM,Trade,Buy to Close,VIX,Buy,Close,1,08/19/2020,32.5,C,3.98,0.79,-398,Bought 1 VIX 08/19/20 Call 32.50 @ 3.98,Individual...60
-06/22/2020 10:12 PM,Trade,Sell to Close,VIX,Sell,Close,1,07/22/2020,35,C,3.93,0.792,393,Sold 1 VIX 07/22/20 Call 35.00 @ 3.93,Individual...60
-06/22/2020 10:12 PM,Trade,Buy to Close,VIX,Buy,Close,1,07/22/2020,30,C,5.53,0.79,-553,Bought 1 VIX 07/22/20 Call 30.00 @ 5.53,Individual...60
-06/20/2020 3:46 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-06/18/2020 4:18 PM,Trade,Sell to Close,CAR,Sell,Close,1,07/17/2020,21,P,1.31,0.152,131,Sold 1 CAR 07/17/20 Put 21.00 @ 1.31,Individual...60
-06/18/2020 4:18 PM,Trade,Buy to Close,CAR,Buy,Close,1,07/17/2020,25,P,2.67,0.14,-267,Bought 1 CAR 07/17/20 Put 25.00 @ 2.67,Individual...60
-06/16/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.06,INTEREST ON CREDIT BALANCE,Individual...60
-06/13/2020 4:11 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-06/12/2020 6:12 PM,Trade,Sell to Close,PCG,Sell,Close,2,06/19/2020,15,C,0.05,0.294,10,Sold 2 PCG 06/19/20 Call 15.00 @ 0.05,Individual...60
-06/11/2020 8:36 PM,Trade,Sell to Open,VIX,Sell,Open,1,08/19/2020,32.5,C,6.04,1.792,604,Sold 1 VIX 08/19/20 Call 32.50 @ 6.04,Individual...60
-06/11/2020 8:36 PM,Trade,Buy to Open,VIX,Buy,Open,1,08/19/2020,40,C,3.84,1.79,-384,Bought 1 VIX 08/19/20 Call 40.00 @ 3.84,Individual...60
-06/11/2020 8:33 PM,Trade,Buy to Open,CAR,Buy,Open,1,07/17/2020,21,P,2.32,1.14,-232,Bought 1 CAR 07/17/20 Put 21.00 @ 2.32,Individual...60
-06/11/2020 8:33 PM,Trade,Sell to Open,CAR,Sell,Open,1,07/17/2020,25,P,4.27,1.152,427,Sold 1 CAR 07/17/20 Put 25.00 @ 4.27,Individual...60
-06/11/2020 8:00 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,35,C,4.78,1.79,-478,Bought 1 VIX 07/22/20 Call 35.00 @ 4.78,Individual...60
-06/11/2020 8:00 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,30,C,6.83,1.792,683,Sold 1 VIX 07/22/20 Call 30.00 @ 6.83,Individual...60
-06/06/2020 3:57 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,0.01,Regulatory fee adjustment,Individual...60
-06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,34,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 34.00 due to expiration.,Individual...60
-06/05/2020 10:00 PM,Receive Deliver,Expiration,DOW,,,1,06/05/2020,35,P,,0.00,0,Removal of 1 DOW 06/05/20 Put 35.00 due to expiration.,Individual...60
-06/04/2020 6:40 PM,Trade,Buy to Open,VIX,Buy,Open,1,07/22/2020,28,C,4.6,1.79,-460,Bought 1 VIX 07/22/20 Call 28.00 @ 4.60,Individual...60
-06/04/2020 6:40 PM,Trade,Sell to Open,VIX,Sell,Open,1,07/22/2020,24,C,6.5,1.792,650,Sold 1 VIX 07/22/20 Call 24.00 @ 6.50,Individual...60
-05/30/2020 4:08 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/29/2020 10:00 PM,Receive Deliver,Expiration,PCG,,,2,05/29/2020,14,C,,0.00,0,Removal of 2 PCG 05/29/20 Call 14.00 due to expiration.,Individual...60
-05/29/2020 6:04 PM,Trade,Sell to Close,EWG,Sell,Close,7,10/16/2020,22,C,4.13,1.054,2891,Sold 7 EWG 10/16/20 Call 22.00 @ 4.13,Individual...60
-05/29/2020 6:04 PM,Trade,Buy to Close,EWG,Buy,Close,7,10/16/2020,19,C,6.82,0.97,-4774,Bought 7 EWG 10/16/20 Call 19.00 @ 6.82,Individual...60
-05/27/2020 4:19 PM,Trade,Sell to Close,EWG,Sell,Close,8,07/17/2020,22,C,3.72,1.196,2976,Sold 8 EWG 07/17/20 Call 22.00 @ 3.72,Individual...60
-05/27/2020 4:19 PM,Trade,Buy to Close,EWG,Buy,Close,800,,,,25.63,0.64,-20504,Bought 800 EWG @ 25.63,Individual...60
-05/26/2020 11:00 PM,Receive Deliver,Assignment,EWG,,,8,07/17/2020,17,C,,0.00,0,Removal of option due to assignment,Individual...60
-05/26/2020 11:00 PM,Receive Deliver,Sell to Open,EWG,Sell,Open,800,,,,17,5.405,13600,Sell to Open 800 EWG @ 17.00,Individual...60
-05/26/2020 3:38 PM,Trade,Sell to Close,EWG,Sell,Close,4,07/17/2020,21,C,4.28,0.608,1712,Sold 4 EWG 07/17/20 Call 21.00 @ 4.28,Individual...60
-05/26/2020 3:38 PM,Trade,Buy to Close,EWG,Buy,Close,4,07/17/2020,18,C,7.24,0.56,-2896,Bought 4 EWG 07/17/20 Call 18.00 @ 7.24,Individual...60
-05/20/2020 3:31 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,34,P,0.85,1.14,-85,Bought 1 DOW 06/05/20 Put 34.00 @ 0.85,Individual...60
-05/20/2020 3:30 PM,Trade,Buy to Open,DOW,Buy,Open,1,06/05/2020,35,P,1.4,1.14,-140,Bought 1 DOW 06/05/20 Put 35.00 @ 1.40,Individual...60
-05/19/2020 3:30 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.05,0.852,30,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,Individual...60
-05/19/2020 3:30 PM,Trade,Buy to Close,USO,Buy,Close,6,07/17/2020,3.5,P,0.63,0.83,-378,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,Individual...60
-05/18/2020 11:00 PM,Money Movement,Credit Interest,,,,0,,,,,0.00,0.1,INTEREST ON CREDIT BALANCE,Individual...60
-05/16/2020 5:34 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.01,Regulatory fee adjustment,Individual...60
-05/15/2020 5:42 PM,Trade,Buy to Open,PCG,Buy,Open,2,05/29/2020,14,C,0.5,2.28,-100,Bought 2 PCG 05/29/20 Call 14.00 @ 0.50,Individual...60
-05/15/2020 5:00 PM,Trade,Buy to Open,PCG,Buy,Open,2,06/19/2020,15,C,0.64,2.28,-128,Bought 2 PCG 06/19/20 Call 15.00 @ 0.64,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/13/2020 4:45 PM,Trade,Sell to Close,TSLA,Sell,Close,1,05/29/2020,800,C,55.4,0.272,5540,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,Individual...60
-05/13/2020 4:45 PM,Trade,Buy to Close,TSLA,Buy,Close,1,05/29/2020,795,C,58.15,0.14,-5815,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,Individual...60
-05/09/2020 4:22 PM,Money Movement,Balance Adjustment,,,,0,,,,,0.00,-0.02,Regulatory fee adjustment,Individual...60
-05/08/2020 9:02 PM,Trade,Sell to Close,SPX,Sell,Close,2,06/19/2020,2915,P,98.66,1.584,19732,Sold 2 SPX 06/19/20 Put 2915.00 @ 98.66,Individual...60
-05/08/2020 9:02 PM,Trade,Buy to Close,SPX,Buy,Close,2,06/19/2020,2920,P,100.56,1.58,-20112,Bought 2 SPX 06/19/20 Put 2920.00 @ 100.56,Individual...60
-05/08/2020 5:24 PM,Trade,Sell to Close,SVXY,Sell,Close,3,06/19/2020,30,P,0.81,0.436,243,Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81,Individual...60
-05/08/2020 5:24 PM,Trade,Buy to Close,SVXY,Buy,Close,3,06/19/2020,35,P,2.63,0.42,-789,Bought 3 SVXY 06/19/20 Put 35.00 @ 2.63,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/07/2020 4:01 PM,Trade,Buy to Open,TSLA,Buy,Open,1,05/29/2020,800,C,50.47,1.14,-5047,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,Individual...60
-05/07/2020 4:01 PM,Trade,Sell to Open,TSLA,Sell,Open,1,05/29/2020,795,C,52.7,1.262,5270,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,Individual...60
-05/06/2020 8:49 PM,Trade,Sell to Close,TSLA,Sell,Close,1,07/17/2020,690,P,57.51,0.272,5751,Sold 1 TSLA 07/17/20 Put 690.00 @ 57.51,Individual...60
-05/06/2020 8:49 PM,Trade,Buy to Close,TSLA,Buy,Close,1,07/17/2020,705,P,63.09,0.14,-6309,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,Individual...60
+Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency
+2020-12-29T15:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210115P00026000,Equity Option,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,246,1,246.0,-1.00,0.1519999999999999,100,PLTR,PLTR,1/15/21,26,PUT,123456,USD
+2020-12-29T15:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210115P00026000,Equity Option,Sold 1 PLTR 01/15/21 Put 26.00 @ 2.46,246,1,246.0,-1.00,0.1519999999999999,100,PLTR,PLTR,1/15/21,26,PUT,123456,USD
+2020-12-25T15:21:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-12-24T16:10:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LOOP  210115P00007500,Equity Option,Sold 1 LOOP 01/15/21 Put 7.50 @ 0.68,68,1,68.0,-1.00,0.152,100,LOOP,LOOP,1/15/21,7.5,PUT,123456,USD
+2020-12-23T15:45:00+0000,Trade,Buy to Open,BUY_TO_OPEN,BB  210219C00007000,Equity Option,Bought 5 BB 02/19/21 Call 7.00 @ 1.00,-500,5,100.0,-1.00,4.68,100,BB,BB,2/19/21,7,CALL,123456,USD
+2020-12-19T18:24:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-12-17T20:57:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210115P00027000,Equity Option,Bought 1 PLTR 01/15/21 Put 27.00 @ 3.20,-320,1,320.0,-1.00,0.14,100,PLTR,PLTR,1/15/21,27,PUT,123456,USD
+2020-12-17T17:44:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  210115P00014000,Equity Option,Bought 2 GME 01/15/21 Put 14.00 @ 1.79,-358,2,179.0,-1.00,0.27,100,GME,GME,1/15/21,14,PUT,123456,USD
+2020-12-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.03,0,,0,0.00,,,,,,,123456,USD
+2020-12-15T21:24:00+0000,Trade,Buy to Open,BUY_TO_OPEN,LOOP  210115P00007500,Equity Option,Bought 1 LOOP 01/15/21 Put 7.50 @ 1.30,-130,1,130.0,-1.00,0.1399999999999999,100,LOOP,LOOP,1/15/21,7.5,PUT,123456,USD
+2020-12-15T20:38:00+0000,Trade,Buy to Open,BUY_TO_OPEN,THCB,Equity,Bought 200 THCB @ 13.60,-2720,200,13.6,-1.00,0.16,,THCB,THCB,,,,123456,USD
+2020-12-14T16:21:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  210115P00020000,Equity Option,Sold 1 NKLA 01/15/21 Put 20.00 @ 4.40,440,1,440.00000000000006,-1.00,0.152,100,NKLA,NKLA,1/15/21,20,PUT,123456,USD
+2020-12-12T15:30:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-12-11T23:00:00+0000,Receive Deliver,Assignment,,PCG  201211C00010500,Equity Option,Removal of option due to assignment,0,3,,0,0.00,100,PCG,PCG,12/11/20,10.5,CALL,123456,USD
+2020-12-11T23:00:00+0000,Receive Deliver,Sell to Close,SELL_TO_CLOSE,PCG,Equity,Sell to Close 300 PCG @ 10.50,3150,300,10.5,-1.00,4.106,,PCG,PCG,,,,123456,USD
+2020-12-11T15:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210115P00027000,Equity Option,Sold 1 PLTR 01/15/21 Put 27.00 @ 4.00,400,1,400.0,-1.00,0.1519999999999999,100,PLTR,PLTR,1/15/21,27,PUT,123456,USD
+2020-12-10T17:56:00+0000,Trade,Buy to Open,BUY_TO_OPEN,BCRX  210319C00008000,Equity Option,Bought 3 BCRX 03/19/21 Call 8.00 @ 1.75,-525,3,175.0,-1.00,2.41,100,BCRX,BCRX,3/19/21,8,CALL,123456,USD
+2020-12-09T16:14:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  210115P00020000,Equity Option,Bought 1 NKLA 01/15/21 Put 20.00 @ 4.00,-400,1,400.0,-1.00,0.1399999999999999,100,NKLA,NKLA,1/15/21,20,PUT,123456,USD
+2020-12-09T15:45:00+0000,Trade,Buy to Open,BUY_TO_OPEN,THCBW,Equity,Bought 29 THCBW @ 2.96,-85.724,29,2.956,-1.00,0.024,,THCBW,THCBW,,,,123456,USD
+2020-12-09T15:45:00+0000,Trade,Buy to Open,BUY_TO_OPEN,THCBW,Equity,Bought 71 THCBW @ 2.96,-210.16,71,2.96,-1.00,0.057,,THCBW,THCBW,,,,123456,USD
+2020-12-09T15:44:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  210115P00014000,Equity Option,Sold 2 GME 01/15/21 Put 14.00 @ 2.56,512,2,256.0,-1.00,1.294,100,GME,GME,1/15/21,14,PUT,123456,USD
+2020-12-07T19:03:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  210115C00040000,Equity Option,Sold 1 NKLA 01/15/21 Call 40.00 @ 0.27,27,1,27.0,-1.00,0.152,100,NKLA,NKLA,1/15/21,40,CALL,123456,USD
+2020-12-07T19:03:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  210115C00030000,Equity Option,Bought 1 NKLA 01/15/21 Call 30.00 @ 0.77,-77,1,77.0,-1.00,0.14,100,NKLA,NKLA,1/15/21,30,CALL,123456,USD
+2020-12-07T18:46:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  210108P00028500,Equity Option,Sold 1 NKLA 01/08/21 Put 28.50 @ 10.40,1040,1,1040.0,-1.00,0.172,100,NKLA,NKLA,1/8/21,28.5,PUT,123456,USD
+2020-12-05T15:37:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-12-04T16:12:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,KNDI  210115P00009000,Equity Option,Sold 3 KNDI 01/15/21 Put 9.00 @ 2.55,765,3,254.99999999999997,-1.00,0.436,100,KNDI,KNDI,1/15/21,9,PUT,123456,USD
+2020-12-03T15:42:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  210115P00023000,Equity Option,Bought 1 PLTR 01/15/21 Put 23.00 @ 3.55,-355,1,355.0,-1.00,0.14,100,PLTR,PLTR,1/15/21,23,PUT,123456,USD
+2020-12-02T21:38:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201218P00017000,Equity Option,Bought 1 GME 12/18/20 Put 17.00 @ 2.96,-296,1,296.0,-1.00,0.14,100,GME,GME,12/18/20,17,PUT,123456,USD
+2020-12-02T19:38:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  210115P00023000,Equity Option,Sold 1 PLTR 01/15/21 Put 23.00 @ 5.00,500,1,500.0,-1.00,0.16199999999999992,100,PLTR,PLTR,1/15/21,23,PUT,123456,USD
+2020-11-30T16:46:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KNDI  210115P00009000,Equity Option,Bought 3 KNDI 01/15/21 Put 9.00 @ 2.16,-648,3,216.0,-1.00,2.41,100,KNDI,KNDI,1/15/21,9,PUT,123456,USD
+2020-11-28T14:55:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-11-27T17:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201218P00017000,Equity Option,Sold 1 GME 12/18/20 Put 17.00 @ 3.55,355,1,355.0,-1.00,0.1519999999999999,100,GME,GME,12/18/20,17,PUT,123456,USD
+2020-11-27T15:37:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  210115C00040000,Equity Option,Bought 1 NKLA 01/15/21 Call 40.00 @ 2.90,-290,1,290.0,-1.00,0.1399999999999999,100,NKLA,NKLA,1/15/21,40,CALL,123456,USD
+2020-11-27T15:37:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  210115C00030000,Equity Option,Sold 1 NKLA 01/15/21 Call 30.00 @ 6.50,650,1,650.0,-1.00,0.16199999999999992,100,NKLA,NKLA,1/15/21,30,CALL,123456,USD
+2020-11-27T15:32:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  210108P00028500,Equity Option,Bought 1 NKLA 01/08/21 Put 28.50 @ 5.45,-545,1,545.0,-1.00,0.1399999999999999,100,NKLA,NKLA,1/8/21,28.5,PUT,123456,USD
+2020-11-25T18:33:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,AHT  201218P00005000,Equity Option,Bought 2 AHT 12/18/20 Put 5.00 @ 2.40,-480,2,240.0,-1.00,0.27,100,AHT,AHT,12/18/20,5,PUT,123456,USD
+2020-11-23T20:14:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  201204P00019000,Equity Option,Bought 2 PLTR 12/04/20 Put 19.00 @ 0.96,-192,2,96.0,-1.00,0.27,100,PLTR,PLTR,12/4/20,19,PUT,123456,USD
+2020-11-23T16:12:00+0000,Trade,Sell to Open,SELL_TO_OPEN,AHT  201218P00005000,Equity Option,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,272,1,272.0,-1.00,0.1519999999999999,100,AHT,AHT,12/18/20,5,PUT,123456,USD
+2020-11-23T16:08:00+0000,Trade,Sell to Open,SELL_TO_OPEN,AHT  201218P00005000,Equity Option,Sold 1 AHT 12/18/20 Put 5.00 @ 2.72,272,1,272.0,-1.00,0.1519999999999999,100,AHT,AHT,12/18/20,5,PUT,123456,USD
+2020-11-23T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,TSLA  201231P00435000,Equity Option,Sold 1 TSLA 12/31/20 Put 435.00 @ 17.17,1717,1,1717.0000000000002,-1.00,0.182,100,TSLA,TSLA,12/31/20,435,PUT,123456,USD
+2020-11-23T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,TSLA  201231P00455000,Equity Option,Bought 1 TSLA 12/31/20 Put 455.00 @ 24.13,-2413,1,2413.0,-1.00,0.14,100,TSLA,TSLA,12/31/20,455,PUT,123456,USD
+2020-11-21T15:54:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.03,0,,0,0.00,,,,,,,123456,USD
+2020-11-20T18:33:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  201204P00019000,Equity Option,Sold 2 PLTR 12/04/20 Put 19.00 @ 1.92,384,2,192.0,-1.00,1.2839999999999998,100,PLTR,PLTR,12/4/20,19,PUT,123456,USD
+2020-11-17T19:24:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,PLTR  201204C00019000,Equity Option,Sold 2 PLTR 12/04/20 Call 19.00 @ 1.80,360,2,180.0,-1.00,0.284,100,PLTR,PLTR,12/4/20,19,CALL,123456,USD
+2020-11-17T17:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,PLTR  201204C00019000,Equity Option,Bought 2 PLTR 12/04/20 Call 19.00 @ 1.19,-238,2,119.0,-1.00,1.27,100,PLTR,PLTR,12/4/20,19,CALL,123456,USD
+2020-11-17T16:45:00+0000,Trade,Buy to Open,BUY_TO_OPEN,TSLA  201231P00435000,Equity Option,Bought 1 TSLA 12/31/20 Put 435.00 @ 34.81,-3481,1,3481.0,-1.00,0.1399999999999999,100,TSLA,TSLA,12/31/20,435,PUT,123456,USD
+2020-11-17T16:45:00+0000,Trade,Sell to Open,SELL_TO_OPEN,TSLA  201231P00455000,Equity Option,Sold 1 TSLA 12/31/20 Put 455.00 @ 45.90,4590,1,4590.0,-1.00,0.252,100,TSLA,TSLA,12/31/20,455,PUT,123456,USD
+2020-11-17T16:02:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KODK  201120P00010000,Equity Option,Bought 1 KODK 11/20/20 Put 10.00 @ 3.00,-300,1,300.0,-1.00,0.14,100,KODK,KODK,11/20/20,10,PUT,123456,USD
+2020-11-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.04,0,,0,0.00,,,,,,,123456,USD
+2020-11-16T21:21:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PLTR  201120P00015500,Equity Option,Bought 1 PLTR 11/20/20 Put 15.50 @ 0.50,-50,1,50.0,-1.00,0.14,100,PLTR,PLTR,11/20/20,15.5,PUT,123456,USD
+2020-11-16T15:37:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PLTR  201120P00015500,Equity Option,Sold 1 PLTR 11/20/20 Put 15.50 @ 1.00,100,1,100.0,-1.00,0.1519999999999999,100,PLTR,PLTR,11/20/20,15.5,PUT,123456,USD
+2020-11-10T17:12:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,RKT  201113C00023000,Equity Option,Sold 1 RKT 11/13/20 Call 23.00 @ 0.91,91,1,91.0,-1.00,0.152,100,RKT,RKT,11/13/20,23,CALL,123456,USD
+2020-11-09T19:42:00+0000,Trade,Buy to Open,BUY_TO_OPEN,RKT  201113C00023000,Equity Option,Bought 1 RKT 11/13/20 Call 23.00 @ 1.03,-103,1,103.0,-1.00,0.1399999999999999,100,RKT,RKT,11/13/20,23,CALL,123456,USD
+2020-11-09T15:31:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201120P00022500,Equity Option,Bought 1 NKLA 11/20/20 Put 22.50 @ 3.30,-330,1,330.0,-1.00,0.14,100,NKLA,NKLA,11/20/20,22.5,PUT,123456,USD
+2020-11-09T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201211C00010500,Equity Option,Sold 1 PCG 12/11/20 Call 10.50 @ 0.41,41,1,41.0,-1.00,0.1519999999999999,100,PCG,PCG,12/11/20,10.5,CALL,123456,USD
+2020-11-09T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201211C00010500,Equity Option,Sold 2 PCG 12/11/20 Call 10.50 @ 0.41,82,2,41.0,-1.00,1.2839999999999998,100,PCG,PCG,12/11/20,10.5,CALL,123456,USD
+2020-10-30T22:00:00+0000,Receive Deliver,Assignment,,PCG  201030P00011000,Equity Option,Removal of option due to assignment,0,3,,0,0.00,100,PCG,PCG,10/30/20,11,PUT,123456,USD
+2020-10-30T22:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,PCG,Equity,Buy to Open 300 PCG @ 11.00,-3300,300,11,-1.00,4.0,,PCG,PCG,,,,123456,USD
+2020-10-22T15:33:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201030P00011000,Equity Option,Sold 3 PCG 10/30/20 Put 11.00 @ 0.74,222,3,74.0,-1.00,2.426,100,PCG,PCG,10/30/20,11,PUT,123456,USD
+2020-10-19T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  201023P00010500,Equity Option,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,-19,1,19.0,-1.00,0.14,100,PCG,PCG,10/23/20,10.5,PUT,123456,USD
+2020-10-19T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  201023P00010500,Equity Option,Bought 1 PCG 10/23/20 Put 10.50 @ 0.19,-19,1,19.0,-1.00,0.14,100,PCG,PCG,10/23/20,10.5,PUT,123456,USD
+2020-10-17T16:57:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-10-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.04,0,,0,0.00,,,,,,,123456,USD
+2020-10-15T16:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LOOP  201016P00007500,Equity Option,Sold 1 LOOP 10/16/20 Put 7.50 @ 0.40,40,1,40.0,-1.00,0.152,100,LOOP,LOOP,10/16/20,7.5,PUT,123456,USD
+2020-10-15T16:33:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201120P00022500,Equity Option,Sold 1 NKLA 11/20/20 Put 22.50 @ 3.70,370,1,370.0,-1.00,0.1519999999999999,100,NKLA,NKLA,11/20/20,22.5,PUT,123456,USD
+2020-10-15T16:29:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201113P00024000,Equity Option,Sold 1 NKLA 11/13/20 Put 24.00 @ 4.16,416,1,416.0,-1.00,0.152,100,NKLA,NKLA,11/13/20,24,PUT,123456,USD
+2020-10-15T15:44:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201120P00013000,Equity Option,Bought 2 GME 11/20/20 Put 13.00 @ 2.02,-404,2,202.0,-1.00,0.27,100,GME,GME,11/20/20,13,PUT,123456,USD
+2020-10-13T15:39:00+0000,Trade,Buy to Open,BUY_TO_OPEN,LOOP  201016P00007500,Equity Option,Bought 1 LOOP 10/16/20 Put 7.50 @ 1.35,-135,1,135.0,-1.00,0.1399999999999999,100,LOOP,LOOP,10/16/20,7.5,PUT,123456,USD
+2020-10-12T16:39:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KODK  201120P00010000,Equity Option,Sold 1 KODK 11/20/20 Put 10.00 @ 2.25,225,1,225.0,-1.00,0.1519999999999999,100,KODK,KODK,11/20/20,10,PUT,123456,USD
+2020-10-12T16:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201023P00010500,Equity Option,Sold 2 PCG 10/23/20 Put 10.50 @ 0.46,92,2,46.0,-1.00,1.2839999999999998,100,PCG,PCG,10/23/20,10.5,PUT,123456,USD
+2020-10-10T16:20:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.03,0,,0,0.00,,,,,,,123456,USD
+2020-10-09T20:46:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201120P00013000,Equity Option,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,288,1,288.0,-1.00,0.1519999999999999,100,GME,GME,11/20/20,13,PUT,123456,USD
+2020-10-09T20:46:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201120P00013000,Equity Option,Sold 1 GME 11/20/20 Put 13.00 @ 2.88,288,1,288.0,-1.00,0.1519999999999999,100,GME,GME,11/20/20,13,PUT,123456,USD
+2020-10-09T17:10:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KODK  201016P00008500,Equity Option,Bought 1 KODK 10/16/20 Put 8.50 @ 0.43,-43,1,43.0,-1.00,0.14,100,KODK,KODK,10/16/20,8.5,PUT,123456,USD
+2020-10-07T16:07:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201016C00027500,Equity Option,Sold 2 NKLA 10/16/20 Call 27.50 @ 0.61,122,2,61.0,-1.00,0.284,100,NKLA,NKLA,10/16/20,27.5,CALL,123456,USD
+2020-10-07T16:07:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201016C00019500,Equity Option,Bought 2 NKLA 10/16/20 Call 19.50 @ 4.94,-988,2,494.00000000000006,-1.00,0.27,100,NKLA,NKLA,10/16/20,19.5,CALL,123456,USD
+2020-10-07T16:07:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201016C00027500,Equity Option,Sold 1 NKLA 10/16/20 Call 27.50 @ 0.60,60,1,60.0,-1.00,0.152,100,NKLA,NKLA,10/16/20,27.5,CALL,123456,USD
+2020-10-07T16:07:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201016C00019500,Equity Option,Bought 1 NKLA 10/16/20 Call 19.50 @ 4.93,-493,1,493.0,-1.00,0.14,100,NKLA,NKLA,10/16/20,19.5,CALL,123456,USD
+2020-10-06T18:02:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  201009C00009000,Equity Option,Bought 2 PCG 10/09/20 Call 9.00 @ 1.19,-238,2,119.0,-1.00,0.27,100,PCG,PCG,10/9/20,9,CALL,123456,USD
+2020-10-06T18:02:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,PCG,Equity,Sold 200 PCG @ 10.17,2034,200,10.17,-1.00,0.234,,PCG,PCG,,,,123456,USD
+2020-10-05T19:10:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00023500,Equity Option,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,120,1,120.0,-1.00,0.152,100,NKLA,NKLA,10/9/20,23.5,CALL,123456,USD
+2020-10-05T19:10:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201009C00017000,Equity Option,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,-604,1,604.0,-1.00,0.14,100,NKLA,NKLA,10/9/20,17,CALL,123456,USD
+2020-10-05T19:10:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00023500,Equity Option,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,120,1,120.0,-1.00,0.152,100,NKLA,NKLA,10/9/20,23.5,CALL,123456,USD
+2020-10-05T19:10:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201009C00017000,Equity Option,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,-604,1,604.0,-1.00,0.14,100,NKLA,NKLA,10/9/20,17,CALL,123456,USD
+2020-10-05T19:06:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00023500,Equity Option,Sold 1 NKLA 10/09/20 Call 23.50 @ 1.20,120,1,120.0,-1.00,0.152,100,NKLA,NKLA,10/9/20,23.5,CALL,123456,USD
+2020-10-05T19:06:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201009C00017000,Equity Option,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,-604,1,604.0,-1.00,0.14,100,NKLA,NKLA,10/9/20,17,CALL,123456,USD
+2020-10-05T17:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KODK  201016P00008500,Equity Option,Sold 1 KODK 10/16/20 Put 8.50 @ 0.86,86,1,86.0,-1.00,0.1519999999999999,100,KODK,KODK,10/16/20,8.5,PUT,123456,USD
+2020-10-05T15:55:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,KODK  201030C00009500,Equity Option,Sold 3 KODK 10/30/20 Call 9.50 @ 1.15,345,3,114.99999999999999,-1.00,0.426,100,KODK,KODK,10/30/20,9.5,CALL,123456,USD
+2020-10-05T15:55:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KODK  201030C00005000,Equity Option,Bought 3 KODK 10/30/20 Call 5.00 @ 3.83,-1149,3,383.0,-1.00,0.41,100,KODK,KODK,10/30/20,5,CALL,123456,USD
+2020-10-03T15:22:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-10-01T17:52:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201113P00024000,Equity Option,Bought 1 NKLA 11/13/20 Put 24.00 @ 5.95,-595,1,595.0,-1.00,0.1399999999999999,100,NKLA,NKLA,11/13/20,24,PUT,123456,USD
+2020-10-01T16:24:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00023500,Equity Option,Bought 1 NKLA 10/09/20 Call 23.50 @ 2.63,-263,1,263.0,-1.00,0.1399999999999999,100,NKLA,NKLA,10/9/20,23.5,CALL,123456,USD
+2020-10-01T16:24:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00022000,Equity Option,Sold 1 NKLA 10/09/20 Call 22.00 @ 3.49,349,1,349.0,-1.00,0.152,100,NKLA,NKLA,10/9/20,22,CALL,123456,USD
+2020-10-01T16:24:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00023500,Equity Option,Bought 2 NKLA 10/09/20 Call 23.50 @ 2.63,-526,2,263.0,-1.00,1.27,100,NKLA,NKLA,10/9/20,23.5,CALL,123456,USD
+2020-10-01T16:24:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00022000,Equity Option,Sold 2 NKLA 10/09/20 Call 22.00 @ 3.49,698,2,349.0,-1.00,0.294,100,NKLA,NKLA,10/9/20,22,CALL,123456,USD
+2020-10-01T16:24:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201009C00009000,Equity Option,Sold 2 PCG 10/09/20 Call 9.00 @ 0.62,124,2,62.0,-1.00,1.2839999999999998,100,PCG,PCG,10/9/20,9,CALL,123456,USD
+2020-09-30T17:11:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201016C00027500,Equity Option,Bought 3 NKLA 10/16/20 Call 27.50 @ 0.69,-207,3,69.0,-1.00,2.41,100,NKLA,NKLA,10/16/20,27.5,CALL,123456,USD
+2020-09-30T17:11:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201016C00019500,Equity Option,Sold 3 NKLA 10/16/20 Call 19.50 @ 3.01,903,3,301.0,-1.00,2.436,100,NKLA,NKLA,10/16/20,19.5,CALL,123456,USD
+2020-09-29T17:26:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201009P00010000,Equity Option,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,-60,1,60.0,-1.00,0.14,100,GME,GME,10/9/20,10,PUT,123456,USD
+2020-09-29T16:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201009C00017000,Equity Option,Sold 2 NKLA 10/09/20 Call 17.00 @ 3.01,602,2,301.0,-1.00,1.294,100,NKLA,NKLA,10/9/20,17,CALL,123456,USD
+2020-09-29T16:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00022000,Equity Option,Bought 2 NKLA 10/09/20 Call 22.00 @ 0.85,-170,2,85.0,-1.00,1.27,100,NKLA,NKLA,10/9/20,22,CALL,123456,USD
+2020-09-29T16:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201009C00017000,Equity Option,Sold 1 NKLA 10/09/20 Call 17.00 @ 3.01,301,1,301.0,-1.00,0.1519999999999999,100,NKLA,NKLA,10/9/20,17,CALL,123456,USD
+2020-09-29T16:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00022000,Equity Option,Bought 1 NKLA 10/09/20 Call 22.00 @ 0.85,-85,1,85.0,-1.00,0.1399999999999999,100,NKLA,NKLA,10/9/20,22,CALL,123456,USD
+2020-09-29T16:06:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201002C00025000,Equity Option,Sold 3 NKLA 10/02/20 Call 25.00 @ 0.04,12,3,4.0,-1.00,0.426,100,NKLA,NKLA,10/2/20,25,CALL,123456,USD
+2020-09-29T16:06:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201002C00019500,Equity Option,Bought 3 NKLA 10/02/20 Call 19.50 @ 0.86,-258,3,86.0,-1.00,0.41,100,NKLA,NKLA,10/2/20,19.5,CALL,123456,USD
+2020-09-29T16:04:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201009P00010000,Equity Option,Bought 1 GME 10/09/20 Put 10.00 @ 0.60,-60,1,60.0,-1.00,0.14,100,GME,GME,10/9/20,10,PUT,123456,USD
+2020-09-28T19:26:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  201002C00009500,Equity Option,Bought 2 PCG 10/02/20 Call 9.50 @ 0.11,-22,2,11.0,-1.00,0.27,100,PCG,PCG,10/2/20,9.5,CALL,123456,USD
+2020-09-28T18:47:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201009P00010000,Equity Option,Sold 2 GME 10/09/20 Put 10.00 @ 1.08,216,2,108.0,-1.00,1.2839999999999998,100,GME,GME,10/9/20,10,PUT,123456,USD
+2020-09-28T15:32:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201002P00009000,Equity Option,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,-25,1,25.0,-1.00,0.14,100,GME,GME,10/2/20,9,PUT,123456,USD
+2020-09-28T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,GME  201002P00009000,Equity Option,Bought 1 GME 10/02/20 Put 9.00 @ 0.25,-25,1,25.0,-1.00,0.14,100,GME,GME,10/2/20,9,PUT,123456,USD
+2020-09-26T15:59:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.04,0,,0,0.00,,,,,,,123456,USD
+2020-09-25T17:17:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201002C00019500,Equity Option,Sold 3 NKLA 10/02/20 Call 19.50 @ 2.61,783,3,261.0,-1.00,2.436,100,NKLA,NKLA,10/2/20,19.5,CALL,123456,USD
+2020-09-25T17:17:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201002C00025000,Equity Option,Bought 3 NKLA 10/02/20 Call 25.00 @ 0.45,-135,3,45.0,-1.00,2.41,100,NKLA,NKLA,10/2/20,25,CALL,123456,USD
+2020-09-24T17:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201002P00009000,Equity Option,Sold 1 GME 10/02/20 Put 9.00 @ 0.60,60,1,60.0,-1.00,0.1519999999999999,100,GME,GME,10/2/20,9,PUT,123456,USD
+2020-09-24T17:28:00+0000,Trade,Sell to Open,SELL_TO_OPEN,GME  201002P00009000,Equity Option,Sold 1 GME 10/02/20 Put 9.00 @ 0.59,59,1,59.0,-1.00,0.1519999999999999,100,GME,GME,10/2/20,9,PUT,123456,USD
+2020-09-24T17:01:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009P00027000,Equity Option,Sold 1 NKLA 10/09/20 Put 27.00 @ 10.05,1005,1,1005.0000000000001,-1.00,0.172,100,NKLA,NKLA,10/9/20,27,PUT,123456,USD
+2020-09-23T23:00:00+0000,Money Movement,Fee,,KODK,Equity,EASTMAN KODAK COMPANY,-3.32,0,,0,0.00,,KODK,KODK,,,,123456,USD
+2020-09-23T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received a/o 9/22,2315.31,0,,0,0.00,,,,,,,123456,USD
+2020-09-22T19:51:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  201002C00009500,Equity Option,Sold 2 PCG 10/02/20 Call 9.50 @ 0.41,82,2,41.0,-1.00,1.2839999999999998,100,PCG,PCG,10/2/20,9.5,CALL,123456,USD
+2020-09-21T15:48:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200925C00009500,Equity Option,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,-14,1,14.000000000000002,-1.00,0.14,100,PCG,PCG,9/25/20,9.5,CALL,123456,USD
+2020-09-21T15:48:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200925C00009500,Equity Option,Bought 1 PCG 09/25/20 Call 9.50 @ 0.14,-14,1,14.000000000000002,-1.00,0.14,100,PCG,PCG,9/25/20,9.5,CALL,123456,USD
+2020-09-21T15:45:00+0000,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009P00027000,Equity Option,Bought 1 NKLA 10/09/20 Put 27.00 @ 4.79,-479,1,479.0,-1.00,0.1399999999999999,100,NKLA,NKLA,10/9/20,27,PUT,123456,USD
+2020-09-21T15:34:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,KODK  201016C00010000,Equity Option,Sold 3 KODK 10/16/20 Call 10.00 @ 2.15,645,3,215.0,-1.00,0.436,100,KODK,KODK,10/16/20,10,CALL,123456,USD
+2020-09-21T15:34:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KODK,Equity,Bought 300 KODK @ 10.07,-3021,300,10.07,-1.00,0.24,,KODK,KODK,,,,123456,USD
+2020-09-19T16:22:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-09-17T23:00:00+0000,Receive Deliver,Assignment,,KODK  201016C00002500,Equity Option,Removal of option due to assignment,0,3,,0,0.00,100,KODK,KODK,10/16/20,2.5,CALL,123456,USD
+2020-09-17T23:00:00+0000,Receive Deliver,Sell to Open,SELL_TO_OPEN,KODK,Equity,Sell to Open 300 KODK @ 2.50,750,300,2.5,-1.00,4.056,,KODK,KODK,,,,123456,USD
+2020-09-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.03,0,,0,0.00,,,,,,,123456,USD
+2020-09-16T20:42:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  200930C00028000,Equity Option,Sold 2 VIX 09/30/20 Call 28.00 @ 2.17,434,2,217.0,-1.00,0.5740000000000001,100,VIX,VIX,9/30/20,28,CALL,123456,USD
+2020-09-16T20:42:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  200930C00023000,Equity Option,Bought 2 VIX 09/30/20 Call 23.00 @ 4.47,-894,2,447.0,-1.00,0.5700000000000001,100,VIX,VIX,9/30/20,23,CALL,123456,USD
+2020-09-16T16:56:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KODK  201030C00005000,Equity Option,Sold 3 KODK 10/30/20 Call 5.00 @ 4.37,1311,3,437.0,-1.00,2.446,100,KODK,KODK,10/30/20,5,CALL,123456,USD
+2020-09-16T16:56:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KODK  201030C00009500,Equity Option,Bought 3 KODK 10/30/20 Call 9.50 @ 2.27,-681,3,227.0,-1.00,2.41,100,KODK,KODK,10/30/20,9.5,CALL,123456,USD
+2020-09-15T18:22:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200925C00009500,Equity Option,Sold 2 PCG 09/25/20 Call 9.50 @ 0.45,90,2,45.0,-1.00,1.2839999999999998,100,PCG,PCG,9/25/20,9.5,CALL,123456,USD
+2020-09-14T18:42:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200918P00010000,Equity Option,Bought 1 PCG 09/18/20 Put 10.00 @ 0.56,-56,1,56.00000000000001,-1.00,0.14,100,PCG,PCG,9/18/20,10,PUT,123456,USD
+2020-09-12T15:37:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-09-11T19:29:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200918P00010000,Equity Option,Sold 1 PCG 09/18/20 Put 10.00 @ 1.11,111,1,111.00000000000001,-1.00,0.1519999999999999,100,PCG,PCG,9/18/20,10,PUT,123456,USD
+2020-09-11T18:57:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200918C00009000,Equity Option,Bought 2 PCG 09/18/20 Call 9.00 @ 0.14,-28,2,14.000000000000002,-1.00,0.27,100,PCG,PCG,9/18/20,9,CALL,123456,USD
+2020-09-05T16:00:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-09-04T18:11:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200918C00009000,Equity Option,Sold 2 PCG 09/18/20 Call 9.00 @ 0.39,78,2,39.0,-1.00,1.2839999999999998,100,PCG,PCG,9/18/20,9,CALL,123456,USD
+2020-09-03T17:19:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200904P00009000,Equity Option,Bought 1 PCG 09/04/20 Put 9.00 @ 0.03,-3,1,3.0,-1.00,0.14,100,PCG,PCG,9/4/20,9,PUT,123456,USD
+2020-09-03T17:19:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200904C00009000,Equity Option,Bought 1 PCG 09/04/20 Call 9.00 @ 0.23,-23,1,23.0,-1.00,0.14,100,PCG,PCG,9/4/20,9,CALL,123456,USD
+2020-08-31T17:21:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  200930C00028000,Equity Option,Bought 2 VIX 09/30/20 Call 28.00 @ 3.81,-762,2,381.0,-1.00,2.57,100,VIX,VIX,9/30/20,28,CALL,123456,USD
+2020-08-31T17:21:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  200930C00023000,Equity Option,Sold 2 VIX 09/30/20 Call 23.00 @ 6.16,1232,2,616.0,-1.00,2.574,100,VIX,VIX,9/30/20,23,CALL,123456,USD
+2020-08-31T16:19:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KODK  201016C00002500,Equity Option,Sold 3 KODK 10/16/20 Call 2.50 @ 3.68,1104,3,368.0,-1.00,2.446,100,KODK,KODK,10/16/20,2.5,CALL,123456,USD
+2020-08-31T16:19:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KODK  201016C00010000,Equity Option,Bought 3 KODK 10/16/20 Call 10.00 @ 0.77,-231,3,77.0,-1.00,2.41,100,KODK,KODK,10/16/20,10,CALL,123456,USD
+2020-08-31T16:12:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200904C00009000,Equity Option,Sold 1 PCG 09/04/20 Call 9.00 @ 0.30,30,1,30.0,-1.00,0.1519999999999999,100,PCG,PCG,9/4/20,9,CALL,123456,USD
+2020-08-31T16:12:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200904P00009000,Equity Option,Sold 1 PCG 09/04/20 Put 9.00 @ 0.05,5,1,5.0,-1.00,0.1519999999999999,100,PCG,PCG,9/4/20,9,PUT,123456,USD
+2020-08-28T23:00:00+0000,Receive Deliver,Assignment,,PCG  200828P00009500,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,PCG,PCG,8/28/20,9.5,PUT,123456,USD
+2020-08-28T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,PCG,Equity,Buy to Open 100 PCG @ 9.50,-950,100,9.5,-1.00,4.0,,PCG,PCG,,,,123456,USD
+2020-08-28T22:00:00+0000,Receive Deliver,Expiration,,PCG  200828C00009500,Equity Option,Removal of 1 PCG 08/28/20 Call 9.50 due to expiration.,0,1,,0,0.00,100,PCG,PCG,8/28/20,9.5,CALL,123456,USD
+2020-08-25T15:39:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  201021P00021000,Equity Option,Sold 2 VIX 10/21/20 Put 21.00 @ 0.30,60,2,30.0,-1.00,0.5740000000000001,100,VIX,VIX,10/21/20,21,PUT,123456,USD
+2020-08-25T15:39:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  201021P00026000,Equity Option,Bought 2 VIX 10/21/20 Put 26.00 @ 2.05,-410,2,204.99999999999997,-1.00,0.5700000000000001,100,VIX,VIX,10/21/20,26,PUT,123456,USD
+2020-08-22T15:19:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-08-20T17:29:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200828C00009500,Equity Option,Sold 1 PCG 08/28/20 Call 9.50 @ 0.05,5,1,5.0,-1.00,0.152,100,PCG,PCG,8/28/20,9.5,CALL,123456,USD
+2020-08-20T17:29:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200828P00009500,Equity Option,Sold 1 PCG 08/28/20 Put 9.50 @ 0.37,37,1,37.0,-1.00,0.152,100,PCG,PCG,8/28/20,9.5,PUT,123456,USD
+2020-08-17T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.02,0,,0,0.00,,,,,,,123456,USD
+2020-08-15T21:13:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-08-14T23:00:00+0000,Receive Deliver,Assignment,,PCG  200814C00009000,Equity Option,Removal of option due to assignment,0,2,,0,0.00,100,PCG,PCG,8/14/20,9,CALL,123456,USD
+2020-08-14T23:00:00+0000,Receive Deliver,Sell to Close,SELL_TO_CLOSE,PCG,Equity,Sell to Close 200 PCG @ 9.00,1800,200,9,-1.00,4.064,,PCG,PCG,,,,123456,USD
+2020-08-14T18:07:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200814P00009500,Equity Option,Bought 1 PCG 08/14/20 Put 9.50 @ 0.08,-8,1,8.0,-1.00,0.14,100,PCG,PCG,8/14/20,9.5,PUT,123456,USD
+2020-08-14T18:07:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200814C00009500,Equity Option,Bought 1 PCG 08/14/20 Call 9.50 @ 0.04,-4,1,4.0,-1.00,0.14,100,PCG,PCG,8/14/20,9.5,CALL,123456,USD
+2020-08-12T17:29:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200814C00009000,Equity Option,Sold 2 PCG 08/14/20 Call 9.00 @ 0.31,62,2,31.0,-1.00,1.2839999999999998,100,PCG,PCG,8/14/20,9,CALL,123456,USD
+2020-08-12T16:04:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,KODK  200918C00017500,Equity Option,Sold 1 KODK 09/18/20 Call 17.50 @ 0.92,92,1,92.0,-1.00,0.152,100,KODK,KODK,9/18/20,17.5,CALL,123456,USD
+2020-08-12T16:04:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,KODK  200918C00007500,Equity Option,Bought 1 KODK 09/18/20 Call 7.50 @ 3.56,-356,1,356.0,-1.00,0.14,100,KODK,KODK,9/18/20,7.5,CALL,123456,USD
+2020-08-10T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200814C00009500,Equity Option,Sold 1 PCG 08/14/20 Call 9.50 @ 0.03,3,1,3.0,-1.00,0.1519999999999999,100,PCG,PCG,8/14/20,9.5,CALL,123456,USD
+2020-08-10T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200814P00009500,Equity Option,Sold 1 PCG 08/14/20 Put 9.50 @ 0.45,45,1,45.0,-1.00,0.1519999999999999,100,PCG,PCG,8/14/20,9.5,PUT,123456,USD
+2020-08-10T15:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  201021P00026000,Equity Option,Sold 2 VIX 10/21/20 Put 26.00 @ 2.30,460,2,229.99999999999997,-1.00,2.574,100,VIX,VIX,10/21/20,26,PUT,123456,USD
+2020-08-10T15:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  201021P00021000,Equity Option,Bought 2 VIX 10/21/20 Put 21.00 @ 0.50,-100,2,50.0,-1.00,2.57,100,VIX,VIX,10/21/20,21,PUT,123456,USD
+2020-08-08T15:08:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-08-07T17:13:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200807P00009500,Equity Option,Bought 1 PCG 08/07/20 Put 9.50 @ 0.36,-36,1,36.0,-1.00,0.14,100,PCG,PCG,8/7/20,9.5,PUT,123456,USD
+2020-08-07T17:13:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200807C00009500,Equity Option,Bought 1 PCG 08/07/20 Call 9.50 @ 0.03,-3,1,3.0,-1.00,0.14,100,PCG,PCG,8/7/20,9.5,CALL,123456,USD
+2020-08-05T19:22:00+0000,Trade,Buy to Open,BUY_TO_OPEN,PCG,Equity,Bought 100 PCG @ 8.91,-891,100,8.91,-1.00,0.08,,PCG,PCG,,,,123456,USD
+2020-08-04T20:54:00+0000,Trade,Sell to Open,SELL_TO_OPEN,KODK  200918C00007500,Equity Option,Sold 1 KODK 09/18/20 Call 7.50 @ 7.04,704,1,704.0,-1.00,0.16199999999999992,100,KODK,KODK,9/18/20,7.5,CALL,123456,USD
+2020-08-04T20:54:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KODK  200918C00017500,Equity Option,Bought 1 KODK 09/18/20 Call 17.50 @ 2.99,-299,1,299.0,-1.00,0.1399999999999999,100,KODK,KODK,9/18/20,17.5,CALL,123456,USD
+2020-07-31T18:15:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200807P00009500,Equity Option,Sold 1 PCG 08/07/20 Put 9.50 @ 0.45,45,1,45.0,-1.00,0.1519999999999999,100,PCG,PCG,8/7/20,9.5,PUT,123456,USD
+2020-07-31T18:15:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200807C00009500,Equity Option,Sold 1 PCG 08/07/20 Call 9.50 @ 0.08,8,1,8.0,-1.00,0.1519999999999999,100,PCG,PCG,8/7/20,9.5,CALL,123456,USD
+2020-07-31T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200731P00010000,Equity Option,Bought 1 PCG 07/31/20 Put 10.00 @ 0.76,-76,1,76.0,-1.00,0.14,100,PCG,PCG,7/31/20,10,PUT,123456,USD
+2020-07-31T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200731C00009000,Equity Option,Bought 1 PCG 07/31/20 Call 9.00 @ 0.28,-28,1,28.000000000000004,-1.00,0.14,100,PCG,PCG,7/31/20,9,CALL,123456,USD
+2020-07-27T16:12:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,PCG  200731C00009000,Equity Option,Bought 1 PCG 07/31/20 Call 9.00 @ 0.36,-36,1,36.0,-1.00,0.14,100,PCG,PCG,7/31/20,9,CALL,123456,USD
+2020-07-25T15:23:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-07-20T21:24:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200731P00010000,Equity Option,Sold 1 PCG 07/31/20 Put 10.00 @ 0.76,76,1,76.0,-1.00,0.1519999999999999,100,PCG,PCG,7/31/20,10,PUT,123456,USD
+2020-07-20T21:24:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200731C00009000,Equity Option,Sold 1 PCG 07/31/20 Call 9.00 @ 0.55,55,1,55.00000000000001,-1.00,0.1519999999999999,100,PCG,PCG,7/31/20,9,CALL,123456,USD
+2020-07-20T17:04:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200731C00009000,Equity Option,Sold 1 PCG 07/31/20 Call 9.00 @ 0.39,39,1,39.0,-1.00,0.1519999999999999,100,PCG,PCG,7/31/20,9,CALL,123456,USD
+2020-07-17T23:00:00+0000,Receive Deliver,Assignment,,PCG  200717P00010000,Equity Option,Removal of option due to assignment,0,1,,0,0.00,100,PCG,PCG,7/17/20,10,PUT,123456,USD
+2020-07-17T23:00:00+0000,Receive Deliver,Buy to Open,BUY_TO_OPEN,PCG,Equity,Buy to Open 100 PCG @ 10.00,-1000,100,10,-1.00,4.0,,PCG,PCG,,,,123456,USD
+2020-07-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.03,0,,0,0.00,,,,,,,123456,USD
+2020-07-08T17:18:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  200916P00025000,Equity Option,Sold 1 VIX 09/16/20 Put 25.00 @ 1.90,190,1,190.0,-1.00,0.792,100,VIX,VIX,9/16/20,25,PUT,123456,USD
+2020-07-08T17:18:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  200916P00028000,Equity Option,Bought 1 VIX 09/16/20 Put 28.00 @ 3.45,-345,1,345.0,-1.00,0.79,100,VIX,VIX,9/16/20,28,PUT,123456,USD
+2020-07-06T16:02:00+0000,Trade,Sell to Open,SELL_TO_OPEN,PCG  200717P00010000,Equity Option,Sold 1 PCG 07/17/20 Put 10.00 @ 0.77,77,1,77.0,-1.00,0.1519999999999999,100,PCG,PCG,7/17/20,10,PUT,123456,USD
+2020-07-02T20:38:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  200916P00025000,Equity Option,Bought 1 VIX 09/16/20 Put 25.00 @ 2.45,-245,1,245.00000000000003,-1.00,0.79,100,VIX,VIX,9/16/20,25,PUT,123456,USD
+2020-07-02T20:38:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  200916P00028000,Equity Option,Sold 1 VIX 09/16/20 Put 28.00 @ 4.09,409,1,409.0,-1.00,0.792,100,VIX,VIX,9/16/20,28,PUT,123456,USD
+2020-07-02T18:58:00+0000,Trade,Buy to Open,BUY_TO_OPEN,PCG,Equity,Bought 100 PCG @ 9.40,-940.5,100,9.405,-1.00,0.08,,PCG,PCG,,,,123456,USD
+2020-07-02T15:34:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  200722C00028000,Equity Option,Sold 1 VIX 07/22/20 Call 28.00 @ 3.22,322,1,322.0,-1.00,0.792,100,VIX,VIX,7/22/20,28,CALL,123456,USD
+2020-07-02T15:34:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  200722C00024000,Equity Option,Bought 1 VIX 07/22/20 Call 24.00 @ 5.07,-507,1,507.0,-1.00,0.79,100,VIX,VIX,7/22/20,24,CALL,123456,USD
+2020-07-02T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  200819C00040000,Equity Option,Sold 1 VIX 08/19/20 Call 40.00 @ 2.33,233,1,233.0,-1.00,0.792,100,VIX,VIX,8/19/20,40,CALL,123456,USD
+2020-07-02T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  200819C00032500,Equity Option,Bought 1 VIX 08/19/20 Call 32.50 @ 3.98,-398,1,398.0,-1.00,0.79,100,VIX,VIX,8/19/20,32.5,CALL,123456,USD
+2020-06-22T22:12:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,VIX  200722C00035000,Equity Option,Sold 1 VIX 07/22/20 Call 35.00 @ 3.93,393,1,393.0,-1.00,0.792,100,VIX,VIX,7/22/20,35,CALL,123456,USD
+2020-06-22T22:12:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,VIX  200722C00030000,Equity Option,Bought 1 VIX 07/22/20 Call 30.00 @ 5.53,-553,1,553.0,-1.00,0.79,100,VIX,VIX,7/22/20,30,CALL,123456,USD
+2020-06-20T15:46:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-06-18T16:18:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,CAR  200717P00021000,Equity Option,Sold 1 CAR 07/17/20 Put 21.00 @ 1.31,131,1,131.0,-1.00,0.152,100,CAR,CAR,7/17/20,21,PUT,123456,USD
+2020-06-18T16:18:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,CAR  200717P00025000,Equity Option,Bought 1 CAR 07/17/20 Put 25.00 @ 2.67,-267,1,267.0,-1.00,0.14,100,CAR,CAR,7/17/20,25,PUT,123456,USD
+2020-06-16T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.06,0,,0,0.00,,,,,,,123456,USD
+2020-06-13T16:11:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,0.01,0,,0,0.00,,,,,,,123456,USD
+2020-06-12T18:12:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,PCG  200619C00015000,Equity Option,Sold 2 PCG 06/19/20 Call 15.00 @ 0.05,10,2,5.0,-1.00,0.294,100,PCG,PCG,6/19/20,15,CALL,123456,USD
+2020-06-11T20:36:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  200819C00032500,Equity Option,Sold 1 VIX 08/19/20 Call 32.50 @ 6.04,604,1,604.0,-1.00,0.792,100,VIX,VIX,8/19/20,32.5,CALL,123456,USD
+2020-06-11T20:36:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  200819C00040000,Equity Option,Bought 1 VIX 08/19/20 Call 40.00 @ 3.84,-384,1,384.0,-1.00,0.79,100,VIX,VIX,8/19/20,40,CALL,123456,USD
+2020-06-11T20:33:00+0000,Trade,Buy to Open,BUY_TO_OPEN,CAR  200717P00021000,Equity Option,Bought 1 CAR 07/17/20 Put 21.00 @ 2.32,-232,1,231.99999999999997,-1.00,0.1399999999999999,100,CAR,CAR,7/17/20,21,PUT,123456,USD
+2020-06-11T20:33:00+0000,Trade,Sell to Open,SELL_TO_OPEN,CAR  200717P00025000,Equity Option,Sold 1 CAR 07/17/20 Put 25.00 @ 4.27,427,1,426.99999999999994,-1.00,0.1519999999999999,100,CAR,CAR,7/17/20,25,PUT,123456,USD
+2020-06-11T20:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  200722C00035000,Equity Option,Bought 1 VIX 07/22/20 Call 35.00 @ 4.78,-478,1,478.0,-1.00,0.79,100,VIX,VIX,7/22/20,35,CALL,123456,USD
+2020-06-11T20:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  200722C00030000,Equity Option,Sold 1 VIX 07/22/20 Call 30.00 @ 6.83,683,1,683.0,-1.00,0.792,100,VIX,VIX,7/22/20,30,CALL,123456,USD
+2020-06-06T15:57:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,0.01,0,,0,0.00,,,,,,,123456,USD
+2020-06-05T22:00:00+0000,Receive Deliver,Expiration,,DOW  200605P00034000,Equity Option,Removal of 1 DOW 06/05/20 Put 34.00 due to expiration.,0,1,,0,0.00,100,DOW,DOW,6/5/20,34,PUT,123456,USD
+2020-06-05T22:00:00+0000,Receive Deliver,Expiration,,DOW  200605P00035000,Equity Option,Removal of 1 DOW 06/05/20 Put 35.00 due to expiration.,0,1,,0,0.00,100,DOW,DOW,6/5/20,35,PUT,123456,USD
+2020-06-04T18:40:00+0000,Trade,Buy to Open,BUY_TO_OPEN,VIX  200722C00028000,Equity Option,Bought 1 VIX 07/22/20 Call 28.00 @ 4.60,-460,1,459.99999999999994,-1.00,0.79,100,VIX,VIX,7/22/20,28,CALL,123456,USD
+2020-06-04T18:40:00+0000,Trade,Sell to Open,SELL_TO_OPEN,VIX  200722C00024000,Equity Option,Sold 1 VIX 07/22/20 Call 24.00 @ 6.50,650,1,650.0,-1.00,0.792,100,VIX,VIX,7/22/20,24,CALL,123456,USD
+2020-05-30T16:08:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-05-29T22:00:00+0000,Receive Deliver,Expiration,,PCG  200529C00014000,Equity Option,Removal of 2 PCG 05/29/20 Call 14.00 due to expiration.,0,2,,0,0.00,100,PCG,PCG,5/29/20,14,CALL,123456,USD
+2020-05-29T18:04:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,EWG  201016C00022000,Equity Option,Sold 7 EWG 10/16/20 Call 22.00 @ 4.13,2891,7,413.0,-1.00,0.05400000000000005,100,EWG,EWG,10/16/20,22,CALL,123456,USD
+2020-05-29T18:04:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,EWG  201016C00019000,Equity Option,Bought 7 EWG 10/16/20 Call 19.00 @ 6.82,-4774,7,682.0,-1.00,0.97,100,EWG,EWG,10/16/20,19,CALL,123456,USD
+2020-05-27T16:19:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,EWG  200717C00022000,Equity Option,Sold 8 EWG 07/17/20 Call 22.00 @ 3.72,2976,8,372.0,-1.00,0.19599999999999995,100,EWG,EWG,7/17/20,22,CALL,123456,USD
+2020-05-27T16:19:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,EWG,Equity,Bought 800 EWG @ 25.63,-20504,800,25.63,-1.00,0.64,,EWG,EWG,,,,123456,USD
+2020-05-26T23:00:00+0000,Receive Deliver,Assignment,,EWG  200717C00017000,Equity Option,Removal of option due to assignment,0,8,,0,0.00,100,EWG,EWG,7/17/20,17,CALL,123456,USD
+2020-05-26T23:00:00+0000,Receive Deliver,Sell to Open,SELL_TO_OPEN,EWG,Equity,Sell to Open 800 EWG @ 17.00,13600,800,17,-1.00,4.405,,EWG,EWG,,,,123456,USD
+2020-05-26T15:38:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,EWG  200717C00021000,Equity Option,Sold 4 EWG 07/17/20 Call 21.00 @ 4.28,1712,4,428.0,-1.00,0.608,100,EWG,EWG,7/17/20,21,CALL,123456,USD
+2020-05-26T15:38:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,EWG  200717C00018000,Equity Option,Bought 4 EWG 07/17/20 Call 18.00 @ 7.24,-2896,4,724.0,-1.00,0.56,100,EWG,EWG,7/17/20,18,CALL,123456,USD
+2020-05-20T15:31:00+0000,Trade,Buy to Open,BUY_TO_OPEN,DOW  200605P00034000,Equity Option,Bought 1 DOW 06/05/20 Put 34.00 @ 0.85,-85,1,85.0,-1.00,0.1399999999999999,100,DOW,DOW,6/5/20,34,PUT,123456,USD
+2020-05-20T15:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,DOW  200605P00035000,Equity Option,Bought 1 DOW 06/05/20 Put 35.00 @ 1.40,-140,1,140.0,-1.00,0.1399999999999999,100,DOW,DOW,6/5/20,35,PUT,123456,USD
+2020-05-19T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,USO  200717P00002000,Equity Option,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,30,6,5.0,-1.00,0.852,100,USO,USO,7/17/20,2,PUT,123456,USD
+2020-05-19T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,USO  200717P00003500,Equity Option,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,-378,6,63.0,-1.00,0.83,100,USO,USO,7/17/20,3.5,PUT,123456,USD
+2020-05-18T23:00:00+0000,Money Movement,Credit Interest,,,,INTEREST ON CREDIT BALANCE,0.1,0,,0,0.00,,,,,,,123456,USD
+2020-05-16T17:34:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD
+2020-05-15T17:42:00+0000,Trade,Buy to Open,BUY_TO_OPEN,PCG  200529C00014000,Equity Option,Bought 2 PCG 05/29/20 Call 14.00 @ 0.50,-100,2,50.0,-1.00,1.2799999999999998,100,PCG,PCG,5/29/20,14,CALL,123456,USD
+2020-05-15T17:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,PCG  200619C00015000,Equity Option,Bought 2 PCG 06/19/20 Call 15.00 @ 0.64,-128,2,64.0,-1.00,1.2799999999999998,100,PCG,PCG,6/19/20,15,CALL,123456,USD
+2020-05-13T16:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,TSLA  200529C00800000,Equity Option,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,5540,1,5540.0,-1.00,0.272,100,TSLA,TSLA,5/29/20,800,CALL,123456,USD
+2020-05-13T16:45:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,TSLA  200529C00795000,Equity Option,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,-5815,1,5815.0,-1.00,0.14,100,TSLA,TSLA,5/29/20,795,CALL,123456,USD
+2020-05-13T16:45:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,TSLA  200529C00800000,Equity Option,Sold 1 TSLA 05/29/20 Call 800.00 @ 55.40,5540,1,5540.0,-1.00,0.272,100,TSLA,TSLA,5/29/20,800,CALL,123456,USD
+2020-05-13T16:45:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,TSLA  200529C00795000,Equity Option,Bought 1 TSLA 05/29/20 Call 795.00 @ 58.15,-5815,1,5815.0,-1.00,0.14,100,TSLA,TSLA,5/29/20,795,CALL,123456,USD
+2020-05-09T16:22:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.02,0,,0,0.00,,,,,,,123456,USD
+2020-05-08T21:02:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPX  200619P02915000,Equity Option,Sold 2 SPX 06/19/20 Put 2915.00 @ 98.66,19732,2,9866.0,-1.00,0.5840000000000001,100,SPX,SPX,6/19/20,2915,PUT,123456,USD
+2020-05-08T21:02:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,SPX  200619P02920000,Equity Option,Bought 2 SPX 06/19/20 Put 2920.00 @ 100.56,-20112,2,10056.0,-1.00,0.5800000000000001,100,SPX,SPX,6/19/20,2920,PUT,123456,USD
+2020-05-08T17:24:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SVXY  200619P00030000,Equity Option,Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81,243,3,81.0,-1.00,0.436,100,SVXY,SVXY,6/19/20,30,PUT,123456,USD
+2020-05-08T17:24:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,SVXY  200619P00035000,Equity Option,Bought 3 SVXY 06/19/20 Put 35.00 @ 2.63,-789,3,263.0,-1.00,0.42,100,SVXY,SVXY,6/19/20,35,PUT,123456,USD
+2020-05-07T16:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,TSLA  200529C00800000,Equity Option,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,-5047,1,5047.0,-1.00,0.1399999999999999,100,TSLA,TSLA,5/29/20,800,CALL,123456,USD
+2020-05-07T16:01:00+0000,Trade,Sell to Open,SELL_TO_OPEN,TSLA  200529C00795000,Equity Option,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,5270,1,5270.0,-1.00,0.262,100,TSLA,TSLA,5/29/20,795,CALL,123456,USD
+2020-05-07T16:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,TSLA  200529C00800000,Equity Option,Bought 1 TSLA 05/29/20 Call 800.00 @ 50.47,-5047,1,5047.0,-1.00,0.1399999999999999,100,TSLA,TSLA,5/29/20,800,CALL,123456,USD
+2020-05-07T16:01:00+0000,Trade,Sell to Open,SELL_TO_OPEN,TSLA  200529C00795000,Equity Option,Sold 1 TSLA 05/29/20 Call 795.00 @ 52.70,5270,1,5270.0,-1.00,0.262,100,TSLA,TSLA,5/29/20,795,CALL,123456,USD
+2020-05-06T20:49:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,TSLA  200717P00690000,Equity Option,Sold 1 TSLA 07/17/20 Put 690.00 @ 57.51,5751,1,5751.0,-1.00,0.272,100,TSLA,TSLA,7/17/20,690,PUT,123456,USD
+2020-05-06T20:49:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,TSLA  200717P00705000,Equity Option,Bought 1 TSLA 07/17/20 Put 705.00 @ 63.09,-6309,1,6309.0,-1.00,0.14,100,TSLA,TSLA,7/17/20,705,PUT,123456,USD

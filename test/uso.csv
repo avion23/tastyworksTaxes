@@ -1,9 +1,9 @@
-Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference
-05/19/2020 3:30 PM,Trade,Sell to Close,USO,Sell,Close,6,07/17/2020,2,P,0.05,0.852,30,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,Individual...60
-05/19/2020 3:30 PM,Trade,Buy to Close,USO,Buy,Close,6,07/17/2020,3.5,P,0.63,0.83,-378,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,Individual...60
-04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Buy,Open,6,07/17/2020,2,P,,0.00,-174,Reverse split: Open 6 USO1  200717P00002000,Individual...60
-04/29/2020 12:35 PM,Receive Deliver,Reverse Split,USO,Sell,Close,6,07/17/2020,2,P,,0.00,174,Reverse split: Close 6 USO   200717P00002000,Individual...60
-04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Sell,Open,6,07/17/2020,3.5,P,,0.00,648,Reverse split: Open 6 USO1  200717P00003500,Individual...60
-04/29/2020 12:34 PM,Receive Deliver,Reverse Split,USO,Buy,Close,6,07/17/2020,3.5,P,,0.00,-648,Reverse split: Close 6 USO   200717P00003500,Individual...60
-04/23/2020 7:30 PM,Trade,Sell to Open,USO,Sell,Open,6,07/17/2020,3.5,P,1.08,6.862,648,Sold 6 USO 07/17/20 Put 3.50 @ 1.08,Individual...60
-04/23/2020 7:30 PM,Trade,Buy to Open,USO,Buy,Open,6,07/17/2020,2,P,0.29,6.83,-174,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,Individual...60
+Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency
+2020-05-19T15:30:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,USO  200717P00002000,Equity Option,Sold 6 USO 07/17/20 Put 2.00 @ 0.05,30,6,5.0,-1.00,0.852,100,USO,USO,7/17/20,2,PUT,123456,USD
+2020-05-19T15:30:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,USO  200717P00003500,Equity Option,Bought 6 USO 07/17/20 Put 3.50 @ 0.63,-378,6,63.0,-1.00,0.83,100,USO,USO,7/17/20,3.5,PUT,123456,USD
+2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,BUY_TO_OPEN,USO  200717P00002000,Equity Option,Reverse split: Open 6 USO1  200717P00002000,-174,6,,0,0.00,100,USO,USO,7/17/20,2,PUT,123456,USD
+2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,SELL_TO_CLOSE,USO  200717P00002000,Equity Option,Reverse split: Close 6 USO   200717P00002000,174,6,,0,0.00,100,USO,USO,7/17/20,2,PUT,123456,USD
+2020-04-29T12:34:00+0000,Receive Deliver,Reverse Split,SELL_TO_OPEN,USO  200717P00003500,Equity Option,Reverse split: Open 6 USO1  200717P00003500,648,6,,0,0.00,100,USO,USO,7/17/20,3.5,PUT,123456,USD
+2020-04-29T12:34:00+0000,Receive Deliver,Reverse Split,BUY_TO_CLOSE,USO  200717P00003500,Equity Option,Reverse split: Close 6 USO   200717P00003500,-648,6,,0,0.00,100,USO,USO,7/17/20,3.5,PUT,123456,USD
+2020-04-23T19:30:00+0000,Trade,Sell to Open,SELL_TO_OPEN,USO  200717P00003500,Equity Option,Sold 6 USO 07/17/20 Put 3.50 @ 1.08,648,6,108.0,-1.00,5.862,100,USO,USO,7/17/20,3.5,PUT,123456,USD
+2020-04-23T19:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,USO  200717P00002000,Equity Option,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,-174,6,28.999999999999996,-1.00,5.83,100,USO,USO,7/17/20,2,PUT,123456,USD

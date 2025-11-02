@@ -41,26 +41,26 @@ def test_money_fromUsdToEur():
 
 def test_debit_interest():
     t = Tasty()
-    debit_interest_tx = Transaction.fromString("06/16/2021 11:00 PM,Money Movement,Debit Interest,,,,0,,,,,0.00,-0.87,FROM 05/16 THRU 06/15 @ 8    %,Individual...39")
+    debit_interest_tx = Transaction.fromString("2021-06-16T23:00:00+0000,Money Movement,Debit Interest,,,,FROM 05/16 THRU 06/15 @ 8    %,-0.87,0,,0,0.00,,,,,,,123456,USD")
     t.moneyMovement(debit_interest_tx)
     assert clean_numpy_str(str(t.year(2021).debitInterest)) == "{'eur': -0.7175849554602441, 'usd': -0.87}"
 
 def test_dividend():
     t = Tasty()
-    dividend_tx = Transaction.fromString("07/06/2021 11:00 PM,Money Movement,Dividend,UWMC,,,0,,,,,0.00,-3,UWM HOLDINGS CORPORATION,Individual...39")
+    dividend_tx = Transaction.fromString("2021-07-06T23:00:00+0000,Money Movement,Dividend,,UWMC,Equity,UWM HOLDINGS CORPORATION,-3,0,,0,0.00,,UWMC,UWMC,,,,123456,USD")
     t.moneyMovement(dividend_tx)
     assert clean_numpy_str(str(t.year(2021).dividend)) == "{'eur': -2.5342118601115056, 'usd': -3.0}"
 
 def test_deposit():
     t = Tasty()
-    deposit_tx = Transaction.fromString("03/01/2021 11:00 PM,Money Movement,Withdrawal,,,,0,,,,,0.00,4770.4,Wire Funds Received,Individual...39")
+    deposit_tx = Transaction.fromString("2021-03-01T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,4770.4,0,,0,0.00,,,,,,,123456,USD")
     t.moneyMovement(deposit_tx)
     assert clean_numpy_str(str(t.year(2021).deposit)) == "{'eur': 3957.8528167261256, 'usd': 4770.4}"
 
 def test_securities_lending_income():
     t = Tasty("test/merged3.csv")
     lending_income_transaction = Transaction.fromString(
-        "08/13/2024 11:00 PM,Money Movement,Fully Paid Stock Lending Income,,,,0,,,,,0.00,0.20,FULLYPAID LENDING REBATE,Individual...39")
+        "2024-08-13T23:00:00+0000,Money Movement,Fully Paid Stock Lending Income,,,,FULLYPAID LENDING REBATE,0.20,0,,0,0.00,,,,,,,123456,USD")
     t.moneyMovement(lending_income_transaction)
     lending_income = t.year(2024).securitiesLendingIncome
     assert 0.18 <= float(clean_numpy_str(str(lending_income)).split(':')[1].split(',')[0]) <= 0.19

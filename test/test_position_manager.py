@@ -8,23 +8,23 @@ from tastyworksTaxes.position import PositionType
 class TestPositionManager:
     def test_lfin_calls_open_and_close(self):
         pm = PositionManager()
-        pm.add_position(Transaction.fromString("03/12/2018 5:08 PM,Trade,Buy to Open,LFIN,Buy,Open,2,06/15/2018,40,C,2.2,2.28,-440,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,Individual...39"))
+        pm.add_position(Transaction.fromString("2018-03-12T17:08:00+0000,Trade,Buy to Open,BUY_TO_OPEN,LFIN  180615C00040000,Equity Option,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,-440,2,220.00000000000003,-1.00,1.2799999999999998,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
         lot = pm.open_lots[0]
         assert lot.symbol == 'LFIN'
         assert lot.quantity == 2
         
-        pm.add_position(Transaction.fromString("03/16/2018 4:09 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,16.6,1.19,1660,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,Individual...39"))
+        pm.add_position(Transaction.fromString("2018-03-16T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LFIN  180615C00040000,Equity Option,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,1660,1,1660.0000000000002,-1.00,0.18999999999999995,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
         lot = pm.open_lots[0]
         assert lot.quantity == 1
         assert pm.closed_trades[0].quantity == 1
         
-        pm.add_position(Transaction.fromString("03/16/2018 4:09 PM,Trade,Sell to Close,LFIN,Sell,Close,1,06/15/2018,40,C,16.6,1.19,1660,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,Individual...39"))
+        pm.add_position(Transaction.fromString("2018-03-16T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LFIN  180615C00040000,Equity Option,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,1660,1,1660.0000000000002,-1.00,0.18999999999999995,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
         assert len(pm.open_lots) == 0
         assert len(pm.closed_trades) == 2
     
     def test_sprt_position(self):
         pm = PositionManager()
-        pm.add_position(Transaction.fromString("07/01/2021 8:57 PM,Trade,Buy to Open,SPRT,Buy,Open,200,,,,3.87,0.16,-774,Bought 200 SPRT @ 3.87,Individual...39"))
+        pm.add_position(Transaction.fromString("2021-07-01T20:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 200 SPRT @ 3.87,-774,200,3.87,-1.00,0.16,,SPRT,SPRT,,,,123456,USD"))
         lot = pm.open_lots[0]
         assert lot.symbol == 'SPRT'
         assert lot.quantity == 200
@@ -33,11 +33,11 @@ class TestPositionManager:
     def test_true_fifo_stock_logic(self):
         pm = PositionManager()
 
-        buy1_str = "01/01/2024 10:00 AM,Trade,Buy to Open,FIFO,Buy,Open,10,,,,,10.00,-100.00,Bought 10 FIFO @ 10,acc"
-        
-        buy2_str = "01/02/2024 10:00 AM,Trade,Buy to Open,FIFO,Buy,Open,10,,,,,10.00,-200.00,Bought 10 FIFO @ 20,acc"
-        
-        sell1_str = "01/03/2024 10:00 AM,Trade,Sell to Close,FIFO,Sell,Close,15,,,,,10.00,375.00,Sold 15 FIFO @ 25,acc"
+        buy1_str = "2024-01-01T10:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FIFO,Equity,Bought 10 FIFO @ 10,-100,10,10,-1.00,0.00,,FIFO,FIFO,,,,123456,USD"
+
+        buy2_str = "2024-01-02T10:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FIFO,Equity,Bought 10 FIFO @ 20,-200,10,20,-1.00,0.00,,FIFO,FIFO,,,,123456,USD"
+
+        sell1_str = "2024-01-03T10:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,FIFO,Equity,Sold 15 FIFO @ 25,375,15,25,-1.00,0.00,,FIFO,FIFO,,,,123456,USD"
 
         pm.add_position(Transaction.fromString(buy1_str))
         pm.add_position(Transaction.fromString(buy2_str))
@@ -57,13 +57,13 @@ class TestPositionManager:
         """Test correct prorating of values in partial position closures"""
         pm = PositionManager()
         
-        pm.add_position(Transaction.fromString("01/01/2024 9:00 AM,Trade,Buy to Open,XYZ,Buy,Open,100,,,,10,5,-1000,Bought 100 XYZ @ 10,Individual...39"))
+        pm.add_position(Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,Bought 100 XYZ @ 10,-1000,100,10,-1.00,4.0,,XYZ,XYZ,,,,123456,USD"))
         lot = pm.open_lots[0]
         assert lot.quantity == 100
         assert lot.amount_usd == -1000
         assert lot.fees_usd == 5
         
-        pm.add_position(Transaction.fromString("01/02/2024 9:00 AM,Trade,Sell to Close,XYZ,Sell,Close,50,,,,12,3,600,Sold 50 XYZ @ 12,Individual...39"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 50 XYZ @ 12,600,50,12,-1.00,2.0,,XYZ,XYZ,,,,123456,USD"))
         
         lot = pm.open_lots[0]
         assert lot.quantity == 50
@@ -79,15 +79,15 @@ class TestPositionManager:
         """Test that consecutive partial closures maintain proper accounting"""
         pm = PositionManager()
         
-        pm.add_position(Transaction.fromString("01/01/2024 9:00 AM,Trade,Buy to Open,XYZ,Buy,Open,100,,,,10,5,-1000,Bought 100 XYZ @ 10,Individual...39"))
+        pm.add_position(Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,Bought 100 XYZ @ 10,-1000,100,10,-1.00,4.0,,XYZ,XYZ,,,,123456,USD"))
         
-        pm.add_position(Transaction.fromString("01/02/2024 9:00 AM,Trade,Sell to Close,XYZ,Sell,Close,30,,,,12,3,360,Sold 30 XYZ @ 12,Individual...39"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 30 XYZ @ 12,360,30,12,-1.00,2.0,,XYZ,XYZ,,,,123456,USD"))
         
         lot = pm.open_lots[0]
         assert lot.quantity == 70
         assert abs(lot.amount_usd - (-700)) < 0.01
         
-        pm.add_position(Transaction.fromString("01/03/2024 9:00 AM,Trade,Sell to Close,XYZ,Sell,Close,40,,,,15,4,600,Sold 40 XYZ @ 15,Individual...39"))
+        pm.add_position(Transaction.fromString("2024-01-03T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 40 XYZ @ 15,600,40,15,-1.00,3.0,,XYZ,XYZ,,,,123456,USD"))
         
         lot = pm.open_lots[0]
         assert lot.quantity == 30
@@ -98,10 +98,10 @@ class TestPositionManager:
     def test_overclosing_position(self):
         """Test what happens when trying to close more shares than exist in position"""
         pm = PositionManager()
-        
+
         pm.add_position(Transaction.fromString(
-            "01/01/2024 9:00 AM,Trade,Buy to Open,XYZ,Buy,Open,10,,,,10,5,-100,Bought 10 XYZ @ 10,Individual...39"))
-        
+            "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,Bought 10 XYZ @ 10,-100,10,10,-1.00,4.00,,XYZ,XYZ,,,,123456,USD"))
+
         with pytest.raises(ValueError, match="Tried to close more shares than available for XYZ"):
             pm.add_position(Transaction.fromString(
-                "01/02/2024 9:00 AM,Trade,Sell to Close,XYZ,Sell,Close,20,,,,12,3,240,Sold 20 XYZ @ 12,Individual...39"))
+                "2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 20 XYZ @ 12,240,20,12,-1.00,2.00,,XYZ,XYZ,,,,123456,USD"))

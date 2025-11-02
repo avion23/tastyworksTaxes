@@ -1,16 +1,9 @@
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from datetime import datetime
-import logging
 import pandas as pd
 from io import StringIO
 from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money, convert_usd_to_eur
-from tastyworksTaxes.position import Option, Position, PositionType, Stock
-
-logger = logging.getLogger(__name__)
+from tastyworksTaxes.position import PositionType
 
 class Transaction(pd.core.series.Series):
 
@@ -40,21 +33,22 @@ class Transaction(pd.core.series.Series):
         def addEuroConversion(df):
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
-            
+
             df['AmountEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1)
             df['FeesEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1)
 
-        header = "Date/Time,Transaction Code,Transaction Subcode,Symbol,Buy/Sell,Open/Close,Quantity,Expiration Date,Strike,Call/Put,Price,Fees,Amount,Description,Account Reference"
+        # New format header
+        header = "Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency"
         csv = header + "\n" + line
 
         try:
-            df = pd.read_csv(StringIO(csv))
+            df_raw = pd.read_csv(StringIO(csv))
         except pd.errors.ParserError as e:
             raise ValueError(f"Could not parse '{line}' as Transaction. Original error: {str(e)}") from e
 
-        df = df.drop(columns=['Account Reference'])
-        df['Strike'] = df['Strike'].astype(float)
-        df['Amount'] = df['Amount'].astype(float)
+        # Transform using History's transformation logic
+        df = History._transform_new_format(df_raw)
+        df['Amount'] = df['Amount'].replace('', '0').astype(float)
 
         addEuroConversion(df)
         return Transaction(df.squeeze())
@@ -85,7 +79,7 @@ class Transaction(pd.core.series.Series):
         return self.isType("Call/Put", valid_options) and self.isType("Transaction Subcode", valid_subcodes)
 
     def isStock(self) -> bool:
-        return not not self.getSymbol() and pd.isnull(self["Strike"])
+        return bool(self.getSymbol()) and (pd.isnull(self["Strike"]) or self["Strike"] == 0.0)
 
     def getSymbol(self) -> str:
         symbol: str = str(self.loc["Symbol"])
