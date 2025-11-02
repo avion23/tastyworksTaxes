@@ -5,7 +5,7 @@ import os
 from tastyworksTaxes.history import History
 
 def test_fromFile():
-    t = History.fromFile("test/merged.csv")
+    t = History.fromFile("test/transactions_2018_to_2025.csv")
     assert isinstance(t, History)
     assert 'Date/Time' in t.columns
     assert 'Expiration Date' in t.columns
@@ -13,7 +13,7 @@ def test_fromFile():
     assert 'FeesEuro' in t.columns
 
 def test_addEuroConversion():
-    t = History.fromFile("test/merged.csv")
+    t = History.fromFile("test/transactions_2018_to_2025.csv")
     assert "AmountEuro" in t.columns
     assert "FeesEuro" in t.columns
 
