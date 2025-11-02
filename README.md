@@ -35,42 +35,60 @@ Before running the project, ensure all dependencies are installed. Execute the f
 pip install -r requirements.txt
 ```
 
-## Downloading Data from Tastyworks (changed in March 2024)
+## Downloading Data from Tastyworks
+
+**IMPORTANT: You MUST download "Transactions" history, NOT "Orders" or "Activity" data.**
 
 1. Go to https://my.tastytrade.com/app.html#/trading/activity
-2. Set the date filter.
-3. Set to show only "filled" trades.
-4. Click the little "upload" button (it's an upload symbol, not download) to export.
+2. Click on "Transactions" tab (NOT "Orders" or "Activity")
+3. Set the date filter to your desired range
+4. Set to show only "filled" trades
+5. Click the export button to download the CSV file
 
-⚠️ Heads Up
-- Export limit is now 1000 rows.
-- If you use the new platform, you need to convert the new data format to the old format using the `legacy.py` tool.
-- New data format might be mergable automatically.
-
-### Converting New Format to Legacy Format
-
-For the new platform data format, use the legacy converter:
-
-```bash
-python tastyworksTaxes/legacy.py <new-format.csv> <output-legacy-format.csv>
-```
+⚠️ Important Notes:
+- Export limit is 1000 rows per file
+- Only the new TastyTrade format (21 columns, ISO 8601 dates) is supported
+- The old TastyWorks format is no longer supported (as of November 2024)
+- If you have more than 1000 transactions, download multiple files with different date ranges and merge them (see below)
 
 ## Usage
 
 After installing the dependencies, you can run the main program using:
 
 ```bash
-python tastyworksTaxes/main.py [--write-closed-trades <output-file.csv>] <tastyworks-data.csv>
+python -m tastyworksTaxes.main [--write-closed-trades <output-file.csv>] <tastyworks-data.csv>
+```
+
+Example with test data (2018-2025):
+```bash
+python -m tastyworksTaxes.main test/transactions_2018_to_2025.csv
 ```
 
 ### Merging Multiple CSV Files
 
-If you have multiple export files from Tastyworks due to the 1000 row limit, you can merge them before processing:
+If you have multiple export files from Tastyworks due to the 1000 row limit, you can merge them using Python:
 
+```python
+import pandas as pd
+
+# Read all CSV files
+df1 = pd.read_csv('file1.csv')
+df2 = pd.read_csv('file2.csv')
+df3 = pd.read_csv('file3.csv')
+
+# Concatenate and remove duplicates (keep all if no duplicates)
+merged = pd.concat([df1, df2, df3], ignore_index=True)
+merged = merged.drop_duplicates()
+
+# Sort by date (oldest first)
+merged = merged.sort_values('Date', ascending=False)
+merged.to_csv('merged.csv', index=False)
+```
+
+Or use simple shell commands if files don't overlap:
 ```bash
-cat file1.csv file2.csv file3.csv > merged.csv
-# Remove duplicate headers before processing
-awk '!seen[$0]++' merged.csv > merged_clean.csv
+# If date ranges don't overlap, simple concatenation works
+(head -1 file1.csv && tail -n +2 file1.csv && tail -n +2 file2.csv && tail -n +2 file3.csv) > merged.csv
 ```
 
 ### Test-Driven Development
