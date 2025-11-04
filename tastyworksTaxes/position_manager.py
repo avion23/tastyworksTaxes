@@ -1,49 +1,82 @@
 import logging
+from collections import defaultdict, deque
+from dataclasses import dataclass
+from datetime import datetime
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.constants import TransactionSubcode, OpenClose, Fields, CLOSING_SUBCODES
 from tastyworksTaxes.fifo_processor import FifoProcessor, TradeResult
+from tastyworksTaxes.position import PositionType
 
 logger = logging.getLogger(__name__)
 
+@dataclass(frozen=True)
+class InstrumentKey:
+    """Immutable key for uniquely identifying an instrument"""
+    symbol: str
+    position_type: PositionType
+    strike: float | None = None
+    expiry: datetime | None = None
+    call_put: str | None = None
+
 class PositionManager:
     def __init__(self):
-        self.open_lots = []
+        self.open_lots: dict[InstrumentKey, deque[PositionLot]] = defaultdict(deque)
         self.closed_trades = []
+
+    def _get_key_from_transaction(self, transaction) -> InstrumentKey:
+        """Generate InstrumentKey from transaction for O(1) lot lookup"""
+        position_type = transaction.getType()
+        if position_type == PositionType.stock:
+            return InstrumentKey(transaction.getSymbol(), position_type, None, None, None)
+        return InstrumentKey(
+            transaction.getSymbol(),
+            position_type,
+            transaction.getStrike(),
+            transaction.getExpiry(),
+            transaction.loc[Fields.CALL_PUT.value]
+        )
+
+    def get_all_open_lots(self) -> list[PositionLot]:
+        """Return flat list of all open lots (for testing/debugging)"""
+        all_lots = []
+        for lots_queue in self.open_lots.values():
+            all_lots.extend(lots_queue)
+        return sorted(all_lots, key=lambda x: x.date)
+
+    def add_lot_directly(self, lot: PositionLot):
+        """Add a lot directly to open_lots (for testing only)"""
+        key = InstrumentKey(
+            lot.symbol,
+            lot.position_type,
+            lot.strike,
+            lot.expiry,
+            lot.call_put
+        )
+        self.open_lots[key].append(lot)
     
     def add_position(self, transaction):
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
 
-        # Intercept Symbol Change and Stock Merger events specifically to prevent them from being treated as trades.
         if subcode in {TransactionSubcode.SYMBOL_CHANGE.value, TransactionSubcode.STOCK_MERGER.value}:
-            # The broker uses a "close" on the old symbol and an "open" on the new symbol.
-            # We must treat this not as a trade, but as an atomic mutation.
-
-            # If this is the "close" leg, we find the matching lot and simply remove it from the open lots
-            # without generating a closed trade. It is effectively "staged" for the mutation.
             if self._is_closing_transaction(transaction):
-                matching_lots = self._find_matching_lots(transaction)
+                key = self._get_key_from_transaction(transaction)
+                matching_lots = self.open_lots.get(key)
                 if not matching_lots:
                     logger.warning(f"Symbol Change 'close' leg for {transaction.getSymbol()} found no open position to mutate.")
                     return
 
-                # Assuming the first match is the correct one in a chronological scan.
                 lot_to_remove = matching_lots[0]
-                self.open_lots.remove(lot_to_remove)
+                matching_lots.popleft()
+                if not matching_lots:
+                    del self.open_lots[key]
                 logger.debug(f"Symbol Change: Removed lot {lot_to_remove.symbol} qty={lot_to_remove.quantity} basis={lot_to_remove.amount_usd:.2f}")
 
-            # If this is the "open" leg, we treat it as a normal opening trade.
-            # Crucially, its cost basis (amount) will be the opposite of the "close" leg,
-            # effectively transferring the basis. The FIFO logic will correctly match these later.
-            # In a tax context, this is a wash sale, but for our FIFO queue, it's just a new lot
-            # that will be matched against the final, real closing trade.
-            else: # It's an opening transaction
+            else:
                 self._open_position(transaction)
                 logger.debug(f"Symbol Change: Added new lot {transaction.getSymbol()} qty={transaction.getQuantity()} basis={transaction.getValue().usd:.2f}")
-            
-            # In either case, we stop processing here for Symbol Change events.
+
             return
 
-        # --- Standard processing for all other transaction types ---
         if subcode == TransactionSubcode.REVERSE_SPLIT.value:
             if self._handle_reverse_split(transaction):
                 return
@@ -60,7 +93,7 @@ class PositionManager:
     
     def _open_position(self, transaction):
         logger.info(f"{transaction.getDateTime():<19} Adding '{transaction.getQuantity():>4}' of '{transaction.getSymbol():<6}' to positions")
-        
+
         lot = PositionLot(
             symbol=transaction.getSymbol(),
             position_type=transaction.getType(),
@@ -74,86 +107,67 @@ class PositionManager:
             expiry=transaction.getExpiry() if transaction.getType().name != 'stock' else None,
             call_put=transaction.loc[Fields.CALL_PUT.value] if transaction.getType().name != 'stock' else None
         )
-        
-        self.open_lots.append(lot)
+
+        key = self._get_key_from_transaction(transaction)
+        self.open_lots[key].append(lot)
     
     def _close_position(self, transaction):
         quantity_to_close = abs(transaction.getQuantity())
         closing_quantity = transaction.getQuantity()
-        
-        matching_lots = self._find_matching_lots(transaction)
-        
+
+        key = self._get_key_from_transaction(transaction)
+        matching_lots = self.open_lots.get(key)
+
         if not matching_lots:
             raise ValueError(f"Tried to close a position but no previous position found for {transaction}")
-        
-        lots_to_remove = []
-        
+
+        lots_processed = []
+
         for lot in matching_lots:
             if quantity_to_close < 1e-6:
                 break
-                
+
             subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
             if subcode not in {'Expiration', 'Assignment'} and not lot.can_close_with(closing_quantity):
                 continue
-                
+
             closable_quantity = lot.get_closable_quantity(quantity_to_close)
-            
-            opening_was_long = (lot.quantity > 0)
+
+            opening_was_long = (lot.amount_usd < 0)
             lot_before = f"{lot.quantity} @ {lot.amount_usd:.2f}"
             consumed_values = lot.consume(closable_quantity)
             lot_after = f"{lot.quantity} @ {lot.amount_usd:.2f}" if not lot.is_empty() else "empty"
-            
+
             trade_result = FifoProcessor.create_trade_result(lot, transaction, closable_quantity, consumed_values, opening_was_long)
             self.closed_trades.append(trade_result)
-            
+
             logger.info(f"{trade_result.opening_date:<19} - {trade_result.closing_date:<19} closing {trade_result.quantity:>4} {trade_result.symbol:<6}")
             logger.debug(f"Consumed {closable_quantity} from lot: {lot_before} -> {lot_after}")
-            
-            if lot.is_empty():
-                lots_to_remove.append(lot)
-            
+
+            lots_processed.append(lot)
             quantity_to_close -= closable_quantity
-        
-        for lot in lots_to_remove:
-            self.open_lots.remove(lot)
-        
+
+        while matching_lots and matching_lots[0].is_empty():
+            matching_lots.popleft()
+
+        if not matching_lots:
+            del self.open_lots[key]
+
         if quantity_to_close > 1e-6:
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
     
-    def _find_matching_lots(self, transaction):
-        symbol = transaction.getSymbol()
-        position_type = transaction.getType()
-        strike = transaction.getStrike() if position_type.name != 'stock' else None
-        expiry = transaction.getExpiry() if position_type.name != 'stock' else None
-        call_put = transaction.loc[Fields.CALL_PUT.value] if position_type.name != 'stock' else None
-        
-        matching_lots = []
-        for lot in self.open_lots:
-            if lot.matches(symbol, position_type, strike, expiry, call_put):
-                matching_lots.append(lot)
-        
-        if not matching_lots:
-            logger.warning(f"No matching lots found for {symbol} {position_type} {strike} {expiry} {call_put}. Open lots: {len(self.open_lots)}")
-        else:
-            logger.debug(f"Found {len(matching_lots)} matching lots for {symbol} {position_type}")
-        
-        return sorted(matching_lots, key=lambda x: x.date)
-    
     def _handle_reverse_split(self, transaction):
-        # Guard Clause: If the description contains option symbols (not ratio information),
-        # it's a mislabeled trade, not a pure corporate action. Do not handle it here.
         description = transaction.loc['Description']
-        # Look for option symbol patterns like "200717P00002000" (6 digits + letter + 8 digits)
         import re
         if re.search(r'\d{6}[CP]\d{8}', description):
             logger.debug(f"Reverse split is a trade, not a mutation: {description}")
-            return False # Fall back to standard trade processing.
+            return False
         symbol_to_split = transaction.getSymbol()
         
         ratio_patterns = [
-            r'(\d+):(\d+)',  # "1:8" or "8:1"
-            r'(\d+)-for-(\d+)',  # "1-for-8"
-            r'(\d+)\s*for\s*(\d+)',  # "1 for 8"
+            r'(\d+):(\d+)',
+            r'(\d+)-for-(\d+)',
+            r'(\d+)\s*for\s*(\d+)',
         ]
         
         ratio = None
@@ -172,17 +186,23 @@ class PositionManager:
             logger.warning(f"Using hardcoded ratio for {symbol_to_split}")
         
         if ratio is not None:
-            affected_lots = [lot for lot in self.open_lots if lot.symbol == symbol_to_split]
-            logger.warning(f"Applying reverse split ratio {ratio} to {len(affected_lots)} open '{symbol_to_split}' lots.")
-            
-            for lot in affected_lots:
-                old_qty = lot.quantity
-                old_strike = getattr(lot, 'strike', None)
-                lot.adjust_for_split(ratio)
-                logger.debug(f"Split adjusted lot: qty {old_qty} -> {lot.quantity}, strike {old_strike} -> {getattr(lot, 'strike', None)}")
-            return True # Event was handled successfully.
+            affected_keys = [key for key in self.open_lots.keys() if key.symbol == symbol_to_split]
+            total_lots = sum(len(self.open_lots[key]) for key in affected_keys)
+            logger.warning(f"Applying reverse split ratio {ratio} to {total_lots} open '{symbol_to_split}' lots.")
+
+            for key in affected_keys:
+                lots_queue = self.open_lots[key]
+                original_count = len(lots_queue)
+
+                for lot in lots_queue:
+                    old_qty = lot.quantity
+                    old_strike = getattr(lot, 'strike', None)
+                    lot.adjust_for_split(ratio)
+                    logger.debug(f"Split adjusted lot: qty {old_qty} -> {lot.quantity}, strike {old_strike} -> {getattr(lot, 'strike', None)}")
+
+            return True
         else:
             logger.error(f"CRITICAL: Reverse split for {symbol_to_split} could not be parsed from description: '{description}'. This may result in incorrect position tracking. Manual verification required.")
-            return False # Fall back to standard trade processing.
+            return False
     
     

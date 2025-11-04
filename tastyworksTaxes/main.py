@@ -44,8 +44,6 @@ def main() -> None:
     t.run()
     for year, values in t.yearValues.items():
         print(f"Values for year {year} in Euro:")
-        # for attr, value in vars(values).items():
-            # print(f"{attr}: {value}")
         p = Printer(values=values, closed_trades=t.position_manager.closed_trades)
         print(p.generateDummyReport())
     if args.write_closed_trades:

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+from math import floor, ceil
 import logging
 from tastyworksTaxes.constants import Fields
 from tastyworksTaxes.position import PositionType
@@ -67,15 +68,24 @@ class PositionLot:
         return consumed_values
     
     def adjust_for_split(self, ratio):
-        new_qty = int(round(self.quantity * ratio))
-        if new_qty == 0 and self.quantity != 0:
-            logger.warning(f"Split rounding produced 0 from {self.quantity} with ratio {ratio}")
-        self.amount_usd *= (new_qty / self.quantity) if self.quantity else 0.0
-        self.amount_eur *= (new_qty / self.quantity) if self.quantity else 0.0
-        self.fees_usd   *= (new_qty / self.quantity) if self.quantity else 0.0
-        self.fees_eur   *= (new_qty / self.quantity) if self.quantity else 0.0
+        if self.quantity == 0:
+            return
+
+        target = self.quantity * ratio
+        new_qty = floor(target) if self.quantity > 0 else ceil(target)
+
+        if new_qty == 0:
+            logger.warning(f"Split rounding produced 0 from {self.quantity} with ratio {ratio} for {self.symbol}. The lot will be zeroed but basis retained for reporting.")
+        elif target != 0:
+            scale = new_qty / target
+            self.amount_usd *= scale
+            self.amount_eur *= scale
+            self.fees_usd *= scale
+            self.fees_eur *= scale
+
         self.quantity = new_qty
-        if self.strike:
+
+        if self.strike is not None:
             self.strike = self.strike / ratio
     
     def is_empty(self):

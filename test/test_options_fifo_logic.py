@@ -18,7 +18,9 @@ def test_true_fifo_option_logic():
     total_profit = sum(t.profit_usd for t in tasty.position_manager.closed_trades)
     assert round(total_profit, 2) == 17500.00
 
-    remaining_lot = tasty.position_manager.open_lots[0]
+    remaining_lots = tasty.position_manager.get_all_open_lots()
+    assert len(remaining_lots) == 1
+    remaining_lot = remaining_lots[0]
     assert remaining_lot.quantity == 5
 
     remaining_cost_basis = remaining_lot.amount_usd
