@@ -107,6 +107,7 @@ python -m pytest test -s --log-cli-level=DEBUG
 
 ## Recent Improvements
 
+- **Split Handling Fixed**: Reverse splits now correctly handle short positions (ceiling rounding), scale cost basis to maintain per-share cost, and preserve basis for zero-quantity lots
 - **Corporate Actions Fixed**: Symbol Changes and Stock Mergers now preserve original cost basis instead of incorrectly realizing gains/losses
 - **Enhanced Partial Exemptions**: Partial exemption (Teilfreistellung) calculation improved for equity ETFs (30%). Other fund types (Mixed, Real Estate) are correctly identified and generate warnings, but their specific exemption rates are not yet applied in the final tax summary
 - **Improved FIFO Processing**: Refactored to forward-chronological processing for more accurate trade matching

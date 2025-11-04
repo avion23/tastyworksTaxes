@@ -137,13 +137,8 @@ def test_uso():
         "Net Liquidating Value": 110.63,
     }
 
-    # given
     t = Tasty("test/uso.csv")
     values = t.run()
     pprint(t)
     pprint(values)
-    # printer = Printer(t.yearValues[2020], t.position_manager.closed_trades)
     pprint(t.position_manager.closed_trades)
-    # de = printer.GermanTaxReport()
-    # en = printer.EnglishTaxReport()
-    # assert (de == en)
