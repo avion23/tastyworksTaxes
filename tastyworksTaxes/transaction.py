@@ -1,7 +1,6 @@
 from datetime import datetime
 import pandas as pd
 from io import StringIO
-from tastyworksTaxes.history import History
 from tastyworksTaxes.money import Money, convert_usd_to_eur
 from tastyworksTaxes.position import PositionType
 
@@ -30,6 +29,8 @@ class Transaction(pd.core.series.Series):
 
     @classmethod
     def fromString(cls, line: str):
+        from tastyworksTaxes.history import History
+
         def addEuroConversion(df):
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
@@ -37,7 +38,6 @@ class Transaction(pd.core.series.Series):
             df['AmountEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1)
             df['FeesEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1)
 
-        # New format header
         header = "Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency"
         csv = header + "\n" + line
 
@@ -46,8 +46,7 @@ class Transaction(pd.core.series.Series):
         except pd.errors.ParserError as e:
             raise ValueError(f"Could not parse '{line}' as Transaction. Original error: {str(e)}") from e
 
-        # Transform using History's transformation logic
-        df = History._transform_new_format(df_raw)
+        df = History._transform(df_raw)
         df['Amount'] = df['Amount'].replace('', '0').astype(float)
 
         addEuroConversion(df)

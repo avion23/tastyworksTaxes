@@ -11,9 +11,7 @@ class History(pd.DataFrame):
     @classmethod
     def fromFile(cls, path):
         df_raw = pd.read_csv(path)
-
-        # Transform new format to internal format
-        df = cls._transform_new_format(df_raw)
+        df = cls._transform(df_raw)
 
         df = History(df)
         df.sort_values('Date/Time', inplace=True)
@@ -23,11 +21,9 @@ class History(pd.DataFrame):
         return df
 
     @staticmethod
-    def _transform_new_format(df: pd.DataFrame) -> pd.DataFrame:
-        """Transform new TastyWorks CSV format to internal format"""
+    def _transform(df: pd.DataFrame) -> pd.DataFrame:
         internal_df = pd.DataFrame()
 
-        # Date: ISO 8601 -> datetime (convert to naive UTC for compatibility)
         def parse_date(date_str):
             if pd.isna(date_str):
                 return pd.NaT
@@ -38,20 +34,14 @@ class History(pd.DataFrame):
                 raise ValueError(f"Failed to parse date '{date_str}': {e}")
 
         internal_df['Date/Time'] = df['Date'].apply(parse_date)
-
-        # Direct mappings
         internal_df['Transaction Code'] = df['Type']
         internal_df['Transaction Subcode'] = df['Sub Type']
-
-        # Symbol: extract root (first word)
         internal_df['Symbol'] = df['Symbol'].apply(
             lambda x: str(x).split()[0] if pd.notna(x) and x != '' else '')
 
-        # Buy/Sell: infer from Sub Type or Action
         def extract_buy_sell(row):
             sub_type = str(row.get('Sub Type', ''))
             action = str(row.get('Action', ''))
-
             if 'Buy' in sub_type:
                 return 'Buy'
             elif 'Sell' in sub_type:
@@ -63,19 +53,12 @@ class History(pd.DataFrame):
             return ''
 
         internal_df['Buy/Sell'] = df.apply(extract_buy_sell, axis=1)
-
-        # Open/Close: extract from Action field
         internal_df['Open/Close'] = df['Action'].apply(
             lambda x: str(x).split('_TO_')[-1].capitalize() if pd.notna(x) and '_TO_' in str(x) else '')
-
-        # Quantity
         internal_df['Quantity'] = df['Quantity'] if 'Quantity' in df else 0
-
-        # Expiration Date: M/D/YY -> datetime
         internal_df['Expiration Date'] = pd.to_datetime(
             df['Expiration Date'], format='%m/%d/%y', errors='coerce')
 
-        # Strike: convert to float (0 for stocks, actual value for options)
         def parse_strike(strike):
             if pd.isna(strike) or strike == '':
                 return 0.0
@@ -86,7 +69,6 @@ class History(pd.DataFrame):
 
         internal_df['Strike'] = df['Strike Price'].apply(parse_strike) if 'Strike Price' in df else 0.0
 
-        # Call/Put: extract first character
         def format_call_put(cp):
             if pd.notna(cp) and cp not in ('', '--'):
                 return str(cp)[0]
@@ -94,17 +76,14 @@ class History(pd.DataFrame):
 
         internal_df['Call/Put'] = df['Call or Put'].apply(format_call_put) if 'Call or Put' in df else ''
 
-        # Price: divide by 100 for options, keep for stocks - return as float
         def parse_price(row):
             price = row.get('Average Price', None)
             if pd.isna(price) or price == '--' or price == 0 or price == '':
                 return 0.0
-
             try:
                 price_float = float(str(price).replace(',', ''))
                 symbol = row.get('Symbol', '')
                 is_option = len(str(symbol).split()) > 1
-
                 if is_option:
                     return price_float / 100
                 else:
@@ -117,11 +96,9 @@ class History(pd.DataFrame):
         else:
             internal_df['Price'] = 0.0
 
-        # Fees: sum Commissions + Fees (absolute values) - keep as float
         def calc_fees(row):
             commissions = row.get('Commissions', 0)
             fees = row.get('Fees', 0)
-
             try:
                 comm_val = abs(float(str(commissions).replace(',', ''))) if commissions != '--' and pd.notna(commissions) else 0
                 fees_val = abs(float(str(fees).replace(',', ''))) if fees != '--' and pd.notna(fees) else 0
@@ -135,7 +112,6 @@ class History(pd.DataFrame):
             internal_df['Fees'] = df['Fees'].apply(
                 lambda x: abs(float(str(x).replace(',', ''))) if pd.notna(x) and x != '--' and x != 0 else 0.0)
 
-        # Amount: direct copy as float
         def parse_amount(amount):
             if pd.isna(amount):
                 return 0.0
@@ -145,12 +121,9 @@ class History(pd.DataFrame):
                 raise ValueError(f"Failed to parse amount '{amount}': {e}")
 
         internal_df['Amount'] = df['Value'].apply(parse_amount)
-
-        # Description: direct copy
         internal_df['Description'] = df['Description']
 
         return internal_df
-
 
     def addEuroConversion(self):
         """ adds a new column called "AmountEuro" and "FeesEuro" to the dataframe
