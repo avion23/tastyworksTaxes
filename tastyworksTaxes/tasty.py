@@ -4,7 +4,7 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position_manager import PositionManager
-from tastyworksTaxes.constants import TransactionCode, MoneyMovementType, Fields
+from tastyworksTaxes.constants import TransactionCode, Fields
 from tastyworksTaxes.trade_calculator import (
     calculate_combined_sum, calculate_option_sum, calculate_long_option_profits,
     calculate_long_option_losses, calculate_long_option_total_losses,
@@ -32,63 +32,42 @@ class Tasty:
         return self.yearValues[year]
 
     def moneyMovement(self, row):
+        import re
         t = Transaction(row)
         m = Money(row=row)
-        
-        def handle_transfer(t, m):
-            self.year(t.getYear()).transfer += m
-            
-        def handle_withdrawal(t, m):
-            import re
-            if "Wire Funds Received" in t.loc["Description"]:
-                self.year(t.getYear()).deposit += m
-            elif re.match(r'.*FROM \d{2}/\d{2} THRU \d{2}/\d{2} @.*', t.loc["Description"]):
-                self.year(t.getYear()).debitInterest += m
-            else:
-                self.year(t.getYear()).withdrawal += m
-                
-        def handle_balance_adjustment(t, m):
-            self.year(t.getYear()).balanceAdjustment += m
-            
-        def handle_fee(t, m):
-            self.year(t.getYear()).fee += m
-            
-        def handle_deposit(t, m):
-            if t.loc["Description"] == "INTEREST ON CREDIT BALANCE":
-                self.year(t.getYear()).creditInterest += m
-            else:
-                self.year(t.getYear()).deposit += m
-                
-        def handle_credit_interest(t, m):
-            self.year(t.getYear()).creditInterest += m
-            
-        def handle_debit_interest(t, m):
-            self.year(t.getYear()).debitInterest += m
-            
-        def handle_dividend(t, m):
-            self.year(t.getYear()).dividend += m
-            
-        def handle_stock_lending(t, m):
-            self.year(t.getYear()).securitiesLendingIncome += m
-        
-        handlers = {
-            MoneyMovementType.TRANSFER.value: handle_transfer,
-            MoneyMovementType.WITHDRAWAL.value: handle_withdrawal,
-            MoneyMovementType.BALANCE_ADJUSTMENT.value: handle_balance_adjustment,
-            MoneyMovementType.FEE.value: handle_fee,
-            MoneyMovementType.DEPOSIT.value: handle_deposit,
-            MoneyMovementType.CREDIT_INTEREST.value: handle_credit_interest,
-            MoneyMovementType.DEBIT_INTEREST.value: handle_debit_interest,
-            MoneyMovementType.DIVIDEND.value: handle_dividend,
-            MoneyMovementType.STOCK_LENDING.value: handle_stock_lending
-        }
-        
-        subcode = t.loc["Transaction Subcode"]
-        if subcode in handlers:
-            handlers[subcode](t, m)
-        else:
-            raise ValueError(f"CRITICAL: Unknown money movement subcode '{subcode}' in transaction: {t.loc['Description']}. "
-                           f"This could affect tax calculations. Please add handler for this subcode or verify it should be ignored.")
+        year_values = self.year(t.getYear())
+        desc = t.loc["Description"]
+
+        match t.loc["Transaction Subcode"]:
+            case "Transfer":
+                year_values.transfer += m
+            case "Withdrawal":
+                if "Wire Funds Received" in desc:
+                    year_values.deposit += m
+                elif re.match(r'.*FROM \d{2}/\d{2} THRU \d{2}/\d{2} @.*', desc):
+                    year_values.debitInterest += m
+                else:
+                    year_values.withdrawal += m
+            case "Balance Adjustment":
+                year_values.balanceAdjustment += m
+            case "Fee":
+                year_values.fee += m
+            case "Deposit":
+                if desc == "INTEREST ON CREDIT BALANCE":
+                    year_values.creditInterest += m
+                else:
+                    year_values.deposit += m
+            case "Credit Interest":
+                year_values.creditInterest += m
+            case "Debit Interest":
+                year_values.debitInterest += m
+            case "Dividend":
+                year_values.dividend += m
+            case "Fully Paid Stock Lending Income":
+                year_values.securitiesLendingIncome += m
+            case subcode:
+                raise ValueError(f"CRITICAL: Unknown money movement subcode '{subcode}' in transaction: {desc}. "
+                               f"This could affect tax calculations.")
 
 
     def print(self):
