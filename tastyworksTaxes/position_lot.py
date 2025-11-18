@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from math import floor, ceil
 import logging
@@ -41,15 +41,15 @@ class PositionLot:
     def consume(self, quantity_to_consume):
         if abs(quantity_to_consume) > abs(self.quantity):
             raise ValueError(f"Cannot consume {quantity_to_consume} from lot with quantity {self.quantity}")
-        
+
         abs_original_quantity = abs(self.quantity)
         percentage_consumed = quantity_to_consume / abs_original_quantity
-        
+
         consumed_amount_usd = self.amount_usd * percentage_consumed
-        consumed_amount_eur = self.amount_eur * percentage_consumed  
+        consumed_amount_eur = self.amount_eur * percentage_consumed
         consumed_fees_usd = self.fees_usd * percentage_consumed
         consumed_fees_eur = self.fees_eur * percentage_consumed
-        
+
         consumed_values = {
             Fields.AMOUNT.value: consumed_amount_usd,
             Fields.AMOUNT_EURO.value: consumed_amount_eur,
@@ -58,14 +58,17 @@ class PositionLot:
         }
 
         sign = 1 if self.quantity > 0 else -1
-        self.quantity -= sign * quantity_to_consume
-        
-        self.amount_usd -= consumed_amount_usd
-        self.amount_eur -= consumed_amount_eur
-        self.fees_usd -= consumed_fees_usd  
-        self.fees_eur -= consumed_fees_eur
+        new_quantity = self.quantity - (sign * quantity_to_consume)
 
-        return consumed_values
+        new_lot = replace(self,
+            quantity=new_quantity,
+            amount_usd=self.amount_usd - consumed_amount_usd,
+            amount_eur=self.amount_eur - consumed_amount_eur,
+            fees_usd=self.fees_usd - consumed_fees_usd,
+            fees_eur=self.fees_eur - consumed_fees_eur,
+        )
+
+        return new_lot, consumed_values
     
     def adjust_for_split(self, ratio):
         if self.quantity == 0:

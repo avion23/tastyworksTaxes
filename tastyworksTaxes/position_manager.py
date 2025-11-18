@@ -121,34 +121,34 @@ class PositionManager:
         if not matching_lots:
             raise ValueError(f"Tried to close a position but no previous position found for {transaction}")
 
-        lots_processed = []
-
-        for lot in matching_lots:
-            if quantity_to_close < 1e-6:
-                break
+        while quantity_to_close > 1e-6 and matching_lots:
+            lot_to_process = matching_lots[0]
 
             subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
-            if subcode not in {'Expiration', 'Assignment'} and not lot.can_close_with(closing_quantity):
-                continue
+            if subcode not in {'Expiration', 'Assignment'} and not lot_to_process.can_close_with(closing_quantity):
+                break
 
-            closable_quantity = lot.get_closable_quantity(quantity_to_close)
+            matching_lots.popleft()
 
-            opening_was_long = (lot.amount_usd < 0)
-            lot_before = f"{lot.quantity} @ {lot.amount_usd:.2f}"
-            consumed_values = lot.consume(closable_quantity)
-            lot_after = f"{lot.quantity} @ {lot.amount_usd:.2f}" if not lot.is_empty() else "empty"
+            closable_quantity = lot_to_process.get_closable_quantity(quantity_to_close)
 
-            trade_result = FifoProcessor.create_trade_result(lot, transaction, closable_quantity, consumed_values, opening_was_long)
+            opening_was_long = (lot_to_process.amount_usd < 0)
+            lot_before = f"{lot_to_process.quantity} @ {lot_to_process.amount_usd:.2f}"
+
+            new_lot, consumed_values = lot_to_process.consume(closable_quantity)
+
+            lot_after = f"{new_lot.quantity} @ {new_lot.amount_usd:.2f}" if not new_lot.is_empty() else "empty"
+
+            trade_result = FifoProcessor.create_trade_result(lot_to_process, transaction, closable_quantity, consumed_values, opening_was_long)
             self.closed_trades.append(trade_result)
 
             logger.info(f"{trade_result.opening_date:<19} - {trade_result.closing_date:<19} closing {trade_result.quantity:>4} {trade_result.symbol:<6}")
             logger.debug(f"Consumed {closable_quantity} from lot: {lot_before} -> {lot_after}")
 
-            lots_processed.append(lot)
-            quantity_to_close -= closable_quantity
+            if not new_lot.is_empty():
+                matching_lots.appendleft(new_lot)
 
-        while matching_lots and matching_lots[0].is_empty():
-            matching_lots.popleft()
+            quantity_to_close -= closable_quantity
 
         if not matching_lots:
             del self.open_lots[key]
