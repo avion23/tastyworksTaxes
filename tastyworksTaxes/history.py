@@ -139,7 +139,3 @@ class History(pd.DataFrame):
         if "Date/Time" not in self.columns:
             raise ValueError(
                 "Couldn't find the first column labeled Date/Time in the csv file")
-
-
-    # _merge method removed - was problematic due to non-unique timestamps
-    # Use manual CSV concatenation: ls -r 20*.csv | tr '\n' '\0' |xargs -0 cat > merged.csv
