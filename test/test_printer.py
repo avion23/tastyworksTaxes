@@ -7,9 +7,6 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from pprint import pprint
-
-
 from tastyworksTaxes.printer import Printer
 from tastyworksTaxes.tasty import Tasty
 
@@ -139,6 +136,3 @@ def test_uso():
 
     t = Tasty("test/uso.csv")
     values = t.run()
-    pprint(t)
-    pprint(values)
-    pprint(t.position_manager.closed_trades)
