@@ -115,7 +115,12 @@ def calculate_option_differential(trades: List[TradeResult]) -> Money:
 
 def calculate_stock_loss(trades: List[TradeResult]) -> Money:
     filtered_trades = get_loss_trades(get_stock_trades(trades))
-    return sum_money_from_trades(filtered_trades)
+    if not filtered_trades:
+        return Money()
+    return Money(
+        usd=sum(t.profit_usd - t.fees_usd for t in filtered_trades),
+        eur=sum(t.profit_eur - t.fees_eur for t in filtered_trades)
+    )
 
 def calculate_stock_fees(trades: List[TradeResult]) -> Money:
     stock_trades = get_stock_trades(trades)
@@ -149,37 +154,40 @@ def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money
     profitable_stock_trades = get_profitable_trades(get_stock_trades(trades))
     if not profitable_stock_trades:
         return Money()
-    
+
     total_taxable_eur = 0.0
     total_taxable_usd = 0.0
-    
+
     for trade in profitable_stock_trades:
         classification = classifier.classify(trade.symbol, trade.position_type)
-        
+
         if classification == 'EQUITY_ETF':
             exemption_pct = classifier.get_exemption_percentage(classification)
             taxable_portion = 1.0 - (exemption_pct / 100.0)
-            
-            total_taxable_eur += trade.profit_eur * taxable_portion
-            total_taxable_usd += trade.profit_usd * taxable_portion
-            
+
+            net_profit_eur = trade.profit_eur - trade.fees_eur
+            net_profit_usd = trade.profit_usd - trade.fees_usd
+
+            total_taxable_eur += net_profit_eur * taxable_portion
+            total_taxable_usd += net_profit_usd * taxable_portion
+
             logger.debug(f"Applied {exemption_pct}% Teilfreistellung to {trade.symbol}")
-    
+
     return Money(usd=total_taxable_usd, eur=total_taxable_eur)
 
 def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier) -> Money:
     profitable_stock_trades = get_profitable_trades(get_stock_trades(trades))
     if not profitable_stock_trades:
         return Money()
-    
+
     total_eur = 0.0
     total_usd = 0.0
-    
+
     for trade in profitable_stock_trades:
         classification = classifier.classify(trade.symbol, trade.position_type)
-        
+
         if classification not in ['EQUITY_ETF']:
-            total_eur += trade.profit_eur
-            total_usd += trade.profit_usd
-    
+            total_eur += trade.profit_eur - trade.fees_eur
+            total_usd += trade.profit_usd - trade.fees_usd
+
     return Money(usd=total_usd, eur=total_eur)

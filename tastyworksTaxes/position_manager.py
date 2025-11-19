@@ -69,11 +69,11 @@ class PositionManager:
                 matching_lots.popleft()
                 if not matching_lots:
                     del self.open_lots[key]
+                self._pending_symbol_change_lot = lot_to_remove
                 logger.debug(f"Symbol Change: Removed lot {lot_to_remove.symbol} qty={lot_to_remove.quantity} basis={lot_to_remove.amount_usd:.2f}")
 
             else:
-                self._open_position(transaction)
-                logger.debug(f"Symbol Change: Added new lot {transaction.getSymbol()} qty={transaction.getQuantity()} basis={transaction.getValue().usd:.2f}")
+                self._open_position_from_symbol_change(transaction)
 
             return
 
@@ -110,7 +110,33 @@ class PositionManager:
 
         key = self._get_key_from_transaction(transaction)
         self.open_lots[key].append(lot)
-    
+
+    def _open_position_from_symbol_change(self, transaction):
+        old_lot = getattr(self, '_pending_symbol_change_lot', None)
+        if old_lot is None:
+            logger.warning(f"Symbol Change 'open' leg for {transaction.getSymbol()} has no pending lot to transfer basis from. Using CSV values.")
+            self._open_position(transaction)
+            return
+
+        lot = PositionLot(
+            symbol=transaction.getSymbol(),
+            position_type=transaction.getType(),
+            quantity=transaction.getQuantity(),
+            amount_usd=old_lot.amount_usd,
+            amount_eur=old_lot.amount_eur,
+            fees_usd=old_lot.fees_usd,
+            fees_eur=old_lot.fees_eur,
+            date=old_lot.date,
+            strike=transaction.getStrike() if transaction.getType().name != 'stock' else None,
+            expiry=transaction.getExpiry() if transaction.getType().name != 'stock' else None,
+            call_put=transaction.loc[Fields.CALL_PUT.value] if transaction.getType().name != 'stock' else None
+        )
+
+        key = self._get_key_from_transaction(transaction)
+        self.open_lots[key].append(lot)
+        logger.debug(f"Symbol Change: Added new lot {transaction.getSymbol()} qty={lot.quantity} basis={lot.amount_usd:.2f} (preserved from {old_lot.symbol})")
+        self._pending_symbol_change_lot = None
+
     def _close_position(self, transaction):
         quantity_to_close = abs(transaction.getQuantity())
         closing_quantity = transaction.getQuantity()

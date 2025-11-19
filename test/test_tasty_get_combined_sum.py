@@ -103,8 +103,8 @@ class TestTastyFinancialCalculations:
             eur=equity_etf_profits.eur + other_profits.eur + losses.eur
         )
         
-        assert total_stock.usd == -5396.0
-        assert round(total_stock.eur, 2) == -4401.11
+        assert total_stock.usd == -5401.324
+        assert round(total_stock.eur, 2) == -4405.43
         
     def test_getCombinedSum_minimal_data(self):
         trades = [
