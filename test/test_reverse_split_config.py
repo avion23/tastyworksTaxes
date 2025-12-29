@@ -110,5 +110,5 @@ class TestReverseSplitConfig:
         assert "REVERSE SPLIT RATIO UNKNOWN" in error_msg
         assert "XYZ" in error_msg
         assert "2023-06-15" in error_msg
-        assert "corporate_actions.yaml" in error_msg
-        assert "ratio: ???" in error_msg
+        assert "corporate_actions.csv" in error_msg
+        assert "???" in error_msg
