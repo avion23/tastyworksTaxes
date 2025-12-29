@@ -43,6 +43,8 @@ import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
+import yaml
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.constants import (
     TransactionSubcode,
@@ -71,6 +73,65 @@ class PositionManager:
     def __init__(self):
         self.open_lots: dict[InstrumentKey, deque[PositionLot]] = defaultdict(deque)
         self.closed_trades = []
+        self._corporate_actions_config = self._load_corporate_actions_config()
+
+    @staticmethod
+    def _load_corporate_actions_config() -> dict:
+        """
+        Load corporate actions configuration from YAML file.
+
+        Returns dict with structure:
+        {
+            'reverse_splits': [
+                {'date': '2020-04-29', 'symbol': 'USO', 'ratio': 0.125, ...},
+                ...
+            ]
+        }
+        """
+        config_path = Path(__file__).parent.parent / "corporate_actions.yaml"
+
+        if not config_path.exists():
+            logger.warning(f"Corporate actions config not found: {config_path}")
+            return {}
+
+        try:
+            with open(config_path, "r") as f:
+                config = yaml.safe_load(f)
+                if config is None:
+                    return {}
+                return config
+        except Exception as e:
+            logger.error(f"Failed to load corporate actions config: {e}")
+            return {}
+
+    def _get_reverse_split_ratio_from_config(
+        self, symbol: str, date: datetime
+    ) -> float | None:
+        """
+        Look up reverse split ratio from config file.
+
+        Args:
+            symbol: Stock/option symbol
+            date: Transaction date
+
+        Returns:
+            Ratio if found in config, None otherwise
+        """
+        reverse_splits = self._corporate_actions_config.get("reverse_splits", [])
+        date_str = (
+            date.strftime("%Y-%m-%d") if isinstance(date, datetime) else str(date)[:10]
+        )
+
+        for split in reverse_splits:
+            if split.get("symbol") == symbol and split.get("date") == date_str:
+                ratio = split.get("ratio")
+                logger.info(
+                    f"Using configured reverse split ratio {ratio} for {symbol} on {date_str} "
+                    f"(source: {split.get('source', 'unknown')})"
+                )
+                return float(ratio)
+
+        return None
 
     def _get_key_from_transaction(self, transaction) -> InstrumentKey:
         """Generate InstrumentKey from transaction for O(1) lot lookup"""
@@ -298,6 +359,8 @@ class PositionManager:
         description = transaction.loc["Description"]
         import re
 
+        # If description contains option symbol pattern, treat as trade (Close/Open), not position mutation
+        # Real Tastytrade reverse split data for options uses separate Close/Open transactions
         if re.search(r"\d{6}[CP]\d{8}", description):
             logger.debug(f"Reverse split is a trade, not a mutation: {description}")
             return False
@@ -320,9 +383,11 @@ class PositionManager:
                     ratio = max(num1, num2) / min(num1, num2)
                 break
 
-        if ratio is None and symbol_to_split == "USO":
-            ratio = 1.0 / 8.0
-            logger.warning(f"Using hardcoded ratio for {symbol_to_split}")
+        if ratio is None:
+            transaction_date = transaction.get("Date/Time") or transaction.get("Date")
+            ratio = self._get_reverse_split_ratio_from_config(
+                symbol_to_split, transaction_date
+            )
 
         if ratio is not None:
             affected_keys = [
@@ -347,7 +412,32 @@ class PositionManager:
 
             return True
         else:
-            logger.error(
-                f"CRITICAL: Reverse split for {symbol_to_split} could not be parsed from description: '{description}'. This may result in incorrect position tracking. Manual verification required."
+            affected_keys = [
+                key for key in self.open_lots.keys() if key.symbol == symbol_to_split
+            ]
+            affected_lots = sum(len(self.open_lots[key]) for key in affected_keys)
+            transaction_date = transaction.get("Date/Time") or transaction.get("Date")
+            date_str = (
+                transaction_date.strftime("%Y-%m-%d")
+                if hasattr(transaction_date, "strftime")
+                else str(transaction_date)[:10]
             )
-            return False
+
+            raise ValueError(
+                f"\n{'=' * 80}\n"
+                f"REVERSE SPLIT RATIO UNKNOWN: {symbol_to_split}\n"
+                f"{'=' * 80}\n\n"
+                f"Cannot automatically determine split ratio from:\n"
+                f"  Date: {date_str}\n"
+                f"  Description: '{description}'\n"
+                f"  Open lots affected: {affected_lots}\n\n"
+                f"REQUIRED ACTION:\n"
+                f"Add this entry to corporate_actions.yaml in the project root:\n\n"
+                f'  - date: "{date_str}"\n'
+                f'    symbol: "{symbol_to_split}"\n'
+                f"    ratio: ???  # e.g., 0.125 for 1:8 reverse split, 2.0 for 2:1 forward split\n"
+                f'    source: "Broker announcement or SEC filing"\n'
+                f'    notes: "Tastytrade CSV missing ratio information"\n\n'
+                f"Then re-run the program.\n"
+                f"{'=' * 80}\n"
+            )

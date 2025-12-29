@@ -1,0 +1,31 @@
+# Corporate Actions Configuration
+#
+# This file contains corporate action data that cannot be automatically inferred
+# from Tastytrade CSV files (e.g., reverse splits without ratio information).
+#
+# Format:
+#   reverse_splits:
+#     - date: "YYYY-MM-DD"
+#       symbol: "TICKER"
+#       ratio: <float>
+#       source: "description of data source"
+#
+# Ratio format:
+#   - For 1:8 reverse split, use: 0.125 (= 1/8)
+#   - For 1:5 reverse split, use: 0.2 (= 1/5)
+#   - For 2:1 forward split, use: 2.0 (= 2/1)
+#
+# Data sources:
+#   - Broker announcements
+#   - Company investor relations
+#   - SEC filings
+#   - Financial news services
+
+reverse_splits:
+  # USO (United States Oil Fund) - 1:8 Reverse Split during COVID-19 oil crisis
+  # Source: https://www.sec.gov/Archives/edgar/data/1327068/000168386320002228/f8k042120_usocomo.htm
+  - date: "2020-04-29"
+    symbol: "USO"
+    ratio: 0.125  # 1:8 reverse split (100 shares → 12.5 shares)
+    source: "SEC Form 8-K filed 2020-04-28, effective 2020-04-29"
+    notes: "Tastytrade CSV does not include ratio in Description field for this event"
