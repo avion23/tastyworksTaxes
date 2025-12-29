@@ -44,7 +44,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-import yaml
+import csv
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.constants import (
     TransactionSubcode,
@@ -78,31 +78,54 @@ class PositionManager:
     @staticmethod
     def _load_corporate_actions_config() -> dict:
         """
-        Load corporate actions configuration from YAML file.
+        Load corporate actions configuration from CSV file.
 
         Returns dict with structure:
         {
             'reverse_splits': [
-                {'date': '2020-04-29', 'symbol': 'USO', 'ratio': 0.125, ...},
+                {'date': '2020-04-29', 'symbol': 'USO', 'ratio': 0.125, 'source': '...'},
                 ...
             ]
         }
         """
-        config_path = Path(__file__).parent.parent / "corporate_actions.yaml"
+        config_path = Path(__file__).parent.parent / "corporate_actions.csv"
 
         if not config_path.exists():
             logger.warning(f"Corporate actions config not found: {config_path}")
-            return {}
+            return {"reverse_splits": []}
 
         try:
-            with open(config_path, "r") as f:
-                config = yaml.safe_load(f)
-                if config is None:
-                    return {}
-                return config
+            splits = []
+            with open(config_path, "r", encoding="utf-8") as f:
+                # Filter out comment lines before passing to CSV reader
+                lines = [
+                    line
+                    for line in f
+                    if line.strip() and not line.strip().startswith("#")
+                ]
+
+            # Parse the filtered lines
+            reader = csv.DictReader(lines)
+            for row in reader:
+                try:
+                    splits.append(
+                        {
+                            "date": row["date"].strip(),
+                            "symbol": row["symbol"].strip(),
+                            "ratio": float(row["ratio"]),
+                            "source": row.get("source", "").strip(),
+                        }
+                    )
+                except (KeyError, ValueError) as e:
+                    logger.warning(
+                        f"Skipping invalid row in corporate_actions.csv: {row} ({e})"
+                    )
+                    continue
+
+            return {"reverse_splits": splits}
         except Exception as e:
             logger.error(f"Failed to load corporate actions config: {e}")
-            return {}
+            return {"reverse_splits": []}
 
     def _get_reverse_split_ratio_from_config(
         self, symbol: str, date: datetime
@@ -432,12 +455,12 @@ class PositionManager:
                 f"  Description: '{description}'\n"
                 f"  Open lots affected: {affected_lots}\n\n"
                 f"REQUIRED ACTION:\n"
-                f"Add this entry to corporate_actions.yaml in the project root:\n\n"
-                f'  - date: "{date_str}"\n'
-                f'    symbol: "{symbol_to_split}"\n'
-                f"    ratio: ???  # e.g., 0.125 for 1:8 reverse split, 2.0 for 2:1 forward split\n"
-                f'    source: "Broker announcement or SEC filing"\n'
-                f'    notes: "Tastytrade CSV missing ratio information"\n\n'
+                f"Add this line to corporate_actions.csv in the project root:\n\n"
+                f"{date_str},{symbol_to_split},???,Broker announcement or SEC filing\n\n"
+                f"Replace ??? with the actual ratio:\n"
+                f"  - 1:8 reverse split → 0.125\n"
+                f"  - 1:5 reverse split → 0.2\n"
+                f"  - 2:1 forward split → 2.0\n\n"
                 f"Then re-run the program.\n"
                 f"{'=' * 80}\n"
             )
