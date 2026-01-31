@@ -1,5 +1,7 @@
 # `tastyworksTaxes`
 
+[![Tests](https://github.com/avion23/tastyworksTaxes/actions/workflows/tests.yml/badge.svg)](https://github.com/avion23/tastyworksTaxes/actions)
+
 Automate the calculation of yearly taxes for a tastyworks export in the context of the German private asset management tax situation.
 
 ⚠️ **Note:** This software is currently a work in progress. While extensive test driven development has been done with real data, users should be cautious and verify results independently.
