@@ -11,7 +11,7 @@ class History(pd.DataFrame):
     @classmethod
     def fromFile(cls, path):
         df_raw = pd.read_csv(path)
-        df = cls._transform(df_raw)
+        df = cls._load_supported_schema(df_raw)
 
         df = History(df)
         df.sort_values('Date/Time', inplace=True)
@@ -19,6 +19,78 @@ class History(pd.DataFrame):
         df.addEuroConversion()
         df._selfTest()
         return df
+
+    @staticmethod
+    def _load_supported_schema(df: pd.DataFrame) -> pd.DataFrame:
+        if History._is_new_format(df):
+            return History._transform(df)
+        if History._is_internal_format(df):
+            return History._normalize_internal(df)
+
+        raise ValueError(
+            "Unsupported CSV schema. Expected either new TastyTrade export columns "
+            "('Date', 'Type', 'Sub Type', 'Value', ...) or normalized internal columns "
+            "('Date/Time', 'Transaction Code', 'Transaction Subcode', 'Amount', ...). "
+            f"Found columns: {list(df.columns)}"
+        )
+
+    @staticmethod
+    def _is_new_format(df: pd.DataFrame) -> bool:
+        required = {'Date', 'Type', 'Sub Type', 'Value', 'Description'}
+        return required.issubset(df.columns)
+
+    @staticmethod
+    def _is_internal_format(df: pd.DataFrame) -> bool:
+        required = {
+            'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
+            'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
+            'Call/Put', 'Price', 'Fees', 'Amount', 'Description'
+        }
+        return required.issubset(df.columns)
+
+    @staticmethod
+    def _numeric_column(series: pd.Series, column_name: str) -> pd.Series:
+        raw = series.copy()
+        text = raw.astype(str).str.strip()
+        blank = raw.isna() | text.isin(['', '--', 'nan'])
+        cleaned = text.str.replace(',', '', regex=False)
+        parsed = pd.to_numeric(cleaned.where(~blank, '0'), errors='coerce')
+
+        invalid = parsed.isna() & ~blank
+        if invalid.any():
+            bad_values = raw.loc[invalid].tolist()
+            raise ValueError(
+                f"Failed to parse numeric values in normalized CSV column "
+                f"'{column_name}': {bad_values}"
+            )
+
+        return parsed
+
+    @staticmethod
+    def _normalize_internal(df: pd.DataFrame) -> pd.DataFrame:
+        internal_df = df.copy()
+
+        internal_df['Date/Time'] = pd.to_datetime(internal_df['Date/Time'], errors='coerce')
+        if internal_df['Date/Time'].isna().any():
+            bad_values = df.loc[internal_df['Date/Time'].isna(), 'Date/Time'].tolist()
+            raise ValueError(f"Failed to parse Date/Time values in normalized CSV: {bad_values}")
+
+        raw_expiration = internal_df['Expiration Date'].copy()
+        internal_df['Expiration Date'] = pd.to_datetime(raw_expiration, errors='coerce')
+
+        has_option_type = internal_df['Call/Put'].astype(str).str.strip().isin(['C', 'P'])
+        invalid_option_expiry = has_option_type & internal_df['Expiration Date'].isna()
+        if invalid_option_expiry.any():
+            bad_values = raw_expiration.loc[invalid_option_expiry].tolist()
+            raise ValueError(
+                "Failed to parse Expiration Date values for option rows in "
+                f"normalized CSV: {bad_values}"
+            )
+
+        for column in ['Amount', 'Fees', 'Quantity', 'Strike', 'Price']:
+            internal_df[column] = History._numeric_column(internal_df[column], column)
+
+        return internal_df
 
     @staticmethod
     def _transform(df: pd.DataFrame) -> pd.DataFrame:
