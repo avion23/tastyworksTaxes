@@ -136,18 +136,21 @@ class Tasty:
             year: -calculate_fees_sum(trades) for year, trades in trades_by_year.items()
         }
 
-        for key in self.yearValues:
+        years = set(self.yearValues.keys()) | set(trades_by_year.keys())
+
+        for key in sorted(years):
+            values_obj = self.year(key)
             m = Money()
             if key in fees:
                 m.usd = fees[key].usd
                 m.eur = fees[key].eur
-            self.year(key).fee += m
+            values_obj.fee += m
 
         ret = dict()
-        for key in self.yearValues:
+        for key in sorted(years):
             yearly_trades = trades_by_year.get(key, [])
             self._checkAssetClassifications(yearly_trades)
-            values_obj = self.yearValues[key]
+            values_obj = self.year(key)
 
             values_obj.stockAndOptionsSum = calculate_combined_sum(yearly_trades)
             values_obj.equityEtfGrossProfits = calculate_gross_equity_etf_profits(

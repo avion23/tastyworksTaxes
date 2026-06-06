@@ -344,7 +344,13 @@ class Printer(object):
         report.additional_order_fees = self.values.otherFees.eur
         report.stock_gains_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.stock_losses_z23 = self.values.stockAndEtfLosses.eur
-        report.other_losses = self.values.otherLoss.eur
+        report.long_option_gains = self.values.longOptionProfits.eur
+        report.long_option_losses = self.values.longOptionLosses.eur
+        report.long_option_total = (
+            self.values.longOptionProfits.eur
+            + self.values.longOptionLosses.eur
+            + self.values.longOptionTotalLosses.eur
+        )
         report.securities_lending_income = self.values.securitiesLendingIncome.eur
         return report
 
@@ -358,7 +364,13 @@ class Printer(object):
         report.zusatzliche_ordergebuehren = self.values.otherFees.eur
         report.aktiengewinne_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.aktienverluste_z23 = self.values.stockAndEtfLosses.eur
-        report.sonstige_verluste = self.values.otherLoss.eur
+        report.long_optionen_gewinne = self.values.longOptionProfits.eur
+        report.long_optionen_verluste = self.values.longOptionLosses.eur
+        report.long_optionen_gesamt = (
+            self.values.longOptionProfits.eur
+            + self.values.longOptionLosses.eur
+            + self.values.longOptionTotalLosses.eur
+        )
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
         return report
 
