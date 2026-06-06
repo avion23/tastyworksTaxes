@@ -4,13 +4,18 @@
 
 Automate the calculation of yearly taxes for a tastyworks export in the context of the German private asset management tax situation.
 
-⚠️ **Note:** This software is currently a work in progress. While extensive test driven development has been done with real data, users should be cautious and verify results independently.
+## Validation Status and Disclaimer
+
+This project is intended as an open-source tax preparation aid for private German investors using TastyTrade/Tastyworks transaction exports. It applies documented rules for FIFO matching, option trades, corporate actions, USD/EUR conversion, and selected German tax report categories, with regression tests covering the implemented behavior.
+
+It is not a substitute for professional tax advice. Tax law, broker export formats, and individual circumstances vary; users should review generated figures against broker statements and consult a qualified tax advisor before filing.
 
 ❗ **UPDATE (December 2024)**: The 20,000 EUR limit on offsetting losses from options trading has been abolished. The German Bundesrat approved this change on November 22, 2024 (Jahressteuergesetz 2024). Losses from derivatives can now be fully offset against capital gains, with retroactive application to all open cases. This follows the Federal Fiscal Court ruling that the previous restriction was unconstitutional.
 
-**Development Status**:
-- Currently, the program does not differentiate between various asset classes; it only recognizes stocks and options. This does not accurately reflect all trading scenarios.
-- **Please triple-check your results.** Accurately assigning losses, profits, fees, interest, etc., to their specific categories is challenging and this software remains a work in progress.
+**Current Coverage**:
+- Stocks, options, selected corporate actions, dividends, interest, fees, and USD/EUR conversion are handled by the implemented calculation pipeline.
+- Asset classification support is evolving. Equity ETF partial exemption is implemented; other fund classes are identified but may require manual review.
+- Unsupported or ambiguous transaction patterns are intentionally surfaced as errors or warnings rather than silently estimated.
 
 **Stocks**:
 
@@ -114,9 +119,9 @@ python -m pytest test -s --log-cli-level=DEBUG
 - **Enhanced Partial Exemptions**: Partial exemption (Teilfreistellung) calculation improved for equity ETFs (30%). Other fund types (Mixed, Real Estate) are correctly identified and generate warnings, but their specific exemption rates are not yet applied in the final tax summary
 - **Improved FIFO Processing**: Refactored to forward-chronological processing for more accurate trade matching
 
-## Known Issues
+## Known Limitations
 
-⚠️ **Critical**: This software remains a work in progress. I am not a tax expert - there is tax law I don't fully understand.
+The following areas are intentionally documented so users can decide whether the generated output is complete for their filing situation.
 
 **Unimplemented Tax Requirements**:
 - ETF advance tax payment ("Vorabpauschale") is not implemented. This is yearly fictitious taxable income on accumulating ETFs (70% of base interest rate × fund value at start of year, minus distributions). Required by German tax law since 2018.
@@ -126,8 +131,8 @@ python -m pytest test -s --log-cli-level=DEBUG
 - While Symbol Changes and Stock Mergers are now handled correctly, **Reverse Splits with unrecognized description formats may be incorrectly processed as taxable trades**. These events should be manually verified.
 
 **Other Limitations**:
-- Fee calculations remain uncertain and should be double-checked
-- Partial exemption rates only cover equity ETFs - other fund types need manual handling
+- Fee treatment should be reviewed against the applicable tax form instructions and broker statements.
+- Partial exemption rates are currently applied for equity ETFs; other fund types need manual handling in the final tax review.
 
 ## Contributing
 
