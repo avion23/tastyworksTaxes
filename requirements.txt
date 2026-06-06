@@ -1,4 +1,4 @@
-pandas
-currencyconverter
-dataclasses_json
-pytest
+pandas>=3.0.3
+currencyconverter>=0.18.18
+dataclasses_json>=0.6.7
+pytest>=9.0.3

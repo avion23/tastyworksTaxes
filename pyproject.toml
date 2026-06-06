@@ -25,13 +25,13 @@ classifiers = [
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
 dependencies = [
-    "pandas",
-    "currencyconverter",
-    "dataclasses_json",
+    "pandas>=3.0.3",
+    "currencyconverter>=0.18.18",
+    "dataclasses_json>=0.6.7",
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest>=9.0.3"]
 
 [project.urls]
 Homepage = "https://github.com/avion23/tastyworksTaxes"
