@@ -54,20 +54,42 @@ class TestTastyRun:
 
         t.processTransactionHistory.assert_called_once()
         assert isinstance(result, dict)
+        assert 2018 in result
 
         year_keys = list(result.keys())
         assert all(isinstance(key, int) for key in year_keys)
 
-        if year_keys:
-            sample_year = year_keys[0]
-            year_data = result[sample_year]
+        year_data = result[2018]
+        assert isinstance(year_data, Values)
+        assert isinstance(year_data.stockAndOptionsSum, Money)
+        assert isinstance(year_data.optionSum, Money)
+        assert isinstance(year_data.longOptionProfits, Money)
+        assert isinstance(year_data.longOptionLosses, Money)
 
-            assert isinstance(year_data, Values)
-            assert isinstance(year_data.stockAndOptionsSum, Money)
-            assert isinstance(year_data.stockSum, Money)
-            assert isinstance(year_data.optionSum, Money)
-            assert isinstance(year_data.longOptionProfits, Money)
-            assert isinstance(year_data.longOptionLosses, Money)
+    def test_run_includes_trade_only_year_without_money_movements(self):
+        t = Tasty()
+        t.processTransactionHistory = MagicMock()
+        t.position_manager.closed_trades = [
+            TradeResult(
+                symbol="XYZ",
+                position_type=PositionType.stock,
+                opening_date="2022-01-03 10:00:00",
+                closing_date="2022-02-04 10:00:00",
+                quantity=1,
+                profit_usd=10.0,
+                profit_eur=9.0,
+                fees_usd=1.0,
+                fees_eur=0.9,
+                worthless_expiry=False,
+            )
+        ]
+
+        result = t.run()
+
+        assert set(result.keys()) == {2022}
+        assert isinstance(result[2022], Values)
+        assert result[2022].stockAndOptionsSum.eur == 9.0
+        assert result[2022].fee.eur == -0.9
 
     @pytest.mark.skipif(
         not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
