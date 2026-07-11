@@ -119,6 +119,55 @@ def test_unsupported_csv_schema_raises_clear_error(tmp_path):
         History.fromFile(csv_path)
 
 
+def test_new_format_missing_optional_columns_uses_safe_defaults(tmp_path):
+    csv_path = tmp_path / "minimal_tastytrade.csv"
+    pd.DataFrame({
+        "Date": ["2020-05-08T17:24:00-04:00"],
+        "Type": ["Money Movement"],
+        "Sub Type": ["Fee"],
+        "Value": ["-1.0"],
+        "Description": ["Regulatory fee"],
+    }).to_csv(csv_path, index=False)
+
+    history = History.fromFile(csv_path)
+
+    assert history.loc[0, "Symbol"] == ""
+    assert history.loc[0, "Quantity"] == 0
+    assert history.loc[0, "Fees"] == 0
+    assert pd.isna(history.loc[0, "Expiration Date"])
+
+
+def test_new_format_invalid_optional_value_has_clear_error(tmp_path):
+    csv_path = tmp_path / "bad_quantity.csv"
+    pd.DataFrame({
+        "Date": ["2020-05-08T17:24:00-04:00"],
+        "Type": ["Trade"],
+        "Sub Type": ["Buy to Open"],
+        "Value": ["-1.0"],
+        "Description": ["Bought stock"],
+        "Quantity": ["not-a-number"],
+    }).to_csv(csv_path, index=False)
+
+    with pytest.raises(ValueError, match="numeric values.*Quantity"):
+        History.fromFile(csv_path)
+
+
+def test_new_format_option_with_invalid_expiration_has_clear_error(tmp_path):
+    csv_path = tmp_path / "bad_option_expiration.csv"
+    pd.DataFrame({
+        "Date": ["2020-05-08T17:24:00-04:00"],
+        "Type": ["Trade"],
+        "Sub Type": ["Buy to Open"],
+        "Value": ["-1.0"],
+        "Description": ["Bought option"],
+        "Call or Put": ["CALL"],
+        "Expiration Date": ["not-a-date"],
+    }).to_csv(csv_path, index=False)
+
+    with pytest.raises(ValueError, match="Failed to parse Expiration Date"):
+        History.fromFile(csv_path)
+
+
 def test_new_format_csv_sorting():
     test_data = {
         "Date": ["2020-05-08T17:24:00-04:00", "2020-05-07T14:00:00-04:00"],

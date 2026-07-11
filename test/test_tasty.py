@@ -1,11 +1,7 @@
-import sys
-import os
 import pytest
-from pathlib import Path
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
-from tastyworksTaxes.position import PositionType
 
 class TestTasty:
     def test_money_movement_debit_interest(self):

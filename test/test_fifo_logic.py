@@ -1,4 +1,3 @@
-import pytest
 from tastyworksTaxes.position_manager import PositionManager
 from tastyworksTaxes.transaction import Transaction
 

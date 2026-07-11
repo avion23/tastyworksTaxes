@@ -3,12 +3,10 @@ import os
 import re
 import pytest
 import pandas as pd
-from datetime import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.money import Money
-from tastyworksTaxes.history import History
 from tastyworksTaxes.position import PositionType
 
 

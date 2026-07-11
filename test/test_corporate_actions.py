@@ -99,7 +99,7 @@ class TestCorporateActions:
         
         result = position_manager._handle_reverse_split(transaction)
         
-        assert result == False
+        assert not result
         assert sample_option_lot.quantity == -6
         assert sample_option_lot.strike == 3.5
         

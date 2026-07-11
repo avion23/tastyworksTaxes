@@ -1,5 +1,3 @@
-import pytest
-import pandas as pd
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.printer import Printer

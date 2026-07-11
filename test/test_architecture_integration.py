@@ -1,8 +1,6 @@
 import pytest
-import pandas as pd
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.money import Money
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.trade_calculator import (
     calculate_gross_equity_etf_profits, calculate_equity_etf_profits,
@@ -192,7 +190,7 @@ class TestArchitectureIntegration:
         assert tasty_instance.classifier.get_exemption_percentage('REAL_ESTATE_ETF') == 60
     
     def test_mixed_and_real_estate_funds_work_with_classification(self, tasty_instance):
-        trades = [
+        [
             TradeResult(
                 symbol='AOM',
                 position_type=PositionType.stock,

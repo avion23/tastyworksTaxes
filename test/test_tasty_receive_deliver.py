@@ -1,9 +1,6 @@
-import pytest
-from pathlib import Path
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
-from tastyworksTaxes.position import PositionType
 
 class TestTastyReceiveDeliver:
     def test_assigned_stock(self):

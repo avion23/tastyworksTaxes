@@ -1,8 +1,6 @@
 import pytest
-import pandas as pd
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.money import Money
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.trade_calculator import (
     calculate_gross_equity_etf_profits, calculate_equity_etf_profits

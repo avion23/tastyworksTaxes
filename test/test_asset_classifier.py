@@ -2,7 +2,6 @@ import pytest
 import logging
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.asset_definitions import ASSET_DEFINITIONS
 
 class TestAssetClassifier:
     @pytest.fixture

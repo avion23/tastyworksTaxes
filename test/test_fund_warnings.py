@@ -1,5 +1,4 @@
 import pytest
-import pandas as pd
 import logging
 from unittest.mock import patch
 

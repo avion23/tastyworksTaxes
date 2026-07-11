@@ -1,4 +1,3 @@
-import pytest
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
 

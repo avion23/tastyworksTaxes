@@ -1,5 +1,4 @@
 import pytest
-import pandas as pd
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.money import Money
@@ -10,8 +9,7 @@ from tastyworksTaxes.trade_calculator import (
     calculate_long_option_losses, calculate_long_option_total_losses,
     calculate_short_option_profits, calculate_short_option_losses,
     calculate_option_differential, calculate_stock_loss, calculate_stock_fees,
-    calculate_other_fees, calculate_fees_sum, calculate_gross_equity_etf_profits,
-    calculate_equity_etf_profits, calculate_other_stock_and_bond_profits
+    calculate_other_fees, calculate_fees_sum, calculate_equity_etf_profits, calculate_other_stock_and_bond_profits
 )
 
 class TestTastyFinancialCalculations:

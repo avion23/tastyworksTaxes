@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
-from tastyworksTaxes.position import PositionType
 
 # Skip tests that require the full dataset if it's not available (CI environment)
 FULL_DATASET = Path("test/transactions_2018_to_2025.csv")

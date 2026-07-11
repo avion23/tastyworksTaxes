@@ -2,7 +2,6 @@
 
 import pytest
 from datetime import datetime
-from pathlib import Path
 from tastyworksTaxes.position_manager import PositionManager
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.position import PositionType

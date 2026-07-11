@@ -1,9 +1,6 @@
 import pytest
-import pandas as pd
-import pathlib
 from pathlib import Path
-from unittest.mock import patch, MagicMock
-import pprint
+from unittest.mock import MagicMock
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.money import Money

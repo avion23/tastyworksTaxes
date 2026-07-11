@@ -5,6 +5,26 @@ from tastyworksTaxes.money import convert_usd_to_eur
 
 class History(pd.DataFrame):
 
+    _NEW_FORMAT_REQUIRED_COLUMNS = {
+        'Date', 'Type', 'Sub Type', 'Value', 'Description',
+    }
+    _NEW_FORMAT_DEFAULTS = {
+        'Symbol': '',
+        'Action': '',
+        'Quantity': 0,
+        'Expiration Date': '',
+        'Strike Price': 0,
+        'Call or Put': '',
+        'Average Price': 0,
+        'Commissions': 0,
+        'Fees': 0,
+    }
+    _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
+        'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
+        'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
+        'Call/Put', 'Price', 'Fees', 'Amount', 'Description',
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -36,17 +56,11 @@ class History(pd.DataFrame):
 
     @staticmethod
     def _is_new_format(df: pd.DataFrame) -> bool:
-        required = {'Date', 'Type', 'Sub Type', 'Value', 'Description'}
-        return required.issubset(df.columns)
+        return History._NEW_FORMAT_REQUIRED_COLUMNS.issubset(df.columns)
 
     @staticmethod
     def _is_internal_format(df: pd.DataFrame) -> bool:
-        required = {
-            'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
-            'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
-            'Call/Put', 'Price', 'Fees', 'Amount', 'Description'
-        }
-        return required.issubset(df.columns)
+        return History._INTERNAL_FORMAT_REQUIRED_COLUMNS.issubset(df.columns)
 
     @staticmethod
     def _numeric_column(series: pd.Series, column_name: str) -> pd.Series:
@@ -94,11 +108,16 @@ class History(pd.DataFrame):
 
     @staticmethod
     def _transform(df: pd.DataFrame) -> pd.DataFrame:
+        df = df.copy()
+        for column, default in History._NEW_FORMAT_DEFAULTS.items():
+            if column not in df:
+                df[column] = default
+
         internal_df = pd.DataFrame()
 
         def parse_date(date_str):
             if pd.isna(date_str):
-                return pd.NaT
+                raise ValueError("Failed to parse date: value is missing")
             try:
                 dt = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
                 return dt.replace(tzinfo=None)
@@ -108,8 +127,13 @@ class History(pd.DataFrame):
         internal_df['Date/Time'] = df['Date'].apply(parse_date)
         internal_df['Transaction Code'] = df['Type']
         internal_df['Transaction Subcode'] = df['Sub Type']
-        internal_df['Symbol'] = df['Symbol'].apply(
-            lambda x: str(x).split()[0] if pd.notna(x) and x != '' else '')
+        def parse_symbol(symbol):
+            if pd.isna(symbol):
+                return ''
+            parts = str(symbol).strip().split()
+            return parts[0] if parts else ''
+
+        internal_df['Symbol'] = df['Symbol'].apply(parse_symbol)
 
         def extract_buy_sell(row):
             sub_type = str(row.get('Sub Type', ''))
@@ -127,9 +151,10 @@ class History(pd.DataFrame):
         internal_df['Buy/Sell'] = df.apply(extract_buy_sell, axis=1)
         internal_df['Open/Close'] = df['Action'].apply(
             lambda x: str(x).split('_TO_')[-1].capitalize() if pd.notna(x) and '_TO_' in str(x) else '')
-        internal_df['Quantity'] = df['Quantity'] if 'Quantity' in df else 0
+        internal_df['Quantity'] = History._numeric_column(df['Quantity'], 'Quantity')
+        raw_expiration = df['Expiration Date']
         internal_df['Expiration Date'] = pd.to_datetime(
-            df['Expiration Date'], format='%m/%d/%y', errors='coerce')
+            raw_expiration, format='%m/%d/%y', errors='coerce')
 
         def parse_strike(strike):
             if pd.isna(strike) or strike == '':
@@ -147,6 +172,14 @@ class History(pd.DataFrame):
             return ''
 
         internal_df['Call/Put'] = df['Call or Put'].apply(format_call_put) if 'Call or Put' in df else ''
+        has_option_type = internal_df['Call/Put'].isin(['C', 'P'])
+        invalid_option_expiry = has_option_type & internal_df['Expiration Date'].isna()
+        if invalid_option_expiry.any():
+            bad_values = raw_expiration.loc[invalid_option_expiry].tolist()
+            raise ValueError(
+                "Failed to parse Expiration Date values for option rows in "
+                f"TastyTrade CSV: {bad_values}"
+            )
 
         def parse_price(row):
             price = row.get('Average Price', None)
@@ -163,10 +196,7 @@ class History(pd.DataFrame):
             except (ValueError, TypeError) as e:
                 raise ValueError(f"Failed to parse price '{price}' for symbol '{row.get('Symbol', '')}': {e}")
 
-        if 'Average Price' in df.columns:
-            internal_df['Price'] = df.apply(parse_price, axis=1)
-        else:
-            internal_df['Price'] = 0.0
+        internal_df['Price'] = df.apply(parse_price, axis=1)
 
         def calc_fees(row):
             commissions = row.get('Commissions', 0)
@@ -178,11 +208,7 @@ class History(pd.DataFrame):
             except (ValueError, TypeError) as e:
                 raise ValueError(f"Failed to parse fees - commissions: '{commissions}', fees: '{fees}': {e}")
 
-        if 'Commissions' in df.columns:
-            internal_df['Fees'] = df.apply(calc_fees, axis=1)
-        else:
-            internal_df['Fees'] = df['Fees'].apply(
-                lambda x: abs(float(str(x).replace(',', ''))) if pd.notna(x) and x != '--' and x != 0 else 0.0)
+        internal_df['Fees'] = df.apply(calc_fees, axis=1)
 
         def parse_amount(amount):
             if pd.isna(amount):
