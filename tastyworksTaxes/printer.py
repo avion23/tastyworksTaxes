@@ -6,7 +6,6 @@ from tastyworksTaxes.values import Values
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
 import logging
-import pandas as pd
 import locale
 
 logger = logging.getLogger(__name__)
@@ -317,6 +316,14 @@ class EnglishTaxReport(object):
             ('future gains', self.future_gains),
             ('future losses', self.future_losses),
             ('future total', self.future_total),
+            ('additional order fees', self.additional_order_fees),
+            ('dividends', self.dividends),
+            ('paid dividends', self.paid_dividends),
+            ('withholding tax z41', self.withholding_tax_z41),
+            ('interest income', self.interest_income),
+            ('interest expenses', self.interest_expenses),
+            ('interest total', self.interest_total),
+            ('z19 foreign capital gains', self.z19_foreign_capital_gains),
             ('z21 term gains option holder', self.z21_term_gains_option_holder),
             ('z24 term losses', self.z24_term_losses),
             ('kap kap inv', self.kap_kap_inv),

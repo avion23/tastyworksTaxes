@@ -162,7 +162,9 @@ class Tasty:
             values_obj.otherStockAndBondProfits = (
                 calculate_other_stock_and_bond_profits(yearly_trades, self.classifier)
             )
-            values_obj.stockAndEtfLosses = calculate_stock_loss(yearly_trades)
+            values_obj.stockAndEtfLosses = calculate_stock_loss(
+                yearly_trades, self.classifier
+            )
 
             values_obj.totalTaxableStockAndEtfProfits = Money(
                 usd=values_obj.equityEtfProfits.usd

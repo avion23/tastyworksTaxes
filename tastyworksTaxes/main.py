@@ -1,7 +1,3 @@
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import argparse
 import logging
 import pathlib
@@ -10,20 +6,10 @@ from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.printer import Printer
 
 
-logger = logging.getLogger(__name__)
 logging.basicConfig(
     format='%(message)s',
     level=logging.INFO)
-for key in logging.Logger.manager.loggerDict:  # disable logging for imported modules
-    temp = logging.getLogger(key)
-    temp.propagate = True
-    temp.setLevel(logging.INFO)
-    if temp.name == "trade":
-        temp.setLevel(logging.DEBUG)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 def init_argparse() -> argparse.ArgumentParser:
@@ -38,8 +24,8 @@ def init_argparse() -> argparse.ArgumentParser:
 def main() -> None:
     parser = init_argparse()
     args = parser.parse_args()
-    if not args.input.exists():
-        raise FileNotFoundError(f"File {args.input} does not exist")
+    if not args.input.is_file():
+        parser.error(f"input file does not exist or is not a file: {args.input}")
     t = Tasty(path=args.input)
     t.run()
     for year, values in t.yearValues.items():

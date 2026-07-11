@@ -43,8 +43,8 @@ import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
 import csv
+from importlib.resources import files
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.constants import (
     TransactionSubcode,
@@ -52,7 +52,7 @@ from tastyworksTaxes.constants import (
     Fields,
     CLOSING_SUBCODES,
 )
-from tastyworksTaxes.fifo_processor import FifoProcessor, TradeResult
+from tastyworksTaxes.fifo_processor import FifoProcessor
 from tastyworksTaxes.position import PositionType
 
 logger = logging.getLogger(__name__)
@@ -89,15 +89,10 @@ class PositionManager:
             ]
         }
         """
-        config_path = Path(__file__).parent.parent / "corporate_actions.csv"
-
-        if not config_path.exists():
-            logger.warning(f"Corporate actions config not found: {config_path}")
-            return {"reverse_splits": []}
-
         try:
             splits = []
-            with open(config_path, "r", encoding="utf-8") as f:
+            config_resource = files("tastyworksTaxes").joinpath("corporate_actions.csv")
+            with config_resource.open("r", encoding="utf-8") as f:
                 # Filter out comment lines before passing to CSV reader
                 lines = [
                     line
@@ -124,7 +119,10 @@ class PositionManager:
                     continue
 
             return {"reverse_splits": splits}
-        except Exception as e:
+        except (FileNotFoundError, ModuleNotFoundError) as e:
+            logger.warning("Corporate actions config not found: %s", e)
+            return {"reverse_splits": []}
+        except (OSError, csv.Error) as e:
             logger.error(f"Failed to load corporate actions config: {e}")
             return {"reverse_splits": []}
 
@@ -474,7 +472,7 @@ class PositionManager:
                 f"  Description: '{description}'\n"
                 f"  Open lots affected: {affected_lots}\n\n"
                 f"REQUIRED ACTION:\n"
-                f"Add this line to corporate_actions.csv in the project root:\n\n"
+                f"Add this line to corporate_actions.csv in the tastyworksTaxes package:\n\n"
                 f"{date_str},{symbol_to_split},???,Broker announcement or SEC filing\n\n"
                 f"Replace ??? with the actual ratio:\n"
                 f"  - 1:8 reverse split → 0.125\n"

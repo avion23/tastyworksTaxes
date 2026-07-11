@@ -41,5 +41,8 @@ Issues = "https://github.com/avion23/tastyworksTaxes/issues"
 [project.scripts]
 tastyworks-taxes = "tastyworksTaxes.main:main"
 
+[tool.setuptools.package-data]
+tastyworksTaxes = ["corporate_actions.csv"]
+
 [tool.pytest.ini_options]
 testpaths = ["test"]

@@ -34,6 +34,14 @@ def get_profitable_trades(trades: List[TradeResult]) -> List[TradeResult]:
 def get_loss_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if t.profit_eur <= 0]
 
+def _net_profit_eur(trade: TradeResult) -> float:
+    return trade.profit_eur - trade.fees_eur
+
+def _is_taxable_capital_asset(trade: TradeResult, classifier) -> bool:
+    return classifier.get_tax_category(
+        classifier.classify(trade.symbol, trade.position_type)
+    ) != "SO"
+
 def get_long_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if t.quantity > 0]
 
@@ -113,8 +121,12 @@ def calculate_option_differential(trades: List[TradeResult]) -> Money:
         eur=min(abs(negative_sum.eur), abs(positive_sum.eur))
     )
 
-def calculate_stock_loss(trades: List[TradeResult]) -> Money:
-    filtered_trades = get_loss_trades(get_stock_trades(trades))
+def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
+    filtered_trades = [
+        trade for trade in get_stock_trades(trades)
+        if _net_profit_eur(trade) <= 0
+        and (classifier is None or _is_taxable_capital_asset(trade, classifier))
+    ]
     if not filtered_trades:
         return Money()
     return Money(
@@ -134,7 +146,9 @@ def calculate_fees_sum(trades: List[TradeResult]) -> Money:
     return sum_fees_from_trades(trades)
 
 def calculate_gross_equity_etf_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = get_profitable_trades(get_stock_trades(trades))
+    profitable_stock_trades = [
+        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
+    ]
     if not profitable_stock_trades:
         return Money()
     
@@ -151,7 +165,9 @@ def calculate_gross_equity_etf_profits(trades: List[TradeResult], classifier) ->
     return Money(usd=total_usd, eur=total_eur)
 
 def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = get_profitable_trades(get_stock_trades(trades))
+    profitable_stock_trades = [
+        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
+    ]
     if not profitable_stock_trades:
         return Money()
 
@@ -176,7 +192,9 @@ def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money
     return Money(usd=total_taxable_usd, eur=total_taxable_eur)
 
 def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = get_profitable_trades(get_stock_trades(trades))
+    profitable_stock_trades = [
+        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
+    ]
     if not profitable_stock_trades:
         return Money()
 
@@ -186,8 +204,12 @@ def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier
     for trade in profitable_stock_trades:
         classification = classifier.classify(trade.symbol, trade.position_type)
 
-        if classification not in ['EQUITY_ETF']:
-            total_eur += trade.profit_eur - trade.fees_eur
-            total_usd += trade.profit_usd - trade.fees_usd
+        if classification == "EQUITY_ETF" or classifier.get_tax_category(classification) == "SO":
+            continue
+
+        exemption_pct = classifier.get_exemption_percentage(classification)
+        taxable_portion = 1.0 - (exemption_pct / 100.0)
+        total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
+        total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
 
     return Money(usd=total_usd, eur=total_eur)

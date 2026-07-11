@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from tastyworksTaxes.constants import TransactionSubcode, Fields
 from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.position_lot import PositionLot
 
 @dataclass
 class TradeResult:
