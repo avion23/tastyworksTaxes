@@ -197,3 +197,8 @@ class TestTransaction:
         merger = Transaction.fromString("2021-09-15T12:36:00+0000,Receive Deliver,Stock Merger,SELL_TO_OPEN,GREE  210917P00022000,Equity Option,Stock merger Open 6.0 GREE1 210917P00022000,3360,6,,0,0.00,100,GREE,GREE,9/17/21,22,PUT,123456,USD")
         assert merger.getQuantity() == -6
         assert merger.getSymbol() == "GREE"
+def test_fractional_quantity_is_preserved():
+    transaction = Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FRAC,Equity,Bought fractional FRAC,-5,0.5,10,-1,0,,FRAC,FRAC,,,,1,USD")
+    assert transaction.getQuantity() == 0.5
+    transaction.setQuantity(-1.9)
+    assert transaction.getQuantity() == -1.9

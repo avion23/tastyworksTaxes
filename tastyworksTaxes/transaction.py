@@ -98,7 +98,7 @@ class Transaction(pd.core.series.Series):
         else:
             raise ValueError(f"Couldn't identify if it is stock, call or put. Entry was '{self}")
 
-    def getQuantity(self) -> int:
+    def getQuantity(self) -> float:
         def get_sign_based_on_subcode(subcode: str, buy_sell: str) -> int:
             sign_mapping = {
                 "Buy to Open": 1,
@@ -126,9 +126,9 @@ class Transaction(pd.core.series.Series):
         sign = get_sign_based_on_subcode(subcode, buy_sell)
         quantity = self.loc["Quantity"]
 
-        return int(sign * quantity)
+        return sign * float(quantity)
 
-    def setQuantity(self, quantity: int):
+    def setQuantity(self, quantity: float):
         transaction_code = self.loc["Transaction Code"]
         transaction_subcode = self.loc["Transaction Subcode"]
         open_close = self.loc["Open/Close"]
@@ -138,10 +138,10 @@ class Transaction(pd.core.series.Series):
             raise KeyError(f"Transaction Code is '{transaction_code}' and not in '{valid_transaction_codes}'.")
 
         if transaction_code == "Receive Deliver" and transaction_subcode in ["Assignment", "Expiration"]:
-            self.loc["Quantity"] = int(quantity)
+            self.loc["Quantity"] = quantity
             return
 
-        self.loc["Quantity"] = int(abs(quantity))
+        self.loc["Quantity"] = abs(quantity)
         self.loc["Buy/Sell"] = "Sell" if quantity < 0 else "Buy"
 
         subcode_mapping = {
@@ -179,5 +179,4 @@ class Transaction(pd.core.series.Series):
     def getStrike(self) -> float:
         strike = self.loc["Strike"]
         return strike
-
 

@@ -74,6 +74,7 @@ class PositionManager:
         self.open_lots: dict[InstrumentKey, deque[PositionLot]] = defaultdict(deque)
         self.closed_trades = []
         self._corporate_actions_config = self._load_corporate_actions_config()
+        self._pending_symbol_change_lots: list[PositionLot] | None = None
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
@@ -192,23 +193,13 @@ class PositionManager:
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
         }:
-            if self._is_closing_transaction(transaction):
-                key = self._get_key_from_transaction(transaction)
-                matching_lots = self.open_lots.get(key)
-                if not matching_lots:
-                    logger.warning(
-                        f"Symbol Change 'close' leg for {transaction.getSymbol()} found no open position to mutate."
-                    )
-                    return
-
-                lot_to_remove = matching_lots[0]
-                matching_lots.popleft()
-                if not matching_lots:
-                    del self.open_lots[key]
-                self._pending_symbol_change_lot = lot_to_remove
-                logger.debug(
-                    f"Symbol Change: Removed lot {lot_to_remove.symbol} qty={lot_to_remove.quantity} basis={lot_to_remove.amount_usd:.2f}"
-                )
+            key = self._get_key_from_transaction(transaction)
+            is_conversion_close = self._is_closing_transaction(transaction) or any(
+                lot.can_close_with(transaction.getQuantity())
+                for lot in self.open_lots.get(key, ())
+            )
+            if is_conversion_close:
+                self._close_position_for_symbol_change(transaction)
 
             else:
                 self._open_position_from_symbol_change(transaction)
@@ -258,40 +249,66 @@ class PositionManager:
         self.open_lots[key].append(lot)
 
     def _open_position_from_symbol_change(self, transaction):
-        old_lot = getattr(self, "_pending_symbol_change_lot", None)
-        if old_lot is None:
+        old_lots = self._pending_symbol_change_lots
+        if not old_lots:
             logger.warning(
                 f"Symbol Change 'open' leg for {transaction.getSymbol()} has no pending lot to transfer basis from. Using CSV values."
             )
             self._open_position(transaction)
             return
 
-        lot = PositionLot(
-            symbol=transaction.getSymbol(),
-            position_type=transaction.getType(),
-            quantity=transaction.getQuantity(),
-            amount_usd=old_lot.amount_usd,
-            amount_eur=old_lot.amount_eur,
-            fees_usd=old_lot.fees_usd,
-            fees_eur=old_lot.fees_eur,
-            date=old_lot.date,
-            strike=transaction.getStrike()
-            if transaction.getType().name != "stock"
-            else None,
-            expiry=transaction.getExpiry()
-            if transaction.getType().name != "stock"
-            else None,
-            call_put=transaction.loc[Fields.CALL_PUT.value]
-            if transaction.getType().name != "stock"
-            else None,
-        )
-
         key = self._get_key_from_transaction(transaction)
-        self.open_lots[key].append(lot)
-        logger.debug(
-            f"Symbol Change: Added new lot {transaction.getSymbol()} qty={lot.quantity} basis={lot.amount_usd:.2f} (preserved from {old_lot.symbol})"
-        )
-        self._pending_symbol_change_lot = None
+        total_old_quantity = sum(abs(lot.quantity) for lot in old_lots)
+        new_quantity = transaction.getQuantity()
+        for old_lot in old_lots:
+            quantity = abs(new_quantity) * abs(old_lot.quantity) / total_old_quantity
+            lot = PositionLot(
+                symbol=transaction.getSymbol(), position_type=transaction.getType(),
+                quantity=quantity if new_quantity >= 0 else -quantity,
+                amount_usd=old_lot.amount_usd, amount_eur=old_lot.amount_eur,
+                fees_usd=old_lot.fees_usd, fees_eur=old_lot.fees_eur, date=old_lot.date,
+                strike=transaction.getStrike() if transaction.getType() != PositionType.stock else None,
+                expiry=transaction.getExpiry() if transaction.getType() != PositionType.stock else None,
+                call_put=transaction.loc[Fields.CALL_PUT.value] if transaction.getType() != PositionType.stock else None,
+            )
+            self.open_lots[key].append(lot)
+            logger.debug(f"Symbol Change: Added {lot.symbol} qty={lot.quantity} basis={lot.amount_usd:.2f} (preserved from {old_lot.symbol})")
+        self._pending_symbol_change_lots = None
+
+    def _close_position_for_symbol_change(self, transaction):
+        """Move the requested FIFO slices to the pending conversion buffer."""
+        key = self._get_key_from_transaction(transaction)
+        matching_lots = self.open_lots.get(key)
+        if not matching_lots:
+            raise ValueError(f"Symbol Change 'close' leg for {transaction.getSymbol()} found no open position to mutate.")
+
+        quantity_to_move = abs(transaction.getQuantity())
+        closing_quantity = transaction.getQuantity()
+        candidates = [lot for lot in matching_lots if lot.can_close_with(closing_quantity)]
+        if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_move:
+            raise ValueError(f"Tried to convert more shares than available for {transaction.getSymbol()}")
+
+        pending, remaining = [], deque()
+        for lot in matching_lots:
+            if quantity_to_move > 1e-6 and lot.can_close_with(closing_quantity):
+                quantity = lot.get_closable_quantity(quantity_to_move)
+                new_lot, values = lot.consume(quantity)
+                pending.append(PositionLot(
+                    symbol=lot.symbol, position_type=lot.position_type, quantity=lot.quantity - new_lot.quantity,
+                    amount_usd=values[Fields.AMOUNT.value], amount_eur=values[Fields.AMOUNT_EURO.value],
+                    fees_usd=values[Fields.FEES.value], fees_eur=values[Fields.FEES_EURO.value], date=lot.date,
+                    strike=lot.strike, expiry=lot.expiry, call_put=lot.call_put,
+                ))
+                quantity_to_move -= quantity
+                if not new_lot.is_empty():
+                    remaining.append(new_lot)
+            else:
+                remaining.append(lot)
+        if remaining:
+            self.open_lots[key] = remaining
+        else:
+            del self.open_lots[key]
+        self._pending_symbol_change_lots = pending
 
     def _close_position(self, transaction):
         """
@@ -324,21 +341,23 @@ class PositionManager:
                 f"Tried to close a position but no previous position found for {transaction}"
             )
 
-        while quantity_to_close > 1e-6 and matching_lots:
-            lot_to_process = matching_lots[0]
+        subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
+        ignores_direction = subcode in {"Expiration", "Assignment"}
+        candidates = [lot for lot in matching_lots if ignores_direction or lot.can_close_with(closing_quantity)]
+        if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_close:
+            raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
 
-            subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
-            if subcode not in {
-                "Expiration",
-                "Assignment",
-            } and not lot_to_process.can_close_with(closing_quantity):
-                break
-
-            matching_lots.popleft()
+        # Validate the full close before mutating lots or creating trade results.
+        remaining_lots = deque()
+        while matching_lots:
+            lot_to_process = matching_lots.popleft()
+            if quantity_to_close <= 1e-6 or (not ignores_direction and not lot_to_process.can_close_with(closing_quantity)):
+                remaining_lots.append(lot_to_process)
+                continue
 
             closable_quantity = lot_to_process.get_closable_quantity(quantity_to_close)
 
-            opening_was_long = lot_to_process.amount_usd < 0
+            opening_was_long = lot_to_process.quantity > 0
             lot_before = f"{lot_to_process.quantity} @ {lot_to_process.amount_usd:.2f}"
 
             new_lot, consumed_values = lot_to_process.consume(closable_quantity)
@@ -366,17 +385,14 @@ class PositionManager:
             )
 
             if not new_lot.is_empty():
-                matching_lots.appendleft(new_lot)
+                remaining_lots.append(new_lot)
 
             quantity_to_close -= closable_quantity
 
-        if not matching_lots:
+        if remaining_lots:
+            self.open_lots[key] = remaining_lots
+        else:
             del self.open_lots[key]
-
-        if quantity_to_close > 1e-6:
-            raise ValueError(
-                f"Tried to close more shares than available for {transaction.getSymbol()}"
-            )
 
     def _handle_reverse_split(self, transaction):
         description = transaction.loc["Description"]
@@ -421,17 +437,20 @@ class PositionManager:
                 f"Applying reverse split ratio {ratio} to {total_lots} open '{symbol_to_split}' lots."
             )
 
+            adjusted_lots = []
             for key in affected_keys:
-                lots_queue = self.open_lots[key]
-                original_count = len(lots_queue)
-
-                for lot in lots_queue:
+                for lot in self.open_lots[key]:
                     old_qty = lot.quantity
                     old_strike = getattr(lot, "strike", None)
                     lot.adjust_for_split(ratio)
                     logger.debug(
                         f"Split adjusted lot: qty {old_qty} -> {lot.quantity}, strike {old_strike} -> {getattr(lot, 'strike', None)}"
                     )
+                    adjusted_lots.append(lot)
+                del self.open_lots[key]
+            for lot in adjusted_lots:
+                key = InstrumentKey(lot.symbol, lot.position_type, lot.strike, lot.expiry, lot.call_put)
+                self.open_lots[key].append(lot)
 
             return True
         else:

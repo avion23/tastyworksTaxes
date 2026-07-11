@@ -1,9 +1,11 @@
 import pytest
 from pathlib import Path
+from datetime import datetime
 
 from tastyworksTaxes.position_manager import PositionManager
 from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.position_lot import PositionLot
 
 class TestPositionManager:
     def test_lfin_calls_open_and_close(self):
@@ -105,3 +107,43 @@ class TestPositionManager:
         with pytest.raises(ValueError, match="Tried to close more shares than available for XYZ"):
             pm.add_position(Transaction.fromString(
                 "2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 20 XYZ @ 12,240,20,12,-1.00,2.00,,XYZ,XYZ,,,,123456,USD"))
+    def test_overclose_is_atomic(self):
+        pm = PositionManager()
+        pm.add_position(Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,Bought 10 XYZ @ 10,-100,10,10,-1.00,0,,XYZ,XYZ,,,,123456,USD"))
+        with pytest.raises(ValueError):
+            pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 20 XYZ @ 12,240,20,12,-1.00,0,,XYZ,XYZ,,,,123456,USD"))
+        assert pm.get_all_open_lots()[0].quantity == 10
+        assert pm.closed_trades == []
+
+    def test_closes_matching_direction_when_long_and_short_lots_coexist(self):
+        pm = PositionManager()
+        pm.add_lot_directly(PositionLot("MIX", PositionType.stock, 10, -100, -100, 0, 0, datetime(2024, 1, 1)))
+        pm.add_lot_directly(PositionLot("MIX", PositionType.stock, -5, 50, 50, 0, 0, datetime(2024, 1, 2)))
+        pm.add_position(Transaction.fromString("2024-01-03T09:00:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,MIX,Equity,Bought 5 MIX @ 9,-45,5,9,-1.00,0,,MIX,MIX,,,,123456,USD"))
+        assert [lot.quantity for lot in pm.get_all_open_lots()] == [10]
+        assert pm.closed_trades[0].quantity == -5
+
+    def test_close_direction_uses_quantity_not_cash_sign(self):
+        pm = PositionManager()
+        pm.add_lot_directly(PositionLot("DIR", PositionType.stock, 1, 100, 100, 0, 0, datetime(2024, 1, 1)))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,DIR,Equity,Sold 1 DIR @ 90,90,1,90,-1.00,0,,DIR,DIR,,,,123456,USD"))
+        assert pm.closed_trades[0].quantity == 1
+
+    def test_symbol_change_moves_multiple_lots_and_partial_basis(self):
+        pm = PositionManager()
+        pm.add_position(Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought 10 OLD @ 10,-100,10,10,-1.00,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought 10 OLD @ 20,-200,10,20,-1.00,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,SELL,OLD,Equity,Symbol change,0,15,0,0,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,BUY,NEW,Equity,Symbol change,0,30,0,0,0,,NEW,NEW,,,,123456,USD"))
+        old, new = [lot for lot in pm.get_all_open_lots() if lot.symbol == "OLD"], [lot for lot in pm.get_all_open_lots() if lot.symbol == "NEW"]
+        assert [(lot.quantity, lot.amount_usd) for lot in old] == [(5, -100)]
+        assert [(lot.quantity, lot.amount_usd) for lot in new] == [(20, -100), (10, -100)]
+
+    def test_reverse_split_rekeys_adjusted_option(self):
+        pm = PositionManager()
+        expiry = datetime(2024, 6, 21)
+        pm.add_lot_directly(PositionLot("OPT", PositionType.call, 2, -100, -100, 0, 0, datetime(2024, 1, 1), 100, expiry, "C"))
+        pm.add_position(Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Reverse Split,BUY,OPT,Equity,OPT reverse split 1:2,0,0,0,0,0,,OPT,OPT,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-02-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,OPT  240621C00200000,Equity Option,Sold 1 OPT 06/21/24 Call 200,100,1,100,-1,0,100,OPT,OPT,6/21/24,200,CALL,123456,USD"))
+        assert pm.closed_trades[0].quantity == 1
+        assert pm.get_all_open_lots() == []

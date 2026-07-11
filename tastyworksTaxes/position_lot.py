@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class PositionLot:
     symbol: str
     position_type: PositionType
-    quantity: int
+    quantity: float
     amount_usd: float
     amount_eur: float
     fees_usd: float
