@@ -74,7 +74,7 @@ class PositionManager:
         self.open_lots: dict[InstrumentKey, deque[PositionLot]] = defaultdict(deque)
         self.closed_trades = []
         self._corporate_actions_config = self._load_corporate_actions_config()
-        self._pending_symbol_change_lots: list[PositionLot] | None = None
+        self._pending_symbol_change_lots: dict[tuple, list[PositionLot]] = {}
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
@@ -192,10 +192,20 @@ class PositionManager:
             TransactionSubcode.STOCK_MERGER.value,
         }:
             key = self._get_key_from_transaction(transaction)
-            is_conversion_close = self._is_closing_transaction(transaction) or any(
-                lot.can_close_with(transaction.getQuantity())
-                for lot in self.open_lots.get(key, ())
-            )
+            open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
+            if open_close == OpenClose.CLOSE.value:
+                is_conversion_close = True
+            elif open_close == OpenClose.OPEN.value:
+                is_conversion_close = False
+            else:
+                conversion_key = self._get_conversion_key(transaction)
+                is_conversion_close = (
+                    conversion_key not in self._pending_symbol_change_lots
+                    and any(
+                        lot.can_close_with(transaction.getQuantity())
+                        for lot in self.open_lots.get(key, ())
+                    )
+                )
             if is_conversion_close:
                 self._close_position_for_symbol_change(transaction)
 
@@ -217,6 +227,18 @@ class PositionManager:
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
         open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
         return subcode in CLOSING_SUBCODES or open_close == OpenClose.CLOSE.value
+
+    @staticmethod
+    def _get_conversion_key(transaction) -> tuple:
+        position_type = transaction.getType()
+        if position_type == PositionType.stock:
+            return position_type, None, None, None
+        return (
+            position_type,
+            transaction.getStrike(),
+            transaction.getExpiry(),
+            transaction.loc[Fields.CALL_PUT.value],
+        )
 
     def _open_position(self, transaction):
         logger.info(
@@ -247,7 +269,8 @@ class PositionManager:
         self.open_lots[key].append(lot)
 
     def _open_position_from_symbol_change(self, transaction):
-        old_lots = self._pending_symbol_change_lots
+        conversion_key = self._get_conversion_key(transaction)
+        old_lots = self._pending_symbol_change_lots.pop(conversion_key, None)
         if not old_lots:
             logger.warning(
                 f"Symbol Change 'open' leg for {transaction.getSymbol()} has no pending lot to transfer basis from. Using CSV values."
@@ -271,7 +294,6 @@ class PositionManager:
             )
             self.open_lots[key].append(lot)
             logger.debug(f"Symbol Change: Added {lot.symbol} qty={lot.quantity} basis={lot.amount_usd:.2f} (preserved from {old_lot.symbol})")
-        self._pending_symbol_change_lots = None
 
     def _close_position_for_symbol_change(self, transaction):
         """Move the requested FIFO slices to the pending conversion buffer."""
@@ -306,7 +328,8 @@ class PositionManager:
             self.open_lots[key] = remaining
         else:
             del self.open_lots[key]
-        self._pending_symbol_change_lots = pending
+        conversion_key = self._get_conversion_key(transaction)
+        self._pending_symbol_change_lots.setdefault(conversion_key, []).extend(pending)
 
     def _close_position(self, transaction):
         """

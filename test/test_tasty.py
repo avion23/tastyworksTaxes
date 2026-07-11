@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
@@ -80,3 +81,24 @@ class TestTasty:
         t.moneyMovement(lending_income_transaction)
         assert t.year(2024).securitiesLendingIncome.eur == pytest.approx(0.1829658768639649, abs=1e-5)
         assert t.year(2024).securitiesLendingIncome.usd == 0.2
+
+    def test_symbol_change_close_is_processed_before_same_time_open(self):
+        old_open = Transaction.fromString(
+            "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought stock,-100,10,10,0,0,,OLD,OLD,,,,123456,USD"
+        )
+        new_open = Transaction.fromString(
+            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,-250,20,0,0,0,,NEW,NEW,,,,123456,USD"
+        )
+        old_close = Transaction.fromString(
+            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Symbol change close,250,10,0,0,0,,OLD,OLD,,,,123456,USD"
+        )
+        t = Tasty()
+        t.history = pd.DataFrame([old_open, new_open, old_close])
+
+        t.processTransactionHistory()
+
+        lots = t.position_manager.get_all_open_lots()
+        assert [(lot.symbol, lot.quantity, lot.amount_usd) for lot in lots] == [
+            ("NEW", 20, -100),
+        ]
+        assert t.position_manager._pending_symbol_change_lots == {}

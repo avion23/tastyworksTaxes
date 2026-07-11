@@ -146,3 +146,35 @@ class TestPositionManager:
         pm.add_position(Transaction.fromString("2024-02-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,OPT  240621C00200000,Equity Option,Sold 1 OPT 06/21/24 Call 200,100,1,100,-1,0,100,OPT,OPT,6/21/24,200,CALL,123456,USD"))
         assert pm.closed_trades[0].quantity == 1
         assert pm.get_all_open_lots() == []
+
+    def test_symbol_change_open_does_not_consume_existing_new_symbol_lot(self):
+        pm = PositionManager()
+        pm.add_position(Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought 10 OLD @ 10,-100,10,10,-1.00,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-01T09:01:00+0000,Trade,Sell to Open,SELL_TO_OPEN,NEW,Equity,Sold 5 NEW @ 15,75,5,15,-1.00,0,,NEW,NEW,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Symbol change close,0,10,0,0,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,0,10,0,0,0,,NEW,NEW,,,,123456,USD"))
+
+        assert sorted((lot.quantity, lot.amount_usd) for lot in pm.get_all_open_lots()) == [
+            (-5, 75),
+            (10, -100),
+        ]
+        assert pm._pending_symbol_change_lots == {}
+
+    def test_simultaneous_stock_and_option_symbol_changes_keep_bases_separate(self):
+        pm = PositionManager()
+        stock_open = Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought stock,-100,10,10,0,0,,OLD,OLD,,,,123456,USD")
+        option_open = Transaction.fromString("2024-01-01T09:01:00+0000,Trade,Sell to Open,SELL_TO_OPEN,OLD  240621P00010000,Equity Option,Sold put,50,1,50,0,0,100,OLD,OLD,6/21/24,10,PUT,123456,USD")
+        pm.add_position(stock_open)
+        pm.add_position(option_open)
+
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Stock close,0,10,0,0,0,,OLD,OLD,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_CLOSE,OLD  240621P00010000,Equity Option,Option close,0,1,0,0,0,100,OLD,OLD,6/21/24,10,PUT,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Stock open,0,10,0,0,0,,NEW,NEW,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_OPEN,NEW  240621P00010000,Equity Option,Option open,0,1,0,0,0,100,NEW,NEW,6/21/24,10,PUT,123456,USD"))
+
+        lots = pm.get_all_open_lots()
+        assert [(lot.position_type, lot.amount_usd) for lot in lots] == [
+            (PositionType.stock, -100),
+            (PositionType.put, 50),
+        ]
+        assert pm._pending_symbol_change_lots == {}

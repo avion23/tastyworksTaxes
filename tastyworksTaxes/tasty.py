@@ -4,7 +4,12 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position_manager import PositionManager
-from tastyworksTaxes.constants import TransactionCode, Fields
+from tastyworksTaxes.constants import (
+    TransactionCode,
+    TransactionSubcode,
+    OpenClose,
+    Fields,
+)
 from tastyworksTaxes.trade_calculator import (
     calculate_combined_sum,
     calculate_option_sum,
@@ -90,8 +95,27 @@ class Tasty:
             print(value)
 
     def processTransactionHistory(self):
-        chronological_history = self.history.sort_values(
-            by=Fields.DATE_TIME.value, ascending=True, kind="stable"
+        corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+            TransactionSubcode.SYMBOL_CHANGE.value,
+            TransactionSubcode.STOCK_MERGER.value,
+        })
+        close_legs = corporate_actions & (
+            self.history[Fields.OPEN_CLOSE.value] == OpenClose.CLOSE.value
+        )
+        open_legs = corporate_actions & (
+            self.history[Fields.OPEN_CLOSE.value] == OpenClose.OPEN.value
+        )
+        chronological_history = (
+            self.history.assign(
+                _corporate_action_order=close_legs.astype(int) * -1
+                + open_legs.astype(int)
+            )
+            .sort_values(
+                by=[Fields.DATE_TIME.value, "_corporate_action_order"],
+                ascending=True,
+                kind="stable",
+            )
+            .drop(columns="_corporate_action_order")
         )
         for _, row in chronological_history.iterrows():
             transaction_code = row.loc["Transaction Code"]
