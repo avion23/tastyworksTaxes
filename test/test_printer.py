@@ -5,9 +5,14 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from tastyworksTaxes.money import Money
-from tastyworksTaxes.printer import Printer
+from tastyworksTaxes.printer import Printer, _format_german_number
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.values import Values
+
+
+def test_german_number_formatting_is_locale_independent():
+    assert _format_german_number(1234.5) == "1.234,50"
+    assert _format_german_number(-1234.5) == "-1.234,50"
 
 def test_uso():
     """Tests with the uso file"""

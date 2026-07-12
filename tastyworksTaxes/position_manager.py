@@ -307,8 +307,15 @@ class PositionManager:
         key = self._get_key_from_transaction(transaction)
         total_old_quantity = sum(abs(lot.quantity) for lot in old_lots)
         new_quantity = transaction.getQuantity()
+        quantity_per_lot = (
+            abs(new_quantity) / len(old_lots) if total_old_quantity == 0 else None
+        )
         for old_lot in old_lots:
-            quantity = abs(new_quantity) * abs(old_lot.quantity) / total_old_quantity
+            quantity = (
+                quantity_per_lot
+                if quantity_per_lot is not None
+                else abs(new_quantity) * abs(old_lot.quantity) / total_old_quantity
+            )
             lot = PositionLot(
                 symbol=transaction.getSymbol(), position_type=transaction.getType(),
                 quantity=quantity if new_quantity >= 0 else -quantity,

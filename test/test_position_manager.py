@@ -138,6 +138,20 @@ class TestPositionManager:
         assert [(lot.quantity, lot.amount_usd) for lot in old] == [(5, -100)]
         assert [(lot.quantity, lot.amount_usd) for lot in new] == [(20, -100), (10, -100)]
 
+    def test_symbol_change_distributes_quantity_when_all_old_lots_are_zero(self):
+        pm = PositionManager()
+        open_transaction = Transaction.fromString("2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,BUY,NEW,Equity,Symbol change,0,10,0,0,0,,NEW,NEW,,,,123456,USD")
+        pm._pending_symbol_change_lots[pm._get_conversion_key(open_transaction)] = [
+            PositionLot("OLD", PositionType.stock, 0, -60, -55, 1, 0.9, datetime(2024, 1, 1)),
+            PositionLot("OLD", PositionType.stock, 0, -40, -35, 0.5, 0.4, datetime(2024, 1, 2)),
+        ]
+
+        pm.add_position(open_transaction)
+
+        lots = pm.get_all_open_lots()
+        assert [lot.quantity for lot in lots] == [5, 5]
+        assert sum(lot.amount_usd for lot in lots) == -100
+
     def test_reverse_split_rekeys_adjusted_option(self):
         pm = PositionManager()
         expiry = datetime(2024, 6, 21)

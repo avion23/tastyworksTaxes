@@ -6,9 +6,13 @@ from tastyworksTaxes.values import Values
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass
 import logging
-import locale
 
 logger = logging.getLogger(__name__)
+
+
+def _format_german_number(value: float) -> str:
+    """Format a number deterministically without changing process-wide locale."""
+    return f"{value:,.2f}".translate(str.maketrans({",": ".", ".": ","}))
 
 
 def _format_report_line(label: str, value: float, width: int = 40) -> str:
@@ -422,11 +426,6 @@ class Printer(object):
                 "otherFees": "Optionsgebühren",
             }
         }
-        try:
-            locale.setlocale(locale.LC_ALL, 'de_DE.UTF-8')
-        except Exception:
-            locale.setlocale(locale.LC_ALL, '')  # system default
-
         values_attrs = vars(self.values)
         all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
 
@@ -439,7 +438,7 @@ class Printer(object):
             for attr, translation in translations.items():
                 value = values_attrs.get(attr)
                 if value:
-                    formatted_value = locale.format_string("%.2f", value.eur, grouping=True)
+                    formatted_value = _format_german_number(value.eur)
                     line = f"{translation.ljust(max_attr_width)}\t{formatted_value.rjust(max_value_width)}\n"
                     report.append(line)
 
