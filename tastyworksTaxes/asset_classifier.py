@@ -11,35 +11,48 @@ logger = logging.getLogger(__name__)
 class AssetClassifier:
     def __init__(self, registry_path: Path | None = None, on_date: date | None = None):
         self._definitions = load_asset_registry(registry_path)
-        self._on_date = on_date or date.today()
+        self._on_date = on_date
         logger.debug("AssetClassifier initialized")
 
-    def _definition(self, symbol: str) -> AssetDefinition | None:
+    def _definition(self, symbol: str, on_date: date | None = None) -> AssetDefinition | None:
         normalized = symbol.upper()
+        effective_date = on_date or self._on_date or date.today()
         for definition in self._definitions:
-            if definition.symbol == normalized and definition.is_effective(self._on_date):
+            if definition.symbol == normalized and definition.is_effective(effective_date):
                 return definition
         if normalized.endswith(("/USD", "/EUR")):
             return AssetDefinition(normalized, "CRYPTO", "SO", 0, True,
                                    date.min, None, "Currency pair notation")
         return None
 
-    def is_explicitly_classified(self, symbol: str, position_type: PositionType) -> bool:
+    def is_explicitly_classified(self, symbol: str, position_type: PositionType,
+                                 on_date: date | None = None) -> bool:
         if position_type != PositionType.stock:
             return True
-        return self._definition(symbol) is not None
+        return self._definition(symbol, on_date) is not None
 
-    def is_verified(self, symbol: str, position_type: PositionType) -> bool:
+    def is_verified(self, symbol: str, position_type: PositionType,
+                    on_date: date | None = None) -> bool:
         if position_type != PositionType.stock:
             return True
-        definition = self._definition(symbol)
+        definition = self._definition(symbol, on_date)
         return definition is not None and definition.verified
 
-    def classify(self, symbol: str, position_type: PositionType) -> str:
+    def classify(self, symbol: str, position_type: PositionType,
+                 on_date: date | None = None) -> str:
         if position_type != PositionType.stock:
             return position_type.name.upper()
-        definition = self._definition(symbol)
+        definition = self._definition(symbol, on_date)
         return definition.classification if definition else "INDIVIDUAL_STOCK"
+
+    def classify_for_tax(self, symbol: str, position_type: PositionType,
+                         on_date: date | None = None) -> str:
+        if position_type != PositionType.stock:
+            return position_type.name.upper()
+        definition = self._definition(symbol, on_date)
+        if definition is None or not definition.verified:
+            return "INDIVIDUAL_STOCK"
+        return definition.classification
 
     def get_tax_category(self, classification: str) -> str:
         return CLASSIFICATIONS.get(classification, ("KAP", 0))[0]
@@ -47,21 +60,32 @@ class AssetClassifier:
     def get_exemption_percentage(self, classification: str) -> int:
         return CLASSIFICATIONS.get(classification, ("KAP", 0))[1]
 
-    def get_exemption_percentage_for(self, symbol: str, position_type: PositionType) -> int:
+    def get_exemption_percentage_for(self, symbol: str, position_type: PositionType,
+                                     on_date: date | None = None) -> int:
         if position_type != PositionType.stock:
             return 0
-        definition = self._definition(symbol)
+        definition = self._definition(symbol, on_date)
         return definition.teilfreistellung_pct if definition and definition.verified else 0
 
     def get_all_symbols_by_type(self, asset_type: str) -> set[str]:
         return {item.symbol for item in self._definitions
-                if item.classification == asset_type and item.is_effective(self._on_date)}
+                if item.classification == asset_type
+                and item.is_effective(self._on_date or date.today())}
 
-    def check_unsupported_assets(self, symbols: list[str]) -> None:
+    def check_unsupported_assets(self, symbols: list[str], on_date: date | None = None) -> None:
         for symbol in symbols:
-            classification = self.classify(symbol, PositionType.stock)
+            definition = self._definition(symbol, on_date)
+            classification = self.classify(symbol, PositionType.stock, on_date)
             tax_category = self.get_tax_category(classification)
-            if tax_category == "SO":
+            if definition is None:
+                logger.warning("Unknown fund/stock type for symbol '%s' - treating as individual stock. "
+                               "If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.",
+                               symbol)
+            elif not definition.verified:
+                logger.warning("UNVERIFIED ASSET CLASSIFICATION: Symbol '%s' is treated as an individual stock "
+                               "for tax calculations; verify its exact instrument and applicable investment terms.",
+                               symbol)
+            elif tax_category == "SO":
                 logger.warning("UNSUPPORTED TAX CATEGORY: Symbol '%s' (%s) belongs in 'Anlage SO'. "
                                "This program does not handle this. You must calculate it manually.",
                                symbol, classification)

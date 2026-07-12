@@ -91,15 +91,16 @@ class TestAssetClassifier:
         with caplog.at_level(logging.WARNING):
             classifier.check_unsupported_assets(['AOM', 'VNQ'])
         
-        assert "Special fund type detected" in caplog.text
-        assert "AOM" in caplog.text and "15%" in caplog.text
-        assert "VNQ" in caplog.text and "60%" in caplog.text
+        assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
+        assert "AOM" in caplog.text
+        assert "VNQ" in caplog.text
     
-    def test_check_unsupported_assets_no_warnings_for_known(self, classifier, caplog):
+    def test_check_unsupported_assets_warns_for_unverified_known_funds(self, classifier, caplog):
         with caplog.at_level(logging.WARNING):
             classifier.check_unsupported_assets(['SCHG', 'PULS'])
         
-        assert len(caplog.records) == 0
+        assert len(caplog.records) == 2
+        assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
 
 
 def test_unverified_registry_rows_do_not_grant_partial_exemption():
@@ -119,6 +120,32 @@ def test_verified_registry_row_grants_partial_exemption(tmp_path):
     classifier = AssetClassifier(registry, on_date=__import__('datetime').date(2025, 1, 1))
     assert classifier.is_verified('TEST', PositionType.stock)
     assert classifier.get_exemption_percentage_for('TEST', PositionType.stock) == 30
+
+
+def test_effective_date_is_selected_per_operation(tmp_path):
+    registry = tmp_path / 'assets.csv'
+    registry.write_text(
+        'symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n'
+        'TEST,EQUITY_ETF,KAP-INV,30,true,2020-01-01,2020-12-31,Prospectus section 2\n',
+        encoding='utf-8',
+    )
+    classifier = AssetClassifier(registry)
+    date = __import__('datetime').date
+
+    assert classifier.classify_for_tax('TEST', PositionType.stock, date(2020, 6, 1)) == 'EQUITY_ETF'
+    assert classifier.get_exemption_percentage_for('TEST', PositionType.stock, date(2020, 6, 1)) == 30
+    assert classifier.classify_for_tax('TEST', PositionType.stock, date(2021, 1, 1)) == 'INDIVIDUAL_STOCK'
+    assert classifier.get_exemption_percentage_for('TEST', PositionType.stock, date(2021, 1, 1)) == 0
+
+
+def test_unverified_classification_does_not_select_tax_category():
+    classifier = AssetClassifier()
+
+    assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
+    assert classifier.classify_for_tax('TECL', PositionType.stock) == 'INDIVIDUAL_STOCK'
+    assert classifier.get_tax_category(
+        classifier.classify_for_tax('TECL', PositionType.stock)
+    ) == 'KAP'
 
 
 @pytest.mark.parametrize('row, message', [

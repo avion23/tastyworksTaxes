@@ -60,8 +60,8 @@ class TestArchitectureIntegration:
         
         result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
-        expected_eur = 100.0 + 200.0
-        expected_usd = 120.0 + 240.0
+        expected_eur = 0.0
+        expected_usd = 0.0
         
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01
@@ -115,8 +115,8 @@ class TestArchitectureIntegration:
         gross_result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         taxable_result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
-        expected_gross_eur = 100.0 + 200.0
-        expected_gross_usd = 120.0 + 240.0
+        expected_gross_eur = 0.0
+        expected_gross_usd = 0.0
         
         assert abs(gross_result.eur - expected_gross_eur) < 0.01
         assert abs(gross_result.usd - expected_gross_usd) < 0.01
@@ -172,8 +172,8 @@ class TestArchitectureIntegration:
         
         result = calculate_other_stock_and_bond_profits(trades, tasty_instance.classifier)
         
-        expected_eur = 50.0 + 75.0
-        expected_usd = 60.0 + 90.0
+        expected_eur = 100.0 + 50.0 + 75.0
+        expected_usd = 120.0 + 60.0 + 90.0
         
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01

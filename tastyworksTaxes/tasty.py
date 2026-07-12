@@ -29,6 +29,7 @@ from tastyworksTaxes.trade_calculator import (
     calculate_other_stock_and_bond_profits,
 )
 import logging
+from datetime import date
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -175,13 +176,18 @@ class Tasty:
         if not stock_trades:
             return
 
-        unique_symbols = list(set(trade.symbol for trade in stock_trades))
-        self.unverified_asset_symbols.update(
-            trade.symbol
-            for trade in stock_trades
-            if not self.classifier.is_verified(trade.symbol, trade.position_type)
-        )
-        self.classifier.check_unsupported_assets(unique_symbols)
+        checked = set()
+        for trade in stock_trades:
+            closing_date = date.fromisoformat(str(trade.closing_date)[:10])
+            key = trade.symbol, closing_date
+            if key in checked:
+                continue
+            checked.add(key)
+            if not self.classifier.is_verified(
+                trade.symbol, trade.position_type, closing_date
+            ):
+                self.unverified_asset_symbols.add(trade.symbol)
+            self.classifier.check_unsupported_assets([trade.symbol], closing_date)
 
     def run(self):
         self.processTransactionHistory()

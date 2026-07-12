@@ -45,8 +45,8 @@ class TestGrossEquityEtfProfits:
         
         result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         
-        assert abs(result.eur - 300.0) < 0.01
-        assert abs(result.usd - 360.0) < 0.01
+        assert result.eur == 0.0
+        assert result.usd == 0.0
     
     def test_gross_equity_etf_profits_excludes_non_equity_etfs(self, tasty_instance):
         trades = [
@@ -96,8 +96,8 @@ class TestGrossEquityEtfProfits:
         
         result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         
-        assert abs(result.eur - 100.0) < 0.01
-        assert abs(result.usd - 120.0) < 0.01
+        assert result.eur == 0.0
+        assert result.usd == 0.0
     
     def test_gross_equity_etf_profits_excludes_losses(self, tasty_instance):
         trades = [
@@ -133,8 +133,8 @@ class TestGrossEquityEtfProfits:
         
         result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         
-        assert abs(result.eur - 100.0) < 0.01
-        assert abs(result.usd - 120.0) < 0.01
+        assert result.eur == 0.0
+        assert result.usd == 0.0
     
     def test_gross_equity_etf_profits_excludes_options(self, tasty_instance):
         trades = [
@@ -170,8 +170,8 @@ class TestGrossEquityEtfProfits:
         
         result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         
-        assert abs(result.eur - 100.0) < 0.01
-        assert abs(result.usd - 120.0) < 0.01
+        assert result.eur == 0.0
+        assert result.usd == 0.0
     
     def test_gross_equity_etf_profits_empty_trades(self, tasty_instance):
         trades = []

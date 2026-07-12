@@ -3,6 +3,7 @@ import logging
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.fifo_processor import TradeResult
+from datetime import date, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -37,9 +38,18 @@ def get_loss_trades(trades: List[TradeResult]) -> List[TradeResult]:
 def _net_profit_eur(trade: TradeResult) -> float:
     return trade.profit_eur - trade.fees_eur
 
+def _trade_date(trade: TradeResult) -> date:
+    value = trade.closing_date
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    return date.fromisoformat(str(value)[:10])
+
+
 def _is_taxable_capital_asset(trade: TradeResult, classifier) -> bool:
     return classifier.get_tax_category(
-        classifier.classify(trade.symbol, trade.position_type)
+        classifier.classify_for_tax(trade.symbol, trade.position_type, _trade_date(trade))
     ) != "SO"
 
 def get_long_trades(trades: List[TradeResult]) -> List[TradeResult]:
@@ -135,7 +145,9 @@ def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
         total_eur = 0.0
         for trade in filtered_trades:
             taxable_portion = 1.0 - (
-                classifier.get_exemption_percentage_for(trade.symbol, trade.position_type) / 100.0
+                classifier.get_exemption_percentage_for(
+                    trade.symbol, trade.position_type, _trade_date(trade)
+                ) / 100.0
             )
             total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
             total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
@@ -168,7 +180,9 @@ def calculate_gross_equity_etf_profits(trades: List[TradeResult], classifier) ->
     total_usd = 0.0
     
     for trade in profitable_stock_trades:
-        classification = classifier.classify(trade.symbol, trade.position_type)
+        classification = classifier.classify_for_tax(
+            trade.symbol, trade.position_type, _trade_date(trade)
+        )
         
         if classification == 'EQUITY_ETF':
             total_eur += trade.profit_eur
@@ -187,10 +201,14 @@ def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money
     total_taxable_usd = 0.0
 
     for trade in profitable_stock_trades:
-        classification = classifier.classify(trade.symbol, trade.position_type)
+        classification = classifier.classify_for_tax(
+            trade.symbol, trade.position_type, _trade_date(trade)
+        )
 
         if classification == 'EQUITY_ETF':
-            exemption_pct = classifier.get_exemption_percentage_for(trade.symbol, trade.position_type)
+            exemption_pct = classifier.get_exemption_percentage_for(
+                trade.symbol, trade.position_type, _trade_date(trade)
+            )
             taxable_portion = 1.0 - (exemption_pct / 100.0)
 
             net_profit_eur = trade.profit_eur - trade.fees_eur
@@ -214,12 +232,16 @@ def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier
     total_usd = 0.0
 
     for trade in profitable_stock_trades:
-        classification = classifier.classify(trade.symbol, trade.position_type)
+        classification = classifier.classify_for_tax(
+            trade.symbol, trade.position_type, _trade_date(trade)
+        )
 
         if classification == "EQUITY_ETF" or classifier.get_tax_category(classification) == "SO":
             continue
 
-        exemption_pct = classifier.get_exemption_percentage_for(trade.symbol, trade.position_type)
+        exemption_pct = classifier.get_exemption_percentage_for(
+            trade.symbol, trade.position_type, _trade_date(trade)
+        )
         taxable_portion = 1.0 - (exemption_pct / 100.0)
         total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
         total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion

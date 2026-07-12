@@ -5,6 +5,8 @@ from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.printer import EnglishTaxReport
 from tastyworksTaxes.trade_calculator import (
+    calculate_equity_etf_profits,
+    calculate_gross_equity_etf_profits,
     calculate_other_stock_and_bond_profits,
     calculate_stock_loss,
 )
@@ -46,6 +48,32 @@ def test_unverified_mixed_and_real_estate_funds_get_no_exemption():
 
     assert result.eur == 200
     assert result.usd == 200
+
+
+def test_unverified_equity_fund_does_not_enter_fund_tax_bucket():
+    classifier = AssetClassifier()
+    trades = [stock_trade("TECL", 100)]
+
+    assert calculate_gross_equity_etf_profits(trades, classifier).eur == 0
+    assert calculate_equity_etf_profits(trades, classifier).eur == 0
+    assert calculate_other_stock_and_bond_profits(trades, classifier).eur == 100
+
+
+def test_trade_date_controls_effective_fund_exemption(tmp_path):
+    registry = tmp_path / "assets.csv"
+    registry.write_text(
+        "symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n"
+        "TEST,EQUITY_ETF,KAP-INV,30,true,2020-01-01,2020-12-31,Prospectus section 2\n",
+        encoding="utf-8",
+    )
+    classifier = AssetClassifier(registry)
+    effective_trade = stock_trade("TEST", 100)
+    effective_trade.closing_date = "2020-06-01 12:00:00"
+    expired_trade = stock_trade("TEST", 100)
+    expired_trade.closing_date = "2021-06-01 12:00:00"
+
+    assert calculate_equity_etf_profits([effective_trade, expired_trade], classifier).eur == 70
+    assert calculate_other_stock_and_bond_profits([effective_trade, expired_trade], classifier).eur == 100
 
 
 def test_unverified_fund_losses_get_no_exemption():
