@@ -98,6 +98,26 @@ class TestTasty:
 
         assert t.year(2025).dividend.usd == 8.04
 
+    def test_paired_special_dividend_bookkeeping_is_not_withholding(self):
+        opening = Transaction.fromString(
+            "2025-12-10T08:47:06-0300,Money Movement,Special Dividend,,"
+            "TECL  251219C00131960,Equity Option,Special dividend: Open 1.0,"
+            "275,0,,0,0.00,,TECL,TECL,12/19/25,131.96,C,123456,USD"
+        )
+        closing = Transaction.fromString(
+            "2025-12-10T08:47:06-0300,Money Movement,Special Dividend,,"
+            "TECL  251219C00140000,Equity Option,Special dividend: Close 1.0,"
+            "-275,0,,0,0.00,,TECL,TECL,12/19/25,140,C,123456,USD"
+        )
+        t = Tasty()
+        t.history = pd.DataFrame([opening, closing])
+
+        t.processTransactionHistory()
+
+        assert t.year(2025).dividend.usd == 0
+        assert t.year(2025).withholdingTax.usd == 0
+        assert t.year(2025).paidDividend.usd == 0
+
     def test_money_movement_deposit_via_withdrawal(self):
         t = Tasty()
         deposit_withdrawal_transaction = Transaction.fromString("2021-03-01T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,4770.4,0,,0,0.00,,,,,,,123456,USD")

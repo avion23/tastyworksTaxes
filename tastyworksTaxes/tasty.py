@@ -79,7 +79,13 @@ class Tasty:
                 year_values.creditInterest += m
             case "Debit Interest":
                 year_values.debitInterest += m
-            case "Dividend" | "Special Dividend":
+            case "Special Dividend":
+                # Tastytrade also uses this subcode for paired option/corporate-
+                # action bookkeeping entries. Preserve their signed net amount;
+                # treating the negative leg as withholding would create fictitious
+                # dividend income and foreign tax.
+                year_values.dividend += m
+            case "Dividend":
                 if m.usd < 0:
                     key = (t.loc["Date/Time"], t.getSymbol())
                     if key in getattr(self, "_withholding_dividend_keys", set()):
@@ -126,9 +132,7 @@ class Tasty:
             .drop(columns="_corporate_action_order")
         )
         dividends = chronological_history[
-            chronological_history[Fields.TRANSACTION_SUBCODE.value].isin(
-                {"Dividend", "Special Dividend"}
-            )
+            chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
         ]
         amounts = dividends.groupby(
             [Fields.DATE_TIME.value, Fields.SYMBOL.value]
