@@ -35,6 +35,11 @@ class TestAssetClassifier:
     def test_classify_unknown_stock(self, classifier):
         assert classifier.classify('UNKNOWN_SYMBOL', PositionType.stock) == 'INDIVIDUAL_STOCK'
         assert classifier.classify('AAPL', PositionType.stock) == 'INDIVIDUAL_STOCK'
+
+    def test_explicit_classification_is_distinct_from_fallback(self, classifier):
+        assert classifier.is_explicitly_classified('TECL', PositionType.stock)
+        assert not classifier.is_explicitly_classified('AAPL', PositionType.stock)
+        assert classifier.is_explicitly_classified('AAPL', PositionType.call)
     
     def test_classify_options(self, classifier):
         assert classifier.classify('AAPL', PositionType.call) == 'CALL'

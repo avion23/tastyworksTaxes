@@ -4,7 +4,6 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position_manager import PositionManager
-from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.constants import (
     TransactionCode,
     TransactionSubcode,
@@ -178,10 +177,11 @@ class Tasty:
 
         unique_symbols = list(set(trade.symbol for trade in stock_trades))
         self.unverified_asset_symbols.update(
-            symbol
-            for symbol in unique_symbols
-            if self.classifier.classify(symbol, PositionType.stock)
-            == "INDIVIDUAL_STOCK"
+            trade.symbol
+            for trade in stock_trades
+            if not self.classifier.is_explicitly_classified(
+                trade.symbol, trade.position_type
+            )
         )
         self.classifier.check_unsupported_assets(unique_symbols)
 

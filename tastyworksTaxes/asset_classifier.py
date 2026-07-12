@@ -9,10 +9,7 @@ class AssetClassifier:
         self._definitions = ASSET_DEFINITIONS
         logger.debug("AssetClassifier initialized")
 
-    def classify(self, symbol: str, position_type: PositionType) -> str:
-        if position_type != PositionType.stock:
-            return position_type.name.upper()
-
+    def _defined_stock_classification(self, symbol: str):
         rules = self._definitions.get(PositionType.stock, {})
         for category, definition in rules.items():
             checker = definition['symbols']
@@ -22,7 +19,20 @@ class AssetClassifier:
             elif isinstance(checker, set):
                 if symbol in checker:
                     return category
-        
+        return None
+
+    def is_explicitly_classified(self, symbol: str, position_type: PositionType) -> bool:
+        if position_type != PositionType.stock:
+            return True
+        return self._defined_stock_classification(symbol) is not None
+
+    def classify(self, symbol: str, position_type: PositionType) -> str:
+        if position_type != PositionType.stock:
+            return position_type.name.upper()
+
+        classification = self._defined_stock_classification(symbol)
+        if classification is not None:
+            return classification
         return 'INDIVIDUAL_STOCK'
 
     def get_tax_category(self, classification: str) -> str:
