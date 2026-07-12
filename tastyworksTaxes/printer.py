@@ -348,6 +348,8 @@ class Printer(object):
         report.interest_income = self.values.creditInterest.eur
         report.interest_expenses = self.values.debitInterest.eur
         report.dividends = self.values.dividend.eur
+        report.paid_dividends = self.values.paidDividend.eur
+        report.withholding_tax_z41 = self.values.withholdingTax.eur
         report.additional_order_fees = self.values.otherFees.eur
         report.stock_gains_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.stock_losses_z23 = self.values.stockAndEtfLosses.eur
@@ -368,6 +370,8 @@ class Printer(object):
         report.zinseinnahmen = self.values.creditInterest.eur
         report.zinsausgaben = self.values.debitInterest.eur
         report.dividenden = self.values.dividend.eur
+        report.bezahlte_dividenden = self.values.paidDividend.eur
+        report.quellensteuer_z41 = self.values.withholdingTax.eur
         report.zusatzliche_ordergebuehren = self.values.otherFees.eur
         report.aktiengewinne_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.aktienverluste_z23 = self.values.stockAndEtfLosses.eur
@@ -393,6 +397,8 @@ class Printer(object):
                 "creditInterest": "Guthabenzinsen",
                 "debitInterest": "Sollzinsen",
                 "dividend": "Dividendenzahlungen",
+                "paidDividend": "Bezahlte Dividenden",
+                "withholdingTax": "Quellensteuer",
                 "securitiesLendingIncome": "Wertpapierleihe-Einkommen"
             },
             "Aktien & Optionen": {

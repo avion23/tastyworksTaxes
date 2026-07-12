@@ -80,7 +80,14 @@ class Tasty:
             case "Debit Interest":
                 year_values.debitInterest += m
             case "Dividend" | "Special Dividend":
-                year_values.dividend += m
+                if m.usd < 0:
+                    key = (t.loc["Date/Time"], t.getSymbol())
+                    if key in getattr(self, "_withholding_dividend_keys", set()):
+                        year_values.withholdingTax += -m
+                    else:
+                        year_values.paidDividend += m
+                else:
+                    year_values.dividend += m
             case "Fully Paid Stock Lending Income":
                 year_values.securitiesLendingIncome += m
             case subcode:
@@ -118,6 +125,19 @@ class Tasty:
             )
             .drop(columns="_corporate_action_order")
         )
+        dividends = chronological_history[
+            chronological_history[Fields.TRANSACTION_SUBCODE.value].isin(
+                {"Dividend", "Special Dividend"}
+            )
+        ]
+        amounts = dividends.groupby(
+            [Fields.DATE_TIME.value, Fields.SYMBOL.value]
+        )[Fields.AMOUNT.value]
+        self._withholding_dividend_keys = {
+            key
+            for key, values in amounts
+            if (values > 0).any() and (values < 0).any()
+        }
         for _, row in chronological_history.iterrows():
             transaction_code = row.loc["Transaction Code"]
             if transaction_code == TransactionCode.MONEY_MOVEMENT.value:

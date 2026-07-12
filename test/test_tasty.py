@@ -65,8 +65,27 @@ class TestTasty:
         t = Tasty()
         dividend_transaction = Transaction.fromString("2021-07-06T23:00:00+0000,Money Movement,Dividend,,UWMC,Equity,UWM HOLDINGS CORPORATION,-3,0,,0,0.00,,UWMC,UWMC,,,,123456,USD")
         t.moneyMovement(dividend_transaction)
-        assert t.year(2021).dividend.eur == pytest.approx(-2.5342118601115056)
-        assert t.year(2021).dividend.usd == -3.0
+        assert t.year(2021).paidDividend.eur == pytest.approx(-2.5342118601115056)
+        assert t.year(2021).paidDividend.usd == -3.0
+        assert t.year(2021).dividend.usd == 0
+
+    def test_dividend_withholding_is_not_netted_from_income(self):
+        income = Transaction.fromString(
+            "2025-10-10T23:00:00+0000,Money Movement,Dividend,,NVDY,Equity,"
+            "TIDAL TRUST II,397.70,0,,0,0.00,,NVDY,NVDY,,,,123456,USD"
+        )
+        withholding = Transaction.fromString(
+            "2025-10-10T23:00:00+0000,Money Movement,Dividend,,NVDY,Equity,"
+            "TIDAL TRUST II,-59.66,0,,0,0.00,,NVDY,NVDY,,,,123456,USD"
+        )
+        t = Tasty()
+        t.history = pd.DataFrame([income, withholding])
+
+        t.processTransactionHistory()
+
+        assert t.year(2025).dividend.usd == 397.70
+        assert t.year(2025).withholdingTax.usd == 59.66
+        assert t.year(2025).paidDividend.usd == 0
 
     def test_money_movement_special_dividend_is_cash_income(self):
         t = Tasty()

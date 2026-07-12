@@ -22,6 +22,8 @@ class Values(object):
     securitiesLendingIncome: Money = field(default_factory=Money)
     debitInterest: Money = field(default_factory=Money)
     dividend: Money = field(default_factory=Money)
+    paidDividend: Money = field(default_factory=Money)
+    withholdingTax: Money = field(default_factory=Money)
     stockAndOptionsSum: Money = field(default_factory=Money)
     equityEtfGrossProfits: Money = field(default_factory=Money)
     equityEtfProfits: Money = field(default_factory=Money)

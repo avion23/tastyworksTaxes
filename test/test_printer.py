@@ -35,3 +35,17 @@ def test_tax_reports_use_existing_long_option_fields():
     assert german_report.long_optionen_gewinne == 20.0
     assert german_report.long_optionen_verluste == -5.0
     assert german_report.long_optionen_gesamt == 2.66
+
+
+def test_tax_reports_keep_gross_dividends_and_withholding_separate():
+    values = Values()
+    values.dividend = Money(eur=100.0, usd=110.0)
+    values.paidDividend = Money(eur=-5.0, usd=-5.5)
+    values.withholdingTax = Money(eur=15.0, usd=16.5)
+
+    printer = Printer(values, [])
+    english = printer.generateEnglishTaxReport()
+    german = printer.generateGermanTaxReport()
+
+    assert (english.dividends, english.paid_dividends, english.withholding_tax_z41) == (100.0, -5.0, 15.0)
+    assert (german.dividenden, german.bezahlte_dividenden, german.quellensteuer_z41) == (100.0, -5.0, 15.0)

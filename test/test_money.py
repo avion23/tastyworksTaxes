@@ -69,7 +69,7 @@ def test_dividend():
     )
     t.moneyMovement(dividend_tx)
     assert (
-        clean_numpy_str(str(t.year(2021).dividend))
+        clean_numpy_str(str(t.year(2021).paidDividend))
         == "{'eur': -2.5342118601115056, 'usd': -3.0}"
     )
 
