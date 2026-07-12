@@ -119,6 +119,15 @@ def test_unsupported_csv_schema_raises_clear_error(tmp_path):
         History.fromFile(csv_path)
 
 
+@pytest.mark.parametrize("contents", ["", "Date,Type,Sub Type,Value,Description\n"])
+def test_empty_csv_raises_clear_error(tmp_path, contents):
+    csv_path = tmp_path / "empty.csv"
+    csv_path.write_text(contents)
+
+    with pytest.raises(ValueError, match="empty|no transactions"):
+        History.fromFile(csv_path)
+
+
 def test_new_format_missing_optional_columns_uses_safe_defaults(tmp_path):
     csv_path = tmp_path / "minimal_tastytrade.csv"
     pd.DataFrame({
@@ -200,3 +209,25 @@ def test_new_format_csv_sorting():
         assert hist["Transaction Subcode"].iloc[1] == "Sell to Close"
     finally:
         os.unlink(temp_file.name)
+
+
+def test_new_format_accepts_fractional_iso_date_and_normalizes_option(tmp_path):
+    csv_path = tmp_path / "fractional_date.csv"
+    pd.DataFrame({
+        "Date": ["2024-01-02T03:04:05.123456Z"],
+        "Type": ["Trade"],
+        "Sub Type": ["Buy to Open"],
+        "Value": ["-100"],
+        "Description": ["Bought option"],
+        "Call or Put": ["call"],
+        "Expiration Date": ["01/19/24"],
+        "Strike Price": ["1,000"],
+        "Average Price": [125],
+    }).to_csv(csv_path, index=False)
+
+    history = History.fromFile(csv_path)
+
+    assert history.loc[0, "Date/Time"] == pd.Timestamp("2024-01-02 03:04:05.123456")
+    assert history.loc[0, "Call/Put"] == "C"
+    assert history.loc[0, "Strike"] == 1000
+    assert history.loc[0, "Price"] == 1.25

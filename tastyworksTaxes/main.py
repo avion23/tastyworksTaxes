@@ -1,7 +1,11 @@
 import argparse
 import logging
 import pathlib
+from dataclasses import asdict, fields
 
+import pandas as pd
+
+from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.printer import Printer
 
@@ -26,6 +30,12 @@ def main() -> None:
     args = parser.parse_args()
     if not args.input.is_file():
         parser.error(f"input file does not exist or is not a file: {args.input}")
+    if args.write_closed_trades:
+        output = args.write_closed_trades
+        if output.resolve() == args.input.resolve():
+            parser.error("closed-trades output must not overwrite the input CSV")
+        if not output.parent.is_dir():
+            parser.error(f"output directory does not exist or is not a directory: {output.parent}")
     t = Tasty(path=args.input)
     t.run()
     for year, values in t.yearValues.items():
@@ -36,15 +46,10 @@ def main() -> None:
         logging.info(
             f"Writing closed trades to: '{args.write_closed_trades}'")
         closed_trades = t.position_manager.closed_trades
-        if closed_trades:
-            import pandas as pd
-            from dataclasses import asdict
-            trades_data = [asdict(trade) for trade in closed_trades]
-            df = pd.DataFrame(trades_data)
-            df.to_csv(args.write_closed_trades, index=False)
-        else:
-            logging.error(
-                "The closed trades list is empty. Not saving to file.")
+        trades_data = [asdict(trade) for trade in closed_trades]
+        columns = [field.name for field in fields(TradeResult)]
+        pd.DataFrame(trades_data, columns=columns).to_csv(
+            args.write_closed_trades, index=False)
     logging.info("Done")
 
 

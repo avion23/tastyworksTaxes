@@ -30,7 +30,13 @@ class History(pd.DataFrame):
 
     @classmethod
     def fromFile(cls, path):
-        df_raw = pd.read_csv(path)
+        try:
+            df_raw = pd.read_csv(path)
+        except pd.errors.EmptyDataError as exc:
+            raise ValueError(f"Input CSV is empty: {path}") from exc
+
+        if df_raw.empty:
+            raise ValueError(f"Input CSV contains no transactions: {path}")
         df = cls._load_supported_schema(df_raw)
 
         df = History(df)
@@ -119,7 +125,9 @@ class History(pd.DataFrame):
             if pd.isna(date_str):
                 raise ValueError("Failed to parse date: value is missing")
             try:
-                dt = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
+                dt = datetime.fromisoformat(str(date_str).strip().replace('Z', '+00:00'))
+                if dt.tzinfo is None:
+                    raise ValueError("timezone offset is missing")
                 return dt.replace(tzinfo=None)
             except (ValueError, TypeError) as e:
                 raise ValueError(f"Failed to parse date '{date_str}': {e}")
@@ -160,7 +168,7 @@ class History(pd.DataFrame):
             if pd.isna(strike) or strike == '':
                 return 0.0
             try:
-                return float(strike)
+                return float(str(strike).replace(',', ''))
             except (ValueError, TypeError) as e:
                 raise ValueError(f"Failed to parse strike '{strike}': {e}")
 
@@ -168,7 +176,8 @@ class History(pd.DataFrame):
 
         def format_call_put(cp):
             if pd.notna(cp) and cp not in ('', '--'):
-                return str(cp)[0]
+                value = str(cp).strip().upper()
+                return value[0] if value else ''
             return ''
 
         internal_df['Call/Put'] = df['Call or Put'].apply(format_call_put) if 'Call or Put' in df else ''
@@ -188,7 +197,8 @@ class History(pd.DataFrame):
             try:
                 price_float = float(str(price).replace(',', ''))
                 symbol = row.get('Symbol', '')
-                is_option = len(str(symbol).split()) > 1
+                call_put = str(row.get('Call or Put', '')).strip().upper()
+                is_option = call_put in {'CALL', 'PUT', 'C', 'P'} or len(str(symbol).split()) > 1
                 if is_option:
                     return price_float / 100
                 else:
