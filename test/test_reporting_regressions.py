@@ -38,17 +38,17 @@ def test_stock_results_are_classified_after_fees_and_crypto_is_excluded():
     assert calculate_stock_loss(trades, classifier).eur == -1
 
 
-def test_mixed_and_real_estate_funds_use_their_own_exemptions():
+def test_unverified_mixed_and_real_estate_funds_get_no_exemption():
     classifier = AssetClassifier()
     trades = [stock_trade("AOM", 100), stock_trade("VNQ", 100)]
 
     result = calculate_other_stock_and_bond_profits(trades, classifier)
 
-    assert result.eur == 125
-    assert result.usd == 125
+    assert result.eur == 200
+    assert result.usd == 200
 
 
-def test_fund_losses_use_their_partial_exemptions():
+def test_unverified_fund_losses_get_no_exemption():
     classifier = AssetClassifier()
     trades = [
         stock_trade("TECL", -100),
@@ -60,17 +60,17 @@ def test_fund_losses_use_their_partial_exemptions():
 
     result = calculate_stock_loss(trades, classifier)
 
-    assert result.eur == -395
-    assert result.usd == -395
+    assert result.eur == -500
+    assert result.usd == -500
 
 
-def test_fund_loss_partial_exemption_includes_fees():
+def test_unverified_fund_loss_includes_fees_without_exemption():
     classifier = AssetClassifier()
 
     result = calculate_stock_loss([stock_trade("TECL", 1, 2)], classifier)
 
-    assert result.eur == -0.7
-    assert result.usd == -0.7
+    assert result.eur == -1
+    assert result.usd == -1
 
 
 def test_corporate_actions_resource_is_packaged_with_the_module():

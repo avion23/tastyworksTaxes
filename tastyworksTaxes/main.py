@@ -42,8 +42,8 @@ def main() -> None:
         symbols = ", ".join(sorted(t.unverified_asset_symbols))
         print("*** INCOMPLETE ASSET CLASSIFICATION - NOT FILING-READY ***")
         print(
-            "The following symbols are not in the program's explicit asset registry. "
-            "They were treated as individual stocks but may be funds requiring "
+            "The following symbols lack a verified classification in the asset registry. "
+            "No partial exemption was applied; unknown symbols were treated as individual stocks and may be funds requiring "
             "different German tax treatment:"
         )
         print(symbols)

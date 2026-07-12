@@ -179,9 +179,7 @@ class Tasty:
         self.unverified_asset_symbols.update(
             trade.symbol
             for trade in stock_trades
-            if not self.classifier.is_explicitly_classified(
-                trade.symbol, trade.position_type
-            )
+            if not self.classifier.is_verified(trade.symbol, trade.position_type)
         )
         self.classifier.check_unsupported_assets(unique_symbols)
 

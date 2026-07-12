@@ -59,5 +59,5 @@ def test_cli_marks_unverified_asset_classifications(tmp_path, monkeypatch, capsy
     output = capsys.readouterr().out
     assert "INCOMPLETE ASSET CLASSIFICATION - NOT FILING-READY" in output
     assert "AAPL, SQQQ" in output
-    assert "not in the program's explicit asset registry" in output
+    assert "lack a verified classification in the asset registry" in output
     assert "Verify each symbol's stock/fund status" in output

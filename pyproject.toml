@@ -42,7 +42,7 @@ Issues = "https://github.com/avion23/tastyworksTaxes/issues"
 tastyworks-taxes = "tastyworksTaxes.main:main"
 
 [tool.setuptools.package-data]
-tastyworksTaxes = ["corporate_actions.csv"]
+tastyworksTaxes = ["corporate_actions.csv", "asset_registry.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["test"]

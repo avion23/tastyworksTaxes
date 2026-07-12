@@ -60,8 +60,8 @@ class TestArchitectureIntegration:
         
         result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
-        expected_eur = (100.0 + 200.0) * 0.70
-        expected_usd = (120.0 + 240.0) * 0.70
+        expected_eur = 100.0 + 200.0
+        expected_usd = 120.0 + 240.0
         
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01
@@ -121,8 +121,8 @@ class TestArchitectureIntegration:
         assert abs(gross_result.eur - expected_gross_eur) < 0.01
         assert abs(gross_result.usd - expected_gross_usd) < 0.01
         
-        assert abs(taxable_result.eur - (expected_gross_eur * 0.70)) < 0.01
-        assert abs(taxable_result.usd - (expected_gross_usd * 0.70)) < 0.01
+        assert abs(taxable_result.eur - expected_gross_eur) < 0.01
+        assert abs(taxable_result.usd - expected_gross_usd) < 0.01
     
     def test_other_stock_and_bond_profits_excludes_equity_etfs(self, tasty_instance):
         trades = [

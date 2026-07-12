@@ -100,3 +100,38 @@ class TestAssetClassifier:
             classifier.check_unsupported_assets(['SCHG', 'PULS'])
         
         assert len(caplog.records) == 0
+
+
+def test_unverified_registry_rows_do_not_grant_partial_exemption():
+    classifier = AssetClassifier()
+    assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
+    assert not classifier.is_verified('TECL', PositionType.stock)
+    assert classifier.get_exemption_percentage_for('TECL', PositionType.stock) == 0
+
+
+def test_verified_registry_row_grants_partial_exemption(tmp_path):
+    registry = tmp_path / 'assets.csv'
+    registry.write_text(
+        'symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n'
+        'TEST,EQUITY_ETF,KAP-INV,30,true,2024-01-01,,Prospectus section 2\n',
+        encoding='utf-8',
+    )
+    classifier = AssetClassifier(registry, on_date=__import__('datetime').date(2025, 1, 1))
+    assert classifier.is_verified('TEST', PositionType.stock)
+    assert classifier.get_exemption_percentage_for('TEST', PositionType.stock) == 30
+
+
+@pytest.mark.parametrize('row, message', [
+    ('test,EQUITY_ETF,KAP-INV,30,true,2024-01-01,,evidence', 'invalid symbol'),
+    ('TEST,EQUITY_ETF,KAP-INV,15,true,2024-01-01,,evidence', 'tax properties'),
+    ('TEST,EQUITY_ETF,KAP-INV,30,yes,2024-01-01,,evidence', 'verified'),
+    ('TEST,EQUITY_ETF,KAP-INV,30,true,2025-01-01,2024-01-01,evidence', 'precedes'),
+    ('TEST,EQUITY_ETF,KAP-INV,30,true,2024-01-01,,', 'evidence is required'),
+])
+def test_registry_validation(tmp_path, row, message):
+    registry = tmp_path / 'assets.csv'
+    registry.write_text(
+        'symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n'
+        + row + '\n', encoding='utf-8')
+    with pytest.raises(ValueError, match=message):
+        AssetClassifier(registry)

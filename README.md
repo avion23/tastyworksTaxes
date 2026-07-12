@@ -141,3 +141,18 @@ Contributions are welcome, this software was a lot of work. Try opening an issue
 ## License
 
 This software is under the MIT License.
+
+### Asset classification registry
+
+Fund classifications are maintained in `tastyworksTaxes/asset_registry.csv`, rather
+than in Python symbol lists. Each row records the classification, tax properties,
+verification status, effective dates, and evidence. The loader rejects malformed
+rows, unknown categories, inconsistent rates, and overlapping date ranges.
+
+A row marked `verified=false` preserves the historical classification for review,
+but the calculator does **not** apply its partial exemption and the CLI marks the
+report not filing-ready. Change it to `true` only after checking the exact share
+class (preferably by ISIN) against binding investment terms applicable during the
+recorded dates, and replace the legacy evidence note with a document reference.
+Do not infer fund status from a ticker or product name. Unknown instruments should
+not be added with a guessed classification.

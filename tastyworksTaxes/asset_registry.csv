@@ -1,0 +1,25 @@
+symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence
+SCHG,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+TECL,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+QQQ,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+SPY,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+VTI,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+VXUS,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+TQQQ,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+PULS,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+VGSH,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+ICSH,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+TLT,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+BND,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+AGG,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+AOM,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+AOR,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+AOK,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+AOA,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
+VNQ,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
+IYR,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
+VNQI,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
+RWR,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
+BTC,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
+ETH,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
+DOGE,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency

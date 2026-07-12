@@ -134,9 +134,8 @@ def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
         total_usd = 0.0
         total_eur = 0.0
         for trade in filtered_trades:
-            classification = classifier.classify(trade.symbol, trade.position_type)
             taxable_portion = 1.0 - (
-                classifier.get_exemption_percentage(classification) / 100.0
+                classifier.get_exemption_percentage_for(trade.symbol, trade.position_type) / 100.0
             )
             total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
             total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
@@ -191,7 +190,7 @@ def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money
         classification = classifier.classify(trade.symbol, trade.position_type)
 
         if classification == 'EQUITY_ETF':
-            exemption_pct = classifier.get_exemption_percentage(classification)
+            exemption_pct = classifier.get_exemption_percentage_for(trade.symbol, trade.position_type)
             taxable_portion = 1.0 - (exemption_pct / 100.0)
 
             net_profit_eur = trade.profit_eur - trade.fees_eur
@@ -220,7 +219,7 @@ def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier
         if classification == "EQUITY_ETF" or classifier.get_tax_category(classification) == "SO":
             continue
 
-        exemption_pct = classifier.get_exemption_percentage(classification)
+        exemption_pct = classifier.get_exemption_percentage_for(trade.symbol, trade.position_type)
         taxable_portion = 1.0 - (exemption_pct / 100.0)
         total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
         total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
