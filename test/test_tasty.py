@@ -68,6 +68,17 @@ class TestTasty:
         assert t.year(2021).dividend.eur == pytest.approx(-2.5342118601115056)
         assert t.year(2021).dividend.usd == -3.0
 
+    def test_money_movement_special_dividend_is_cash_income(self):
+        t = Tasty()
+        transaction = Transaction.fromString(
+            "2025-12-17T19:00:00+0000,Money Movement,Special Dividend,,TECL,Equity,"
+            "Cash special dividend,8.04,0,,0,0.00,,TECL,TECL,,,,123456,USD"
+        )
+
+        t.moneyMovement(transaction)
+
+        assert t.year(2025).dividend.usd == 8.04
+
     def test_money_movement_deposit_via_withdrawal(self):
         t = Tasty()
         deposit_withdrawal_transaction = Transaction.fromString("2021-03-01T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,4770.4,0,,0,0.00,,,,,,,123456,USD")

@@ -75,6 +75,9 @@ class PositionManager:
         self.closed_trades = []
         self._corporate_actions_config = self._load_corporate_actions_config()
         self._pending_symbol_change_lots: dict[tuple, list[PositionLot]] = {}
+        self._pending_special_dividend_lots: dict[
+            tuple, deque[list[PositionLot]]
+        ] = defaultdict(deque)
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
@@ -202,6 +205,7 @@ class PositionManager:
                 conversion_key = self._get_conversion_key(transaction)
                 is_conversion_close = (
                     conversion_key not in self._pending_symbol_change_lots
+                    and not self._pending_special_dividend_lots.get(conversion_key)
                     and any(
                         lot.can_close_with(transaction.getQuantity())
                         for lot in self.open_lots.get(key, ())
@@ -234,6 +238,18 @@ class PositionManager:
         position_type = transaction.getType()
         if position_type == PositionType.stock:
             return position_type, None, None, None
+        if (
+            transaction[Fields.TRANSACTION_SUBCODE.value]
+            == TransactionSubcode.SPECIAL_DIVIDEND.value
+        ):
+            return (
+                TransactionSubcode.SPECIAL_DIVIDEND.value,
+                position_type,
+                transaction.getExpiry(),
+                transaction.loc[Fields.CALL_PUT.value],
+                abs(transaction.getQuantity()),
+                abs(transaction.getValue().usd),
+            )
         return (
             position_type,
             transaction.getStrike(),
@@ -271,7 +287,16 @@ class PositionManager:
 
     def _open_position_from_symbol_change(self, transaction):
         conversion_key = self._get_conversion_key(transaction)
-        old_lots = self._pending_symbol_change_lots.pop(conversion_key, None)
+        if (
+            transaction[Fields.TRANSACTION_SUBCODE.value]
+            == TransactionSubcode.SPECIAL_DIVIDEND.value
+        ):
+            pending = self._pending_special_dividend_lots.get(conversion_key)
+            old_lots = pending.popleft() if pending else None
+            if pending is not None and not pending:
+                del self._pending_special_dividend_lots[conversion_key]
+        else:
+            old_lots = self._pending_symbol_change_lots.pop(conversion_key, None)
         if not old_lots:
             logger.warning(
                 f"Symbol Change 'open' leg for {transaction.getSymbol()} has no pending lot to transfer basis from. Using CSV values."
@@ -330,7 +355,13 @@ class PositionManager:
         else:
             del self.open_lots[key]
         conversion_key = self._get_conversion_key(transaction)
-        self._pending_symbol_change_lots.setdefault(conversion_key, []).extend(pending)
+        if (
+            transaction[Fields.TRANSACTION_SUBCODE.value]
+            == TransactionSubcode.SPECIAL_DIVIDEND.value
+        ):
+            self._pending_special_dividend_lots[conversion_key].append(pending)
+        else:
+            self._pending_symbol_change_lots.setdefault(conversion_key, []).extend(pending)
 
     def _close_position(self, transaction):
         """

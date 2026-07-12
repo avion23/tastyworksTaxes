@@ -79,7 +79,7 @@ class Tasty:
                 year_values.creditInterest += m
             case "Debit Interest":
                 year_values.debitInterest += m
-            case "Dividend":
+            case "Dividend" | "Special Dividend":
                 year_values.dividend += m
             case "Fully Paid Stock Lending Income":
                 year_values.securitiesLendingIncome += m

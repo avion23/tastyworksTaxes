@@ -65,3 +65,26 @@ class TestTastyReceiveDeliver:
         assert lots[0].quantity == -1
         assert lots[0].amount_usd == 275
         assert t.position_manager.closed_trades == []
+
+    def test_special_dividend_option_adjustment_ignores_csv_replacement_basis(self):
+        t = Tasty()
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-01T15:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,TECL  251219C00140000,Equity Option,"
+            "Sold 0.5 TECL calls,137.50,0.5,275,-1,0,100,TECL,TECL,12/19/25,140,CALL,123456,USD"
+        ))
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-10T11:47:06+0000,Receive Deliver,Special Dividend,BUY_TO_CLOSE,TECL  251219C00140000,Equity Option,"
+            "Special dividend close,-999,0.5,,0,0,100,TECL,TECL,12/19/25,140,CALL,,USD"
+        ))
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-10T11:47:06+0000,Receive Deliver,Special Dividend,SELL_TO_OPEN,TECL  251219C00131960,Equity Option,"
+            "Special dividend open,999,0.5,,0,0,100,TECL,TECL,12/19/25,131.96,CALL,,USD"
+        ))
+
+        lots = t.position_manager.get_all_open_lots()
+        assert len(lots) == 1
+        assert lots[0].quantity == -0.5
+        assert lots[0].strike == 131.96
+        assert lots[0].amount_usd == 137.5
+        assert lots[0].fees_usd == 1
+        assert t.position_manager.closed_trades == []
