@@ -129,6 +129,19 @@ def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
     ]
     if not filtered_trades:
         return Money()
+
+    if classifier is not None:
+        total_usd = 0.0
+        total_eur = 0.0
+        for trade in filtered_trades:
+            classification = classifier.classify(trade.symbol, trade.position_type)
+            taxable_portion = 1.0 - (
+                classifier.get_exemption_percentage(classification) / 100.0
+            )
+            total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
+            total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
+        return Money(usd=total_usd, eur=total_eur)
+
     return Money(
         usd=sum(t.profit_usd - t.fees_usd for t in filtered_trades),
         eur=sum(t.profit_eur - t.fees_eur for t in filtered_trades)

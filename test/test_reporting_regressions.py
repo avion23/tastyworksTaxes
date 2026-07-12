@@ -48,6 +48,31 @@ def test_mixed_and_real_estate_funds_use_their_own_exemptions():
     assert result.usd == 125
 
 
+def test_fund_losses_use_their_partial_exemptions():
+    classifier = AssetClassifier()
+    trades = [
+        stock_trade("TECL", -100),
+        stock_trade("AOM", -100),
+        stock_trade("VNQ", -100),
+        stock_trade("PULS", -100),
+        stock_trade("AAPL", -100),
+    ]
+
+    result = calculate_stock_loss(trades, classifier)
+
+    assert result.eur == -395
+    assert result.usd == -395
+
+
+def test_fund_loss_partial_exemption_includes_fees():
+    classifier = AssetClassifier()
+
+    result = calculate_stock_loss([stock_trade("TECL", 1, 2)], classifier)
+
+    assert result.eur == -0.7
+    assert result.usd == -0.7
+
+
 def test_corporate_actions_resource_is_packaged_with_the_module():
     resource = files("tastyworksTaxes").joinpath("corporate_actions.csv")
 
