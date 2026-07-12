@@ -138,6 +138,7 @@ dmypy.json
 # Personal transaction data and temporary output files - users generate their own
 /*.csv
 /*.txt
+/local-data/
 !requirements.txt
 
 # Test data with real transactions - users generate their own
