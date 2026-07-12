@@ -74,7 +74,7 @@ class Transaction(pd.core.series.Series):
 
     def isOption(self) -> bool:
         valid_options = {"P", "C"}
-        valid_subcodes = {"Sell to Open", "Buy to Open", "Sell to Close", "Buy to Close", "Assignment", "Expiration"}
+        valid_subcodes = {"Sell to Open", "Buy to Open", "Sell to Close", "Buy to Close", "Assignment", "Expiration", "Special Dividend"}
         return self.isType("Call/Put", valid_options) and self.isType("Transaction Subcode", valid_subcodes)
 
     def isStock(self) -> bool:
@@ -109,7 +109,7 @@ class Transaction(pd.core.series.Series):
                 "Expiration": 1
             }
 
-            if subcode in ["Reverse Split", "Symbol Change", "Stock Merger"]:
+            if subcode in ["Reverse Split", "Symbol Change", "Stock Merger", "Special Dividend"]:
                 return 1 if buy_sell == "Buy" else -1
 
             try:
@@ -179,4 +179,3 @@ class Transaction(pd.core.series.Series):
     def getStrike(self) -> float:
         strike = self.loc["Strike"]
         return strike
-

@@ -190,6 +190,7 @@ class PositionManager:
         if subcode in {
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
+            TransactionSubcode.SPECIAL_DIVIDEND.value,
         }:
             key = self._get_key_from_transaction(transaction)
             open_close = transaction.get(Fields.OPEN_CLOSE.value, "")

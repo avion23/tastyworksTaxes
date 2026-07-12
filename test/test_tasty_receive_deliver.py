@@ -41,3 +41,27 @@ class TestTastyReceiveDeliver:
         t.position_manager.add_position(Transaction.fromString("2018-07-20T22:00:00+0000,Receive Deliver,Expiration,,DERM  180720C00011000,Equity Option,Removal of 2 DERM 07/20/18 Call 11.00 due to expiration.,0,2,,0,0.00,100,DERM,DERM,7/20/18,11,CALL,123456,USD"))
         assert len(t.position_manager.closed_trades) == 1
         assert len(t.position_manager.open_lots) == 0
+
+    def test_special_dividend_option_adjustment_preserves_basis(self):
+        """Special-dividend close/open legs roll an option without realizing P&L."""
+        t = Tasty()
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-01T15:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,TECL  251219C00140000,Equity Option,"
+            "Sold 1 TECL 12/19/25 Call 140.00 @ 2.75,275,1,275,-1,0,100,TECL,TECL,12/19/25,140,CALL,123456,USD"
+        ))
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-10T11:47:06+0000,Receive Deliver,Special Dividend,BUY_TO_CLOSE,TECL  251219C00140000,Equity Option,"
+            "Special dividend: Close 1.0 TECL  251219C00140000,-275,1,,0,0.00,100,TECL,TECL,12/19/25,140,CALL,123456,USD"
+        ))
+        t.position_manager.add_position(Transaction.fromString(
+            "2025-12-10T11:47:06+0000,Receive Deliver,Special Dividend,SELL_TO_OPEN,TECL  251219C00131960,Equity Option,"
+            "Special dividend: Open 1.0 TECL  251219C00131960,275,1,,0,0.00,100,TECL,TECL,12/19/25,131.96,CALL,123456,USD"
+        ))
+
+        lots = t.position_manager.get_all_open_lots()
+        assert len(lots) == 1
+        assert lots[0].symbol == "TECL"
+        assert lots[0].strike == 131.96
+        assert lots[0].quantity == -1
+        assert lots[0].amount_usd == 275
+        assert t.position_manager.closed_trades == []

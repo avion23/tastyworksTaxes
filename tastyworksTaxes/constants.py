@@ -10,6 +10,7 @@ class TransactionSubcode(Enum):
     REVERSE_SPLIT = "Reverse Split"
     SYMBOL_CHANGE = "Symbol Change"
     STOCK_MERGER = "Stock Merger"
+    SPECIAL_DIVIDEND = "Special Dividend"
 
 class TransactionCode(Enum):
     TRADE = "Trade"

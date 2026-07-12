@@ -98,6 +98,7 @@ class Tasty:
         corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin({
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
+            TransactionSubcode.SPECIAL_DIVIDEND.value,
         })
         close_legs = corporate_actions & (
             self.history[Fields.OPEN_CLOSE.value] == OpenClose.CLOSE.value
