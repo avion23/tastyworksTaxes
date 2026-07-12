@@ -38,6 +38,15 @@ def main() -> None:
             parser.error(f"output directory does not exist or is not a directory: {output.parent}")
     t = Tasty(path=args.input)
     t.run()
+    if getattr(t, "unverified_asset_symbols", None):
+        symbols = ", ".join(sorted(t.unverified_asset_symbols))
+        print("*** INCOMPLETE ASSET CLASSIFICATION - NOT FILING-READY ***")
+        print(
+            "The following symbols were conservatively treated as individual stocks "
+            "but may be funds requiring different German tax treatment:"
+        )
+        print(symbols)
+        print("Verify every classification before using this report for a tax filing.\n")
     for year, values in t.yearValues.items():
         print(f"Values for year {year} in Euro:")
         p = Printer(values=values, closed_trades=t.position_manager.closed_trades)

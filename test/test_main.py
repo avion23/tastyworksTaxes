@@ -42,3 +42,21 @@ def test_cli_replaces_stale_output_with_header_only_csv(tmp_path, monkeypatch):
         "profit_usd", "profit_eur", "fees_usd", "fees_eur",
         "worthless_expiry", "strike", "expiry",
     ]
+
+
+def test_cli_marks_unverified_asset_classifications(tmp_path, monkeypatch, capsys):
+    source = tmp_path / "transactions.csv"
+    source.write_text("data")
+    monkeypatch.setattr("sys.argv", ["tastyworks-taxes", str(source)])
+    tasty = MagicMock()
+    tasty.yearValues = {}
+    tasty.position_manager.closed_trades = []
+    tasty.unverified_asset_symbols = {"SQQQ", "AAPL"}
+
+    with patch("tastyworksTaxes.main.Tasty", return_value=tasty):
+        main()
+
+    output = capsys.readouterr().out
+    assert "INCOMPLETE ASSET CLASSIFICATION - NOT FILING-READY" in output
+    assert "AAPL, SQQQ" in output
+    assert "Verify every classification" in output
