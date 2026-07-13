@@ -20,6 +20,12 @@ def _format_report_line(label: str, value: float, width: int = 40) -> str:
     return f"{label:<{width}}{value: .2f}\n"
 
 
+def _format_german_report_line(label: str, value: float, width: int = 40) -> str:
+    formatted = _format_german_number(abs(value))
+    sign = "-" if value < 0 else " "
+    return f"{label:<{width}}{sign}{formatted}\n"
+
+
 @dataclass_json
 @dataclass
 class GermanTaxReport(object):
@@ -209,7 +215,7 @@ class GermanTaxReport(object):
             ('Net Liquidating Value', self.net_liquidating_value),
             ('Wertpapierleihe Einkommen', self.wertpapierleihe_einkommen),
         ]
-        return ''.join(_format_report_line(label, value) for label, value in fields)
+        return ''.join(_format_german_report_line(label, value) for label, value in fields)
 
 
 @dataclass_json

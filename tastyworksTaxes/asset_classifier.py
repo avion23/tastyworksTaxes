@@ -92,7 +92,3 @@ class AssetClassifier:
             elif classification == "INDIVIDUAL_STOCK":
                 logger.warning("Unknown fund/stock type for symbol '%s' - treating as individual stock. "
                                "If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.", symbol)
-            elif classification in {"MIXED_FUND_ETF", "REAL_ESTATE_ETF"}:
-                logger.warning("Special fund type detected: '%s' (%s) has %s%% Teilfreistellung "
-                               "but automatic calculation is not fully implemented.", symbol, classification,
-                               self.get_exemption_percentage(classification))

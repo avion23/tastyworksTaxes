@@ -10,6 +10,7 @@ CLASSIFICATIONS = {
     "BOND_ETF": ("KAP-INV", 0),
     "MIXED_FUND_ETF": ("KAP-INV", 15),
     "REAL_ESTATE_ETF": ("KAP-INV", 60),
+    "FOREIGN_REAL_ESTATE_ETF": ("KAP-INV", 80),
     "CRYPTO": ("SO", 0),
 }
 _COLUMNS = {

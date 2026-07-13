@@ -122,6 +122,19 @@ def test_verified_registry_row_grants_partial_exemption(tmp_path):
     assert classifier.get_exemption_percentage_for('TEST', PositionType.stock) == 30
 
 
+def test_verified_foreign_real_estate_fund_grants_80_percent_exemption(tmp_path):
+    registry = tmp_path / 'assets.csv'
+    registry.write_text(
+        'symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n'
+        'TEST,FOREIGN_REAL_ESTATE_ETF,KAP-INV,80,true,2024-01-01,,Prospectus section 2\n',
+        encoding='utf-8',
+    )
+    classifier = AssetClassifier(registry, on_date=__import__('datetime').date(2025, 1, 1))
+
+    assert classifier.classify_for_tax('TEST', PositionType.stock) == 'FOREIGN_REAL_ESTATE_ETF'
+    assert classifier.get_exemption_percentage_for('TEST', PositionType.stock) == 80
+
+
 def test_effective_date_is_selected_per_operation(tmp_path):
     registry = tmp_path / 'assets.csv'
     registry.write_text(
