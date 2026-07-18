@@ -41,6 +41,10 @@ def test_cli_replaces_stale_output_with_header_only_csv(tmp_path, monkeypatch):
         "symbol", "position_type", "opening_date", "closing_date", "quantity",
         "profit_usd", "profit_eur", "fees_usd", "fees_eur",
         "worthless_expiry", "strike", "expiry",
+        "opening_profit_usd", "opening_profit_eur",
+        "closing_profit_usd", "closing_profit_eur",
+        "opening_fees_usd", "opening_fees_eur",
+        "closing_fees_usd", "closing_fees_eur",
     ]
 
 

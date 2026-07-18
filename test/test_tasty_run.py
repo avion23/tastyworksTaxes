@@ -131,6 +131,11 @@ class TestTastyRun:
             close_year = datetime.strptime(trade.closing_date, "%Y-%m-%d %H:%M:%S").year
             if open_year == close_year:
                 continue
-            assert open_year in trades_by_year
-            assert trade in trades_by_year[open_year]
-            assert close_year not in trades_by_year or trade not in trades_by_year.get(close_year, [])
+            open_year_trades = trades_by_year[open_year]
+            close_year_trades = trades_by_year[close_year]
+            opening_legs = [t for t in open_year_trades if t.symbol == trade.symbol and t.closing_date == trade.opening_date]
+            closing_legs = [t for t in close_year_trades if t.symbol == trade.symbol and t.opening_date == trade.closing_date]
+            assert len(opening_legs) >= 1, f"Expected opening leg(s) for {trade.symbol} in {open_year}"
+            assert len(closing_legs) >= 1, f"Expected closing leg(s) for {trade.symbol} in {close_year}"
+            assert opening_legs[0].profit_usd == pytest.approx(trade.opening_profit_usd)
+            assert closing_legs[0].profit_usd == pytest.approx(trade.closing_profit_usd)

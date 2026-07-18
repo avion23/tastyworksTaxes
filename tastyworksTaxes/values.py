@@ -36,10 +36,10 @@ class Values(object):
     longOptionTotalLosses: Money = field(default_factory=Money)
     shortOptionProfits: Money = field(default_factory=Money)
     shortOptionLosses: Money = field(default_factory=Money)
-    grossOptionDifferential: Money = field(default_factory=Money)
+    optionDifferential: Money = field(default_factory=Money)
     stockFees: Money = field(default_factory=Money)
     otherFees: Money = field(default_factory=Money)
-    z21_termingeschaefsgewinne_stillhalter: Money = field(default_factory=Money)
+    z21_termingeschaefsgewinne: Money = field(default_factory=Money)
     z24_termingeschaefte_verluste: Money = field(default_factory=Money)
 
     def __str__(self):

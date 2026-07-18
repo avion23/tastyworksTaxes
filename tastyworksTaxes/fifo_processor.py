@@ -16,6 +16,14 @@ class TradeResult:
     worthless_expiry: bool
     strike: float = None
     expiry: str = None
+    opening_profit_usd: float = 0.0
+    opening_profit_eur: float = 0.0
+    closing_profit_usd: float = 0.0
+    closing_profit_eur: float = 0.0
+    opening_fees_usd: float = 0.0
+    opening_fees_eur: float = 0.0
+    closing_fees_usd: float = 0.0
+    closing_fees_eur: float = 0.0
 
 class FifoProcessor:
     @staticmethod
@@ -39,7 +47,15 @@ class FifoProcessor:
                 and opening_was_long
             ),
             strike=closing_transaction.getStrike() if closing_transaction.getType() != PositionType.stock else None,
-            expiry=closing_transaction.getExpiry().strftime('%Y-%m-%d') if closing_transaction.getType() != PositionType.stock else None
+            expiry=closing_transaction.getExpiry().strftime('%Y-%m-%d') if closing_transaction.getType() != PositionType.stock else None,
+            opening_profit_usd=consumed_values[Fields.AMOUNT.value],
+            opening_profit_eur=consumed_values[Fields.AMOUNT_EURO.value],
+            closing_profit_usd=closing_amounts['amount_usd'],
+            closing_profit_eur=closing_amounts['amount_eur'],
+            opening_fees_usd=consumed_values[Fields.FEES.value],
+            opening_fees_eur=consumed_values[Fields.FEES_EURO.value],
+            closing_fees_usd=closing_amounts['fees_usd'],
+            closing_fees_eur=closing_amounts['fees_eur'],
         )
         
         return trade_result

@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 def _format_german_number(value: float) -> str:
     """Format a number deterministically without changing process-wide locale."""
+    if value == 0:
+        value = 0.0
     return f"{value:,.2f}".translate(str.maketrans({",": ".", ".": ","}))
 
 
@@ -144,7 +146,7 @@ class GermanTaxReport(object):
     zinsausgaben: float = 0
     zinsen_gesamt: float = 0
     z19_auslaendische_kapitalertraege: float = 0
-    z21_termingeschaefsgewinne_stillhalter: float = 0
+    z21_termingeschaefsgewinne: float = 0
     z24_termingeschaefte_verluste: float = 0
     kap_kap_inv: float = 0
     kap_kap_inv_kerst_soli: float = 0
@@ -206,7 +208,7 @@ class GermanTaxReport(object):
             ('Zinsausgaben', self.zinsausgaben),
             ('Zinsen insgesamt', self.zinsen_gesamt),
             ('Z19 Ausländische Kapitalerträge', self.z19_auslaendische_kapitalertraege),
-            ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne_stillhalter),
+            ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne),
             ('Z24 Termingeschäftsverluste', self.z24_termingeschaefte_verluste),
             ('KAP+KAP-INV', self.kap_kap_inv),
             ('KAP+KAP-INV KErSt+Soli', self.kap_kap_inv_kerst_soli),
@@ -272,7 +274,7 @@ class EnglishTaxReport(object):
     interest_expenses: float = 0
     interest_total: float = 0
     z19_foreign_capital_gains: float = 0
-    z21_term_gains_option_holder: float = 0
+    z21_term_gains: float = 0
     z24_term_losses: float = 0
     kap_kap_inv: float = 0
     kap_kap_inv_kerst_soli: float = 0
@@ -334,7 +336,7 @@ class EnglishTaxReport(object):
             ('interest expenses', self.interest_expenses),
             ('interest total', self.interest_total),
             ('z19 foreign capital gains', self.z19_foreign_capital_gains),
-            ('z21 term gains option holder', self.z21_term_gains_option_holder),
+            ('z21 term gains', self.z21_term_gains),
             ('z24 term losses', self.z24_term_losses),
             ('kap kap inv', self.kap_kap_inv),
             ('kap kap inv kerst soli', self.kap_kap_inv_kerst_soli),
@@ -402,7 +404,7 @@ class Printer(object):
             + self.values.longOptionLosses.eur
             + self.values.longOptionTotalLosses.eur
         )
-        report.z21_termingeschaefsgewinne_stillhalter = self.values.z21_termingeschaefsgewinne_stillhalter.eur
+        report.z21_termingeschaefsgewinne = self.values.z21_termingeschaefsgewinne.eur
         report.z24_termingeschaefte_verluste = self.values.z24_termingeschaefte_verluste.eur
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
         return report
@@ -436,7 +438,7 @@ class Printer(object):
                 "longOptionTotalLosses": "Long Optionen Totalverluste",
                 "shortOptionProfits": "Short Optionen Gewinne",
                 "shortOptionLosses": "Short Optionen Verluste",
-                "grossOptionDifferential": "Max Optionen-Delta",
+                "optionDifferential": "Max Optionen-Delta",
             },
             "Gebühren & Verluste": {
                 "fee": "Summe Gebühren Aktien + Optionen",
@@ -444,7 +446,7 @@ class Printer(object):
                 "otherFees": "Optionsgebühren",
             },
             "Steuerformular": {
-                "z21_termingeschaefsgewinne_stillhalter": "Z21 Termingeschäfte+Stillhalter",
+                "z21_termingeschaefsgewinne": "Z21 Termingeschäfte+Stillhalter",
                 "z24_termingeschaefte_verluste": "Z24 Termingeschäftsverluste",
             }
         }

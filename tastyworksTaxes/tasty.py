@@ -161,6 +161,7 @@ class Tasty:
         from datetime import datetime
         from collections import defaultdict
         from tastyworksTaxes.position import PositionType
+        from tastyworksTaxes.fifo_processor import TradeResult
 
         def _parse_year(date_str):
             if isinstance(date_str, str):
@@ -174,10 +175,44 @@ class Tasty:
                 and trade.position_type in (PositionType.call, PositionType.put)
             )
             if is_short_option:
-                year = _parse_year(trade.opening_date)
+                open_year = _parse_year(trade.opening_date)
+                close_year = _parse_year(trade.closing_date)
+                if open_year != close_year:
+                    opening_leg = TradeResult(
+                        symbol=trade.symbol,
+                        position_type=trade.position_type,
+                        opening_date=trade.opening_date,
+                        closing_date=trade.opening_date,
+                        quantity=trade.quantity,
+                        profit_usd=trade.opening_profit_usd,
+                        profit_eur=trade.opening_profit_eur,
+                        fees_usd=trade.opening_fees_usd,
+                        fees_eur=trade.opening_fees_eur,
+                        worthless_expiry=False,
+                        strike=trade.strike,
+                        expiry=trade.expiry,
+                    )
+                    closing_leg = TradeResult(
+                        symbol=trade.symbol,
+                        position_type=trade.position_type,
+                        opening_date=trade.closing_date,
+                        closing_date=trade.closing_date,
+                        quantity=trade.quantity,
+                        profit_usd=trade.closing_profit_usd,
+                        profit_eur=trade.closing_profit_eur,
+                        fees_usd=trade.closing_fees_usd,
+                        fees_eur=trade.closing_fees_eur,
+                        worthless_expiry=False,
+                        strike=trade.strike,
+                        expiry=trade.expiry,
+                    )
+                    trades_by_year[open_year].append(opening_leg)
+                    trades_by_year[close_year].append(closing_leg)
+                else:
+                    trades_by_year[open_year].append(trade)
             else:
                 year = _parse_year(trade.closing_date)
-            trades_by_year[year].append(trade)
+                trades_by_year[year].append(trade)
 
         return dict(trades_by_year)
 
@@ -254,13 +289,13 @@ class Tasty:
                 yearly_trades
             )
             values_obj.shortOptionLosses = calculate_short_option_losses(yearly_trades)
-            values_obj.grossOptionDifferential = calculate_option_differential(
+            values_obj.optionDifferential = calculate_option_differential(
                 yearly_trades
             )
             values_obj.stockFees = -calculate_stock_fees(yearly_trades)
             values_obj.otherFees = -calculate_other_fees(yearly_trades)
 
-            values_obj.z21_termingeschaefsgewinne_stillhalter = Money(
+            values_obj.z21_termingeschaefsgewinne = Money(
                 usd=values_obj.shortOptionProfits.usd + values_obj.longOptionProfits.usd,
                 eur=values_obj.shortOptionProfits.eur + values_obj.longOptionProfits.eur,
             )

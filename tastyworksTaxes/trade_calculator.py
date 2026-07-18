@@ -33,7 +33,7 @@ def get_profitable_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if _net_profit_eur(t) > 0]
 
 def get_loss_trades(trades: List[TradeResult]) -> List[TradeResult]:
-    return [t for t in trades if _net_profit_eur(t) <= 0]
+    return [t for t in trades if _net_profit_eur(t) < 0]
 
 def _net_profit_eur(trade: TradeResult) -> float:
     return trade.profit_eur - trade.fees_eur
@@ -134,7 +134,7 @@ def calculate_option_differential(trades: List[TradeResult]) -> Money:
 def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
     filtered_trades = [
         trade for trade in get_stock_trades(trades)
-        if _net_profit_eur(trade) <= 0
+        if _net_profit_eur(trade) < 0
         and (classifier is None or _is_taxable_capital_asset(trade, classifier))
     ]
     if not filtered_trades:
