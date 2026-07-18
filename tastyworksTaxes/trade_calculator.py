@@ -185,8 +185,8 @@ def calculate_gross_equity_etf_profits(trades: List[TradeResult], classifier) ->
         )
         
         if classification == 'EQUITY_ETF':
-            total_eur += trade.profit_eur
-            total_usd += trade.profit_usd
+            total_eur += trade.profit_eur - trade.fees_eur
+            total_usd += trade.profit_usd - trade.fees_usd
     
     return Money(usd=total_usd, eur=total_eur)
 

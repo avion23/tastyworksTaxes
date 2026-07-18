@@ -365,6 +365,12 @@ class Printer(object):
         report.additional_order_fees = self.values.otherFees.eur
         report.stock_gains_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.stock_losses_z23 = self.values.stockAndEtfLosses.eur
+        report.option_holder_gains = self.values.shortOptionProfits.eur
+        report.option_holder_losses = self.values.shortOptionLosses.eur
+        report.option_holder_total = (
+            self.values.shortOptionProfits.eur
+            + self.values.shortOptionLosses.eur
+        )
         report.long_option_gains = self.values.longOptionProfits.eur
         report.long_option_losses = self.values.longOptionLosses.eur
         report.long_option_total = (
@@ -372,6 +378,8 @@ class Printer(object):
             + self.values.longOptionLosses.eur
             + self.values.longOptionTotalLosses.eur
         )
+        report.z21_term_gains = self.values.z21_termingeschaefsgewinne.eur
+        report.z24_term_losses = self.values.z24_termingeschaefte_verluste.eur
         report.securities_lending_income = self.values.securitiesLendingIncome.eur
         return report
 
@@ -446,7 +454,7 @@ class Printer(object):
                 "otherFees": "Optionsgebühren",
             },
             "Steuerformular": {
-                "z21_termingeschaefsgewinne": "Z21 Termingeschäfte+Stillhalter",
+                "z21_termingeschaefsgewinne": "Z21 Termingeschäftsgewinne (Stillhalter+Inhaber)",
                 "z24_termingeschaefte_verluste": "Z24 Termingeschäftsverluste",
             }
         }
