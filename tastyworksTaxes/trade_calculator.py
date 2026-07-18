@@ -11,8 +11,8 @@ def sum_money_from_trades(trades: List[TradeResult]) -> Money:
     if not trades:
         return Money()
     return Money(
-        usd=sum(t.profit_usd for t in trades),
-        eur=sum(t.profit_eur for t in trades)
+        usd=sum(t.profit_usd - t.fees_usd for t in trades),
+        eur=sum(t.profit_eur - t.fees_eur for t in trades)
     )
 
 def sum_fees_from_trades(trades: List[TradeResult]) -> Money:
@@ -30,10 +30,10 @@ def get_stock_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if t.position_type == PositionType.stock]
 
 def get_profitable_trades(trades: List[TradeResult]) -> List[TradeResult]:
-    return [t for t in trades if t.profit_eur > 0]
+    return [t for t in trades if _net_profit_eur(t) > 0]
 
 def get_loss_trades(trades: List[TradeResult]) -> List[TradeResult]:
-    return [t for t in trades if t.profit_eur <= 0]
+    return [t for t in trades if _net_profit_eur(t) <= 0]
 
 def _net_profit_eur(trade: TradeResult) -> float:
     return trade.profit_eur - trade.fees_eur

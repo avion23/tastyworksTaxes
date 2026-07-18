@@ -160,13 +160,23 @@ class Tasty:
 
         from datetime import datetime
         from collections import defaultdict
+        from tastyworksTaxes.position import PositionType
+
+        def _parse_year(date_str):
+            if isinstance(date_str, str):
+                return datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S").year
+            return date_str.year
 
         trades_by_year = defaultdict(list)
         for trade in self.position_manager.closed_trades:
-            if isinstance(trade.closing_date, str):
-                year = datetime.strptime(trade.closing_date, "%Y-%m-%d %H:%M:%S").year
+            is_short_option = (
+                trade.quantity < 0
+                and trade.position_type in (PositionType.call, PositionType.put)
+            )
+            if is_short_option:
+                year = _parse_year(trade.opening_date)
             else:
-                year = trade.closing_date.year
+                year = _parse_year(trade.closing_date)
             trades_by_year[year].append(trade)
 
         return dict(trades_by_year)
@@ -249,6 +259,19 @@ class Tasty:
             )
             values_obj.stockFees = -calculate_stock_fees(yearly_trades)
             values_obj.otherFees = -calculate_other_fees(yearly_trades)
+
+            values_obj.z21_termingeschaefsgewinne_stillhalter = Money(
+                usd=values_obj.shortOptionProfits.usd + values_obj.longOptionProfits.usd,
+                eur=values_obj.shortOptionProfits.eur + values_obj.longOptionProfits.eur,
+            )
+            values_obj.z24_termingeschaefte_verluste = Money(
+                usd=values_obj.shortOptionLosses.usd
+                + values_obj.longOptionLosses.usd
+                + values_obj.longOptionTotalLosses.usd,
+                eur=values_obj.shortOptionLosses.eur
+                + values_obj.longOptionLosses.eur
+                + values_obj.longOptionTotalLosses.eur,
+            )
 
             ret[key] = values_obj
 

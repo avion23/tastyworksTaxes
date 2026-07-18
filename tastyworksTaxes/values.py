@@ -39,6 +39,8 @@ class Values(object):
     grossOptionDifferential: Money = field(default_factory=Money)
     stockFees: Money = field(default_factory=Money)
     otherFees: Money = field(default_factory=Money)
+    z21_termingeschaefsgewinne_stillhalter: Money = field(default_factory=Money)
+    z24_termingeschaefte_verluste: Money = field(default_factory=Money)
 
     def __str__(self):
         """pretty prints all the contained Values

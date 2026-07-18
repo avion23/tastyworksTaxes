@@ -85,7 +85,7 @@ class TestTastyRun:
 
         assert set(result.keys()) == {2022}
         assert isinstance(result[2022], Values)
-        assert result[2022].stockAndOptionsSum.eur == 9.0
+        assert result[2022].stockAndOptionsSum.eur == 8.1
         assert result[2022].fee.eur == -0.9
 
     @pytest.mark.skipif(
@@ -108,3 +108,29 @@ class TestTastyRun:
             assert isinstance(value.otherStockAndBondProfits, Money)
             assert isinstance(value.stockAndEtfLosses, Money)
             assert isinstance(value.optionSum, Money)
+
+    @pytest.mark.skipif(
+        not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
+    )
+    def test_short_options_grouped_by_opening_year(self):
+        from datetime import datetime
+        from tastyworksTaxes.position import PositionType
+
+        t = Tasty(FULL_DATASET)
+        t.processTransactionHistory()
+        trades_by_year = t.getYearlyTrades()
+
+        for trade in t.position_manager.closed_trades:
+            is_short_option = (
+                trade.quantity < 0
+                and trade.position_type in (PositionType.call, PositionType.put)
+            )
+            if not is_short_option:
+                continue
+            open_year = datetime.strptime(trade.opening_date, "%Y-%m-%d %H:%M:%S").year
+            close_year = datetime.strptime(trade.closing_date, "%Y-%m-%d %H:%M:%S").year
+            if open_year == close_year:
+                continue
+            assert open_year in trades_by_year
+            assert trade in trades_by_year[open_year]
+            assert close_year not in trades_by_year or trade not in trades_by_year.get(close_year, [])

@@ -385,6 +385,16 @@ class Printer(object):
         report.zusatzliche_ordergebuehren = self.values.otherFees.eur
         report.aktiengewinne_z20 = self.values.totalTaxableStockAndEtfProfits.eur
         report.aktienverluste_z23 = self.values.stockAndEtfLosses.eur
+        report.aktien_gesamt = (
+            self.values.totalTaxableStockAndEtfProfits.eur
+            + self.values.stockAndEtfLosses.eur
+        )
+        report.stillhalter_gewinne = self.values.shortOptionProfits.eur
+        report.stillhalter_verluste = self.values.shortOptionLosses.eur
+        report.stillhalter_gesamt = (
+            self.values.shortOptionProfits.eur
+            + self.values.shortOptionLosses.eur
+        )
         report.long_optionen_gewinne = self.values.longOptionProfits.eur
         report.long_optionen_verluste = self.values.longOptionLosses.eur
         report.long_optionen_gesamt = (
@@ -392,6 +402,8 @@ class Printer(object):
             + self.values.longOptionLosses.eur
             + self.values.longOptionTotalLosses.eur
         )
+        report.z21_termingeschaefsgewinne_stillhalter = self.values.z21_termingeschaefsgewinne_stillhalter.eur
+        report.z24_termingeschaefte_verluste = self.values.z24_termingeschaefte_verluste.eur
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
         return report
 
@@ -430,6 +442,10 @@ class Printer(object):
                 "fee": "Summe Gebühren Aktien + Optionen",
                 "stockFees": "Aktiengebühren",
                 "otherFees": "Optionsgebühren",
+            },
+            "Steuerformular": {
+                "z21_termingeschaefsgewinne_stillhalter": "Z21 Termingeschäfte+Stillhalter",
+                "z24_termingeschaefte_verluste": "Z24 Termingeschäftsverluste",
             }
         }
         values_attrs = vars(self.values)

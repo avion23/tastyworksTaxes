@@ -75,8 +75,8 @@ class TestTastyFinancialCalculations:
         ]
 
     @pytest.mark.parametrize("method_name,expected_usd,expected_eur", [
-        ("calculate_combined_sum", -2518.0, -2059.88),
-        ("calculate_option_sum", 2878.0, 2341.23)
+        ("calculate_combined_sum", -2526.968, -2067.16),
+        ("calculate_option_sum", 2874.356, 2338.27)
     ])
     def test_money_calculations_with_sample_df(self, method_name, expected_usd, expected_eur, sample_trades):
         function_map = {
@@ -87,7 +87,7 @@ class TestTastyFinancialCalculations:
         result = method(sample_trades)
         
         assert isinstance(result, Money)
-        assert result.usd == expected_usd
+        assert round(result.usd, 3) == expected_usd
         assert round(result.eur, 2) == expected_eur
         
     def test_stock_calculations_with_sample_df(self, sample_trades):
