@@ -60,8 +60,8 @@ class TestArchitectureIntegration:
         
         result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
-        expected_eur = 0.0
-        expected_usd = 0.0
+        expected_eur = 70.0
+        expected_usd = 84.0
         
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01
@@ -115,14 +115,14 @@ class TestArchitectureIntegration:
         gross_result = calculate_gross_equity_etf_profits(trades, tasty_instance.classifier)
         taxable_result = calculate_equity_etf_profits(trades, tasty_instance.classifier)
         
-        expected_gross_eur = 0.0
-        expected_gross_usd = 0.0
+        expected_gross_eur = 100.0
+        expected_gross_usd = 120.0
         
         assert abs(gross_result.eur - expected_gross_eur) < 0.01
         assert abs(gross_result.usd - expected_gross_usd) < 0.01
         
-        assert abs(taxable_result.eur - expected_gross_eur) < 0.01
-        assert abs(taxable_result.usd - expected_gross_usd) < 0.01
+        assert abs(taxable_result.eur - 70.0) < 0.01
+        assert abs(taxable_result.usd - 84.0) < 0.01
     
     def test_other_stock_and_bond_profits_excludes_equity_etfs(self, tasty_instance):
         trades = [
@@ -172,8 +172,8 @@ class TestArchitectureIntegration:
         
         result = calculate_other_stock_and_bond_profits(trades, tasty_instance.classifier)
         
-        expected_eur = 100.0 + 50.0 + 75.0
-        expected_usd = 120.0 + 60.0 + 90.0
+        expected_eur = 50.0 + 75.0
+        expected_usd = 60.0 + 90.0
         
         assert abs(result.eur - expected_eur) < 0.01
         assert abs(result.usd - expected_usd) < 0.01
@@ -225,7 +225,7 @@ class TestArchitectureIntegration:
         vnq_classification = tasty_instance.classifier.classify('VNQ', PositionType.stock)
         
         assert aom_classification == 'MIXED_FUND_ETF'
-        assert vnq_classification == 'REAL_ESTATE_ETF'
+        assert vnq_classification == 'EQUITY_ETF'
         
         assert tasty_instance.classifier.get_exemption_percentage(aom_classification) == 15
-        assert tasty_instance.classifier.get_exemption_percentage(vnq_classification) == 60
+        assert tasty_instance.classifier.get_exemption_percentage(vnq_classification) == 30

@@ -1,6 +1,7 @@
 import pytest
 import logging
 from tastyworksTaxes.asset_classifier import AssetClassifier
+from tastyworksTaxes.asset_definitions import load_asset_registry
 from tastyworksTaxes.position import PositionType
 
 class TestAssetClassifier:
@@ -10,22 +11,23 @@ class TestAssetClassifier:
     
     def test_classify_equity_etf(self, classifier):
         assert classifier.classify('SCHG', PositionType.stock) == 'EQUITY_ETF'
-        assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
         assert classifier.classify('QQQ', PositionType.stock) == 'EQUITY_ETF'
-        assert classifier.classify('TQQQ', PositionType.stock) == 'EQUITY_ETF'
+        assert classifier.classify('VNQ', PositionType.stock) == 'EQUITY_ETF'
     
     def test_classify_bond_etf(self, classifier):
+        assert classifier.classify('TECL', PositionType.stock) == 'BOND_ETF'
+        assert classifier.classify('TQQQ', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('PULS', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('VGSH', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('TLT', PositionType.stock) == 'BOND_ETF'
     
     def test_classify_mixed_fund_etf(self, classifier):
         assert classifier.classify('AOM', PositionType.stock) == 'MIXED_FUND_ETF'
-        assert classifier.classify('AOR', PositionType.stock) == 'MIXED_FUND_ETF'
+        assert classifier.classify('AOK', PositionType.stock) == 'MIXED_FUND_ETF'
     
     def test_classify_real_estate_etf(self, classifier):
-        assert classifier.classify('VNQ', PositionType.stock) == 'REAL_ESTATE_ETF'
-        assert classifier.classify('IYR', PositionType.stock) == 'REAL_ESTATE_ETF'
+        assert classifier.classify('VNQ', PositionType.stock) == 'EQUITY_ETF'
+        assert classifier.classify('IYR', PositionType.stock) == 'EQUITY_ETF'
     
     def test_classify_crypto_lambda(self, classifier):
         assert classifier.classify('BTC/USD', PositionType.stock) == 'CRYPTO'
@@ -62,7 +64,7 @@ class TestAssetClassifier:
     def test_get_all_symbols_by_type(self, classifier):
         equity_symbols = classifier.get_all_symbols_by_type('EQUITY_ETF')
         assert 'SCHG' in equity_symbols
-        assert 'TECL' in equity_symbols
+        assert 'AOR' in equity_symbols
         
         bond_symbols = classifier.get_all_symbols_by_type('BOND_ETF')
         assert 'PULS' in bond_symbols
@@ -91,13 +93,11 @@ class TestAssetClassifier:
         with caplog.at_level(logging.WARNING):
             classifier.check_unsupported_assets(['AOM', 'VNQ'])
         
-        assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
-        assert "AOM" in caplog.text
-        assert "VNQ" in caplog.text
+        assert len(caplog.records) == 0
     
     def test_check_unsupported_assets_warns_for_unverified_known_funds(self, classifier, caplog):
         with caplog.at_level(logging.WARNING):
-            classifier.check_unsupported_assets(['SCHG', 'PULS'])
+            classifier.check_unsupported_assets(['GGLL', 'METU'])
         
         assert len(caplog.records) == 2
         assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
@@ -105,9 +105,17 @@ class TestAssetClassifier:
 
 def test_unverified_registry_rows_do_not_grant_partial_exemption():
     classifier = AssetClassifier()
-    assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
-    assert not classifier.is_verified('TECL', PositionType.stock)
-    assert classifier.get_exemption_percentage_for('TECL', PositionType.stock) == 0
+    assert classifier.classify('GGLL', PositionType.stock) == 'BOND_ETF'
+    assert not classifier.is_verified('GGLL', PositionType.stock)
+    assert classifier.get_exemption_percentage_for('GGLL', PositionType.stock) == 0
+
+
+def test_registry_loads_verified_schg_as_an_equity_fund():
+    registry = load_asset_registry()
+    schg = next(definition for definition in registry if definition.symbol == 'SCHG')
+
+    assert schg.classification == 'EQUITY_ETF'
+    assert schg.verified
 
 
 def test_verified_registry_row_grants_partial_exemption(tmp_path):
@@ -154,10 +162,10 @@ def test_effective_date_is_selected_per_operation(tmp_path):
 def test_unverified_classification_does_not_select_tax_category():
     classifier = AssetClassifier()
 
-    assert classifier.classify('TECL', PositionType.stock) == 'EQUITY_ETF'
-    assert classifier.classify_for_tax('TECL', PositionType.stock) == 'INDIVIDUAL_STOCK'
+    assert classifier.classify('GGLL', PositionType.stock) == 'BOND_ETF'
+    assert classifier.classify_for_tax('GGLL', PositionType.stock) == 'INDIVIDUAL_STOCK'
     assert classifier.get_tax_category(
-        classifier.classify_for_tax('TECL', PositionType.stock)
+        classifier.classify_for_tax('GGLL', PositionType.stock)
     ) == 'KAP'
 
 

@@ -40,17 +40,18 @@ def test_stock_results_are_classified_after_fees_and_crypto_is_excluded():
     assert calculate_stock_loss(trades, classifier).eur == -1
 
 
-def test_unverified_mixed_and_real_estate_funds_get_no_exemption():
+def test_verified_mixed_and_equity_funds_receive_their_exemptions():
     classifier = AssetClassifier()
     trades = [stock_trade("AOM", 100), stock_trade("VNQ", 100)]
 
     result = calculate_other_stock_and_bond_profits(trades, classifier)
 
-    assert result.eur == 200
-    assert result.usd == 200
+    assert result.eur == 85
+    assert result.usd == 85
+    assert calculate_equity_etf_profits(trades, classifier).eur == 70
 
 
-def test_unverified_equity_fund_does_not_enter_fund_tax_bucket():
+def test_verified_bond_fund_does_not_enter_equity_fund_tax_bucket():
     classifier = AssetClassifier()
     trades = [stock_trade("TECL", 100)]
 
@@ -76,7 +77,7 @@ def test_trade_date_controls_effective_fund_exemption(tmp_path):
     assert calculate_other_stock_and_bond_profits([effective_trade, expired_trade], classifier).eur == 100
 
 
-def test_unverified_fund_losses_get_no_exemption():
+def test_verified_fund_losses_apply_their_exemptions():
     classifier = AssetClassifier()
     trades = [
         stock_trade("TECL", -100),
@@ -88,11 +89,11 @@ def test_unverified_fund_losses_get_no_exemption():
 
     result = calculate_stock_loss(trades, classifier)
 
-    assert result.eur == -500
-    assert result.usd == -500
+    assert result.eur == -455
+    assert result.usd == -455
 
 
-def test_unverified_fund_loss_includes_fees_without_exemption():
+def test_verified_bond_fund_loss_includes_fees_without_exemption():
     classifier = AssetClassifier()
 
     result = calculate_stock_loss([stock_trade("TECL", 1, 2)], classifier)

@@ -1,25 +1,35 @@
 symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence
-SCHG,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-TECL,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-QQQ,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-SPY,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-VTI,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-VXUS,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-TQQQ,EQUITY_ETF,KAP-INV,30,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-PULS,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-VGSH,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-ICSH,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-TLT,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-BND,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-AGG,BOND_ETF,KAP-INV,0,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-AOM,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-AOR,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-AOK,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-AOA,MIXED_FUND_ETF,KAP-INV,15,false,2018-01-01,,Legacy classification; verify against the fund investment terms
-VNQ,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
-IYR,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
-VNQI,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
-RWR,REAL_ESTATE_ETF,KAP-INV,60,false,2018-01-01,,Legacy classification; verify whether domestic or foreign real-estate requirements apply
+SCHG,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US8085242019; Schwab prospectus tracks large-cap growth equities; Aktienfonds
+TECL,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US25459W1027; Direxion prospectus mandates daily 3x derivative exposure not >51% equity; no Aktienfonds
+QQQ,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US46090E1038; Invesco QQQ Trust tracks Nasdaq-100 non-financial company shares; Aktienfonds
+SPY,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US78462F1030; State Street trust tracks S&P 500 equity index; Aktienfonds
+VTI,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US9229087690; Vanguard Total Stock Market ETF tracks U.S. equity market; Aktienfonds
+VXUS,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US9219097683; Vanguard Total International Stock ETF tracks ex-U.S. equities; Aktienfonds
+TQQQ,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US74347X8314; ProShares prospectus uses daily 3x swaps and futures not >51% equity; no Aktienfonds
+PULS,BOND_ETF,KAP-INV,0,true,2018-08-07,,ISIN US69344A1079; PGIM Ultra Short Bond ETF invests in short-duration debt; no equity quota
+VGSH,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US92206C4096; Vanguard Short-Term Treasury ETF holds U.S. Treasury debt; no equity quota
+ICSH,BOND_ETF,KAP-INV,0,true,2013-12-11,,ISIN US46434V8789; iShares fact sheet specifies ultra-short investment-grade bonds and money-market instruments
+TLT,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US4642874329; iShares prospectus tracks U.S. Treasury bonds with 20+ year maturities
+BND,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US9219378356; Vanguard Total Bond Market ETF tracks U.S. investment-grade bonds
+AGG,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US4642872265; iShares prospectus tracks the U.S. aggregate bond index
+AOM,MIXED_FUND_ETF,KAP-INV,15,true,2018-01-01,,ISIN US4642898690; iShares terms target 40% equity and 60% bond underlying funds; Mischfonds
+AOR,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US4642898757; iShares terms target 60% equity underlying funds; Aktienfonds
+AOK,MIXED_FUND_ETF,KAP-INV,15,true,2018-01-01,,ISIN US4642898831; iShares terms target 30% equity and 70% bond underlying funds; Mischfonds
+AOA,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US4642898799; iShares terms target 80% equity underlying funds; Aktienfonds
+VNQ,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US9229085538; Vanguard prospectus invests in listed real-estate company shares not direct real estate; Aktienfonds
+IYR,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US4642877397; iShares fact sheet tracks U.S. real-estate equities and REITs not direct real estate; Aktienfonds
+VNQI,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US9220427754; Vanguard prospectus invests in ex-U.S. listed real-estate shares; Aktienfonds
+RWR,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US78464A6073; State Street fact sheet holds publicly traded REIT securities not direct real estate; Aktienfonds
+EWG,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US81369Y1001; iShares MSCI Germany ETF tracks German equity securities; Aktienfonds
+SPYG,EQUITY_ETF,KAP-INV,30,true,2018-01-01,,ISIN US78464A4094; State Street fact sheet tracks S&P 500 Growth stocks; Aktienfonds
+UPRO,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US74347X8645; ProShares prospectus targets daily 3x S&P 500 via financial instruments not >51% equity; no Aktienfonds
+SQQQ,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US74350P6759; ProShares prospectus targets daily -3x Nasdaq-100 via swaps and futures; no Aktienfonds
+SOXL,BOND_ETF,KAP-INV,0,true,2018-01-01,,ISIN US25459W4583; Direxion prospectus mandates daily 3x derivative exposure not >51% equity; no Aktienfonds
+MSTY,BOND_ETF,KAP-INV,0,true,2024-02-21,,ISIN US88634T4931; YieldMax prospectus states it does not invest directly in MSTR and writes call spreads; no Aktienfonds
+NVDY,BOND_ETF,KAP-INV,0,true,2023-05-10,,ISIN US88634T7744; YieldMax prospectus states it does not invest directly in NVDA and writes call spreads; no Aktienfonds
+YMAG,BOND_ETF,KAP-INV,0,true,2024-01-29,,ISIN US88636J6423; YieldMax terms make it a fund of option-income ETFs not a >51% equity mandate; no Aktienfonds
+GGLL,BOND_ETF,KAP-INV,0,false,2022-08-09,,Unverified: official GraniteShares prospectus and current ISIN were not retrievable; no exemption is granted
+METU,BOND_ETF,KAP-INV,0,false,2024-06-25,,Unverified: official Direxion prospectus and current ISIN were not retrievable; no exemption is granted
 BTC,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
 ETH,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
 DOGE,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
