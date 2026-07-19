@@ -1,36 +1,28 @@
-from tastyworksTaxes.values import Values
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.printer import Printer
+from tastyworksTaxes.values import Values
 
-class TestPrinterLabels:
-    def test_equity_etf_profits_label_accuracy(self):
-        values = Values()
-        values.equityEtfProfits = Money(usd=100.0, eur=80.0)
-        
-        empty_trades = []
-        printer = Printer(values, empty_trades)
-        
-        report = printer.generateDummyReport()
-        
-        assert "Aktien-ETF steuerpflichtige Gewinne (nach Teilfreistellung)" in report
-        assert "80,00" in report
-        
-        assert "Aktien-ETF Gewinne (Teilfreistellung)" not in report
-    
-    def test_all_required_categories_present(self):
-        values = Values()
-        values.stockFees = Money(usd=10.0, eur=8.0)
-        values.otherFees = Money(usd=5.0, eur=4.0)
-        values.equityEtfProfits = Money(usd=100.0, eur=80.0)
-        values.otherStockAndBondProfits = Money(usd=50.0, eur=40.0)
-        values.stockAndEtfLosses = Money(usd=-20.0, eur=-16.0)
-        
-        empty_trades = []
-        printer = Printer(values, empty_trades)
-        
-        report = printer.generateDummyReport()
-        
-        assert "Aktiengebühren" in report
-        assert "Optionsgebühren" in report
-        assert "8,00" in report
-        assert "4,00" in report
+
+def test_german_report_labels_distinguish_stock_and_fund_results():
+    values = Values(
+        stockProfits=Money(eur=80),
+        stockLosses=Money(eur=-16),
+        fundProfits=Money(eur=70),
+        fundLosses=Money(eur=-7),
+        fundDistributions=Money(eur=10),
+        fundDistributionExempt=Money(eur=3),
+        fundDistributionTaxable=Money(eur=7),
+    )
+
+    report = str(Printer(values, []).generateGermanTaxReport())
+
+    for label in (
+        "Aktiengewinne Z20",
+        "Aktienverluste Z23",
+        "Investmentfondsgewinne",
+        "Investmentfondsverluste",
+        "Fondsausschüttungen brutto",
+        "Fondsausschüttungen steuerfrei",
+        "Fondsausschüttungen steuerpflichtig",
+    ):
+        assert label in report

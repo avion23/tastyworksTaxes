@@ -89,9 +89,6 @@ class GermanTaxReport(object):
     Z19 Ausländische Kapitalerträge
     Z21 Termingeschäftsgewinne+Stillhalter
     Z24 Termingeschäftsverluste
-    KAP+KAP-INV
-    KAP+KAP-INV KErSt+Soli
-    KAP+KAP-INV Verlustvortrag
     Cash Balance USD
     Net Liquidating Value
     """
@@ -111,6 +108,9 @@ class GermanTaxReport(object):
     investmentfondsgewinne: float = 0
     investmentfondsverluste: float = 0
     anlage_kap_inv: float = 0
+    fondsausschuettungen_brutto: float = 0
+    fondsausschuettungen_steuerfrei: float = 0
+    fondsausschuettungen_steuerpflichtig: float = 0
     aktiengewinne_z20: float = 0
     aktienverluste_z23: float = 0
     aktien_gesamt: float = 0
@@ -172,7 +172,10 @@ class GermanTaxReport(object):
             ('Anlage SO Verlustvortrag', self.anlage_so_verlustvortrag),
             ('Investmentfondsgewinne', self.investmentfondsgewinne),
             ('Investmentfondsverluste', self.investmentfondsverluste),
-            ('Anlage KAP+INV', self.anlage_kap_inv),
+            ('Anlage KAP-INV', self.anlage_kap_inv),
+            ('Fondsausschüttungen brutto', self.fondsausschuettungen_brutto),
+            ('Fondsausschüttungen steuerfrei', self.fondsausschuettungen_steuerfrei),
+            ('Fondsausschüttungen steuerpflichtig', self.fondsausschuettungen_steuerpflichtig),
             ('Aktiengewinne Z20', self.aktiengewinne_z20),
             ('Aktienverluste Z23', self.aktienverluste_z23),
             ('Aktien Gesamt', self.aktien_gesamt),
@@ -203,21 +206,21 @@ class GermanTaxReport(object):
             ('zusätzliche Ordergebühren', self.zusatzliche_ordergebuehren),
             ('Dividenden', self.dividenden),
             ('bezahlte Dividenden', self.bezahlte_dividenden),
-            ('Quellensteuer', self.quellensteuer_z41),
+            ('Quellensteuer Z41', self.quellensteuer_z41),
             ('Zinseinnahmen', self.zinseinnahmen),
             ('Zinsausgaben', self.zinsausgaben),
             ('Zinsen insgesamt', self.zinsen_gesamt),
             ('Z19 Ausländische Kapitalerträge', self.z19_auslaendische_kapitalertraege),
             ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne),
             ('Z24 Termingeschäftsverluste', self.z24_termingeschaefte_verluste),
-            ('KAP+KAP-INV', self.kap_kap_inv),
-            ('KAP+KAP-INV KErSt+Soli', self.kap_kap_inv_kerst_soli),
-            ('KAP+KAP-INV Verlustvortrag', self.kap_kap_inv_verlustvortrag),
             ('Cash Balance USD', self.cash_balance_usd),
             ('Net Liquidating Value', self.net_liquidating_value),
             ('Wertpapierleihe Einkommen', self.wertpapierleihe_einkommen),
         ]
-        return ''.join(_format_german_report_line(label, value) for label, value in fields)
+        return (
+            ''.join(_format_german_report_line(label, value) for label, value in fields)
+            + 'NOTE: Soli/KESt are not computed; the Finanzamt computes German tax.\n'
+        )
 
 
 @dataclass_json
@@ -239,6 +242,9 @@ class EnglishTaxReport(object):
     investment_fund_gains: float = 0
     investment_fund_losses: float = 0
     investment_kap_inv: float = 0
+    fund_distributions_gross: float = 0
+    fund_distributions_exempt: float = 0
+    fund_distributions_taxable: float = 0
     stock_gains_z20: float = 0
     stock_losses_z23: float = 0
     stock_total: float = 0
@@ -301,6 +307,9 @@ class EnglishTaxReport(object):
             ('investment fund gains', self.investment_fund_gains),
             ('investment fund losses', self.investment_fund_losses),
             ('investment kap inv', self.investment_kap_inv),
+            ('fund distributions gross', self.fund_distributions_gross),
+            ('fund distributions exempt', self.fund_distributions_exempt),
+            ('fund distributions taxable', self.fund_distributions_taxable),
             ('stock gains z20', self.stock_gains_z20),
             ('stock losses z23', self.stock_losses_z23),
             ('stock total', self.stock_total),
@@ -338,9 +347,6 @@ class EnglishTaxReport(object):
             ('z19 foreign capital gains', self.z19_foreign_capital_gains),
             ('z21 term gains', self.z21_term_gains),
             ('z24 term losses', self.z24_term_losses),
-            ('kap kap inv', self.kap_kap_inv),
-            ('kap kap inv kerst soli', self.kap_kap_inv_kerst_soli),
-            ('kap kap inv loss carryforward', self.kap_kap_inv_loss_carryforward),
             ('cash balance usd', self.cash_balance_usd),
             ('net liquidating value', self.net_liquidating_value),
             ('securities lending income', self.securities_lending_income),
@@ -363,8 +369,19 @@ class Printer(object):
         report.paid_dividends = self.values.paidDividend.eur
         report.withholding_tax_z41 = self.values.withholdingTax.eur
         report.additional_order_fees = self.values.otherFees.eur
-        report.stock_gains_z20 = self.values.totalTaxableStockAndEtfProfits.eur
-        report.stock_losses_z23 = self.values.stockAndEtfLosses.eur
+        report.stock_gains_z20 = self.values.stockProfits.eur
+        report.stock_losses_z23 = self.values.stockLosses.eur
+        report.stock_total = self.values.stockProfits.eur + self.values.stockLosses.eur
+        report.investment_fund_gains = self.values.fundProfits.eur
+        report.investment_fund_losses = self.values.fundLosses.eur
+        report.fund_distributions_gross = self.values.fundDistributions.eur
+        report.fund_distributions_exempt = self.values.fundDistributionExempt.eur
+        report.fund_distributions_taxable = self.values.fundDistributionTaxable.eur
+        report.investment_kap_inv = (
+            self.values.fundProfits.eur
+            + self.values.fundLosses.eur
+            + self.values.fundDistributionTaxable.eur
+        )
         report.option_holder_gains = self.values.shortOptionProfits.eur
         report.option_holder_losses = self.values.shortOptionLosses.eur
         report.option_holder_total = (
@@ -381,6 +398,13 @@ class Printer(object):
         report.z21_term_gains = self.values.z21_termingeschaefsgewinne.eur
         report.z24_term_losses = self.values.z24_termingeschaefte_verluste.eur
         report.securities_lending_income = self.values.securitiesLendingIncome.eur
+        report.interest_total = self.values.creditInterest.eur + self.values.debitInterest.eur
+        report.z19_foreign_capital_gains = (
+            self.values.dividend.eur
+            + self.values.creditInterest.eur
+            + self.values.securitiesLendingIncome.eur
+            + self.values.fundDistributionTaxable.eur
+        )
         return report
 
     def generateGermanTaxReport(self) -> GermanTaxReport:
@@ -393,11 +417,18 @@ class Printer(object):
         report.bezahlte_dividenden = self.values.paidDividend.eur
         report.quellensteuer_z41 = self.values.withholdingTax.eur
         report.zusatzliche_ordergebuehren = self.values.otherFees.eur
-        report.aktiengewinne_z20 = self.values.totalTaxableStockAndEtfProfits.eur
-        report.aktienverluste_z23 = self.values.stockAndEtfLosses.eur
-        report.aktien_gesamt = (
-            self.values.totalTaxableStockAndEtfProfits.eur
-            + self.values.stockAndEtfLosses.eur
+        report.aktiengewinne_z20 = self.values.stockProfits.eur
+        report.aktienverluste_z23 = self.values.stockLosses.eur
+        report.aktien_gesamt = self.values.stockProfits.eur + self.values.stockLosses.eur
+        report.investmentfondsgewinne = self.values.fundProfits.eur
+        report.investmentfondsverluste = self.values.fundLosses.eur
+        report.fondsausschuettungen_brutto = self.values.fundDistributions.eur
+        report.fondsausschuettungen_steuerfrei = self.values.fundDistributionExempt.eur
+        report.fondsausschuettungen_steuerpflichtig = self.values.fundDistributionTaxable.eur
+        report.anlage_kap_inv = (
+            self.values.fundProfits.eur
+            + self.values.fundLosses.eur
+            + self.values.fundDistributionTaxable.eur
         )
         report.stillhalter_gewinne = self.values.shortOptionProfits.eur
         report.stillhalter_verluste = self.values.shortOptionLosses.eur
@@ -415,68 +446,11 @@ class Printer(object):
         report.z21_termingeschaefsgewinne = self.values.z21_termingeschaefsgewinne.eur
         report.z24_termingeschaefte_verluste = self.values.z24_termingeschaefte_verluste.eur
         report.wertpapierleihe_einkommen = self.values.securitiesLendingIncome.eur
+        report.zinsen_gesamt = self.values.creditInterest.eur + self.values.debitInterest.eur
+        report.z19_auslaendische_kapitalertraege = (
+            self.values.dividend.eur
+            + self.values.creditInterest.eur
+            + self.values.securitiesLendingIncome.eur
+            + self.values.fundDistributionTaxable.eur
+        )
         return report
-
-    def generateDummyReport(self):
-        CATEGORIES = {
-            "Transaktionen": {
-                "withdrawal": "Abhebungen",
-                "deposit": "Einzahlungen",
-                "transfer": "Transfers",
-                "balanceAdjustment": "Kontokorrekturen"
-            },
-            "Zinsen & Dividenden": {
-                "creditInterest": "Guthabenzinsen",
-                "debitInterest": "Sollzinsen",
-                "dividend": "Dividendenzahlungen",
-                "paidDividend": "Bezahlte Dividenden",
-                "withholdingTax": "Quellensteuer",
-                "securitiesLendingIncome": "Wertpapierleihe-Einkommen"
-            },
-            "Aktien & Optionen": {
-                "stockAndOptionsSum": "Summe Aktien und Optionen",
-                "equityEtfGrossProfits": "Aktien-ETF Gewinne (vor Teilfreistellung)",
-                "equityEtfProfits": "Aktien-ETF steuerpflichtige Gewinne (nach Teilfreistellung)",
-                "otherStockAndBondProfits": "Andere Aktien- und Anleihen-Gewinne",
-                "totalTaxableStockAndEtfProfits": "Gesamt steuerpflichtige Aktien-/ETF-Gewinne",
-                "stockAndEtfLosses": "Aktien- und ETF-Verluste",
-                "optionSum": "Summe Optionshandel",
-                "longOptionProfits": "Long Optionen Gewinne",
-                "longOptionLosses": "Long Optionen Verluste",
-                "longOptionTotalLosses": "Long Optionen Totalverluste",
-                "shortOptionProfits": "Short Optionen Gewinne",
-                "shortOptionLosses": "Short Optionen Verluste",
-                "optionDifferential": "Max Optionen-Delta",
-            },
-            "Gebühren & Verluste": {
-                "fee": "Summe Gebühren Aktien + Optionen",
-                "stockFees": "Aktiengebühren",
-                "otherFees": "Optionsgebühren",
-            },
-            "Steuerformular": {
-                "z21_termingeschaefsgewinne": "Z21 Termingeschäftsgewinne (Stillhalter+Inhaber)",
-                "z24_termingeschaefte_verluste": "Z24 Termingeschäftsverluste",
-            }
-        }
-        values_attrs = vars(self.values)
-        all_translations = {attr: trans for category in CATEGORIES.values() for attr, trans in category.items()}
-
-        max_attr_width = max(len(all_translations.get(attr, attr)) for attr in values_attrs)
-        max_value_width = max(len(f"{value.eur:.2f}") for value in values_attrs.values())
-
-        report = []
-
-        for category, translations in CATEGORIES.items():
-            for attr, translation in translations.items():
-                value = values_attrs.get(attr)
-                if value:
-                    formatted_value = _format_german_number(value.eur)
-                    line = f"{translation.ljust(max_attr_width)}\t{formatted_value.rjust(max_value_width)}\n"
-                    report.append(line)
-
-        printed_keys = set(attr for translations in CATEGORIES.values() for attr in translations.keys())
-        missing_keys = set(values_attrs.keys()) - printed_keys
-        if missing_keys:
-            raise ValueError(f"The following keys were not printed: {', '.join(missing_keys)}")
-
-        return ''.join(report)

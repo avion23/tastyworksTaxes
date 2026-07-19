@@ -4,6 +4,7 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position_manager import PositionManager
+from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.constants import (
     TransactionCode,
     TransactionSubcode,
@@ -11,7 +12,6 @@ from tastyworksTaxes.constants import (
     Fields,
 )
 from tastyworksTaxes.trade_calculator import (
-    calculate_combined_sum,
     calculate_option_sum,
     calculate_long_option_profits,
     calculate_long_option_losses,
@@ -19,14 +19,15 @@ from tastyworksTaxes.trade_calculator import (
     calculate_short_option_profits,
     calculate_short_option_losses,
     calculate_option_differential,
-    calculate_stock_loss,
+    calculate_stock_profits,
+    calculate_stock_losses,
+    calculate_fund_gross_profits,
+    calculate_fund_profits,
+    calculate_fund_losses,
     calculate_stock_fees,
     calculate_other_fees,
     calculate_fees_sum,
     get_stock_trades,
-    calculate_gross_equity_etf_profits,
-    calculate_equity_etf_profits,
-    calculate_other_stock_and_bond_profits,
 )
 import logging
 from datetime import date
@@ -42,6 +43,7 @@ class Tasty:
         self.position_manager = PositionManager()
         self.classifier = AssetClassifier()
         self.unverified_asset_symbols = set()
+        self._withholding_remaining = {}
 
     def year(self, year):
         if year not in self.yearValues:
@@ -89,13 +91,39 @@ class Tasty:
                 year_values.dividend += m
             case "Dividend":
                 if m.usd < 0:
-                    key = (t.loc["Date/Time"], t.getSymbol())
-                    if key in getattr(self, "_withholding_dividend_keys", set()):
-                        year_values.withholdingTax += -m
-                    else:
-                        year_values.paidDividend += m
+                    key = (t.getDate(), t.getSymbol())
+                    remaining = getattr(self, "_withholding_remaining", {}).get(key, 0.0)
+                    negative_amount = -m.usd
+                    withholding_amount = min(negative_amount, remaining)
+                    withholding_ratio = withholding_amount / negative_amount
+                    year_values.withholdingTax += Money(
+                        usd=withholding_amount,
+                        eur=-m.eur * withholding_ratio,
+                    )
+                    year_values.paidDividend += Money(
+                        usd=-(negative_amount - withholding_amount),
+                        eur=m.eur * (1 - withholding_ratio),
+                    )
+                    self._withholding_remaining[key] = remaining - withholding_amount
                 else:
-                    year_values.dividend += m
+                    pay_date = t.loc["Date/Time"].date()
+                    symbol = t.getSymbol()
+                    classification = self.classifier.classify_for_tax(
+                        symbol, PositionType.stock, pay_date
+                    )
+                    if self.classifier.get_tax_category(classification) == "KAP-INV":
+                        exemption = self.classifier.get_exemption_percentage_for(
+                            symbol, PositionType.stock, pay_date
+                        ) / 100.0
+                        year_values.fundDistributions += m
+                        year_values.fundDistributionExempt += Money(
+                            usd=m.usd * exemption, eur=m.eur * exemption
+                        )
+                        year_values.fundDistributionTaxable += Money(
+                            usd=m.usd * (1 - exemption), eur=m.eur * (1 - exemption)
+                        )
+                    else:
+                        year_values.dividend += m
             case "Fully Paid Stock Lending Income":
                 year_values.securitiesLendingIncome += m
             case subcode:
@@ -136,11 +164,12 @@ class Tasty:
         dividends = chronological_history[
             chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
         ]
-        amounts = dividends.groupby(
-            [Fields.DATE_TIME.value, Fields.SYMBOL.value]
+        dividend_dates = dividends[Fields.DATE_TIME.value].dt.date.astype(str)
+        amounts = dividends.assign(_pay_date=dividend_dates).groupby(
+            ["_pay_date", Fields.SYMBOL.value]
         )[Fields.AMOUNT.value]
-        self._withholding_dividend_keys = {
-            key
+        self._withholding_remaining = {
+            key: min(values[values > 0].sum(), -values[values < 0].sum())
             for key, values in amounts
             if (values > 0).any() and (values < 0).any()
         }
@@ -258,25 +287,20 @@ class Tasty:
             self._checkAssetClassifications(yearly_trades)
             values_obj = self.year(key)
 
-            values_obj.stockAndOptionsSum = calculate_combined_sum(yearly_trades)
-            values_obj.equityEtfGrossProfits = calculate_gross_equity_etf_profits(
+            values_obj.stockProfits = calculate_stock_profits(
                 yearly_trades, self.classifier
             )
-            values_obj.equityEtfProfits = calculate_equity_etf_profits(
+            values_obj.stockLosses = calculate_stock_losses(
                 yearly_trades, self.classifier
             )
-            values_obj.otherStockAndBondProfits = (
-                calculate_other_stock_and_bond_profits(yearly_trades, self.classifier)
-            )
-            values_obj.stockAndEtfLosses = calculate_stock_loss(
+            values_obj.fundGrossProfits = calculate_fund_gross_profits(
                 yearly_trades, self.classifier
             )
-
-            values_obj.totalTaxableStockAndEtfProfits = Money(
-                usd=values_obj.equityEtfProfits.usd
-                + values_obj.otherStockAndBondProfits.usd,
-                eur=values_obj.equityEtfProfits.eur
-                + values_obj.otherStockAndBondProfits.eur,
+            values_obj.fundProfits = calculate_fund_profits(
+                yearly_trades, self.classifier
+            )
+            values_obj.fundLosses = calculate_fund_losses(
+                yearly_trades, self.classifier
             )
 
             values_obj.optionSum = calculate_option_sum(yearly_trades)

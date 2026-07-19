@@ -1,11 +1,8 @@
 from typing import List
-import logging
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.fifo_processor import TradeResult
 from datetime import date, datetime
-
-logger = logging.getLogger(__name__)
 
 def sum_money_from_trades(trades: List[TradeResult]) -> Money:
     if not trades:
@@ -46,11 +43,6 @@ def _trade_date(trade: TradeResult) -> date:
         return value
     return date.fromisoformat(str(value)[:10])
 
-
-def _is_taxable_capital_asset(trade: TradeResult, classifier) -> bool:
-    return classifier.get_tax_category(
-        classifier.classify_for_tax(trade.symbol, trade.position_type, _trade_date(trade))
-    ) != "SO"
 
 def get_long_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if t.quantity > 0]
@@ -131,32 +123,66 @@ def calculate_option_differential(trades: List[TradeResult]) -> Money:
         eur=min(abs(negative_sum.eur), abs(positive_sum.eur))
     )
 
-def calculate_stock_loss(trades: List[TradeResult], classifier=None) -> Money:
-    filtered_trades = [
-        trade for trade in get_stock_trades(trades)
-        if _net_profit_eur(trade) < 0
-        and (classifier is None or _is_taxable_capital_asset(trade, classifier))
-    ]
-    if not filtered_trades:
-        return Money()
-
-    if classifier is not None:
-        total_usd = 0.0
-        total_eur = 0.0
-        for trade in filtered_trades:
-            taxable_portion = 1.0 - (
-                classifier.get_exemption_percentage_for(
-                    trade.symbol, trade.position_type, _trade_date(trade)
-                ) / 100.0
-            )
-            total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
-            total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
-        return Money(usd=total_usd, eur=total_eur)
-
-    return Money(
-        usd=sum(t.profit_usd - t.fees_usd for t in filtered_trades),
-        eur=sum(t.profit_eur - t.fees_eur for t in filtered_trades)
+def _classification(trade: TradeResult, classifier) -> str:
+    return classifier.classify_for_tax(
+        trade.symbol, trade.position_type, _trade_date(trade)
     )
+
+
+def _is_fund(trade: TradeResult, classifier) -> bool:
+    return classifier.get_tax_category(_classification(trade, classifier)) == "KAP-INV"
+
+
+def _calculate_stock_result(trades, classifier, profitable: bool) -> Money:
+    filtered = [
+        trade for trade in get_stock_trades(trades)
+        if (_net_profit_eur(trade) > 0) == profitable
+        and _net_profit_eur(trade) != 0
+        and _classification(trade, classifier) == "INDIVIDUAL_STOCK"
+    ]
+    return sum_money_from_trades(filtered)
+
+
+def calculate_stock_profits(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_stock_result(trades, classifier, True)
+
+
+def calculate_stock_losses(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_stock_result(trades, classifier, False)
+
+
+def _calculate_fund_result(trades, classifier, profitable: bool, taxable: bool) -> Money:
+    total_usd = 0.0
+    total_eur = 0.0
+    for trade in get_stock_trades(trades):
+        if (_net_profit_eur(trade) > 0) != profitable or _net_profit_eur(trade) == 0:
+            continue
+        if not _is_fund(trade, classifier):
+            continue
+        taxable_portion = 1.0
+        if taxable:
+            taxable_portion -= classifier.get_exemption_percentage_for(
+                trade.symbol, trade.position_type, _trade_date(trade)
+            ) / 100.0
+        total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
+        total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
+    return Money(usd=total_usd, eur=total_eur)
+
+
+def calculate_fund_profits(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_fund_result(trades, classifier, True, True)
+
+
+def calculate_fund_losses(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_fund_result(trades, classifier, False, True)
+
+
+def calculate_fund_gross_profits(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_fund_result(trades, classifier, True, False)
+
+
+def calculate_fund_gross_losses(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_fund_result(trades, classifier, False, False)
 
 def calculate_stock_fees(trades: List[TradeResult]) -> Money:
     stock_trades = get_stock_trades(trades)
@@ -168,82 +194,3 @@ def calculate_other_fees(trades: List[TradeResult]) -> Money:
 
 def calculate_fees_sum(trades: List[TradeResult]) -> Money:
     return sum_fees_from_trades(trades)
-
-def calculate_gross_equity_etf_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = [
-        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
-    ]
-    if not profitable_stock_trades:
-        return Money()
-    
-    total_eur = 0.0
-    total_usd = 0.0
-    
-    for trade in profitable_stock_trades:
-        classification = classifier.classify_for_tax(
-            trade.symbol, trade.position_type, _trade_date(trade)
-        )
-        
-        if classification == 'EQUITY_ETF':
-            total_eur += trade.profit_eur - trade.fees_eur
-            total_usd += trade.profit_usd - trade.fees_usd
-    
-    return Money(usd=total_usd, eur=total_eur)
-
-def calculate_equity_etf_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = [
-        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
-    ]
-    if not profitable_stock_trades:
-        return Money()
-
-    total_taxable_eur = 0.0
-    total_taxable_usd = 0.0
-
-    for trade in profitable_stock_trades:
-        classification = classifier.classify_for_tax(
-            trade.symbol, trade.position_type, _trade_date(trade)
-        )
-
-        if classification == 'EQUITY_ETF':
-            exemption_pct = classifier.get_exemption_percentage_for(
-                trade.symbol, trade.position_type, _trade_date(trade)
-            )
-            taxable_portion = 1.0 - (exemption_pct / 100.0)
-
-            net_profit_eur = trade.profit_eur - trade.fees_eur
-            net_profit_usd = trade.profit_usd - trade.fees_usd
-
-            total_taxable_eur += net_profit_eur * taxable_portion
-            total_taxable_usd += net_profit_usd * taxable_portion
-
-            logger.debug(f"Applied {exemption_pct}% Teilfreistellung to {trade.symbol}")
-
-    return Money(usd=total_taxable_usd, eur=total_taxable_eur)
-
-def calculate_other_stock_and_bond_profits(trades: List[TradeResult], classifier) -> Money:
-    profitable_stock_trades = [
-        trade for trade in get_stock_trades(trades) if _net_profit_eur(trade) > 0
-    ]
-    if not profitable_stock_trades:
-        return Money()
-
-    total_eur = 0.0
-    total_usd = 0.0
-
-    for trade in profitable_stock_trades:
-        classification = classifier.classify_for_tax(
-            trade.symbol, trade.position_type, _trade_date(trade)
-        )
-
-        if classification == "EQUITY_ETF" or classifier.get_tax_category(classification) == "SO":
-            continue
-
-        exemption_pct = classifier.get_exemption_percentage_for(
-            trade.symbol, trade.position_type, _trade_date(trade)
-        )
-        taxable_portion = 1.0 - (exemption_pct / 100.0)
-        total_eur += (trade.profit_eur - trade.fees_eur) * taxable_portion
-        total_usd += (trade.profit_usd - trade.fees_usd) * taxable_portion
-
-    return Money(usd=total_usd, eur=total_eur)
