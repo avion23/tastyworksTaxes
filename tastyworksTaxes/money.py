@@ -3,14 +3,54 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import datetime
+import logging
 from currency_converter import CurrencyConverter
+
+logger = logging.getLogger(__name__)
 
 # Shared currency converter instance
 _converter = CurrencyConverter(fallback_on_missing_rate=True, fallback_on_wrong_date=True)
+_strict_converter = CurrencyConverter(
+    fallback_on_missing_rate=False, fallback_on_wrong_date=False
+)
+
+
+def _normalise_date(date):
+    try:
+        return date.date()
+    except AttributeError:
+        return date
+
+
+def _fallback_reason(date):
+    first_date, last_date = _strict_converter.bounds['USD']
+    if date < first_date or date > last_date:
+        return 'date out of range'
+    return 'missing rate for date'
+
+
+def get_used_rate(date) -> float:
+    """Return the ECB USD rate used for a date."""
+    return _converter.convert(1, 'EUR', 'USD', date=date)
 
 def convert_usd_to_eur(amount: float, date) -> float:
     """Centralized USD to EUR conversion"""
-    return _converter.convert(amount, 'USD', 'EUR', date=date)
+    converted_amount = _converter.convert(amount, 'USD', 'EUR', date=date)
+    try:
+        strict_amount = _strict_converter.convert(amount, 'USD', 'EUR', date=date)
+    except Exception:
+        strict_amount = None
+
+    if strict_amount != converted_amount:
+        used_date = _normalise_date(date)
+        logger.warning(
+            'USD to EUR conversion used fallback: date=%s amount=%s rate=%s reason=%s',
+            used_date,
+            amount,
+            get_used_rate(date),
+            _fallback_reason(used_date),
+        )
+    return converted_amount
 
 class Money:
     """replaces eur and usd"""

@@ -1,12 +1,14 @@
 import sys
 import os
+import logging
 import pytest
 import re
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from tastyworksTaxes.money import Money
+from tastyworksTaxes.money import Money, convert_usd_to_eur, get_used_rate
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
 
@@ -48,6 +50,42 @@ def test_money_fromUsdToEur():
     c = Money(usd=100)
     c.fromUsdToEur(date="2010-11-21")
     assert 73 <= c.eur <= 74
+
+
+def test_usd_to_eur_weekday_conversion_does_not_warn(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(2021, 7, 6))
+    assert not caplog.records
+
+
+def test_usd_to_eur_weekend_conversion_warns(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(2021, 7, 4))
+    assert 'date=2021-07-04' in caplog.text
+    assert 'amount=100' in caplog.text
+    assert f'rate={get_used_rate(date(2021, 7, 4))}' in caplog.text
+    assert 'reason=missing rate for date' in caplog.text
+
+
+def test_usd_to_eur_out_of_range_conversion_warns(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(1995, 1, 1))
+    assert 'reason=date out of range' in caplog.text
+
+
+@pytest.mark.parametrize(
+    ('conversion_date', 'expected'),
+    [
+        (date(2021, 7, 6), 84.47372867038351),
+        (date(2021, 7, 4), 84.37631837997469),
+    ],
+)
+def test_usd_to_eur_conversion_value_is_unchanged(conversion_date, expected):
+    assert convert_usd_to_eur(100, conversion_date) == expected
+
+
+def test_get_used_rate_returns_positive_ecb_rate():
+    assert get_used_rate(date(2021, 7, 4)) > 0
 
 
 def test_debit_interest():
