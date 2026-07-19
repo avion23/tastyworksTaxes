@@ -71,3 +71,15 @@ def test_english_report_renders_fund_distribution_fields():
     assert "fund distributions gross" in rendered
     assert "fund distributions exempt" in rendered
     assert "fund distributions taxable" in rendered
+
+
+def test_reports_do_not_render_uncalculated_tax_totals_as_zero():
+    printer = Printer(Values(), [])
+    german = str(printer.generateGermanTaxReport())
+    english = str(printer.generateEnglishTaxReport())
+
+    assert "KAP+KAP-INV" not in german
+    assert "KErSt+Soli" not in german
+    assert "kap kap inv" not in english
+    assert "kerst soli" not in english
+    assert "Soli/KESt are not computed" in german

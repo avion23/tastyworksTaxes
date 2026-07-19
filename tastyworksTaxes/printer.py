@@ -89,9 +89,6 @@ class GermanTaxReport(object):
     Z19 Ausländische Kapitalerträge
     Z21 Termingeschäftsgewinne+Stillhalter
     Z24 Termingeschäftsverluste
-    KAP+KAP-INV
-    KAP+KAP-INV KErSt+Soli
-    KAP+KAP-INV Verlustvortrag
     Cash Balance USD
     Net Liquidating Value
     """
@@ -216,9 +213,6 @@ class GermanTaxReport(object):
             ('Z19 Ausländische Kapitalerträge', self.z19_auslaendische_kapitalertraege),
             ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne),
             ('Z24 Termingeschäftsverluste', self.z24_termingeschaefte_verluste),
-            ('KAP+KAP-INV', self.kap_kap_inv),
-            ('KAP+KAP-INV KErSt+Soli', self.kap_kap_inv_kerst_soli),
-            ('KAP+KAP-INV Verlustvortrag', self.kap_kap_inv_verlustvortrag),
             ('Cash Balance USD', self.cash_balance_usd),
             ('Net Liquidating Value', self.net_liquidating_value),
             ('Wertpapierleihe Einkommen', self.wertpapierleihe_einkommen),
@@ -353,9 +347,6 @@ class EnglishTaxReport(object):
             ('z19 foreign capital gains', self.z19_foreign_capital_gains),
             ('z21 term gains', self.z21_term_gains),
             ('z24 term losses', self.z24_term_losses),
-            ('kap kap inv', self.kap_kap_inv),
-            ('kap kap inv kerst soli', self.kap_kap_inv_kerst_soli),
-            ('kap kap inv loss carryforward', self.kap_kap_inv_loss_carryforward),
             ('cash balance usd', self.cash_balance_usd),
             ('net liquidating value', self.net_liquidating_value),
             ('securities lending income', self.securities_lending_income),

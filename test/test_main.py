@@ -90,15 +90,50 @@ def test_vorabpauschale_warning_for_fund_held_over_year_boundary():
 
     assert len(lines) == 1
     assert "fund SCHG held at start of 2024" in lines[0]
+    assert "months_before_acquisition=0" in lines[0]
     assert "Basiszins 2.29%" in lines[0]
     assert "deemed received in 2025" in lines[0]
 
 
-def test_no_vorabpauschale_warning_for_within_year_fund_holding():
+def test_vorabpauschale_warning_for_fund_bought_and_sold_during_calendar_year():
     tasty = Tasty()
     tasty.position_manager.closed_trades = [
         fund_trade("2024-02-01", "2024-10-01")
     ]
     tasty.year(2025)
 
-    assert vorabpauschale_warning_lines(tasty) == []
+    lines = vorabpauschale_warning_lines(tasty)
+
+    assert len(lines) == 1
+    assert "first acquired in 2024-02" in lines[0]
+    assert "months_before_acquisition=1" in lines[0]
+
+
+def test_vorabpauschale_acquisition_year_warning_for_fund_sold_next_year():
+    tasty = Tasty()
+    tasty.position_manager.closed_trades = [
+        fund_trade("2024-07-15", "2025-03-01")
+    ]
+    tasty.year(2025)
+
+    lines = vorabpauschale_warning_lines(tasty)
+
+    assert len(lines) == 1
+    assert "first acquired in 2024-07" in lines[0]
+    assert "months_before_acquisition=6" in lines[0]
+
+
+def test_vorabpauschale_warning_is_assigned_to_following_assessment_year():
+    tasty = Tasty()
+    tasty.position_manager.closed_trades = [
+        fund_trade("2025-03-01", "2025-09-01")
+    ]
+    tasty.year(2025)
+    tasty.year(2026)
+
+    lines = vorabpauschale_warning_lines(tasty)
+
+    assert len(lines) == 1
+    assert "calendar year 2025" in lines[0]
+    assert "deemed received in 2026" in lines[0]
+    assert "months_before_acquisition=2" in lines[0]

@@ -36,6 +36,14 @@ def _as_date(value) -> date:
     return date.fromisoformat(str(value)[:10])
 
 
+def _as_optional_date(value) -> date | None:
+    if value is None or pd.isna(value):
+        return None
+    if str(value).strip().lower() in {"", "none", "nan", "nat"}:
+        return None
+    return _as_date(value)
+
+
 def vorabpauschale_warning_lines(tasty: Tasty) -> list[str]:
     lines = []
     closed_trades = tasty.position_manager.closed_trades
@@ -44,36 +52,60 @@ def vorabpauschale_warning_lines(tasty: Tasty) -> list[str]:
         calendar_year = assessment_year - 1
         if calendar_year not in BASISZINS:
             continue
-        boundary = date(calendar_year, 1, 1)
-        symbols = {
-            trade.symbol
+        year_start = date(calendar_year, 1, 1)
+        year_end = date(calendar_year, 12, 31)
+        holdings = [
+            (
+                trade.symbol,
+                trade.position_type,
+                trade.quantity,
+                _as_date(trade.opening_date),
+                _as_optional_date(trade.closing_date),
+            )
             for trade in closed_trades
-            if trade.position_type == PositionType.stock
-            and trade.quantity > 0
-            and _as_date(trade.opening_date) < boundary
-            and _as_date(trade.closing_date) >= boundary
-        }
-        symbols.update(
-            lot.symbol
+        ]
+        holdings.extend(
+            (lot.symbol, lot.position_type, lot.quantity, _as_date(lot.date), None)
             for lot in open_lots
-            if lot.position_type == PositionType.stock
-            and lot.quantity > 0
-            and _as_date(lot.date) < boundary
         )
-        for symbol in sorted(symbols):
+        fund_acquisitions = {}
+        for symbol, position_type, quantity, opening_date, closing_date in holdings:
+            if position_type != PositionType.stock or quantity <= 0:
+                continue
+            if opening_date > year_end or (
+                closing_date is not None and closing_date < year_start
+            ):
+                continue
+            classification_date = max(opening_date, year_start)
             classification = tasty.classifier.classify_for_tax(
-                symbol, PositionType.stock, boundary
+                symbol, PositionType.stock, classification_date
             )
             if tasty.classifier.get_tax_category(classification) != "KAP-INV":
                 continue
+            previous = fund_acquisitions.get(symbol)
+            if previous is None or opening_date < previous:
+                fund_acquisitions[symbol] = opening_date
+
+        for symbol in sorted(fund_acquisitions):
+            opening_date = fund_acquisitions[symbol]
+            months_before_acquisition = (
+                opening_date.month - 1 if opening_date >= year_start else 0
+            )
+            timeline = (
+                f"first acquired in {calendar_year}-{opening_date.month:02d}"
+                if opening_date >= year_start
+                else f"held at start of {calendar_year}"
+            )
             basiszins_pct = BASISZINS[calendar_year] * 100
             lines.append(
-                f"WARNING: VORABPAUSCHALE: fund {symbol} held at start of {calendar_year}; "
+                f"WARNING: VORABPAUSCHALE: fund {symbol} {timeline}; "
+                f"months_before_acquisition={months_before_acquisition}. "
                 f"compute Vorabpauschale for calendar year {calendar_year} "
                 f"(Basiszins {basiszins_pct:g}%), deemed received in {assessment_year}. "
                 "Use tastyworksTaxes.vorabpauschale.calculate_vorabpauschale("
                 "start_of_year_value_eur, basiszins, teilfreistellung_pct, "
-                "distributions_eur, value_increase_eur)."
+                "distributions_eur, value_increase_eur, "
+                f"months_before_acquisition={months_before_acquisition})."
             )
     return lines
 

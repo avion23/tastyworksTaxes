@@ -110,6 +110,31 @@ class TestTasty:
         assert values.fundDistributionTaxable.usd == 70
         assert values.dividend.usd == 50
 
+    @pytest.mark.parametrize(
+        "negative, expected_withholding, expected_paid",
+        [(-15, 15, 0), (-150, 100, -50)],
+    )
+    def test_dividend_withholding_is_capped_by_positive_dividend(
+        self, negative, expected_withholding, expected_paid
+    ):
+        income = Transaction.fromString(
+            "2025-10-10T20:00:00+0000,Money Movement,Dividend,,AAPL,Equity,"
+            "APPLE INC,100,0,,0,0.00,,AAPL,AAPL,,,,123456,USD"
+        )
+        negative_leg = Transaction.fromString(
+            f"2025-10-10T23:17:42+0000,Money Movement,Dividend,,AAPL,Equity,"
+            f"OTHER PAYMENT,{negative},0,,0,0.00,,AAPL,AAPL,,,,123456,USD"
+        )
+        t = Tasty()
+        t.history = pd.DataFrame([income, negative_leg])
+
+        t.processTransactionHistory()
+
+        values = t.year(2025)
+        assert values.dividend.usd == 100
+        assert values.withholdingTax.usd == expected_withholding
+        assert values.paidDividend.usd == expected_paid
+
     def test_money_movement_special_dividend_is_cash_income(self):
         t = Tasty()
         transaction = Transaction.fromString(

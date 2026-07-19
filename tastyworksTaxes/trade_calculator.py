@@ -180,6 +180,10 @@ def calculate_fund_losses(trades: List[TradeResult], classifier) -> Money:
 def calculate_fund_gross_profits(trades: List[TradeResult], classifier) -> Money:
     return _calculate_fund_result(trades, classifier, True, False)
 
+
+def calculate_fund_gross_losses(trades: List[TradeResult], classifier) -> Money:
+    return _calculate_fund_result(trades, classifier, False, False)
+
 def calculate_stock_fees(trades: List[TradeResult]) -> Money:
     stock_trades = get_stock_trades(trades)
     return sum_fees_from_trades(stock_trades)

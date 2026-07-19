@@ -43,6 +43,7 @@ class Tasty:
         self.position_manager = PositionManager()
         self.classifier = AssetClassifier()
         self.unverified_asset_symbols = set()
+        self._withholding_remaining = {}
 
     def year(self, year):
         if year not in self.yearValues:
@@ -91,10 +92,19 @@ class Tasty:
             case "Dividend":
                 if m.usd < 0:
                     key = (t.getDate(), t.getSymbol())
-                    if key in getattr(self, "_withholding_dividend_keys", set()):
-                        year_values.withholdingTax += -m
-                    else:
-                        year_values.paidDividend += m
+                    remaining = getattr(self, "_withholding_remaining", {}).get(key, 0.0)
+                    negative_amount = -m.usd
+                    withholding_amount = min(negative_amount, remaining)
+                    withholding_ratio = withholding_amount / negative_amount
+                    year_values.withholdingTax += Money(
+                        usd=withholding_amount,
+                        eur=-m.eur * withholding_ratio,
+                    )
+                    year_values.paidDividend += Money(
+                        usd=-(negative_amount - withholding_amount),
+                        eur=m.eur * (1 - withholding_ratio),
+                    )
+                    self._withholding_remaining[key] = remaining - withholding_amount
                 else:
                     pay_date = t.loc["Date/Time"].date()
                     symbol = t.getSymbol()
@@ -158,8 +168,8 @@ class Tasty:
         amounts = dividends.assign(_pay_date=dividend_dates).groupby(
             ["_pay_date", Fields.SYMBOL.value]
         )[Fields.AMOUNT.value]
-        self._withholding_dividend_keys = {
-            key
+        self._withholding_remaining = {
+            key: min(values[values > 0].sum(), -values[values < 0].sum())
             for key, values in amounts
             if (values > 0).any() and (values < 0).any()
         }
