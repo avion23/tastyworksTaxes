@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import datetime
 import logging
+import math
 from currency_converter import CurrencyConverter
 
 logger = logging.getLogger(__name__)
@@ -30,18 +31,23 @@ def _fallback_reason(date):
 
 
 def get_used_rate(date) -> float:
-    """Return the ECB USD rate used for a date."""
-    return _converter.convert(1, 'EUR', 'USD', date=date)
+    """Return the USD→EUR multiplier applied to a USD amount."""
+    return _converter.convert(1, 'USD', 'EUR', date=date)
 
 def convert_usd_to_eur(amount: float, date) -> float:
     """Centralized USD to EUR conversion"""
     converted_amount = _converter.convert(amount, 'USD', 'EUR', date=date)
-    try:
-        strict_amount = _strict_converter.convert(amount, 'USD', 'EUR', date=date)
-    except Exception:
-        strict_amount = None
 
-    if strict_amount != converted_amount:
+    if not math.isfinite(amount):
+        return converted_amount
+
+    fallback_used = False
+    try:
+        _strict_converter.convert(amount, 'USD', 'EUR', date=date)
+    except Exception:
+        fallback_used = True
+
+    if fallback_used:
         used_date = _normalise_date(date)
         logger.warning(
             'USD to EUR conversion used fallback: date=%s amount=%s rate=%s reason=%s',
