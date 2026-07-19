@@ -40,14 +40,14 @@ def test_stock_results_are_classified_after_fees_and_crypto_is_excluded():
     assert calculate_stock_loss(trades, classifier).eur == -1
 
 
-def test_verified_mixed_and_equity_funds_receive_their_exemptions():
+def test_verified_other_and_equity_funds_receive_their_exemptions():
     classifier = AssetClassifier()
     trades = [stock_trade("AOM", 100), stock_trade("VNQ", 100)]
 
     result = calculate_other_stock_and_bond_profits(trades, classifier)
 
-    assert result.eur == 85
-    assert result.usd == 85
+    assert result.eur == 100
+    assert result.usd == 100
     assert calculate_equity_etf_profits(trades, classifier).eur == 70
 
 
@@ -89,8 +89,8 @@ def test_verified_fund_losses_apply_their_exemptions():
 
     result = calculate_stock_loss(trades, classifier)
 
-    assert result.eur == -455
-    assert result.usd == -455
+    assert result.eur == -470
+    assert result.usd == -470
 
 
 def test_verified_bond_fund_loss_includes_fees_without_exemption():

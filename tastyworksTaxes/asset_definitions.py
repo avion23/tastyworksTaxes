@@ -8,6 +8,7 @@ from pathlib import Path
 CLASSIFICATIONS = {
     "EQUITY_ETF": ("KAP-INV", 30),
     "BOND_ETF": ("KAP-INV", 0),
+    "OTHER_FUND": ("KAP-INV", 0),
     "MIXED_FUND_ETF": ("KAP-INV", 15),
     "REAL_ESTATE_ETF": ("KAP-INV", 60),
     "FOREIGN_REAL_ESTATE_ETF": ("KAP-INV", 80),
@@ -52,7 +53,7 @@ def load_asset_registry(path: Path | None = None) -> tuple[AssetDefinition, ...]
             raise ValueError(f"asset registry columns must be exactly {sorted(_COLUMNS)}")
         definitions = []
         for row_number, row in enumerate(reader, start=2):
-            if any(value is None for value in row.values()):
+            if None in row or any(value is None for value in row.values()):
                 raise ValueError(f"asset registry row {row_number}: malformed CSV row")
             symbol = row["symbol"].strip()
             classification = row["classification"].strip()

@@ -189,7 +189,7 @@ class TestArchitectureIntegration:
         assert tasty_instance.classifier.get_exemption_percentage('MIXED_FUND_ETF') == 15
         assert tasty_instance.classifier.get_exemption_percentage('REAL_ESTATE_ETF') == 60
     
-    def test_mixed_and_real_estate_funds_work_with_classification(self, tasty_instance):
+    def test_other_and_equity_funds_work_with_classification(self, tasty_instance):
         [
             TradeResult(
                 symbol='AOM',
@@ -224,8 +224,8 @@ class TestArchitectureIntegration:
         aom_classification = tasty_instance.classifier.classify('AOM', PositionType.stock)
         vnq_classification = tasty_instance.classifier.classify('VNQ', PositionType.stock)
         
-        assert aom_classification == 'MIXED_FUND_ETF'
+        assert aom_classification == 'OTHER_FUND'
         assert vnq_classification == 'EQUITY_ETF'
         
-        assert tasty_instance.classifier.get_exemption_percentage(aom_classification) == 15
+        assert tasty_instance.classifier.get_exemption_percentage(aom_classification) == 0
         assert tasty_instance.classifier.get_exemption_percentage(vnq_classification) == 30

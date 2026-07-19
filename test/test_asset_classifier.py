@@ -1,7 +1,7 @@
 import pytest
 import logging
 from tastyworksTaxes.asset_classifier import AssetClassifier
-from tastyworksTaxes.asset_definitions import load_asset_registry
+from tastyworksTaxes.asset_definitions import CLASSIFICATIONS, load_asset_registry
 from tastyworksTaxes.position import PositionType
 
 class TestAssetClassifier:
@@ -15,15 +15,21 @@ class TestAssetClassifier:
         assert classifier.classify('VNQ', PositionType.stock) == 'EQUITY_ETF'
     
     def test_classify_bond_etf(self, classifier):
-        assert classifier.classify('TECL', PositionType.stock) == 'BOND_ETF'
-        assert classifier.classify('TQQQ', PositionType.stock) == 'BOND_ETF'
+        assert classifier.classify('TECL', PositionType.stock) == 'OTHER_FUND'
+        assert classifier.classify('TQQQ', PositionType.stock) == 'OTHER_FUND'
         assert classifier.classify('PULS', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('VGSH', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('TLT', PositionType.stock) == 'BOND_ETF'
     
     def test_classify_mixed_fund_etf(self, classifier):
-        assert classifier.classify('AOM', PositionType.stock) == 'MIXED_FUND_ETF'
-        assert classifier.classify('AOK', PositionType.stock) == 'MIXED_FUND_ETF'
+        assert classifier.classify('AOA', PositionType.stock) == 'MIXED_FUND_ETF'
+        assert classifier.classify('AOR', PositionType.stock) == 'MIXED_FUND_ETF'
+
+    def test_classify_other_fund(self, classifier):
+        for symbol in ('TECL', 'TQQQ', 'UPRO', 'SQQQ', 'SOXL', 'MSTY', 'NVDY', 'YMAG'):
+            assert classifier.classify(symbol, PositionType.stock) == 'OTHER_FUND'
+        assert classifier.classify('AOM', PositionType.stock) == 'OTHER_FUND'
+        assert classifier.classify('AOK', PositionType.stock) == 'OTHER_FUND'
     
     def test_classify_real_estate_etf(self, classifier):
         assert classifier.classify('VNQ', PositionType.stock) == 'EQUITY_ETF'
@@ -50,6 +56,7 @@ class TestAssetClassifier:
     def test_get_exemption_percentage(self, classifier):
         assert classifier.get_exemption_percentage('EQUITY_ETF') == 30
         assert classifier.get_exemption_percentage('BOND_ETF') == 0
+        assert classifier.get_exemption_percentage('OTHER_FUND') == 0
         assert classifier.get_exemption_percentage('MIXED_FUND_ETF') == 15
         assert classifier.get_exemption_percentage('REAL_ESTATE_ETF') == 60
         assert classifier.get_exemption_percentage('INDIVIDUAL_STOCK') == 0
@@ -58,13 +65,14 @@ class TestAssetClassifier:
     def test_get_tax_category(self, classifier):
         assert classifier.get_tax_category('EQUITY_ETF') == 'KAP-INV'
         assert classifier.get_tax_category('BOND_ETF') == 'KAP-INV'
+        assert classifier.get_tax_category('OTHER_FUND') == 'KAP-INV'
         assert classifier.get_tax_category('CRYPTO') == 'SO'
         assert classifier.get_tax_category('INDIVIDUAL_STOCK') == 'KAP'
     
     def test_get_all_symbols_by_type(self, classifier):
         equity_symbols = classifier.get_all_symbols_by_type('EQUITY_ETF')
         assert 'SCHG' in equity_symbols
-        assert 'AOR' in equity_symbols
+        assert 'AOR' not in equity_symbols
         
         bond_symbols = classifier.get_all_symbols_by_type('BOND_ETF')
         assert 'PULS' in bond_symbols
@@ -105,7 +113,7 @@ class TestAssetClassifier:
 
 def test_unverified_registry_rows_do_not_grant_partial_exemption():
     classifier = AssetClassifier()
-    assert classifier.classify('GGLL', PositionType.stock) == 'BOND_ETF'
+    assert classifier.classify('GGLL', PositionType.stock) == 'OTHER_FUND'
     assert not classifier.is_verified('GGLL', PositionType.stock)
     assert classifier.get_exemption_percentage_for('GGLL', PositionType.stock) == 0
 
@@ -162,11 +170,40 @@ def test_effective_date_is_selected_per_operation(tmp_path):
 def test_unverified_classification_does_not_select_tax_category():
     classifier = AssetClassifier()
 
-    assert classifier.classify('GGLL', PositionType.stock) == 'BOND_ETF'
+    assert classifier.classify('GGLL', PositionType.stock) == 'OTHER_FUND'
     assert classifier.classify_for_tax('GGLL', PositionType.stock) == 'INDIVIDUAL_STOCK'
     assert classifier.get_tax_category(
         classifier.classify_for_tax('GGLL', PositionType.stock)
     ) == 'KAP'
+
+
+def test_registry_rows_match_classification_tax_properties_and_classify():
+    classifier = AssetClassifier()
+    registry = load_asset_registry()
+
+    for definition in registry:
+        assert (
+            definition.classification,
+            definition.tax_category,
+            definition.teilfreistellung_pct,
+        ) == (definition.classification, *CLASSIFICATIONS[definition.classification])
+        if definition.verified and definition.tax_category == 'KAP-INV':
+            assert '; src: https://' in definition.evidence
+        if definition.verified and definition.classification in {
+            'EQUITY_ETF', 'BOND_ETF', 'OTHER_FUND',
+        }:
+            assert classifier.classify(definition.symbol, PositionType.stock) == definition.classification
+
+    expected_classes = {
+        'TECL': 'OTHER_FUND', 'TQQQ': 'OTHER_FUND', 'UPRO': 'OTHER_FUND',
+        'SQQQ': 'OTHER_FUND', 'SOXL': 'OTHER_FUND', 'MSTY': 'OTHER_FUND',
+        'NVDY': 'OTHER_FUND', 'YMAG': 'OTHER_FUND', 'PULS': 'BOND_ETF',
+        'TLT': 'BOND_ETF', 'SCHG': 'EQUITY_ETF', 'QQQ': 'EQUITY_ETF',
+        'AOA': 'MIXED_FUND_ETF', 'AOR': 'MIXED_FUND_ETF',
+        'AOM': 'OTHER_FUND', 'AOK': 'OTHER_FUND',
+    }
+    for symbol, classification in expected_classes.items():
+        assert classifier.classify(symbol, PositionType.stock) == classification
 
 
 @pytest.mark.parametrize('row, message', [
@@ -175,6 +212,7 @@ def test_unverified_classification_does_not_select_tax_category():
     ('TEST,EQUITY_ETF,KAP-INV,30,yes,2024-01-01,,evidence', 'verified'),
     ('TEST,EQUITY_ETF,KAP-INV,30,true,2025-01-01,2024-01-01,evidence', 'precedes'),
     ('TEST,EQUITY_ETF,KAP-INV,30,true,2024-01-01,,', 'evidence is required'),
+    ('TEST,EQUITY_ETF,KAP-INV,30,true,2024-01-01,,evidence,extra', 'malformed'),
 ])
 def test_registry_validation(tmp_path, row, message):
     registry = tmp_path / 'assets.csv'
