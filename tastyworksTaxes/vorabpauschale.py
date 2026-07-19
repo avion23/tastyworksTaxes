@@ -1,8 +1,11 @@
 """Pure helpers for the Vorabpauschale under §§ 18–19 InvStG.
 
-The calculation follows § 18 InvStG and the BMF guidance of 25 July 2023.
-Amounts are returned without currency rounding so callers can round only when
-presenting or aggregating tax results.
+Under § 18 Abs. 1 InvStG, the Basisertrag is 70 percent of the Basiszins
+multiplied by the value at the beginning of the year. It is capped at the
+increase from the first to the last redemption price plus distributions.
+The calculation also follows the BMF guidance of 25 July 2023. Amounts are
+returned without currency rounding so callers can round only when presenting
+or aggregating tax results.
 """
 
 
@@ -48,10 +51,11 @@ def calculate_vorabpauschale(
         raise ValueError("months_before_acquisition must be between 0 and 11")
 
     basisertrag = 0.7 * basiszins * start_of_year_value_eur
-    raw_vorabpauschale = max(
-        min(basisertrag, value_increase_eur) - distributions_eur,
-        0.0,
+    capped_basisertrag = min(
+        basisertrag,
+        value_increase_eur + distributions_eur,
     )
+    raw_vorabpauschale = max(capped_basisertrag - distributions_eur, 0.0)
     prorated = raw_vorabpauschale * (12 - months_before_acquisition) / 12
     return prorated * (1 - teilfreistellung_pct / 100)
 

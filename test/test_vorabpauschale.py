@@ -21,7 +21,7 @@ def calculate(**overrides):
 
 
 def test_canonical_worked_example():
-    # Basisertrag = 70% * 2.29% * €10,000 = €160.30; (€160.30 - €100) * 70% = €42.21.
+    # Cap = min(€160.30, €800 + €100); VP = (€160.30 - €100) * 70% = €42.21.
     result = calculate(
         teilfreistellung_pct=30,
         distributions_eur=100.0,
@@ -29,6 +29,17 @@ def test_canonical_worked_example():
     )
 
     assert result == pytest.approx(42.21)
+
+
+def test_distributions_are_included_in_value_increase_cap():
+    # Cap = min(€160.30, €100 + €100) = €160.30; VP = (€160.30 - €100) * 70% = €42.21.
+    result = calculate(
+        teilfreistellung_pct=30,
+        distributions_eur=100.0,
+        value_increase_eur=100.0,
+    )
+
+    assert result == pytest.approx(42.21, abs=0.01)
 
 
 def test_basisertrag_caps_vorabpauschale():
