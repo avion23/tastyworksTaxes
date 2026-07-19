@@ -8,8 +8,8 @@ from tastyworksTaxes.trade_calculator import (
     calculate_combined_sum, calculate_option_sum, calculate_long_option_profits,
     calculate_long_option_losses, calculate_long_option_total_losses,
     calculate_short_option_profits, calculate_short_option_losses,
-    calculate_option_differential, calculate_stock_loss, calculate_stock_fees,
-    calculate_other_fees, calculate_fees_sum, calculate_equity_etf_profits, calculate_other_stock_and_bond_profits
+    calculate_option_differential, calculate_stock_losses, calculate_stock_profits,
+    calculate_stock_fees, calculate_other_fees, calculate_fees_sum
 )
 
 class TestTastyFinancialCalculations:
@@ -92,14 +92,9 @@ class TestTastyFinancialCalculations:
         
     def test_stock_calculations_with_sample_df(self, sample_trades):
         t = Tasty()
-        equity_etf_profits = calculate_equity_etf_profits(sample_trades, t.classifier)
-        other_profits = calculate_other_stock_and_bond_profits(sample_trades, t.classifier) 
-        losses = calculate_stock_loss(sample_trades)
-        
-        total_stock = Money(
-            usd=equity_etf_profits.usd + other_profits.usd + losses.usd,
-            eur=equity_etf_profits.eur + other_profits.eur + losses.eur
-        )
+        profits = calculate_stock_profits(sample_trades, t.classifier)
+        losses = calculate_stock_losses(sample_trades, t.classifier)
+        total_stock = profits + losses
         
         assert total_stock.usd == -5401.324
         assert round(total_stock.eur, 2) == -4405.43
@@ -402,7 +397,7 @@ class TestTastyFinancialCalculations:
             )
         ]
         
-        result = calculate_stock_loss(trades)
+        result = calculate_stock_losses(trades, Tasty().classifier)
         assert result.usd == -200.0
         assert round(result.eur, 2) == -162.85
         
@@ -512,14 +507,7 @@ class TestTastyFinancialCalculations:
             )
         ]
         
-        t = Tasty()
-        equity_etf_profits = calculate_equity_etf_profits(trades, t.classifier)
-        other_profits = calculate_other_stock_and_bond_profits(trades, t.classifier)
-        
-        total_profits = Money(
-            usd=equity_etf_profits.usd + other_profits.usd,
-            eur=equity_etf_profits.eur + other_profits.eur
-        )
+        total_profits = calculate_stock_profits(trades, t.classifier)
         
         assert total_profits.usd == 350.0
         assert round(total_profits.eur, 2) == 284.90

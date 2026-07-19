@@ -58,7 +58,9 @@ class TestTastyRun:
 
         year_data = result[2018]
         assert isinstance(year_data, Values)
-        assert isinstance(year_data.stockAndOptionsSum, Money)
+        assert isinstance(year_data.stockProfits, Money)
+        assert isinstance(year_data.stockLosses, Money)
+        assert isinstance(year_data.fundProfits, Money)
         assert isinstance(year_data.optionSum, Money)
         assert isinstance(year_data.longOptionProfits, Money)
         assert isinstance(year_data.longOptionLosses, Money)
@@ -85,7 +87,7 @@ class TestTastyRun:
 
         assert set(result.keys()) == {2022}
         assert isinstance(result[2022], Values)
-        assert result[2022].stockAndOptionsSum.eur == 8.1
+        assert result[2022].stockProfits.eur == 8.1
         assert result[2022].fee.eur == -0.9
 
     @pytest.mark.skipif(
@@ -98,15 +100,16 @@ class TestTastyRun:
 
         assert len(result) > 0
         assert any(
-            hasattr(year_value, "equityEtfProfits") for year_value in result.values()
+            hasattr(year_value, "fundProfits") for year_value in result.values()
         )
 
         for year, value in result.items():
             assert isinstance(year, int)
-            assert isinstance(value.stockAndOptionsSum, Money)
-            assert isinstance(value.equityEtfProfits, Money)
-            assert isinstance(value.otherStockAndBondProfits, Money)
-            assert isinstance(value.stockAndEtfLosses, Money)
+            assert isinstance(value.stockProfits, Money)
+            assert isinstance(value.stockLosses, Money)
+            assert isinstance(value.fundGrossProfits, Money)
+            assert isinstance(value.fundProfits, Money)
+            assert isinstance(value.fundLosses, Money)
             assert isinstance(value.optionSum, Money)
 
     @pytest.mark.skipif(

@@ -3,7 +3,10 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
-from tastyworksTaxes.main import main
+from tastyworksTaxes.fifo_processor import TradeResult
+from tastyworksTaxes.main import main, vorabpauschale_warning_lines
+from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.tasty import Tasty
 
 
 def test_cli_refuses_to_overwrite_input(tmp_path, monkeypatch):
@@ -65,3 +68,37 @@ def test_cli_marks_unverified_asset_classifications(tmp_path, monkeypatch, capsy
     assert "AAPL, SQQQ" in output
     assert "lack a verified classification in the asset registry" in output
     assert "Verify each symbol's stock/fund status" in output
+
+
+def fund_trade(opening_date, closing_date):
+    return TradeResult(
+        symbol="SCHG", position_type=PositionType.stock,
+        opening_date=opening_date, closing_date=closing_date, quantity=1,
+        profit_usd=10, profit_eur=9, fees_usd=0, fees_eur=0,
+        worthless_expiry=False, strike=None, expiry=None,
+    )
+
+
+def test_vorabpauschale_warning_for_fund_held_over_year_boundary():
+    tasty = Tasty()
+    tasty.position_manager.closed_trades = [
+        fund_trade("2023-06-01", "2025-04-01")
+    ]
+    tasty.year(2025)
+
+    lines = vorabpauschale_warning_lines(tasty)
+
+    assert len(lines) == 1
+    assert "fund SCHG held at start of 2024" in lines[0]
+    assert "Basiszins 2.29%" in lines[0]
+    assert "deemed received in 2025" in lines[0]
+
+
+def test_no_vorabpauschale_warning_for_within_year_fund_holding():
+    tasty = Tasty()
+    tasty.position_manager.closed_trades = [
+        fund_trade("2024-02-01", "2024-10-01")
+    ]
+    tasty.year(2025)
+
+    assert vorabpauschale_warning_lines(tasty) == []

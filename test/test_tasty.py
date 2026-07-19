@@ -75,7 +75,7 @@ class TestTasty:
             "TIDAL TRUST II,397.70,0,,0,0.00,,NVDY,NVDY,,,,123456,USD"
         )
         withholding = Transaction.fromString(
-            "2025-10-10T23:00:00+0000,Money Movement,Dividend,,NVDY,Equity,"
+            "2025-10-10T23:17:42+0000,Money Movement,Dividend,,NVDY,Equity,"
             "TIDAL TRUST II,-59.66,0,,0,0.00,,NVDY,NVDY,,,,123456,USD"
         )
         t = Tasty()
@@ -83,9 +83,32 @@ class TestTasty:
 
         t.processTransactionHistory()
 
-        assert t.year(2025).dividend.usd == 397.70
+        assert t.year(2025).fundDistributions.usd == 397.70
+        assert t.year(2025).fundDistributionExempt.usd == 0
+        assert t.year(2025).fundDistributionTaxable.usd == 397.70
+        assert t.year(2025).dividend.usd == 0
         assert t.year(2025).withholdingTax.usd == 59.66
         assert t.year(2025).paidDividend.usd == 0
+
+    def test_fund_and_stock_dividends_are_separated(self):
+        fund = Transaction.fromString(
+            "2025-10-10T23:00:00+0000,Money Movement,Dividend,,SCHG,Equity,"
+            "SCHWAB ETF,100,0,,0,0.00,,SCHG,SCHG,,,,123456,USD"
+        )
+        stock = Transaction.fromString(
+            "2025-10-10T23:00:00+0000,Money Movement,Dividend,,AAPL,Equity,"
+            "APPLE INC,50,0,,0,0.00,,AAPL,AAPL,,,,123456,USD"
+        )
+        t = Tasty()
+
+        t.moneyMovement(fund)
+        t.moneyMovement(stock)
+
+        values = t.year(2025)
+        assert values.fundDistributions.usd == 100
+        assert values.fundDistributionExempt.usd == 30
+        assert values.fundDistributionTaxable.usd == 70
+        assert values.dividend.usd == 50
 
     def test_money_movement_special_dividend_is_cash_income(self):
         t = Tasty()
