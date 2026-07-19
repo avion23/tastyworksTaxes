@@ -1,12 +1,15 @@
 import sys
 import os
+import logging
+import math
 import pytest
 import re
+from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from tastyworksTaxes.money import Money
+from tastyworksTaxes.money import Money, _converter, convert_usd_to_eur, get_used_rate
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
 
@@ -48,6 +51,58 @@ def test_money_fromUsdToEur():
     c = Money(usd=100)
     c.fromUsdToEur(date="2010-11-21")
     assert 73 <= c.eur <= 74
+
+
+def test_usd_to_eur_weekday_conversion_does_not_warn(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(2021, 7, 6))
+    assert not caplog.records
+
+
+def test_usd_to_eur_weekend_conversion_warns(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(2021, 7, 4))
+    assert 'date=2021-07-04' in caplog.text
+    assert 'amount=100' in caplog.text
+    assert f'rate={get_used_rate(date(2021, 7, 4))}' in caplog.text
+    assert 'reason=missing rate for date' in caplog.text
+
+
+def test_usd_to_eur_out_of_range_conversion_warns(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        convert_usd_to_eur(100, date(1995, 1, 1))
+    assert 'reason=date out of range' in caplog.text
+
+
+@pytest.mark.parametrize(
+    ('amount', 'conversion_date'),
+    [
+        (-100, date(2021, 7, 6)),
+        (0, date(2021, 7, 6)),
+        (100, date(1995, 1, 1)),
+        (100, date(2100, 1, 1)),
+    ],
+)
+def test_usd_to_eur_conversion_value_is_unchanged(amount, conversion_date):
+    expected = _converter.convert(amount, 'USD', 'EUR', date=conversion_date)
+    assert convert_usd_to_eur(amount, conversion_date) == expected
+
+
+def test_usd_to_eur_nan_conversion_does_not_warn(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.money'):
+        converted_amount = convert_usd_to_eur(float('nan'), date(2021, 7, 6))
+
+    assert math.isnan(converted_amount)
+    assert not [
+        record
+        for record in caplog.records
+        if record.levelno == logging.WARNING
+        and 'USD to EUR conversion used fallback' in record.getMessage()
+    ]
+
+
+def test_get_used_rate_returns_usd_to_eur_multiplier():
+    assert get_used_rate(date(2021, 7, 4)) == pytest.approx(0.8437631837997469)
 
 
 def test_debit_interest():
