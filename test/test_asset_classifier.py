@@ -4,6 +4,19 @@ from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.asset_definitions import CLASSIFICATIONS, load_asset_registry
 from tastyworksTaxes.position import PositionType
 
+
+@pytest.fixture
+def unverified_fund_classifier(tmp_path):
+    registry = tmp_path / 'assets.csv'
+    registry.write_text(
+        'symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n'
+        'TESTUF,OTHER_FUND,KAP-INV,0,false,2020-01-01,,synthetic unverified fixture\n'
+        'TESTVF,EQUITY_ETF,KAP-INV,30,true,2020-01-01,,synthetic verified fixture\n',
+        encoding='utf-8',
+    )
+    return AssetClassifier(registry_path=registry)
+
+
 class TestAssetClassifier:
     @pytest.fixture
     def classifier(self):
@@ -103,19 +116,31 @@ class TestAssetClassifier:
         
         assert len(caplog.records) == 0
     
-    def test_check_unsupported_assets_warns_for_unverified_known_funds(self, classifier, caplog):
+    def test_check_unsupported_assets_warns_for_unverified_known_funds(
+        self, unverified_fund_classifier, caplog
+    ):
+        assert unverified_fund_classifier.classify('TESTUF', PositionType.stock) == 'OTHER_FUND'
         with caplog.at_level(logging.WARNING):
-            classifier.check_unsupported_assets(['GGLL', 'METU'])
-        
-        assert len(caplog.records) == 2
+            unverified_fund_classifier.check_unsupported_assets(['TESTUF'])
+
+        assert len(caplog.records) == 1
         assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
+        assert "TESTUF" in caplog.text
 
 
-def test_unverified_registry_rows_do_not_grant_partial_exemption():
+def test_unverified_registry_rows_do_not_grant_partial_exemption(unverified_fund_classifier):
+    assert not unverified_fund_classifier.is_verified('TESTUF', PositionType.stock)
+    assert unverified_fund_classifier.get_exemption_percentage_for('TESTUF', PositionType.stock) == 0
+
+
+def test_verified_leveraged_single_stock_etfs_classified_as_other_fund():
     classifier = AssetClassifier()
-    assert classifier.classify('GGLL', PositionType.stock) == 'OTHER_FUND'
-    assert not classifier.is_verified('GGLL', PositionType.stock)
-    assert classifier.get_exemption_percentage_for('GGLL', PositionType.stock) == 0
+
+    for symbol in ('GGLL', 'METU'):
+        assert classifier.classify(symbol, PositionType.stock) == 'OTHER_FUND'
+        assert classifier.classify_for_tax(symbol, PositionType.stock) == 'OTHER_FUND'
+        assert classifier.is_verified(symbol, PositionType.stock)
+        assert classifier.get_exemption_percentage_for(symbol, PositionType.stock) == 0
 
 
 def test_registry_loads_verified_schg_as_an_equity_fund():
@@ -167,13 +192,12 @@ def test_effective_date_is_selected_per_operation(tmp_path):
     assert classifier.get_exemption_percentage_for('TEST', PositionType.stock, date(2021, 1, 1)) == 0
 
 
-def test_unverified_classification_does_not_select_tax_category():
-    classifier = AssetClassifier()
+def test_unverified_classification_does_not_select_tax_category(unverified_fund_classifier):
+    assert unverified_fund_classifier.classify('TESTUF', PositionType.stock) == 'OTHER_FUND'
 
-    assert classifier.classify('GGLL', PositionType.stock) == 'OTHER_FUND'
-    assert classifier.classify_for_tax('GGLL', PositionType.stock) == 'INDIVIDUAL_STOCK'
-    assert classifier.get_tax_category(
-        classifier.classify_for_tax('GGLL', PositionType.stock)
+    assert unverified_fund_classifier.classify_for_tax('TESTUF', PositionType.stock) == 'INDIVIDUAL_STOCK'
+    assert unverified_fund_classifier.get_tax_category(
+        unverified_fund_classifier.classify_for_tax('TESTUF', PositionType.stock)
     ) == 'KAP'
 
 
