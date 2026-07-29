@@ -48,6 +48,7 @@ def test_cli_replaces_stale_output_with_header_only_csv(tmp_path, monkeypatch):
         "closing_profit_usd", "closing_profit_eur",
         "opening_fees_usd", "opening_fees_eur",
         "closing_fees_usd", "closing_fees_eur",
+        "settled_by_exercise",
     ]
 
 

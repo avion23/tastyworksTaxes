@@ -149,17 +149,103 @@ class Tasty:
         open_legs = corporate_actions & (
             self.history[Fields.OPEN_CLOSE.value] == OpenClose.OPEN.value
         )
+        receive_deliver = (
+            self.history[Fields.TRANSACTION_CODE.value]
+            == TransactionCode.RECEIVE_DELIVER.value
+        )
+        physical_option_settlements = (
+            receive_deliver
+            & self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+                TransactionSubcode.EXERCISE.value,
+                TransactionSubcode.ASSIGNMENT.value,
+            })
+            & self.history[Fields.CALL_PUT.value].isin({"C", "P"})
+        )
+        settlement_dates = self.history[Fields.DATE_TIME.value].dt.date.astype(str)
+        settlement_symbols = self.history[Fields.SYMBOL.value].copy()
+        settlement_symbols.loc[physical_option_settlements] = self.history.loc[
+            physical_option_settlements, Fields.UNDERLYING_SYMBOL.value
+        ]
+        settlement_directions = self.history[Fields.BUY_SELL.value].str.lower()
+        settlement_directions.loc[
+            physical_option_settlements
+            & (self.history[Fields.CALL_PUT.value] == "C")
+        ] = "buy"
+        settlement_directions.loc[
+            physical_option_settlements
+            & (self.history[Fields.CALL_PUT.value] == "P")
+        ] = "sell"
+        settlement_keys = list(zip(
+            settlement_dates,
+            settlement_symbols,
+            settlement_directions,
+        ))
+        option_keys = {
+            settlement_keys[index]
+            for index in range(len(self.history))
+            if physical_option_settlements.iloc[index]
+        }
+        stock_settlements = (
+            receive_deliver
+            & ~self.history[Fields.CALL_PUT.value].isin({"C", "P"})
+            & self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+                TransactionSubcode.BUY_TO_OPEN.value,
+                TransactionSubcode.SELL_TO_OPEN.value,
+                TransactionSubcode.BUY_TO_CLOSE.value,
+                TransactionSubcode.SELL_TO_CLOSE.value,
+            })
+        )
+        stock_keys = {
+            settlement_keys[index]
+            for index in range(len(self.history))
+            if stock_settlements.iloc[index]
+        }
+        paired_keys = option_keys & stock_keys
+        settlement_anchors = {
+            key: self.history.loc[
+                [
+                    row_key == key and bool(physical_option_settlements.iloc[index])
+                    for index, row_key in enumerate(settlement_keys)
+                ],
+                Fields.DATE_TIME.value,
+            ].max()
+            for key in paired_keys
+        }
+        processing_datetime = self.history[Fields.DATE_TIME.value].copy()
+        stock_needs_delay = [
+            bool(stock_settlements.iloc[index])
+            and key in paired_keys
+            and processing_datetime.iloc[index] < settlement_anchors[key]
+            for index, key in enumerate(settlement_keys)
+        ]
+        processing_datetime.loc[stock_needs_delay] = [
+            settlement_anchors[key]
+            for key, delayed in zip(settlement_keys, stock_needs_delay)
+            if delayed
+        ]
+        settlement_order = physical_option_settlements.astype(int) * -1
+        settlement_order += stock_settlements.astype(int)
         chronological_history = (
             self.history.assign(
                 _corporate_action_order=close_legs.astype(int) * -1
-                + open_legs.astype(int)
+                + open_legs.astype(int),
+                _processing_datetime=processing_datetime,
+                _settlement_order=settlement_order,
             )
             .sort_values(
-                by=[Fields.DATE_TIME.value, "_corporate_action_order"],
+                by=[
+                    "_processing_datetime",
+                    "_settlement_order",
+                    "_corporate_action_order",
+                ],
                 ascending=True,
                 kind="stable",
             )
-            .drop(columns="_corporate_action_order")
+            .drop(columns=[
+                "_corporate_action_order",
+                "_processing_datetime",
+                "_settlement_order",
+            ])
         )
         dividends = chronological_history[
             chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
@@ -182,6 +268,7 @@ class Tasty:
                 TransactionCode.RECEIVE_DELIVER.value,
             }:
                 self.position_manager.add_position(Transaction(row))
+        self.position_manager.warn_unmatched_exercise_adjustments()
 
     def getYearlyTrades(self):
         if not self.position_manager.closed_trades:
