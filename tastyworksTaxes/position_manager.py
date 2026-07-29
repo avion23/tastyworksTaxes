@@ -46,6 +46,7 @@ from importlib.resources import files
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.constants import (
     TransactionSubcode,
+    TransactionCode,
     OpenClose,
     Fields,
     CLOSING_SUBCODES,
@@ -68,6 +69,18 @@ class InstrumentKey:
     call_put: str | None = None
 
 
+@dataclass
+class PendingExercise:
+    """Unmatched physical-delivery premium, consumed in share FIFO order."""
+
+    date_iso: str
+    symbol: str
+    direction: str
+    remaining_shares: float
+    per_share_premium_usd: float
+    per_share_premium_eur: float
+
+
 class PositionManager:
     def __init__(self):
         self.open_lots: dict[InstrumentKey, deque[PositionLot]] = defaultdict(deque)
@@ -77,8 +90,9 @@ class PositionManager:
         self._pending_special_dividend_lots: dict[
             tuple, deque[list[PositionLot]]
         ] = defaultdict(deque)
-        self._pending_exercise_basis: dict[tuple[str, str], Money] = {}
-        self._pending_exercise_proceeds: dict[tuple[str, str], Money] = {}
+        self._pending_exercises: dict[
+            tuple[str, str, str], deque[PendingExercise]
+        ] = defaultdict(deque)
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
@@ -283,18 +297,29 @@ class PositionManager:
             else None,
         )
 
-        if lot.position_type == PositionType.stock:
-            exercise_key = (transaction.getDate(), lot.symbol)
-            adjustment = self._pending_exercise_basis.pop(exercise_key, None)
-            if adjustment is not None:
+        if (
+            lot.position_type == PositionType.stock
+            and transaction[Fields.TRANSACTION_CODE.value]
+            == TransactionCode.RECEIVE_DELIVER.value
+        ):
+            direction = "buy" if lot.quantity > 0 else "sell"
+            adjustment = self._consume_pending_exercise(
+                transaction.getDate(), lot.symbol, direction, abs(lot.quantity)
+            )
+            if adjustment.usd or adjustment.eur:
                 # PositionLot amounts are signed cash flows. Subtracting the positive
                 # premium makes the negative acquisition amount (basis) larger.
-                lot.amount_usd -= adjustment.usd
-                lot.amount_eur -= adjustment.eur
+                if direction == "buy":
+                    lot.amount_usd -= adjustment.usd
+                    lot.amount_eur -= adjustment.eur
+                else:
+                    lot.amount_usd += adjustment.usd
+                    lot.amount_eur += adjustment.eur
                 logger.info(
-                    "Long call exercise: increased %s stock basis on %s by USD %.2f / EUR %.2f",
+                    "Long option exercise: adjusted %s stock %s on %s by USD %.2f / EUR %.2f",
                     lot.symbol,
-                    exercise_key[0],
+                    direction,
+                    transaction.getDate(),
                     adjustment.usd,
                     adjustment.eur,
                 )
@@ -420,13 +445,28 @@ class PositionManager:
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
 
         closing_transaction = transaction
-        pending_proceeds_key = None
-        if transaction.getType() == PositionType.stock:
-            pending_proceeds_key = (transaction.getDate(), transaction.getSymbol())
-            adjustment = self._pending_exercise_proceeds.get(pending_proceeds_key)
-            if adjustment is not None:
+        pending_adjustment = Money()
+        is_stock_delivery = (
+            transaction.getType() == PositionType.stock
+            and transaction[Fields.TRANSACTION_CODE.value]
+            == TransactionCode.RECEIVE_DELIVER.value
+        )
+        if is_stock_delivery:
+            direction = "sell" if closing_quantity < 0 else "buy"
+            pending_adjustment = self._consume_pending_exercise(
+                transaction.getDate(),
+                transaction.getSymbol(),
+                direction,
+                quantity_to_close,
+            )
+            if pending_adjustment.usd or pending_adjustment.eur:
                 closing_transaction = type(transaction)(transaction.copy())
-                closing_transaction.setValue(transaction.getValue() - adjustment)
+                effective_value = (
+                    transaction.getValue() - pending_adjustment
+                    if direction == "sell"
+                    else transaction.getValue() + pending_adjustment
+                )
+                closing_transaction.setValue(effective_value)
 
         # Validate the full close before mutating lots or creating trade results.
         remaining_lots = deque()
@@ -474,21 +514,35 @@ class PositionManager:
                 underlying = str(underlying_value).strip()
                 if not underlying or underlying.lower() == "nan":
                     underlying = transaction.getSymbol()
-                exercise_key = (transaction.getDate(), underlying)
-                pending = (
-                    self._pending_exercise_basis
-                    if lot_to_process.position_type == PositionType.call
-                    else self._pending_exercise_proceeds
+                multiplier_value = transaction.get(Fields.MULTIPLIER.value, 100)
+                try:
+                    multiplier = abs(float(multiplier_value))
+                except (TypeError, ValueError):
+                    multiplier = 100.0
+                if not multiplier:
+                    multiplier = 100.0
+                shares = closable_quantity * multiplier
+                direction = (
+                    "buy" if lot_to_process.position_type == PositionType.call else "sell"
                 )
-                pending[exercise_key] = pending.get(exercise_key, Money()) + premium
+                exercise_key = (transaction.getDate(), underlying, direction)
+                self._pending_exercises[exercise_key].append(PendingExercise(
+                    date_iso=exercise_key[0],
+                    symbol=underlying,
+                    direction=direction,
+                    remaining_shares=shares,
+                    per_share_premium_usd=premium.usd / shares,
+                    per_share_premium_eur=premium.eur / shares,
+                ))
                 trade_result.settled_by_exercise = True
                 trade_result.profit_usd = 0.0
                 trade_result.profit_eur = 0.0
                 logger.info(
-                    "Long %s exercise: pending %s adjustment for %s on %s: USD %.2f / EUR %.2f",
+                    "Long %s exercise: pending %s shares for %s %s on %s: USD %.2f / EUR %.2f",
                     lot_to_process.position_type.name,
-                    "basis" if lot_to_process.position_type == PositionType.call else "proceeds",
+                    shares,
                     underlying,
+                    direction,
                     exercise_key[0],
                     premium.usd,
                     premium.eur,
@@ -512,33 +566,53 @@ class PositionManager:
         else:
             del self.open_lots[key]
 
-        if pending_proceeds_key is not None:
-            adjustment = self._pending_exercise_proceeds.pop(pending_proceeds_key, None)
-            if adjustment is not None:
-                logger.info(
-                    "Long put exercise: reduced %s stock proceeds on %s by USD %.2f / EUR %.2f",
-                    pending_proceeds_key[1],
-                    pending_proceeds_key[0],
-                    adjustment.usd,
-                    adjustment.eur,
-                )
+        if pending_adjustment.usd or pending_adjustment.eur:
+            logger.info(
+                "Long option exercise: adjusted %s stock close on %s by USD %.2f / EUR %.2f",
+                transaction.getSymbol(),
+                transaction.getDate(),
+                pending_adjustment.usd,
+                pending_adjustment.eur,
+            )
+
+    def _consume_pending_exercise(
+        self,
+        date_iso: str,
+        symbol: str,
+        direction: str,
+        stock_shares: float,
+    ) -> Money:
+        """Consume matching premium entries by share quantity in FIFO order."""
+        exercise_key = (date_iso, symbol, direction)
+        pending = self._pending_exercises.get(exercise_key)
+        adjustment = Money()
+        shares_left = abs(stock_shares)
+        while pending and shares_left > 1e-6:
+            entry = pending[0]
+            consumed_shares = min(entry.remaining_shares, shares_left)
+            adjustment.usd += consumed_shares * entry.per_share_premium_usd
+            adjustment.eur += consumed_shares * entry.per_share_premium_eur
+            entry.remaining_shares -= consumed_shares
+            shares_left -= consumed_shares
+            if entry.remaining_shares <= 1e-6:
+                pending.popleft()
+        if pending is not None and not pending:
+            del self._pending_exercises[exercise_key]
+        return adjustment
 
     def warn_unmatched_exercise_adjustments(self):
         """Warn about exercised options for which no stock delivery row was found."""
-        for adjustment_type, pending in (
-            ("basis", self._pending_exercise_basis),
-            ("proceeds", self._pending_exercise_proceeds),
-        ):
-            for (date_iso, symbol), amount in pending.items():
+        for (date_iso, symbol, direction), pending in self._pending_exercises.items():
+            for entry in pending:
                 logger.warning(
                     "Long option exercise has no paired stock delivery: %s %s on %s, "
-                    "pending %s adjustment USD %.2f / EUR %.2f",
+                    "pending %.4f shares at USD %.6f / EUR %.6f per share",
                     symbol,
-                    adjustment_type,
+                    direction,
                     date_iso,
-                    adjustment_type,
-                    amount.usd,
-                    amount.eur,
+                    entry.remaining_shares,
+                    entry.per_share_premium_usd,
+                    entry.per_share_premium_eur,
                 )
 
     def _handle_reverse_split(self, transaction):

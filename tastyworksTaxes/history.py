@@ -19,6 +19,7 @@ class History(pd.DataFrame):
         'Commissions': 0,
         'Fees': 0,
         'Underlying Symbol': '',
+        'Multiplier': 100,
     }
     _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
         'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
@@ -101,6 +102,8 @@ class History(pd.DataFrame):
             internal_df.loc[missing_underlying, 'Underlying Symbol'] = internal_df.loc[
                 missing_underlying, 'Symbol'
             ]
+        if 'Multiplier' not in internal_df:
+            internal_df['Multiplier'] = 100
 
         internal_df['Date/Time'] = pd.to_datetime(internal_df['Date/Time'], errors='coerce')
         if internal_df['Date/Time'].isna().any():
@@ -119,7 +122,7 @@ class History(pd.DataFrame):
                 f"normalized CSV: {bad_values}"
             )
 
-        for column in ['Amount', 'Fees', 'Quantity', 'Strike', 'Price']:
+        for column in ['Amount', 'Fees', 'Quantity', 'Strike', 'Price', 'Multiplier']:
             internal_df[column] = History._numeric_column(internal_df[column], column)
 
         return internal_df
@@ -159,6 +162,7 @@ class History(pd.DataFrame):
             df['Symbol'],
         )
         internal_df['Underlying Symbol'] = underlying.apply(parse_symbol)
+        internal_df['Multiplier'] = History._numeric_column(df['Multiplier'], 'Multiplier')
 
         def extract_buy_sell(row):
             sub_type = str(row.get('Sub Type', ''))

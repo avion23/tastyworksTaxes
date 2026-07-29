@@ -39,6 +39,7 @@ class Fields(Enum):
     BUY_SELL = "Buy/Sell"
     DESCRIPTION = "Description"
     UNDERLYING_SYMBOL = "Underlying Symbol"
+    MULTIPLIER = "Multiplier"
 
 class MoneyMovementType(Enum):
     TRANSFER = "Transfer"
