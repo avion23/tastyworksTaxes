@@ -21,7 +21,11 @@ def sum_fees_from_trades(trades: List[TradeResult]) -> Money:
     )
 
 def get_option_trades(trades: List[TradeResult]) -> List[TradeResult]:
-    return [t for t in trades if t.position_type in [PositionType.call, PositionType.put]]
+    return [
+        t for t in trades
+        if t.position_type in [PositionType.call, PositionType.put]
+        and not t.settled_by_exercise
+    ]
 
 def get_stock_trades(trades: List[TradeResult]) -> List[TradeResult]:
     return [t for t in trades if t.position_type == PositionType.stock]

@@ -149,17 +149,25 @@ class Tasty:
         open_legs = corporate_actions & (
             self.history[Fields.OPEN_CLOSE.value] == OpenClose.OPEN.value
         )
+        physical_option_settlements = (
+            self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+                TransactionSubcode.EXERCISE.value,
+                TransactionSubcode.ASSIGNMENT.value,
+            })
+            & self.history[Fields.CALL_PUT.value].isin({"C", "P"})
+        )
         chronological_history = (
             self.history.assign(
                 _corporate_action_order=close_legs.astype(int) * -1
-                + open_legs.astype(int)
+                + open_legs.astype(int),
+                _exercise_order=physical_option_settlements.astype(int) * -1,
             )
             .sort_values(
-                by=[Fields.DATE_TIME.value, "_corporate_action_order"],
+                by=[Fields.DATE_TIME.value, "_exercise_order", "_corporate_action_order"],
                 ascending=True,
                 kind="stable",
             )
-            .drop(columns="_corporate_action_order")
+            .drop(columns=["_corporate_action_order", "_exercise_order"])
         )
         dividends = chronological_history[
             chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
@@ -182,6 +190,7 @@ class Tasty:
                 TransactionCode.RECEIVE_DELIVER.value,
             }:
                 self.position_manager.add_position(Transaction(row))
+        self.position_manager.warn_unmatched_exercise_adjustments()
 
     def getYearlyTrades(self):
         if not self.position_manager.closed_trades:

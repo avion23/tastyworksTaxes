@@ -12,31 +12,29 @@ Legal Framework:
 1. SHORT OPTIONS (Stillhalter - Premium Seller):
    § 20 Abs. 1 Nr. 11 EStG: "Premiums for granting options (Stillhalterprämien)"
 
-   BMF-Schreiben vom 18.01.2016, Az. IV C 1 – S 2252/08/10004 :017, Rz. 9:
-   "Einnahmen aus Stillhaltergeschäften (Prämien für das Einräumen von Optionen) gehören
-   zu den Einkünften aus Kapitalvermögen im Sinne des § 20 Absatz 1 Nummer 11 EStG.
-   Der Gewinn ist UNABHÄNGIG von der Ausübung der Option und der Erfüllungsart
-   (Bar- oder Physische Erfüllung) im Zeitpunkt des Zuflusses der Option zu versteuern."
+   BMF-Schreiben vom 18.01.2016, Az. IV C 1 – S 2252/08/10004 :017:
+   - Short call assigned: Rz. 26
+   - Short put assigned: Rz. 33
+   The Stillhalter premium remains separate income and is excluded from the share gain.
 
    BFH vom 20.10.2016, Az. VIII R 55/13, BStBl II 2017, 264:
    "Der Tatbestand des § 20 Abs. 1 Nr. 11 EStG ist mit dem Zufluss der Prämie verwirklicht."
 
-   CRITICAL: Premium is taxed separately and does NOT adjust stock cost basis or proceeds.
+   This separate treatment applies ONLY to SHORT (Stillhalter) options: their premium
+   does not adjust the stock cost basis or proceeds.
 
 2. LONG OPTIONS (Inhaber - Premium Buyer):
    § 20 Abs. 4 Satz 1 EStG: Cost basis calculation
 
-   BMF-Schreiben vom 18.01.2016, Rz. 28:
-   "Wird eine Option auf den Erwerb von Wertpapieren ausgeübt, gehören die für die Option
-   gezahlten Prämien zu den Anschaffungskosten der erworbenen Wertpapiere (§ 20 Abs. 4 Satz 1 EStG)."
-
-   Premium DOES adjust stock cost basis (Call exercise) or sale proceeds (Put exercise).
+   BMF-Schreiben vom 18.01.2016:
+   - Long call exercised: Rz. 22; premium increases Anschaffungskosten.
+   - Long put exercised: Rz. 29; premium reduces Veräußerungserlös.
 
 Implementation:
 - Short option assignments: Close option normally → premium as separate income (§ 20 Abs. 1 Nr. 11)
 - Stock from assignment: Booked at strike price (§ 20 Abs. 2 Nr. 1)
-- NO integration of premium into stock basis (unlike US tax treatment)
-- Long option exercise: Premium integrated into stock cost/proceeds (BMF Rz. 28)
+- No premium integration for short assignments (unlike US tax treatment)
+- Long option exercise: Premium integrated into stock cost/proceeds (BMF Rz. 22/29)
 """
 
 import logging
@@ -54,6 +52,7 @@ from tastyworksTaxes.constants import (
 )
 from tastyworksTaxes.fifo_processor import FifoProcessor
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.money import Money
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +77,8 @@ class PositionManager:
         self._pending_special_dividend_lots: dict[
             tuple, deque[list[PositionLot]]
         ] = defaultdict(deque)
+        self._pending_exercise_basis: dict[tuple[str, str], Money] = {}
+        self._pending_exercise_proceeds: dict[tuple[str, str], Money] = {}
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
@@ -282,6 +283,22 @@ class PositionManager:
             else None,
         )
 
+        if lot.position_type == PositionType.stock:
+            exercise_key = (transaction.getDate(), lot.symbol)
+            adjustment = self._pending_exercise_basis.pop(exercise_key, None)
+            if adjustment is not None:
+                # PositionLot amounts are signed cash flows. Subtracting the positive
+                # premium makes the negative acquisition amount (basis) larger.
+                lot.amount_usd -= adjustment.usd
+                lot.amount_eur -= adjustment.eur
+                logger.info(
+                    "Long call exercise: increased %s stock basis on %s by USD %.2f / EUR %.2f",
+                    lot.symbol,
+                    exercise_key[0],
+                    adjustment.usd,
+                    adjustment.eur,
+                )
+
         key = self._get_key_from_transaction(transaction)
         self.open_lots[key].append(lot)
 
@@ -369,19 +386,17 @@ class PositionManager:
 
         GERMAN TAX LAW - OPTION ASSIGNMENTS (§ 20 EStG):
 
-        When Transaction Subcode = "Assignment", this method closes the option position
-        and creates a TradeResult with the option premium as profit/loss.
+        Short call assignments follow BMF 18.01.2016 Rz. 26 and short put
+        assignments follow Rz. 33: the Stillhalter premium remains separate
+        § 20 Abs. 1 Nr. 11 EStG income and is excluded from the share gain.
 
-        This is CORRECT per German tax law:
-        - Short option assignment: Premium is separate income (§ 20 Abs. 1 Nr. 11 EStG)
-        - Premium is NOT integrated into stock cost basis (BMF 18.01.2016 Rz. 9)
-        - Stock position from assignment is created separately at strike price
+        A long call exercise follows Rz. 22: the paid premium increases the
+        delivered shares' Anschaffungskosten. A long put exercise follows Rz. 29:
+        the premium reduces the delivered shares' Veräußerungserlös. Tastytrade
+        should use the explicit "Exercise" subcode. "Assignment" is also accepted
+        as physical exercise only when the consumed option lot is long.
 
-        This differs from US tax treatment where premium adjusts stock basis!
-
-        For long option exercise: Premium should integrate into stock basis per BMF Rz. 28,
-        but current implementation treats it as separate P&L. This may need correction
-        if long option exercises are present in transaction data.
+        BFH 20.10.2016 – VIII R 55/13 remains applicable to Stillhalter premiums.
         """
         quantity_to_close = abs(transaction.getQuantity())
         closing_quantity = transaction.getQuantity()
@@ -395,10 +410,23 @@ class PositionManager:
             )
 
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
-        ignores_direction = subcode in {"Expiration", "Assignment"}
+        ignores_direction = subcode in {
+            TransactionSubcode.EXPIRATION.value,
+            TransactionSubcode.ASSIGNMENT.value,
+            TransactionSubcode.EXERCISE.value,
+        }
         candidates = [lot for lot in matching_lots if ignores_direction or lot.can_close_with(closing_quantity)]
         if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_close:
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
+
+        closing_transaction = transaction
+        pending_proceeds_key = None
+        if transaction.getType() == PositionType.stock:
+            pending_proceeds_key = (transaction.getDate(), transaction.getSymbol())
+            adjustment = self._pending_exercise_proceeds.get(pending_proceeds_key)
+            if adjustment is not None:
+                closing_transaction = type(transaction)(transaction.copy())
+                closing_transaction.setValue(transaction.getValue() - adjustment)
 
         # Validate the full close before mutating lots or creating trade results.
         remaining_lots = deque()
@@ -423,11 +451,48 @@ class PositionManager:
 
             trade_result = FifoProcessor.create_trade_result(
                 lot_to_process,
-                transaction,
+                closing_transaction,
                 closable_quantity,
                 consumed_values,
                 opening_was_long,
             )
+
+            is_long_physical_exercise = (
+                opening_was_long
+                and lot_to_process.position_type in (PositionType.call, PositionType.put)
+                and subcode in {
+                    TransactionSubcode.EXERCISE.value,
+                    TransactionSubcode.ASSIGNMENT.value,
+                }
+            )
+            if is_long_physical_exercise:
+                premium = Money(
+                    usd=-consumed_values[Fields.AMOUNT.value],
+                    eur=-consumed_values[Fields.AMOUNT_EURO.value],
+                )
+                underlying_value = transaction.get(Fields.UNDERLYING_SYMBOL.value)
+                underlying = str(underlying_value).strip()
+                if not underlying or underlying.lower() == "nan":
+                    underlying = transaction.getSymbol()
+                exercise_key = (transaction.getDate(), underlying)
+                pending = (
+                    self._pending_exercise_basis
+                    if lot_to_process.position_type == PositionType.call
+                    else self._pending_exercise_proceeds
+                )
+                pending[exercise_key] = pending.get(exercise_key, Money()) + premium
+                trade_result.settled_by_exercise = True
+                trade_result.profit_usd = 0.0
+                trade_result.profit_eur = 0.0
+                logger.info(
+                    "Long %s exercise: pending %s adjustment for %s on %s: USD %.2f / EUR %.2f",
+                    lot_to_process.position_type.name,
+                    "basis" if lot_to_process.position_type == PositionType.call else "proceeds",
+                    underlying,
+                    exercise_key[0],
+                    premium.usd,
+                    premium.eur,
+                )
             self.closed_trades.append(trade_result)
 
             logger.info(
@@ -446,6 +511,35 @@ class PositionManager:
             self.open_lots[key] = remaining_lots
         else:
             del self.open_lots[key]
+
+        if pending_proceeds_key is not None:
+            adjustment = self._pending_exercise_proceeds.pop(pending_proceeds_key, None)
+            if adjustment is not None:
+                logger.info(
+                    "Long put exercise: reduced %s stock proceeds on %s by USD %.2f / EUR %.2f",
+                    pending_proceeds_key[1],
+                    pending_proceeds_key[0],
+                    adjustment.usd,
+                    adjustment.eur,
+                )
+
+    def warn_unmatched_exercise_adjustments(self):
+        """Warn about exercised options for which no stock delivery row was found."""
+        for adjustment_type, pending in (
+            ("basis", self._pending_exercise_basis),
+            ("proceeds", self._pending_exercise_proceeds),
+        ):
+            for (date_iso, symbol), amount in pending.items():
+                logger.warning(
+                    "Long option exercise has no paired stock delivery: %s %s on %s, "
+                    "pending %s adjustment USD %.2f / EUR %.2f",
+                    symbol,
+                    adjustment_type,
+                    date_iso,
+                    adjustment_type,
+                    amount.usd,
+                    amount.eur,
+                )
 
     def _handle_reverse_split(self, transaction):
         description = transaction.loc["Description"]

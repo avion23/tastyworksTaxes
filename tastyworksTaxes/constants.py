@@ -6,6 +6,7 @@ class TransactionSubcode(Enum):
     BUY_TO_CLOSE = "Buy to Close"
     SELL_TO_CLOSE = "Sell to Close"
     ASSIGNMENT = "Assignment"
+    EXERCISE = "Exercise"
     EXPIRATION = "Expiration"
     REVERSE_SPLIT = "Reverse Split"
     SYMBOL_CHANGE = "Symbol Change"
@@ -37,6 +38,7 @@ class Fields(Enum):
     DATE_TIME = "Date/Time"
     BUY_SELL = "Buy/Sell"
     DESCRIPTION = "Description"
+    UNDERLYING_SYMBOL = "Underlying Symbol"
 
 class MoneyMovementType(Enum):
     TRANSFER = "Transfer"
@@ -52,6 +54,7 @@ class MoneyMovementType(Enum):
 # Transaction validation sets
 CLOSING_SUBCODES = {
     TransactionSubcode.ASSIGNMENT.value,
+    TransactionSubcode.EXERCISE.value,
     TransactionSubcode.EXPIRATION.value,
     TransactionSubcode.BUY_TO_CLOSE.value,
     TransactionSubcode.SELL_TO_CLOSE.value

@@ -18,6 +18,7 @@ class History(pd.DataFrame):
         'Average Price': 0,
         'Commissions': 0,
         'Fees': 0,
+        'Underlying Symbol': '',
     }
     _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
         'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
@@ -90,6 +91,17 @@ class History(pd.DataFrame):
     def _normalize_internal(df: pd.DataFrame) -> pd.DataFrame:
         internal_df = df.copy()
 
+        if 'Underlying Symbol' not in internal_df:
+            internal_df['Underlying Symbol'] = internal_df['Symbol']
+        else:
+            missing_underlying = (
+                internal_df['Underlying Symbol'].isna()
+                | (internal_df['Underlying Symbol'].astype(str).str.strip() == '')
+            )
+            internal_df.loc[missing_underlying, 'Underlying Symbol'] = internal_df.loc[
+                missing_underlying, 'Symbol'
+            ]
+
         internal_df['Date/Time'] = pd.to_datetime(internal_df['Date/Time'], errors='coerce')
         if internal_df['Date/Time'].isna().any():
             bad_values = df.loc[internal_df['Date/Time'].isna(), 'Date/Time'].tolist()
@@ -142,6 +154,11 @@ class History(pd.DataFrame):
             return parts[0] if parts else ''
 
         internal_df['Symbol'] = df['Symbol'].apply(parse_symbol)
+        underlying = df['Underlying Symbol'].where(
+            df['Underlying Symbol'].notna() & (df['Underlying Symbol'].astype(str).str.strip() != ''),
+            df['Symbol'],
+        )
+        internal_df['Underlying Symbol'] = underlying.apply(parse_symbol)
 
         def extract_buy_sell(row):
             sub_type = str(row.get('Sub Type', ''))

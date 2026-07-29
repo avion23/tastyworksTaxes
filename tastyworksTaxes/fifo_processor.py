@@ -24,11 +24,21 @@ class TradeResult:
     opening_fees_eur: float = 0.0
     closing_fees_usd: float = 0.0
     closing_fees_eur: float = 0.0
+    settled_by_exercise: bool = False
 
 class FifoProcessor:
     @staticmethod
     def create_trade_result(opening_lot, closing_transaction, consumed_quantity, consumed_values, opening_was_long: bool):
         closing_amounts = FifoProcessor._calculate_closing_amounts(closing_transaction, consumed_quantity)
+
+        settled_by_exercise = (
+            opening_was_long
+            and closing_transaction.getType() in (PositionType.call, PositionType.put)
+            and closing_transaction[Fields.TRANSACTION_SUBCODE.value] in {
+                TransactionSubcode.EXERCISE.value,
+                TransactionSubcode.ASSIGNMENT.value,
+            }
+        )
 
         signed_quantity = consumed_quantity if opening_was_long else -consumed_quantity
         
@@ -38,8 +48,8 @@ class FifoProcessor:
             opening_date=opening_lot.date.strftime('%Y-%m-%d %H:%M:%S'),
             closing_date=closing_transaction.getDateTime(),
             quantity=signed_quantity,
-            profit_usd=consumed_values[Fields.AMOUNT.value] + closing_amounts['amount_usd'],
-            profit_eur=consumed_values[Fields.AMOUNT_EURO.value] + closing_amounts['amount_eur'],
+            profit_usd=0.0 if settled_by_exercise else consumed_values[Fields.AMOUNT.value] + closing_amounts['amount_usd'],
+            profit_eur=0.0 if settled_by_exercise else consumed_values[Fields.AMOUNT_EURO.value] + closing_amounts['amount_eur'],
             fees_usd=consumed_values[Fields.FEES.value] + closing_amounts['fees_usd'],
             fees_eur=consumed_values[Fields.FEES_EURO.value] + closing_amounts['fees_eur'],
             worthless_expiry=(
@@ -56,6 +66,7 @@ class FifoProcessor:
             opening_fees_eur=consumed_values[Fields.FEES_EURO.value],
             closing_fees_usd=closing_amounts['fees_usd'],
             closing_fees_eur=closing_amounts['fees_eur'],
+            settled_by_exercise=settled_by_exercise,
         )
         
         return trade_result
