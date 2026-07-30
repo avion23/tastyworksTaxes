@@ -14,7 +14,7 @@ It is not a substitute for professional tax advice. Tax law, broker export forma
 
 **Current Coverage**:
 - Stocks, options, selected corporate actions, dividends, interest, fees, and USD/EUR conversion are handled by the implemented calculation pipeline.
-- Asset classification support is evolving. Equity ETF partial exemption is implemented; other fund classes are identified but may require manual review.
+- Generic partial-exemption arithmetic is implemented for verified registry entries: 30% for equity funds, 15% for mixed funds, 60% for domestic real-estate funds, and 80% for foreign real-estate funds. Registry coverage remains instrument- and date-specific; missing or unverified entries require manual review.
 - Unsupported or ambiguous transaction patterns are intentionally surfaced as errors or warnings rather than silently estimated.
 
 **Stocks**:
@@ -130,7 +130,7 @@ python -m pytest test -s --log-cli-level=DEBUG
 
 - **Split Handling Fixed**: Reverse splits now correctly handle short positions (ceiling rounding), scale cost basis to maintain per-share cost, and preserve basis for zero-quantity lots
 - **Corporate Actions Fixed**: Symbol Changes and Stock Mergers now preserve original cost basis instead of incorrectly realizing gains/losses
-- **Enhanced Partial Exemptions**: Partial exemption (Teilfreistellung) calculation improved for equity ETFs (30%). Other fund types (Mixed, Real Estate) are correctly identified and generate warnings, but their specific exemption rates are not yet applied in the final tax summary
+- **Enhanced Partial Exemptions**: The generic fund calculation applies the configured Teilfreistellung to gains, losses, and transaction fees for verified equity (30%), mixed (15%), domestic real-estate (60%), and foreign real-estate (80%) registry entries
 - **Improved FIFO Processing**: Refactored to forward-chronological processing for more accurate trade matching
 
 ## Known Limitations
@@ -145,7 +145,7 @@ The following areas are intentionally documented so users can decide whether the
 
 **Other Limitations**:
 - Fee treatment should be reviewed against the applicable tax form instructions and broker statements.
-- Partial exemption rates are currently applied for equity ETFs; other fund types need manual handling in the final tax review.
+- Partial exemptions are applied only when the exact symbol and transaction date match a `verified=true` registry row. The bundled registry currently has no verified domestic or foreign real-estate fund entries, so those instruments require a reviewed registry entry before the generic 60% or 80% calculation can apply.
 
 ## Contributing
 
@@ -167,5 +167,9 @@ but the calculator does **not** apply its partial exemption and the CLI marks th
 report not filing-ready. Change it to `true` only after checking the exact share
 class (preferably by ISIN) against binding investment terms applicable during the
 recorded dates, and replace the legacy evidence note with a document reference.
+The calculator supports all configured fund rates generically, but that arithmetic
+support does not verify that any particular instrument qualifies. In particular,
+the packaged registry currently contains no verified domestic or foreign
+real-estate fund rows.
 Do not infer fund status from a ticker or product name. Unknown instruments should
 not be added with a guessed classification.

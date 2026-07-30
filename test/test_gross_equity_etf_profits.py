@@ -25,14 +25,28 @@ def trade(symbol, profit_eur, profit_usd=None, fees=0):
         fees_usd=fees,
         fees_eur=fees,
         worthless_expiry=False,
-        strike=None,
-        expiry=None,
+        strike=0.0,
+        expiry="",
     )
 
 
 @pytest.fixture
 def classifier():
     return AssetClassifier()
+
+
+@pytest.fixture
+def synthetic_verified_fund_classifier(tmp_path):
+    registry = tmp_path / "assets.csv"
+    registry.write_text(
+        "symbol,classification,tax_category,teilfreistellung_pct,verified,"
+        "effective_from,effective_to,evidence\n"
+        "SYNM,MIXED_FUND_ETF,KAP-INV,15,true,2018-01-01,,Synthetic test evidence\n"
+        "SYND,REAL_ESTATE_ETF,KAP-INV,60,true,2018-01-01,,Synthetic test evidence\n"
+        "SYNF,FOREIGN_REAL_ESTATE_ETF,KAP-INV,80,true,2018-01-01,,Synthetic test evidence\n",
+        encoding="utf-8",
+    )
+    return AssetClassifier(registry)
 
 
 def test_verified_equity_etf_gain_routes_only_to_funds(classifier):
@@ -88,6 +102,43 @@ def test_mixed_fund_gain_and_loss_use_fifteen_percent_exemption(classifier):
     assert calculate_fund_profits(gains, classifier).usd == 102
     assert calculate_fund_losses(losses, classifier).eur == -85
     assert calculate_fund_losses(losses, classifier).usd == -102
+
+
+@pytest.mark.parametrize(
+    ("symbol", "taxable_portion"),
+    [("SYNM", 0.85), ("SYND", 0.40), ("SYNF", 0.20)],
+)
+def test_verified_generic_fund_exemptions_route_gain_and_loss_only_to_fund_totals(
+    synthetic_verified_fund_classifier, symbol, taxable_portion
+):
+    trades = [trade(symbol, 100, 120), trade(symbol, -80, -96)]
+    classifier = synthetic_verified_fund_classifier
+
+    assert calculate_fund_gross_profits(trades, classifier).eur == 100
+    assert calculate_fund_gross_profits(trades, classifier).usd == 120
+    assert calculate_fund_gross_losses(trades, classifier).eur == -80
+    assert calculate_fund_gross_losses(trades, classifier).usd == -96
+    assert calculate_fund_profits(trades, classifier).eur == pytest.approx(100 * taxable_portion)
+    assert calculate_fund_profits(trades, classifier).usd == pytest.approx(120 * taxable_portion)
+    assert calculate_fund_losses(trades, classifier).eur == pytest.approx(-80 * taxable_portion)
+    assert calculate_fund_losses(trades, classifier).usd == pytest.approx(-96 * taxable_portion)
+    assert calculate_stock_profits(trades, classifier).eur == 0
+    assert calculate_stock_profits(trades, classifier).usd == 0
+    assert calculate_stock_losses(trades, classifier).eur == 0
+    assert calculate_stock_losses(trades, classifier).usd == 0
+
+
+def test_verified_generic_fund_exemption_applies_to_result_after_fees(
+    synthetic_verified_fund_classifier,
+):
+    trades = [trade("SYND", 10, 12, fees=2)]
+    classifier = synthetic_verified_fund_classifier
+
+    assert calculate_fund_gross_profits(trades, classifier).eur == 8
+    assert calculate_fund_gross_profits(trades, classifier).usd == 10
+    assert calculate_fund_profits(trades, classifier).eur == pytest.approx(3.2)
+    assert calculate_fund_profits(trades, classifier).usd == pytest.approx(4.0)
+    assert calculate_stock_profits(trades, classifier).eur == 0
 
 
 def test_raw_stock_and_fund_results_reconcile_without_gaps_or_double_counting(classifier):
