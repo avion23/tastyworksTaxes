@@ -149,7 +149,6 @@ class TestCorporateActions:
         test_cases = [
             ('Reverse split: Open 1 ABC1 with ratio 1:8', 1/8, 'ABC'),
             ('1-for-8 reverse split', 1/8, 'TEST'),
-            ('8 for 1 reverse split', 1/8, 'XYZ'),
             ('Regular split: 2:1', 2/1, 'SPLIT'),
             ('Stock split 3 for 1', 3/1, 'GROW'),
         ]
@@ -178,6 +177,26 @@ class TestCorporateActions:
             
             expected_quantity = int(100 * expected_ratio)
             assert sample_stock_lot.quantity == expected_quantity, f"Failed for description: {description}. Expected {expected_quantity}, got {sample_stock_lot.quantity}"
+
+    def test_ambiguous_reverse_split_ratio_is_not_inferred(self, position_manager, sample_stock_lot):
+        sample_stock_lot.symbol = 'XYZ'
+        position_manager.add_lot_directly(sample_stock_lot)
+        transaction = Transaction(pd.Series({
+            'Date/Time': '2020-04-29 12:34:00',
+            'Transaction Code': 'Receive Deliver',
+            'Transaction Subcode': 'Reverse Split',
+            'Symbol': 'XYZ',
+            'Description': '8 for 1 reverse split',
+            'Amount': 0.0,
+            'Fees': 0.0,
+            'AmountEuro': 0.0,
+            'FeesEuro': 0.0,
+        }))
+
+        with pytest.raises(ValueError, match='REVERSE SPLIT RATIO UNKNOWN'):
+            position_manager._handle_reverse_split(transaction)
+
+        assert sample_stock_lot.quantity == 100
 
     def test_short_position_reverse_split_ceiling_rounding(self, position_manager):
         from math import ceil

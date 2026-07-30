@@ -75,8 +75,8 @@ class TestReverseSplitConfig:
         # After 1:8 split, 100 shares should become 12.5 -> 12 shares (floor for long positions)
         assert uso_stock_lot.quantity == 12
 
-    def test_unknown_symbol_raises_helpful_error(self, position_manager):
-        """Test that unknown reverse split raises error with YAML template"""
+    def test_unknown_stock_fails_before_trade_or_lot_mutation(self, position_manager):
+        """An unrecognized stock split cannot fall through to taxable FIFO handling."""
         xyz_lot = PositionLot(
             symbol="XYZ",
             position_type=PositionType.stock,
@@ -89,25 +89,85 @@ class TestReverseSplitConfig:
         )
         position_manager.add_lot_directly(xyz_lot)
 
-        reverse_split_data = {
-            "Date/Time": "2023-06-15 12:00:00",
-            "Transaction Code": "Receive Deliver",
-            "Transaction Subcode": "Reverse Split",
-            "Symbol": "XYZ",
-            "Description": "Reverse split",  # No ratio
-            "Amount": 0.0,
-            "Fees": 0.0,
-            "AmountEuro": 0.0,
-            "FeesEuro": 0.0,
-        }
-        transaction = Transaction(pd.Series(reverse_split_data))
+        description = "Reverse split: Close 100 XYZ 250101C00010000"
+        transaction = Transaction.fromString(
+            "2023-06-15T12:00:00+0000,Receive Deliver,Reverse Split,"
+            "SELL_TO_CLOSE,XYZ,Equity,"
+            f"{description},1000,100,10,0,0,,XYZ,XYZ,,,,123456,USD"
+        )
 
         with pytest.raises(ValueError) as exc_info:
-            position_manager._handle_reverse_split(transaction)
+            position_manager.add_position(transaction)
 
         error_msg = str(exc_info.value)
         assert "REVERSE SPLIT RATIO UNKNOWN" in error_msg
         assert "XYZ" in error_msg
         assert "2023-06-15" in error_msg
+        assert description in error_msg
         assert "corporate_actions.csv" in error_msg
         assert "???" in error_msg
+        assert position_manager.closed_trades == []
+        assert position_manager.get_all_open_lots() == [xyz_lot]
+        assert xyz_lot.quantity == 100
+        assert xyz_lot.amount_usd == -1000.0
+
+    def test_configured_stock_split_mutates_instead_of_trading(self, position_manager):
+        lot = PositionLot(
+            symbol="XYZ",
+            position_type=PositionType.stock,
+            quantity=100,
+            amount_usd=-1000.0,
+            amount_eur=-850.0,
+            fees_usd=1.0,
+            fees_eur=0.85,
+            date=datetime(2023, 1, 1),
+        )
+        position_manager.add_lot_directly(lot)
+        position_manager._corporate_actions_config = {
+            "reverse_splits": [
+                {
+                    "date": "2023-06-15",
+                    "symbol": "XYZ",
+                    "ratio": 0.25,
+                    "source": "verified filing",
+                }
+            ]
+        }
+        transaction = Transaction.fromString(
+            "2023-06-15T12:00:00+0000,Receive Deliver,Reverse Split,"
+            "SELL_TO_CLOSE,XYZ,Equity,Reverse split,0,100,,0,0,,"
+            "XYZ,XYZ,,,,123456,USD"
+        )
+
+        position_manager.add_position(transaction)
+
+        assert lot.quantity == 25
+        assert position_manager.get_all_open_lots() == [lot]
+        assert position_manager.closed_trades == []
+
+    def test_confirmed_option_close_and_open_keep_fifo_processing(self, position_manager):
+        position_manager.add_position(Transaction.fromString(
+            "2020-04-23T19:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
+            "USO  200717P00002000,Equity Option,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,"
+            "-174,6,29,-1,5.83,100,USO,USO,7/17/20,2,PUT,123456,USD"
+        ))
+
+        position_manager.add_position(Transaction.fromString(
+            "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
+            "SELL_TO_CLOSE,USO  200717P00002000,Equity Option,"
+            "Reverse split: Close 6 USO   200717P00002000,174,6,,0,0,100,"
+            "USO,USO,7/17/20,2,PUT,123456,USD"
+        ))
+        position_manager.add_position(Transaction.fromString(
+            "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
+            "BUY_TO_OPEN,USO1  200717P00002000,Equity Option,"
+            "Reverse split: Open 6 USO1  200717P00002000,-174,6,,0,0,100,"
+            "USO,USO,7/17/20,2,PUT,123456,USD"
+        ))
+
+        assert len(position_manager.closed_trades) == 1
+        assert position_manager.closed_trades[0].quantity == 6
+        open_lots = position_manager.get_all_open_lots()
+        assert len(open_lots) == 1
+        assert open_lots[0].quantity == 6
+        assert open_lots[0].position_type == PositionType.put

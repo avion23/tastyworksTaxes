@@ -38,6 +38,7 @@ Implementation:
 """
 
 import logging
+import re
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from datetime import datetime
@@ -616,12 +617,25 @@ class PositionManager:
                 )
 
     def _handle_reverse_split(self, transaction):
-        description = transaction.loc["Description"]
-        import re
+        description = str(transaction.loc[Fields.DESCRIPTION.value])
 
-        # If description contains option symbol pattern, treat as trade (Close/Open), not position mutation
-        # Real Tastytrade reverse split data for options uses separate Close/Open transactions
-        if re.search(r"\d{6}[CP]\d{8}", description):
+        # Tastytrade represents option reverse splits as paired Close/Open records.
+        # Only let the established option-record shape continue through ordinary
+        # FIFO processing. A contract-looking token alone is not enough: malformed
+        # stock records must fail closed rather than become taxable trades.
+        option_record = re.search(
+            r"\breverse\s+split\s*:\s*(?:close|open)\b.*\b\d{6}[CP]\d{8}\b",
+            description,
+            re.IGNORECASE,
+        )
+        try:
+            option_type = transaction.getType() in {
+                PositionType.call,
+                PositionType.put,
+            }
+        except (KeyError, ValueError):
+            option_type = False
+        if option_record and option_type:
             logger.debug(f"Reverse split is a trade, not a mutation: {description}")
             return False
         symbol_to_split = transaction.getSymbol()
@@ -632,16 +646,20 @@ class PositionManager:
             r"(\d+)\s*for\s*(\d+)",
         ]
 
-        ratio = None
+        parsed_ratios = []
         for pattern in ratio_patterns:
-            match = re.search(pattern, description, re.IGNORECASE)
-            if match:
+            for match in re.finditer(pattern, description, re.IGNORECASE):
                 num1, num2 = int(match.group(1)), int(match.group(2))
-                if "reverse" in description.lower():
-                    ratio = min(num1, num2) / max(num1, num2)
-                else:
-                    ratio = max(num1, num2) / min(num1, num2)
-                break
+                if num2:
+                    parsed_ratios.append(num1 / num2)
+
+        # Use only an explicit, internally consistent ratio. In particular, do
+        # not silently invert "8 for 1 reverse split" into 1:8; that wording is
+        # contradictory and requires an authoritative configured ratio.
+        unique_ratios = set(parsed_ratios)
+        ratio = next(iter(unique_ratios)) if len(unique_ratios) == 1 else None
+        if "reverse" in description.lower() and ratio is not None and ratio >= 1:
+            ratio = None
 
         if ratio is None:
             transaction_date = transaction.get("Date/Time") or transaction.get("Date")
