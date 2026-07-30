@@ -51,6 +51,16 @@ def main() -> None:
             )
             print(symbols)
             print("Verify each symbol's stock/fund status before using this report for a tax filing.\n")
+        short_stock_trades = t.short_stock_trades_by_year.get(year, [])
+        if short_stock_trades:
+            symbols = ", ".join(sorted({trade.symbol for trade in short_stock_trades}))
+            print("*** CLOSED SHORT-STOCK TRADES - NOT FILING-READY ***")
+            print(
+                "Closed short-stock trades were detected for the following symbols: "
+                f"{symbols}. A potential 30% substitute assessment may require separate "
+                "tax treatment; this rule is not calculated by this report."
+            )
+            print("Review these trades manually before using this annual report for a tax filing.\n")
         p = Printer(values=values, closed_trades=t.position_manager.closed_trades)
         print(p.generateGermanTaxReport())
     if args.write_closed_trades:

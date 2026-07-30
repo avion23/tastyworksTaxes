@@ -43,6 +43,7 @@ class Tasty:
         self.position_manager = PositionManager()
         self.classifier = AssetClassifier()
         self.unverified_asset_symbols_by_year = {}
+        self.short_stock_trades_by_year = {}
         self._withholding_remaining = {}
 
     def year(self, year):
@@ -354,9 +355,22 @@ class Tasty:
 
     def run(self):
         self.unverified_asset_symbols_by_year = {}
+        self.short_stock_trades_by_year = {}
         self.processTransactionHistory()
 
         trades_by_year = self.getYearlyTrades()
+        self.short_stock_trades_by_year = {
+            year: [
+                trade
+                for trade in trades
+                if trade.position_type == PositionType.stock and trade.quantity < 0
+            ]
+            for year, trades in trades_by_year.items()
+            if any(
+                trade.position_type == PositionType.stock and trade.quantity < 0
+                for trade in trades
+            )
+        }
         fees = {
             year: -calculate_fees_sum(trades) for year, trades in trades_by_year.items()
         }

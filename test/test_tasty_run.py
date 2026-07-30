@@ -90,6 +90,51 @@ class TestTastyRun:
         assert result[2022].stockProfits.eur == 8.1
         assert result[2022].fee.eur == -0.9
 
+    def test_run_collects_only_closed_short_stocks_by_year_and_resets(self):
+        t = Tasty()
+        t.processTransactionHistory = MagicMock()
+
+        def trade(symbol, position_type, quantity, closing_date):
+            return TradeResult(
+                symbol=symbol,
+                position_type=position_type,
+                opening_date="2020-01-01 00:00:00",
+                closing_date=closing_date,
+                quantity=quantity,
+                profit_usd=10.0,
+                profit_eur=9.0,
+                fees_usd=0.0,
+                fees_eur=0.0,
+                worthless_expiry=False,
+            )
+
+        short_stock_2020 = trade(
+            "SHORT20", PositionType.stock, -10, "2020-02-01 00:00:00"
+        )
+        short_stock_2021 = trade(
+            "SHORT21", PositionType.stock, -5, "2021-02-01 00:00:00"
+        )
+        long_stock = trade("LONG", PositionType.stock, 10, "2021-03-01 00:00:00")
+        short_option = trade("OPTION", PositionType.call, -1, "2021-04-01 00:00:00")
+        t.position_manager.closed_trades = [
+            short_stock_2020,
+            short_stock_2021,
+            long_stock,
+            short_option,
+        ]
+
+        t.run()
+
+        assert t.short_stock_trades_by_year == {
+            2020: [short_stock_2020],
+            2021: [short_stock_2021],
+        }
+
+        t.position_manager.closed_trades = [long_stock, short_option]
+        t.run()
+
+        assert t.short_stock_trades_by_year == {}
+
     @pytest.mark.skipif(
         not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
     )
