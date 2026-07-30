@@ -42,7 +42,7 @@ class Tasty:
         self.history = History.fromFile(path) if path else History()
         self.position_manager = PositionManager()
         self.classifier = AssetClassifier()
-        self.unverified_asset_symbols = set()
+        self.unverified_asset_symbols_by_year = {}
         self._withholding_remaining = {}
 
     def year(self, year):
@@ -347,10 +347,13 @@ class Tasty:
             if not self.classifier.is_verified(
                 trade.symbol, trade.position_type, closing_date
             ):
-                self.unverified_asset_symbols.add(trade.symbol)
+                self.unverified_asset_symbols_by_year.setdefault(
+                    closing_date.year, set()
+                ).add(trade.symbol)
             self.classifier.check_unsupported_assets([trade.symbol], closing_date)
 
     def run(self):
+        self.unverified_asset_symbols_by_year = {}
         self.processTransactionHistory()
 
         trades_by_year = self.getYearlyTrades()

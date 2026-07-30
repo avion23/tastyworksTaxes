@@ -1,7 +1,9 @@
 import pytest
 import logging
+from datetime import date
 from unittest.mock import patch
 
+from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.fifo_processor import TradeResult
@@ -87,3 +89,50 @@ class TestTastyWithAssetClassifier:
             tasty_instance._checkAssetClassifications(option_trades)
         
         assert len(caplog.records) == 0
+
+
+def test_unverified_symbols_are_recorded_by_closing_year_and_effective_period(tmp_path):
+    registry = tmp_path / "assets.csv"
+    registry.write_text(
+        "symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n"
+        "TEST,EQUITY_ETF,KAP-INV,30,true,2020-01-01,2020-12-31,Prospectus\n",
+        encoding="utf-8",
+    )
+    tasty = Tasty()
+    tasty.classifier = AssetClassifier(registry)
+    trades = [
+        TradeResult(
+            symbol="TEST", position_type=PositionType.stock,
+            opening_date="2019-12-01", closing_date=closing_date, quantity=1,
+            profit_usd=100, profit_eur=100, fees_usd=0, fees_eur=0,
+            worthless_expiry=False,
+        )
+        for closing_date in ("2020-06-01", "2021-06-01")
+    ]
+
+    tasty._checkAssetClassifications(trades)
+
+    assert tasty.unverified_asset_symbols_by_year == {2021: {"TEST"}}
+    assert tasty.classifier.is_verified("TEST", PositionType.stock, date(2020, 6, 1))
+    assert not tasty.classifier.is_verified("TEST", PositionType.stock, date(2021, 6, 1))
+
+
+def test_run_resets_unverified_symbols_from_previous_run():
+    tasty = Tasty()
+    tasty.processTransactionHistory = lambda: None
+    tasty.position_manager.closed_trades = [
+        TradeResult(
+            symbol="UNKNOWN", position_type=PositionType.stock,
+            opening_date="2020-01-01 00:00:00",
+            closing_date="2020-02-01 00:00:00", quantity=1,
+            profit_usd=100, profit_eur=100, fees_usd=0, fees_eur=0,
+            worthless_expiry=False,
+        )
+    ]
+    tasty.run()
+    assert tasty.unverified_asset_symbols_by_year == {2020: {"UNKNOWN"}}
+
+    tasty.position_manager.closed_trades = []
+    tasty.run()
+
+    assert tasty.unverified_asset_symbols_by_year == {}
