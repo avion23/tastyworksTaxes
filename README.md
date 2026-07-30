@@ -124,7 +124,6 @@ python -m pytest test -s --log-cli-level=DEBUG
 The following areas are intentionally documented so users can decide whether the generated output is complete for their filing situation.
 
 **Unimplemented Tax Requirements**:
-- ETF advance tax payment ("Vorabpauschale") is not implemented. This is yearly fictitious taxable income on accumulating ETFs (70% of base interest rate × fund value at start of year, minus distributions). Required by German tax law since 2018.
 - Short selling stocks beyond annual limits: 30% substitute assessment base (§ 43a Absatz 2 Satz 7 EStG) is not implemented.
 
 **Corporate Actions**:
