@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 CLASSIFICATIONS = {
+    "INDIVIDUAL_STOCK": ("KAP", 0),
     "EQUITY_ETF": ("KAP-INV", 30),
     "BOND_ETF": ("KAP-INV", 0),
     "OTHER_FUND": ("KAP-INV", 0),

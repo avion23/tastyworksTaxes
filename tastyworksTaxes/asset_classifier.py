@@ -98,7 +98,7 @@ class AssetClassifier:
         """Identify the warning state, including classification for deduplication."""
         definition = self._definition(symbol, on_date)
         classification = self.classify(symbol, PositionType.stock, on_date)
-        if definition is None or classification == "INDIVIDUAL_STOCK":
+        if definition is None:
             return "unknown", classification
         if not definition.verified:
             return "unverified", classification

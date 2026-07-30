@@ -151,6 +151,21 @@ def test_registry_loads_verified_schg_as_an_equity_fund():
     assert schg.verified
 
 
+def test_registry_loads_verified_amat_as_individual_stock_for_transaction_period():
+    classifier = AssetClassifier(on_date=__import__('datetime').date(2025, 1, 27))
+
+    assert classifier.classify('AMAT', PositionType.stock) == 'INDIVIDUAL_STOCK'
+    assert classifier.is_explicitly_classified('AMAT', PositionType.stock)
+    assert classifier.is_verified('AMAT', PositionType.stock)
+    assert classifier.get_exemption_percentage_for('AMAT', PositionType.stock) == 0
+    assert classifier.unsupported_asset_state('AMAT') is None
+
+    before_transaction_period = __import__('datetime').date(2025, 1, 26)
+    assert not classifier.is_explicitly_classified(
+        'AMAT', PositionType.stock, before_transaction_period
+    )
+
+
 def test_verified_registry_row_grants_partial_exemption(tmp_path):
     registry = tmp_path / 'assets.csv'
     registry.write_text(
