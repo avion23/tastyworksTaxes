@@ -71,6 +71,16 @@ Example with test data (2018-2025):
 python -m tastyworksTaxes.main test/transactions_2018_to_2025.csv
 ```
 
+### Manual Vorabpauschale utility
+
+`tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is an explicit,
+standalone utility; the TastyTrade report pipeline neither calls it nor emits
+automatic Vorabpauschale warnings. The caller must supply complete applicable
+EUR values, including the opening value, distributions, value increase,
+Basiszins, partial-exemption rate, and acquisition timing. Its result covers
+only those supplied values: it does not make a broker report account-wide or
+taxpayer-wide, including holdings or distributions outside that export.
+
 ### Merging Multiple CSV Files
 
 If you have multiple export files from Tastyworks due to the 1000 row limit, you can merge them using Python:
