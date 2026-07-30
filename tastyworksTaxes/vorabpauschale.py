@@ -21,6 +21,7 @@ BASISZINS = {
     2023: 0.0255,
     2024: 0.0229,
     2025: 0.0253,
+    2026: 0.0320,
 }
 
 _TEILFREISTELLUNG_PERCENTAGES = {0, 15, 30, 60, 80}
@@ -43,13 +44,16 @@ def calculate_vorabpauschale(
 ) -> float:
     """Return the taxable Vorabpauschale in euros.
 
-    The Basisertrag is capped by the increase in value plus distributions,
-    reduced for a mid-year acquisition, and only then reduced by distributions
-    and the Teilfreistellung. In the year of acquisition,
+    The Basisertrag is capped by the increase in value plus distributions.
+    Distributions are then deducted, followed by the reduction for a mid-year
+    acquisition and the Teilfreistellung. In the year of acquisition,
     ``months_before_acquisition`` is the number of full calendar months before
-    the acquisition month. ``start_of_year_value_eur`` must then contain the
-    applicable first value for that holding. See § 18 InvStG and the BMF letter
-    of 25 July 2023 on application of the InvStG.
+    the acquisition month. ``start_of_year_value_eur`` is the fund's redemption
+    price (or exchange/market price) at the beginning of the calendar year, not
+    the investor's acquisition cost. If a fund was launched during the year,
+    its legally applicable first redemption, exchange, or market price may be
+    used. See § 18 InvStG and the BMF letter of 25 July 2023 on application of
+    the InvStG.
     """
     _validate_finite_number("start_of_year_value_eur", start_of_year_value_eur)
     _validate_finite_number("basiszins", basiszins)
@@ -75,11 +79,11 @@ def calculate_vorabpauschale(
         basisertrag,
         value_increase_eur + distributions_eur,
     )
-    prorated_basisertrag = (
-        capped_basisertrag * (12 - months_before_acquisition) / 12
+    raw_vorabpauschale = max(capped_basisertrag - distributions_eur, 0.0)
+    holding_adjusted_vorabpauschale = (
+        raw_vorabpauschale * (12 - months_before_acquisition) / 12
     )
-    raw_vorabpauschale = max(prorated_basisertrag - distributions_eur, 0.0)
-    return raw_vorabpauschale * (1 - teilfreistellung_pct / 100)
+    return holding_adjusted_vorabpauschale * (1 - teilfreistellung_pct / 100)
 
 
 def vorabpauschale_deemed_received_year(calendar_year: int) -> int:
@@ -88,4 +92,6 @@ def vorabpauschale_deemed_received_year(calendar_year: int) -> int:
     Under § 18 Abs. 3 InvStG, the Vorabpauschale is deemed received on the
     first working day of the following calendar year.
     """
+    if isinstance(calendar_year, bool) or not isinstance(calendar_year, int):
+        raise TypeError("calendar_year must be an integer")
     return calendar_year + 1

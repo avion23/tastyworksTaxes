@@ -76,10 +76,14 @@ python -m tastyworksTaxes.main test/transactions_2018_to_2025.csv
 `tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is an explicit,
 standalone utility; the TastyTrade report pipeline neither calls it nor emits
 automatic Vorabpauschale warnings. The caller must supply complete applicable
-EUR values, including the opening value, distributions, value increase,
-Basiszins, partial-exemption rate, and acquisition timing. Its result covers
-only those supplied values: it does not make a broker report account-wide or
-taxpayer-wide, including holdings or distributions outside that export.
+EUR values, including the fund redemption price (or exchange/market price) at
+the beginning of the calendar year, distributions, value increase, Basiszins,
+partial-exemption rate, and acquisition timing. The opening value is not the
+investor's acquisition cost. For a fund launched during the year, the first
+redemption, exchange, or market price may apply where § 18 InvStG and the BMF
+guidance provide for it. The utility's result covers only the supplied values:
+it does not make a broker report account-wide or taxpayer-wide, including
+holdings or distributions outside that export.
 
 ### Merging Multiple CSV Files
 

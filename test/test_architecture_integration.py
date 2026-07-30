@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.position import PositionType
 
@@ -16,3 +19,14 @@ def test_classifier_tax_categories_and_exemptions_are_integrated():
         assert actual == classification
         assert classifier.get_tax_category(actual) == category
         assert classifier.get_exemption_percentage_for(symbol, PositionType.stock) == exemption
+
+
+def test_cli_and_reports_do_not_import_standalone_vorabpauschale():
+    check_imports = """
+import sys
+import tastyworksTaxes.main
+import tastyworksTaxes.printer
+
+assert "tastyworksTaxes.vorabpauschale" not in sys.modules
+"""
+    subprocess.run([sys.executable, "-c", check_imports], check=True)

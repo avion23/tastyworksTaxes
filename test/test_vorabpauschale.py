@@ -58,11 +58,13 @@ def test_acquisition_year_is_reduced_by_full_preceding_months():
     assert calculate(months_before_acquisition=6) == pytest.approx(80.15)
 
 
-def test_acquisition_reduction_precedes_distribution_deduction():
+def test_distributions_precede_acquisition_reduction_and_partial_exemption():
+    # § 18(2): (€160.30 - €100) * 6/12 holding fraction * 70% taxable.
     assert calculate(
         months_before_acquisition=6,
         distributions_eur=100.0,
-    ) == 0.0
+        teilfreistellung_pct=30,
+    ) == pytest.approx(21.105)
 
 
 def test_teilfreistellung_reduces_taxable_amount():
@@ -74,8 +76,15 @@ def test_deemed_received_year(calendar_year, assessment_year):
     assert vorabpauschale_deemed_received_year(calendar_year) == assessment_year
 
 
-def test_basiszins_contains_2018_through_2025():
-    assert set(range(2018, 2026)) <= BASISZINS.keys()
+def test_basiszins_contains_2018_through_2026_and_official_2026_rate():
+    assert set(range(2018, 2027)) <= BASISZINS.keys()
+    assert BASISZINS[2026] == 0.0320
+
+
+@pytest.mark.parametrize("calendar_year", [2025.0, True, "2025", None])
+def test_deemed_received_year_rejects_noninteger_and_boolean(calendar_year):
+    with pytest.raises(TypeError, match="calendar_year must be an integer"):
+        vorabpauschale_deemed_received_year(calendar_year)
 
 
 @pytest.mark.parametrize(
