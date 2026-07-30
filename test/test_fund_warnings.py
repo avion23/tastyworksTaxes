@@ -1,11 +1,13 @@
 import pytest
 import logging
-from datetime import date
+from datetime import date, datetime
 from unittest.mock import patch
 
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.position_lot import PositionLot
+from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.fifo_processor import TradeResult
 
 class TestTastyWithAssetClassifier:
@@ -26,8 +28,6 @@ class TestTastyWithAssetClassifier:
                 fees_usd=0,
                 fees_eur=0,
                 worthless_expiry=False,
-                strike=None,
-                expiry=None
             )
         ]
         
@@ -50,8 +50,6 @@ class TestTastyWithAssetClassifier:
                 fees_usd=0,
                 fees_eur=0,
                 worthless_expiry=False,
-                strike=None,
-                expiry=None
             )
         ]
         
@@ -80,8 +78,6 @@ class TestTastyWithAssetClassifier:
                 fees_usd=0,
                 fees_eur=0,
                 worthless_expiry=False,
-                strike=None,
-                expiry=None
             )
         ]
         
@@ -136,3 +132,71 @@ def test_run_resets_unverified_symbols_from_previous_run():
     tasty.run()
 
     assert tasty.unverified_asset_symbols_by_year == {}
+
+
+def test_dividend_only_exposure_uses_payment_year_and_effective_date(tmp_path):
+    registry = tmp_path / "assets.csv"
+    registry.write_text(
+        "symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n"
+        "FUND,EQUITY_ETF,KAP-INV,30,true,2020-01-01,2020-12-31,Prospectus\n",
+        encoding="utf-8",
+    )
+    tasty = Tasty()
+    tasty.classifier = AssetClassifier(registry)
+
+    for year in (2020, 2021):
+        tasty.moneyMovement(Transaction.fromString(
+            f"{year}-06-15T12:00:00+0000,Money Movement,Dividend,,FUND,Equity,"
+            "Fund distribution,100,0,,0,0.00,,FUND,FUND,,,,123456,USD"
+        ))
+
+    assert tasty.unverified_asset_symbols_by_year == {2021: {"FUND"}}
+
+
+def test_open_position_only_exposure_creates_year_scoped_readiness():
+    tasty = Tasty()
+    tasty.processTransactionHistory = lambda: None
+    lot = PositionLot(
+        symbol="UNKNOWN_FUND",
+        position_type=PositionType.stock,
+        quantity=10,
+        amount_usd=-1000,
+        amount_eur=-900,
+        fees_usd=1,
+        fees_eur=0.9,
+        date=datetime(2021, 7, 1),
+    )
+    tasty.position_manager.add_lot_directly(lot)
+
+    result = tasty.run()
+
+    assert list(result) == [2021]
+    assert tasty.unverified_asset_symbols_by_year == {2021: {"UNKNOWN_FUND"}}
+
+
+def test_holding_readiness_is_limited_to_acquisition_through_disposal():
+    tasty = Tasty()
+    tasty.processTransactionHistory = lambda: None
+    tasty.position_manager.closed_trades = [
+        TradeResult(
+            symbol="UNKNOWN_FUND",
+            position_type=PositionType.stock,
+            opening_date="2021-06-01 00:00:00",
+            closing_date="2022-03-01 00:00:00",
+            quantity=1,
+            profit_usd=10,
+            profit_eur=9,
+            fees_usd=0,
+            fees_eur=0,
+            worthless_expiry=False,
+        )
+    ]
+    tasty.year(2020)
+    tasty.year(2023)
+
+    tasty.run()
+
+    assert tasty.unverified_asset_symbols_by_year == {
+        2021: {"UNKNOWN_FUND"},
+        2022: {"UNKNOWN_FUND"},
+    }

@@ -155,13 +155,13 @@ class TestReverseSplitConfig:
         position_manager.add_position(Transaction.fromString(
             "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
             "SELL_TO_CLOSE,USO  200717P00002000,Equity Option,"
-            "Reverse split: Close 6 USO   200717P00002000,174,6,,0,0,100,"
+            "OCC adjustment after reverse split; retiring 6 USO   200717P00002000,174,6,,0,0,100,"
             "USO,USO,7/17/20,2,PUT,123456,USD"
         ))
         position_manager.add_position(Transaction.fromString(
             "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
             "BUY_TO_OPEN,USO1  200717P00002000,Equity Option,"
-            "Reverse split: Open 6 USO1  200717P00002000,-174,6,,0,0,100,"
+            "Replacement contract from reverse split 6 USO1  200717P00002000,-174,6,,0,0,100,"
             "USO,USO,7/17/20,2,PUT,123456,USD"
         ))
 
@@ -171,3 +171,104 @@ class TestReverseSplitConfig:
         assert len(open_lots) == 1
         assert open_lots[0].quantity == 6
         assert open_lots[0].position_type == PositionType.put
+
+    def test_ambiguous_option_split_fails_without_mutating_stock_lots(self, position_manager):
+        stock_lot = PositionLot(
+            symbol="USO",
+            position_type=PositionType.stock,
+            quantity=100,
+            amount_usd=-1000,
+            amount_eur=-900,
+            fees_usd=1,
+            fees_eur=0.9,
+            date=datetime(2020, 1, 1),
+        )
+        position_manager.add_lot_directly(stock_lot)
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2020, 4, 29),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "USO  200717P00002000",
+            "Buy/Sell": "Sell",
+            "Open/Close": "",
+            "Quantity": 6,
+            "Expiration Date": datetime(2020, 7, 17),
+            "Strike": 2.0,
+            "Call/Put": "P",
+            "Description": "Reverse split adjustment USO 200717P00002000",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="AMBIGUOUS OPTION REVERSE SPLIT"):
+            position_manager.add_position(transaction)
+
+        assert position_manager.get_all_open_lots() == [stock_lot]
+        assert stock_lot.quantity == 100
+        assert position_manager.closed_trades == []
+
+    @pytest.mark.parametrize("ratio", [0, -0.5, float("nan"), float("inf")])
+    def test_invalid_configured_ratio_is_atomic(self, position_manager, ratio):
+        lot = PositionLot(
+            symbol="XYZ",
+            position_type=PositionType.stock,
+            quantity=100,
+            amount_usd=-1000,
+            amount_eur=-900,
+            fees_usd=1,
+            fees_eur=0.9,
+            date=datetime(2023, 1, 1),
+        )
+        position_manager.add_lot_directly(lot)
+        position_manager._corporate_actions_config = {
+            "reverse_splits": [{
+                "date": "2023-06-15",
+                "symbol": "XYZ",
+                "ratio": ratio,
+                "source": "test",
+            }]
+        }
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2023, 6, 15),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "XYZ",
+            "Description": "Reverse split",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="finite and greater than zero"):
+            position_manager._handle_reverse_split(transaction)
+
+        assert position_manager.get_all_open_lots() == [lot]
+        assert (lot.quantity, lot.amount_usd, lot.amount_eur) == (100, -1000, -900)
+
+    def test_invalid_inferred_ratio_is_atomic(self, position_manager):
+        lot = PositionLot(
+            symbol="XYZ", position_type=PositionType.stock, quantity=100,
+            amount_usd=-1000, amount_eur=-900, fees_usd=1, fees_eur=0.9,
+            date=datetime(2023, 1, 1),
+        )
+        position_manager.add_lot_directly(lot)
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2023, 6, 15),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "XYZ",
+            "Description": "0:8 reverse split",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="finite and greater than zero"):
+            position_manager._handle_reverse_split(transaction)
+
+        assert position_manager.get_all_open_lots() == [lot]
+        assert lot.quantity == 100

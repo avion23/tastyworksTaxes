@@ -38,6 +38,7 @@ Implementation:
 """
 
 import logging
+import math
 import re
 from collections import defaultdict, deque
 from dataclasses import dataclass
@@ -620,24 +621,34 @@ class PositionManager:
         description = str(transaction.loc[Fields.DESCRIPTION.value])
 
         # Tastytrade represents option reverse splits as paired Close/Open records.
-        # Only let the established option-record shape continue through ordinary
-        # FIFO processing. A contract-looking token alone is not enough: malformed
-        # stock records must fail closed rather than become taxable trades.
-        option_record = re.search(
-            r"\breverse\s+split\s*:\s*(?:close|open)\b.*\b\d{6}[CP]\d{8}\b",
-            description,
-            re.IGNORECASE,
-        )
+        declared_option = transaction.get(Fields.CALL_PUT.value, "") in {"C", "P"}
         try:
-            option_type = transaction.getType() in {
+            option_type = declared_option or transaction.getType() in {
                 PositionType.call,
                 PositionType.put,
             }
         except (KeyError, ValueError):
             option_type = False
-        if option_record and option_type:
-            logger.debug(f"Reverse split is a trade, not a mutation: {description}")
-            return False
+        if option_type:
+            # OCC option identifiers plus an explicit Open/Close operation are the
+            # established broker shape. Description prose varies, so do not require
+            # the exact "Reverse split: Close/Open" prefix. Anything less is
+            # ambiguous and must not mutate stock lots or silently become a trade.
+            option_text = f"{transaction.getSymbol()} {description}"
+            has_occ_token = re.search(
+                r"(?<!\d)\d{6}[CP]\d{8}(?!\d)", option_text, re.IGNORECASE
+            ) is not None
+            open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
+            if has_occ_token and open_close in {
+                OpenClose.CLOSE.value,
+                OpenClose.OPEN.value,
+            }:
+                logger.debug(f"Reverse split is an option trade: {description}")
+                return False
+            raise ValueError(
+                "AMBIGUOUS OPTION REVERSE SPLIT: expected an OCC option token and "
+                f"an explicit Open/Close operation; refusing to process '{description}'"
+            )
         symbol_to_split = transaction.getSymbol()
 
         ratio_patterns = [
@@ -668,6 +679,18 @@ class PositionManager:
             )
 
         if ratio is not None:
+            try:
+                ratio = float(ratio)
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    f"Invalid split ratio for {symbol_to_split}: {ratio!r}; "
+                    "ratio must be finite and greater than zero"
+                ) from exc
+            if not math.isfinite(ratio) or ratio <= 0:
+                raise ValueError(
+                    f"Invalid split ratio for {symbol_to_split}: {ratio!r}; "
+                    "ratio must be finite and greater than zero"
+                )
             affected_keys = [
                 key for key in self.open_lots.keys() if key.symbol == symbol_to_split
             ]

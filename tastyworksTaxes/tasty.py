@@ -30,7 +30,7 @@ from tastyworksTaxes.trade_calculator import (
     get_stock_trades,
 )
 import logging
-from datetime import date
+from datetime import date, datetime
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -45,6 +45,7 @@ class Tasty:
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
         self._withholding_remaining = {}
+        self._asset_classification_checks = set()
 
     def year(self, year):
         if year not in self.yearValues:
@@ -91,6 +92,11 @@ class Tasty:
                 # dividend income and foreign tax.
                 year_values.dividend += m
             case "Dividend":
+                pay_date = t.loc["Date/Time"].date()
+                symbol = t.getSymbol()
+                self._checkAssetClassification(
+                    symbol, PositionType.stock, pay_date
+                )
                 if m.usd < 0:
                     key = (t.getDate(), t.getSymbol())
                     remaining = getattr(self, "_withholding_remaining", {}).get(key, 0.0)
@@ -107,8 +113,6 @@ class Tasty:
                     )
                     self._withholding_remaining[key] = remaining - withholding_amount
                 else:
-                    pay_date = t.loc["Date/Time"].date()
-                    symbol = t.getSymbol()
                     classification = self.classifier.classify_for_tax(
                         symbol, PositionType.stock, pay_date
                     )
@@ -134,16 +138,17 @@ class Tasty:
                 )
 
     def print(self):
-        for key, value in self.yearValues.items():
+        for key in sorted(self.yearValues):
+            value = self.yearValues[key]
             print("Year " + str(key) + ":")
             print(value)
 
     def processTransactionHistory(self):
-        corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+        corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin([
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
             TransactionSubcode.SPECIAL_DIVIDEND.value,
-        })
+        ])
         close_legs = corporate_actions & (
             self.history[Fields.OPEN_CLOSE.value] == OpenClose.CLOSE.value
         )
@@ -156,11 +161,11 @@ class Tasty:
         )
         physical_option_settlements = (
             receive_deliver
-            & self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+            & self.history[Fields.TRANSACTION_SUBCODE.value].isin([
                 TransactionSubcode.EXERCISE.value,
                 TransactionSubcode.ASSIGNMENT.value,
-            })
-            & self.history[Fields.CALL_PUT.value].isin({"C", "P"})
+            ])
+            & self.history[Fields.CALL_PUT.value].isin(["C", "P"])
         )
         settlement_dates = self.history[Fields.DATE_TIME.value].dt.date.astype(str)
         settlement_symbols = self.history[Fields.SYMBOL.value].copy()
@@ -188,13 +193,13 @@ class Tasty:
         }
         stock_settlements = (
             receive_deliver
-            & ~self.history[Fields.CALL_PUT.value].isin({"C", "P"})
-            & self.history[Fields.TRANSACTION_SUBCODE.value].isin({
+            & ~self.history[Fields.CALL_PUT.value].isin(["C", "P"])
+            & self.history[Fields.TRANSACTION_SUBCODE.value].isin([
                 TransactionSubcode.BUY_TO_OPEN.value,
                 TransactionSubcode.SELL_TO_OPEN.value,
                 TransactionSubcode.BUY_TO_CLOSE.value,
                 TransactionSubcode.SELL_TO_CLOSE.value,
-            })
+            ])
         )
         stock_keys = {
             settlement_keys[index]
@@ -251,7 +256,10 @@ class Tasty:
         dividends = chronological_history[
             chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
         ]
-        dividend_dates = dividends[Fields.DATE_TIME.value].dt.date.astype(str)
+        dividend_dates = self.history.loc[
+            self.history[Fields.TRANSACTION_SUBCODE.value] == "Dividend",
+            Fields.DATE_TIME.value,
+        ].dt.date.astype(str)
         amounts = dividends.assign(_pay_date=dividend_dates).groupby(
             ["_pay_date", Fields.SYMBOL.value]
         )[Fields.AMOUNT.value]
@@ -333,29 +341,90 @@ class Tasty:
 
         return dict(trades_by_year)
 
+    @staticmethod
+    def _as_date(value):
+        if isinstance(value, datetime):
+            return value.date()
+        if isinstance(value, date):
+            return value
+        return date.fromisoformat(str(value)[:10])
+
+    def _checkAssetClassification(self, symbol, position_type, operation_date):
+        operation_date = self._as_date(operation_date)
+        key = symbol, position_type, operation_date
+        if key in self._asset_classification_checks:
+            return
+        self._asset_classification_checks.add(key)
+
+        if not self.classifier.is_verified(symbol, position_type, operation_date):
+            self.unverified_asset_symbols_by_year.setdefault(
+                operation_date.year, set()
+            ).add(symbol)
+        self.classifier.check_unsupported_assets([symbol], operation_date)
+
+    def _stockHoldingPeriods(self):
+        periods = [
+            (
+                trade.symbol,
+                self._as_date(trade.opening_date),
+                self._as_date(trade.closing_date),
+            )
+            for trade in self.position_manager.closed_trades
+            if trade.position_type == PositionType.stock
+        ]
+
+        open_stock_lots = [
+            lot for lot in self.position_manager.get_all_open_lots()
+            if lot.position_type == PositionType.stock and not lot.is_empty()
+        ]
+        known_dates = [period_date for _, start, end in periods for period_date in (start, end)]
+        known_dates.extend(self._as_date(lot.date) for lot in open_stock_lots)
+        if not self.history.empty and Fields.DATE_TIME.value in self.history:
+            history_dates = self.history[Fields.DATE_TIME.value].dropna()
+            if not history_dates.empty:
+                known_dates.append(self._as_date(history_dates.max()))
+        if self.yearValues:
+            known_dates.append(date(max(self.yearValues), 12, 31))
+
+        scope_end = max(known_dates) if known_dates else None
+        if scope_end is not None:
+            periods.extend(
+                (lot.symbol, self._as_date(lot.date), scope_end)
+                for lot in open_stock_lots
+            )
+        return periods
+
+    def _checkStockHoldingClassifications(self):
+        exposure_years = set()
+        for symbol, acquired, disposed_or_scope_end in self._stockHoldingPeriods():
+            if disposed_or_scope_end < acquired:
+                continue
+            for year in range(acquired.year, disposed_or_scope_end.year + 1):
+                exposure_years.add(year)
+                period_start = max(acquired, date(year, 1, 1))
+                period_end = min(disposed_or_scope_end, date(year, 12, 31))
+                self._checkAssetClassification(
+                    symbol, PositionType.stock, period_start
+                )
+                self._checkAssetClassification(
+                    symbol, PositionType.stock, period_end
+                )
+        return exposure_years
+
     def _checkAssetClassifications(self, trades):
         stock_trades = get_stock_trades(trades)
         if not stock_trades:
             return
 
-        checked = set()
         for trade in stock_trades:
-            closing_date = date.fromisoformat(str(trade.closing_date)[:10])
-            key = trade.symbol, closing_date
-            if key in checked:
-                continue
-            checked.add(key)
-            if not self.classifier.is_verified(
-                trade.symbol, trade.position_type, closing_date
-            ):
-                self.unverified_asset_symbols_by_year.setdefault(
-                    closing_date.year, set()
-                ).add(trade.symbol)
-            self.classifier.check_unsupported_assets([trade.symbol], closing_date)
+            self._checkAssetClassification(
+                trade.symbol, trade.position_type, trade.closing_date
+            )
 
     def run(self):
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
+        self._asset_classification_checks = set()
         self.processTransactionHistory()
 
         trades_by_year = self.getYearlyTrades()
@@ -375,7 +444,13 @@ class Tasty:
             year: -calculate_fees_sum(trades) for year, trades in trades_by_year.items()
         }
 
-        years = set(self.yearValues.keys()) | set(trades_by_year.keys())
+        holding_years = self._checkStockHoldingClassifications()
+        years = (
+            set(self.yearValues.keys())
+            | set(trades_by_year.keys())
+            | holding_years
+            | set(self.unverified_asset_symbols_by_year.keys())
+        )
 
         for key in sorted(years):
             values_obj = self.year(key)

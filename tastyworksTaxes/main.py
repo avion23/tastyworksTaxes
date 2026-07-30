@@ -38,7 +38,8 @@ def main() -> None:
             parser.error(f"output directory does not exist or is not a directory: {output.parent}")
     t = Tasty(path=args.input)
     t.run()
-    for year, values in t.yearValues.items():
+    for year in sorted(t.yearValues):
+        values = t.yearValues[year]
         print(f"Values for year {year} in Euro:")
         unverified_symbols = t.unverified_asset_symbols_by_year.get(year, set())
         if unverified_symbols:

@@ -141,7 +141,7 @@ The following areas are intentionally documented so users can decide whether the
 - Short selling stocks beyond annual limits: 30% substitute assessment base (§ 43a Absatz 2 Satz 7 EStG) is not implemented.
 
 **Corporate Actions**:
-- While Symbol Changes and Stock Mergers are now handled correctly, **Reverse Splits with unrecognized description formats may be incorrectly processed as taxable trades**. These events should be manually verified.
+- Symbol Changes and Stock Mergers preserve their original basis. Stock reverse splits are applied only when a finite, positive ratio is unambiguous in the description or configured in `corporate_actions.csv`; otherwise processing fails closed before any lot is changed. Option reverse-split Close/Open bookkeeping remains safe FIFO activity when the record has an OCC contract token and an explicit Open/Close operation. Ambiguous option records also fail closed rather than mutating stock lots or disappearing.
 
 **Other Limitations**:
 - Fee treatment should be reviewed against the applicable tax form instructions and broker statements.

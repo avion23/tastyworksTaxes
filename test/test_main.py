@@ -125,3 +125,24 @@ def test_cli_marks_closed_short_stock_trades_only_in_their_annual_report(
     assert "potential 30% substitute assessment" in reports[2021]
     assert "this rule is not calculated" in reports[2021]
     assert "Review these trades manually" in reports[2021]
+
+
+def test_cli_sorts_annual_report_years(tmp_path, monkeypatch, capsys):
+    source = tmp_path / "transactions.csv"
+    source.write_text("data")
+    monkeypatch.setattr("sys.argv", ["tastyworks-taxes", str(source)])
+    tasty = MagicMock()
+    tasty.yearValues = {2022: Values(), 2020: Values(), 2021: Values()}
+    tasty.position_manager.closed_trades = []
+    tasty.unverified_asset_symbols_by_year = {}
+    tasty.short_stock_trades_by_year = {}
+
+    with (
+        patch("tastyworksTaxes.main.Tasty", return_value=tasty),
+        patch("tastyworksTaxes.main.Printer") as printer,
+    ):
+        printer.return_value.generateGermanTaxReport.return_value = "REPORT"
+        main()
+
+    output = capsys.readouterr().out
+    assert output.index("year 2020") < output.index("year 2021") < output.index("year 2022")

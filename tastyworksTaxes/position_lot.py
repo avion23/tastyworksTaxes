@@ -1,7 +1,8 @@
 from dataclasses import dataclass, replace
 from datetime import datetime
-from math import floor, ceil
+from math import floor, ceil, isfinite
 import logging
+from typing import Optional
 from tastyworksTaxes.constants import Fields
 from tastyworksTaxes.position import PositionType
 
@@ -17,9 +18,9 @@ class PositionLot:
     fees_usd: float
     fees_eur: float
     date: datetime
-    strike: float = None
-    expiry: datetime = None
-    call_put: str = None
+    strike: Optional[float] = None
+    expiry: Optional[datetime] = None
+    call_put: Optional[str] = None
     
     def matches(self, symbol, position_type, strike=None, expiry=None, call_put=None):
         if self.symbol != symbol or self.position_type != position_type:
@@ -71,6 +72,13 @@ class PositionLot:
         return new_lot, consumed_values
     
     def adjust_for_split(self, ratio):
+        try:
+            ratio = float(ratio)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"Split ratio must be finite and greater than zero: {ratio!r}") from exc
+        if not isfinite(ratio) or ratio <= 0:
+            raise ValueError(f"Split ratio must be finite and greater than zero: {ratio!r}")
+
         if self.quantity == 0:
             return
 

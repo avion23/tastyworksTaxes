@@ -14,8 +14,8 @@ class TradeResult:
     fees_usd: float
     fees_eur: float
     worthless_expiry: bool
-    strike: float = None
-    expiry: str = None
+    strike: float | None = None
+    expiry: str | None = None
     opening_profit_usd: float = 0.0
     opening_profit_eur: float = 0.0
     closing_profit_usd: float = 0.0
