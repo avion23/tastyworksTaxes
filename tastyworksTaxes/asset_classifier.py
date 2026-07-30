@@ -1,5 +1,5 @@
 import logging
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from tastyworksTaxes.asset_definitions import CLASSIFICATIONS, AssetDefinition, load_asset_registry
@@ -72,23 +72,56 @@ class AssetClassifier:
                 if item.classification == asset_type
                 and item.is_effective(self._on_date or date.today())}
 
+    def effective_checkpoints(
+        self, symbol: str, period_start: date, period_end: date
+    ) -> tuple[date, ...]:
+        """Return dates representing every registry segment or gap in a period."""
+        normalized = symbol.upper()
+        checkpoints = {period_start}
+        for definition in self._definitions:
+            if definition.symbol != normalized:
+                continue
+            if period_start <= definition.effective_from <= period_end:
+                checkpoints.add(definition.effective_from)
+            if (
+                definition.effective_to is not None
+                and definition.effective_to < date.max
+            ):
+                gap_start = definition.effective_to + timedelta(days=1)
+                if period_start <= gap_start <= period_end:
+                    checkpoints.add(gap_start)
+        return tuple(sorted(checkpoints))
+
+    def unsupported_asset_state(
+        self, symbol: str, on_date: date | None = None
+    ) -> tuple[str, str] | None:
+        """Identify the warning state, including classification for deduplication."""
+        definition = self._definition(symbol, on_date)
+        classification = self.classify(symbol, PositionType.stock, on_date)
+        if definition is None or classification == "INDIVIDUAL_STOCK":
+            return "unknown", classification
+        if not definition.verified:
+            return "unverified", classification
+        if self.get_tax_category(classification) == "SO":
+            return "unsupported_tax_category", classification
+        return None
+
     def check_unsupported_assets(self, symbols: list[str], on_date: date | None = None) -> None:
         for symbol in symbols:
-            definition = self._definition(symbol, on_date)
+            state = self.unsupported_asset_state(symbol, on_date)
             classification = self.classify(symbol, PositionType.stock, on_date)
-            tax_category = self.get_tax_category(classification)
-            if definition is None:
+            if state is None:
+                continue
+            warning_kind, _ = state
+            if warning_kind == "unknown":
                 logger.warning("Unknown fund/stock type for symbol '%s' - treating as individual stock. "
                                "If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.",
                                symbol)
-            elif not definition.verified:
+            elif warning_kind == "unverified":
                 logger.warning("UNVERIFIED ASSET CLASSIFICATION: Symbol '%s' is treated as an individual stock "
                                "for tax calculations; verify its exact instrument and applicable investment terms.",
                                symbol)
-            elif tax_category == "SO":
+            elif warning_kind == "unsupported_tax_category":
                 logger.warning("UNSUPPORTED TAX CATEGORY: Symbol '%s' (%s) belongs in 'Anlage SO'. "
                                "This program does not handle this. You must calculate it manually.",
                                symbol, classification)
-            elif classification == "INDIVIDUAL_STOCK":
-                logger.warning("Unknown fund/stock type for symbol '%s' - treating as individual stock. "
-                               "If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.", symbol)

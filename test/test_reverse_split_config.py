@@ -89,7 +89,7 @@ class TestReverseSplitConfig:
         )
         position_manager.add_lot_directly(xyz_lot)
 
-        description = "Reverse split: Close 100 XYZ 250101C00010000"
+        description = "Reverse split: Close 100 XYZ"
         transaction = Transaction.fromString(
             "2023-06-15T12:00:00+0000,Receive Deliver,Reverse Split,"
             "SELL_TO_CLOSE,XYZ,Equity,"
@@ -209,19 +209,102 @@ class TestReverseSplitConfig:
         assert stock_lot.quantity == 100
         assert position_manager.closed_trades == []
 
-    @pytest.mark.parametrize("ratio", [0, -0.5, float("nan"), float("inf")])
-    def test_invalid_configured_ratio_is_atomic(self, position_manager, ratio):
-        lot = PositionLot(
-            symbol="XYZ",
-            position_type=PositionType.stock,
-            quantity=100,
-            amount_usd=-1000,
-            amount_eur=-900,
-            fees_usd=1,
-            fees_eur=0.9,
+    def test_stock_shaped_occ_row_with_stale_option_metadata_fails_closed(
+        self, position_manager
+    ):
+        stock_lot = PositionLot(
+            symbol="XYZ", position_type=PositionType.stock, quantity=100,
+            amount_usd=-1000, amount_eur=-900, fees_usd=1, fees_eur=0.9,
             date=datetime(2023, 1, 1),
         )
-        position_manager.add_lot_directly(lot)
+        position_manager.add_lot_directly(stock_lot)
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2023, 6, 15),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "XYZ",
+            "Buy/Sell": "Buy",
+            "Open/Close": "Open",
+            "Quantity": 1,
+            "Expiration Date": datetime(2023, 7, 21),
+            "Strike": 0.0,
+            "Call/Put": "P",
+            "Description": "Stale metadata XYZ 230721P00002000",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="resolved type was not an option"):
+            position_manager.add_position(transaction)
+
+        assert position_manager.get_all_open_lots() == [stock_lot]
+        assert stock_lot.quantity == 100
+        assert position_manager.closed_trades == []
+
+    def test_resolved_option_with_missing_expiry_fails_closed(self, position_manager):
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2023, 6, 15),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "XYZ  230721P00002000",
+            "Buy/Sell": "Buy",
+            "Open/Close": "Open",
+            "Quantity": 1,
+            "Expiration Date": None,
+            "Strike": 2.0,
+            "Call/Put": "P",
+            "Description": "Replacement XYZ 230721P00002000",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="valid option fields"):
+            position_manager.add_position(transaction)
+
+        assert position_manager.get_all_open_lots() == []
+        assert position_manager.closed_trades == []
+
+    def _seed_atomicity_state(self, position_manager):
+        lots = [
+            PositionLot(
+                symbol="XYZ", position_type=PositionType.stock, quantity=100,
+                amount_usd=-1000, amount_eur=-900, fees_usd=1, fees_eur=0.9,
+                date=datetime(2023, 1, 1),
+            ),
+            PositionLot(
+                symbol="XYZ", position_type=PositionType.put, quantity=3,
+                amount_usd=-150, amount_eur=-135, fees_usd=2, fees_eur=1.8,
+                date=datetime(2023, 2, 1), strike=20,
+                expiry=datetime(2023, 9, 15), call_put="P",
+            ),
+        ]
+        for lot in lots:
+            position_manager.add_lot_directly(lot)
+        closed_trade = object()
+        position_manager.closed_trades.append(closed_trade)
+        return lots, tuple(position_manager.open_lots), closed_trade
+
+    def _assert_atomicity_state(
+        self, position_manager, lots, original_keys, closed_trade
+    ):
+        assert tuple(position_manager.open_lots) == original_keys
+        assert position_manager.get_all_open_lots() == lots
+        assert [
+            (lot.quantity, lot.amount_usd, lot.amount_eur, lot.strike)
+            for lot in lots
+        ] == [
+            (100, -1000, -900, None),
+            (3, -150, -135, 20),
+        ]
+        assert position_manager.closed_trades == [closed_trade]
+
+    @pytest.mark.parametrize("ratio", [0, -0.5, float("nan"), float("inf")])
+    def test_invalid_configured_ratio_is_atomic(self, position_manager, ratio):
+        lots, original_keys, closed_trade = self._seed_atomicity_state(position_manager)
         position_manager._corporate_actions_config = {
             "reverse_splits": [{
                 "date": "2023-06-15",
@@ -245,16 +328,12 @@ class TestReverseSplitConfig:
         with pytest.raises(ValueError, match="finite and greater than zero"):
             position_manager._handle_reverse_split(transaction)
 
-        assert position_manager.get_all_open_lots() == [lot]
-        assert (lot.quantity, lot.amount_usd, lot.amount_eur) == (100, -1000, -900)
+        self._assert_atomicity_state(
+            position_manager, lots, original_keys, closed_trade
+        )
 
     def test_invalid_inferred_ratio_is_atomic(self, position_manager):
-        lot = PositionLot(
-            symbol="XYZ", position_type=PositionType.stock, quantity=100,
-            amount_usd=-1000, amount_eur=-900, fees_usd=1, fees_eur=0.9,
-            date=datetime(2023, 1, 1),
-        )
-        position_manager.add_lot_directly(lot)
+        lots, original_keys, closed_trade = self._seed_atomicity_state(position_manager)
         transaction = Transaction(pd.Series({
             "Date/Time": datetime(2023, 6, 15),
             "Transaction Code": "Receive Deliver",
@@ -270,5 +349,6 @@ class TestReverseSplitConfig:
         with pytest.raises(ValueError, match="finite and greater than zero"):
             position_manager._handle_reverse_split(transaction)
 
-        assert position_manager.get_all_open_lots() == [lot]
-        assert lot.quantity == 100
+        self._assert_atomicity_state(
+            position_manager, lots, original_keys, closed_trade
+        )

@@ -200,3 +200,58 @@ def test_holding_readiness_is_limited_to_acquisition_through_disposal():
         2021: {"UNKNOWN_FUND"},
         2022: {"UNKNOWN_FUND"},
     }
+
+
+@pytest.mark.parametrize(
+    ("middle_registry_row", "warning_text"),
+    [
+        ("", "Unknown fund/stock type"),
+        (
+            "TEST,EQUITY_ETF,KAP-INV,30,false,2021-04-01,2021-09-30,Pending verification\n",
+            "UNVERIFIED ASSET CLASSIFICATION",
+        ),
+    ],
+    ids=["mid_year_gap", "mid_year_unverified"],
+)
+def test_holding_readiness_checks_mid_year_registry_states_once_per_year(
+    tmp_path, caplog, middle_registry_row, warning_text
+):
+    registry = tmp_path / "assets.csv"
+    registry.write_text(
+        "symbol,classification,tax_category,teilfreistellung_pct,verified,effective_from,effective_to,evidence\n"
+        "TEST,EQUITY_ETF,KAP-INV,30,true,2021-01-01,2021-03-31,Prospectus\n"
+        f"{middle_registry_row}"
+        "TEST,EQUITY_ETF,KAP-INV,30,true,2021-10-01,2021-12-31,Prospectus\n",
+        encoding="utf-8",
+    )
+    tasty = Tasty()
+    tasty.classifier = AssetClassifier(registry)
+    tasty.processTransactionHistory = lambda: None
+    tasty.position_manager.closed_trades = [
+        TradeResult(
+            symbol="TEST", position_type=PositionType.stock,
+            opening_date="2021-01-01 00:00:00",
+            closing_date="2021-12-31 00:00:00", quantity=1,
+            profit_usd=10, profit_eur=9, fees_usd=0, fees_eur=0,
+            worthless_expiry=False,
+        ),
+        TradeResult(
+            symbol="TEST", position_type=PositionType.stock,
+            opening_date="2021-02-01 00:00:00",
+            closing_date="2021-11-01 00:00:00", quantity=1,
+            profit_usd=10, profit_eur=9, fees_usd=0, fees_eur=0,
+            worthless_expiry=False,
+        ),
+    ]
+
+    with caplog.at_level(logging.WARNING):
+        tasty.run()
+
+    assert tasty.unverified_asset_symbols_by_year == {2021: {"TEST"}}
+    relevant_warnings = [
+        record for record in caplog.records
+        if record.levelno == logging.WARNING
+        and record.getMessage().startswith(warning_text)
+        and "TEST" in record.getMessage()
+    ]
+    assert len(relevant_warnings) == 1

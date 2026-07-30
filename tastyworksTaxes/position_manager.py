@@ -622,24 +622,45 @@ class PositionManager:
 
         # Tastytrade represents option reverse splits as paired Close/Open records.
         declared_option = transaction.get(Fields.CALL_PUT.value, "") in {"C", "P"}
+        option_text = f"{transaction.getSymbol()} {description}"
+        has_occ_token = re.search(
+            r"(?<!\d)\d{6}[CP]\d{8}(?!\d)", option_text, re.IGNORECASE
+        ) is not None
         try:
-            option_type = declared_option or transaction.getType() in {
-                PositionType.call,
-                PositionType.put,
-            }
+            resolved_type = transaction.getType()
         except (KeyError, ValueError):
-            option_type = False
-        if option_type:
+            resolved_type = None
+        if resolved_type in {PositionType.call, PositionType.put}:
             # OCC option identifiers plus an explicit Open/Close operation are the
             # established broker shape. Description prose varies, so do not require
             # the exact "Reverse split: Close/Open" prefix. Anything less is
             # ambiguous and must not mutate stock lots or silently become a trade.
-            option_text = f"{transaction.getSymbol()} {description}"
-            has_occ_token = re.search(
-                r"(?<!\d)\d{6}[CP]\d{8}(?!\d)", option_text, re.IGNORECASE
-            ) is not None
             open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
-            if has_occ_token and open_close in {
+            expected_call_put = "C" if resolved_type == PositionType.call else "P"
+            try:
+                strike = float(transaction.getStrike())
+                valid_strike = math.isfinite(strike) and strike > 0
+            except (KeyError, TypeError, ValueError):
+                valid_strike = False
+            try:
+                expiry = transaction.getExpiry()
+                if isinstance(expiry, str):
+                    datetime.fromisoformat(expiry)
+                    valid_expiry = True
+                else:
+                    valid_expiry = (
+                        expiry is not None
+                        and expiry == expiry
+                        and getattr(expiry, "year", None) is not None
+                    )
+            except (KeyError, TypeError, ValueError):
+                valid_expiry = False
+            valid_option_fields = (
+                transaction.get(Fields.CALL_PUT.value, "") == expected_call_put
+                and valid_strike
+                and valid_expiry
+            )
+            if valid_option_fields and has_occ_token and open_close in {
                 OpenClose.CLOSE.value,
                 OpenClose.OPEN.value,
             }:
@@ -647,7 +668,14 @@ class PositionManager:
                 return False
             raise ValueError(
                 "AMBIGUOUS OPTION REVERSE SPLIT: expected an OCC option token and "
-                f"an explicit Open/Close operation; refusing to process '{description}'"
+                "an explicit Open/Close operation with valid option fields; "
+                f"refusing to process '{description}'"
+            )
+        if declared_option or has_occ_token:
+            raise ValueError(
+                "AMBIGUOUS OPTION REVERSE SPLIT: option metadata or an OCC token "
+                "was present, but the transaction's resolved type was not an option; "
+                f"refusing to process '{description}'"
             )
         symbol_to_split = transaction.getSymbol()
 

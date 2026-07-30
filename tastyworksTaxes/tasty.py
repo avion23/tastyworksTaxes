@@ -351,15 +351,16 @@ class Tasty:
 
     def _checkAssetClassification(self, symbol, position_type, operation_date):
         operation_date = self._as_date(operation_date)
-        key = symbol, position_type, operation_date
-        if key in self._asset_classification_checks:
-            return
-        self._asset_classification_checks.add(key)
-
         if not self.classifier.is_verified(symbol, position_type, operation_date):
             self.unverified_asset_symbols_by_year.setdefault(
                 operation_date.year, set()
             ).add(symbol)
+
+        warning_state = self.classifier.unsupported_asset_state(symbol, operation_date)
+        key = symbol, position_type, operation_date.year, warning_state
+        if warning_state is None or key in self._asset_classification_checks:
+            return
+        self._asset_classification_checks.add(key)
         self.classifier.check_unsupported_assets([symbol], operation_date)
 
     def _stockHoldingPeriods(self):
@@ -403,12 +404,12 @@ class Tasty:
                 exposure_years.add(year)
                 period_start = max(acquired, date(year, 1, 1))
                 period_end = min(disposed_or_scope_end, date(year, 12, 31))
-                self._checkAssetClassification(
-                    symbol, PositionType.stock, period_start
-                )
-                self._checkAssetClassification(
-                    symbol, PositionType.stock, period_end
-                )
+                for checkpoint in self.classifier.effective_checkpoints(
+                    symbol, period_start, period_end
+                ):
+                    self._checkAssetClassification(
+                        symbol, PositionType.stock, checkpoint
+                    )
         return exposure_years
 
     def _checkAssetClassifications(self, trades):
