@@ -33,4 +33,4 @@ METU,OTHER_FUND,KAP-INV,0,true,2024-06-05,,"ISIN US25461A8099; Direxion Daily ME
 AMAT,INDIVIDUAL_STOCK,KAP,0,true,2025-01-27,,Applied Materials investor relations identifies NASDAQ: AMAT; SEC issuer CIK 0000006951; src: https://ir.appliedmaterials.com/stock-information; SEC: https://www.sec.gov/cgi-bin/browse-edgar?CIK=0000006951
 BTC,CRYPTO,SO,0,false,2018-01-01,,Ticker identifies cryptocurrency
 ETH,CRYPTO,SO,0,false,2018-01-01,,Ticker identifies cryptocurrency
-DOGE,CRYPTO,SO,0,true,2018-01-01,,Ticker identifies cryptocurrency
+DOGE,CRYPTO,SO,0,false,2018-01-01,,Ticker identifies cryptocurrency

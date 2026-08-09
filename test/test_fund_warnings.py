@@ -69,7 +69,7 @@ class TestTastyWithAssetClassifier:
 def test_bundled_unverified_symbols_fall_back_to_stock_totals_and_warn(caplog):
     tasty = Tasty()
     tasty.processTransactionHistory = lambda: None
-    symbols = {'AOR', 'AOA', 'BTC', 'ETH'}
+    symbols = {'AOR', 'AOA', 'BTC', 'ETH', 'DOGE'}
     tasty.position_manager.closed_trades = [
         TradeResult(
             symbol=symbol,
@@ -90,14 +90,14 @@ def test_bundled_unverified_symbols_fall_back_to_stock_totals_and_warn(caplog):
         result = tasty.run()
 
     assert tasty.unverified_asset_symbols_by_year == {2025: symbols}
-    assert result[2025].stockProfits.eur == 400
+    assert result[2025].stockProfits.eur == 500
     assert result[2025].fundProfits.eur == 0
     warnings = [
         record.getMessage()
         for record in caplog.records
         if record.getMessage().startswith('UNVERIFIED ASSET CLASSIFICATION')
     ]
-    assert len(warnings) == 4
+    assert len(warnings) == 5
     assert all(any(symbol in warning for warning in warnings) for symbol in symbols)
 
 

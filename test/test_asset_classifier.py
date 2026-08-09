@@ -56,8 +56,9 @@ class TestAssetClassifier:
     def test_currency_pair_notation_is_verified_crypto(self, classifier):
         assert classifier.classify_for_tax('BTC/USD', PositionType.stock) == 'CRYPTO'
         assert classifier.classify_for_tax('ETH/EUR', PositionType.stock) == 'CRYPTO'
+        assert classifier.classify_for_tax('DOGE/USD', PositionType.stock) == 'CRYPTO'
 
-    @pytest.mark.parametrize('symbol', ['BTC', 'ETH'])
+    @pytest.mark.parametrize('symbol', ['BTC', 'ETH', 'DOGE'])
     def test_unverified_bare_crypto_ticker_metadata_falls_back_for_tax(
         self, classifier, symbol
     ):
