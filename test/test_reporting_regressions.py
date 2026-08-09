@@ -7,7 +7,7 @@ from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.position import PositionType
-from tastyworksTaxes.printer import Printer
+from tastyworksTaxes.printer import EnglishTaxReport, GermanTaxReport, Printer
 from tastyworksTaxes.trade_calculator import calculate_fund_profits, calculate_stock_profits
 from tastyworksTaxes.values import Values
 
@@ -120,6 +120,26 @@ def test_values_string_is_structured_json_with_every_annual_value():
     assert set(decoded) == set(values.__dataclass_fields__)
     assert decoded["dividend"] == {"eur": 10, "usd": 11}
     assert decoded["longOptionTotalLosses"] == {"eur": -12.34, "usd": -13}
+
+
+def test_german_legacy_positional_constructor_order_is_preserved():
+    report = GermanTaxReport(*range(1, 63))
+
+    assert report.long_optionen_gesamt == 43
+    assert report.future_gewinne == 44
+    assert report.zusatzliche_ordergebuehren == 47
+    assert report.wertpapierleihe_einkommen == 62
+    assert report.long_optionen_verfallverluste == 0
+
+
+def test_english_legacy_positional_constructor_order_is_preserved():
+    report = EnglishTaxReport(*range(1, 63))
+
+    assert report.long_option_total == 43
+    assert report.future_gains == 44
+    assert report.additional_order_fees == 47
+    assert report.securities_lending_income == 62
+    assert report.long_option_worthless_expiry_losses == 0
 
 
 def test_reports_do_not_render_uncalculated_tax_totals_as_zero():

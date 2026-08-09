@@ -152,7 +152,6 @@ class GermanTaxReport(object):
     stillhalter_gesamt_fifo: float = 0
     long_optionen_gewinne: float = 0
     long_optionen_verluste: float = 0
-    long_optionen_verfallverluste: float = 0
     long_optionen_gesamt: float = 0
     future_gewinne: float = 0
     future_verluste: float = 0
@@ -175,6 +174,7 @@ class GermanTaxReport(object):
     cash_balance_usd: float = 0
     net_liquidating_value: float = 0
     wertpapierleihe_einkommen: float = 0
+    long_optionen_verfallverluste: float = 0
 
     def __str__(self) -> str:
         fields = [
@@ -294,7 +294,6 @@ class EnglishTaxReport(object):
     option_holder_total_fifo: float = 0
     long_option_gains: float = 0
     long_option_losses: float = 0
-    long_option_worthless_expiry_losses: float = 0
     long_option_total: float = 0
     future_gains: float = 0
     future_losses: float = 0
@@ -315,6 +314,7 @@ class EnglishTaxReport(object):
     cash_balance_usd: float = 0
     net_liquidating_value: float = 0
     securities_lending_income: float = 0
+    long_option_worthless_expiry_losses: float = 0
 
     def __str__(self) -> str:
         fields = [
