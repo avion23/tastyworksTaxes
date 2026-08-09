@@ -2,36 +2,77 @@ name: Tests
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  installed-package:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Build wheel
+        run: python -m pip wheel --no-deps --wheel-dir "$RUNNER_TEMP/wheelhouse" .
 
-    - name: Install German locale
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y locales
-        sudo locale-gen de_DE.UTF-8
-        sudo update-locale
+      - name: Install wheel and test extra
+        shell: bash
+        run: |
+          wheel=$(find "$RUNNER_TEMP/wheelhouse" -maxdepth 1 -name '*.whl' -print -quit)
+          test -n "$wheel"
+          python -m pip install "${wheel}[test]"
+          python -m pip check
 
-    - name: Run tests
-      run: pytest test/
+      - name: Verify installed resources and console command
+        working-directory: ${{ runner.temp }}
+        run: |
+          python - <<'PY'
+          import os
+          from importlib.resources import files
+          from pathlib import Path
+
+          import tastyworksTaxes
+
+          source_root = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
+          installed_module = Path(tastyworksTaxes.__file__).resolve()
+          assert source_root not in installed_module.parents, installed_module
+          for name in ("asset_registry.csv", "corporate_actions.csv"):
+              resource = files("tastyworksTaxes").joinpath(name)
+              assert resource.is_file(), resource
+              with resource.open("rb") as stream:
+                  assert stream.read(1), resource
+          PY
+          tastyworks-taxes --help
+
+      - name: Run scenarios against the installed wheel
+        shell: bash
+        run: |
+          cp -R test "$RUNNER_TEMP/test"
+          cd "$RUNNER_TEMP"
+          python -m pytest -q --strict-markers --junitxml=pytest-results.xml test
+          python - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          report = ElementTree.parse(Path("pytest-results.xml"))
+          skipped = sum(
+              int(suite.attrib.get("skipped", 0))
+              for suite in report.iter("testsuite")
+          )
+          if skipped:
+              raise SystemExit(f"unexpected skipped scenarios: {skipped}")
+          PY

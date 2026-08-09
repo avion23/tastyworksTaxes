@@ -2,174 +2,179 @@
 
 [![Tests](https://github.com/avion23/tastyworksTaxes/actions/workflows/tests.yml/badge.svg)](https://github.com/avion23/tastyworksTaxes/actions)
 
-Automate the calculation of yearly taxes for a tastyworks export in the context of the German private asset management tax situation.
+`tastyworksTaxes` is a batch ETL, accounting, and reporting pipeline for
+TastyTrade/Tastyworks transaction exports in the context of German private
+investment taxation. It:
 
-## Validation Status and Disclaimer
+1. extracts transactions from a CSV export;
+2. normalizes the supported broker schema and sorts transactions by time;
+3. converts USD amounts and fees to EUR;
+4. applies FIFO lot accounting, configured corporate actions, and reviewed
+   asset classifications; and
+5. prints annual German tax-report categories and can export closed trades.
 
-This project is intended as an open-source tax preparation aid for private German investors using TastyTrade/Tastyworks transaction exports. It applies documented rules for FIFO matching, option trades, corporate actions, USD/EUR conversion, and selected German tax report categories, with regression tests covering the implemented behavior.
+## Validation status and disclaimer
 
-It is not a substitute for professional tax advice. Tax law, broker export formats, and individual circumstances vary; users should review generated figures against broker statements and consult a qualified tax advisor before filing.
+This project is an open-source tax-preparation aid, not tax advice. Tax law,
+broker exports, exchange-rate data, and individual circumstances change. Review
+the generated figures against broker statements and consult a qualified tax
+advisor before filing.
 
-❗ **UPDATE (December 2024)**: The 20,000 EUR limit on offsetting losses from options trading has been abolished. The German Bundesrat approved this change on November 22, 2024 (Jahressteuergesetz 2024). Losses from derivatives can now be fully offset against capital gains, with retroactive application to all open cases. This follows the Federal Fiscal Court ruling that the previous restriction was unconstitutional.
+A report is **not filing-ready** when the command emits a warning or an explicit
+`NOT FILING-READY` marker. Unknown or unverified assets, unsupported tax
+categories, ambiguous corporate actions, exchange-rate fallbacks, unmatched
+option exercise records, and closed short-stock trades all require review.
 
-**Current Coverage**:
-- Stocks, options, selected corporate actions, dividends, interest, fees, and USD/EUR conversion are handled by the implemented calculation pipeline.
-- Generic partial-exemption arithmetic is implemented for verified registry entries: 30% for equity funds, 15% for mixed funds, 60% for domestic real-estate funds, and 80% for foreign real-estate funds. Registry coverage remains instrument- and date-specific; missing or unverified entries require manual review.
-- Unsupported or ambiguous transaction patterns are intentionally surfaced as errors or warnings rather than silently estimated.
+The pipeline covers stocks, options, selected corporate actions, dividends,
+interest, fees, and USD/EUR conversion. Verified registry entries can apply
+partial exemptions of 30% for equity funds, 15% for mixed funds, 60% for
+domestic real-estate funds, and 80% for foreign real-estate funds. Registry
+coverage is instrument- and date-specific.
 
-**Stocks**:
+The former EUR 20,000 offset limit for derivative losses was removed by the
+Jahressteuergesetz 2024 with retroactive effect for open cases. The program
+reports option gains and losses without applying that former limit.
 
-- Gains and losses are calculated using the FIFO (first-in, first-out) method.
-- Transaction costs are fully deductible when incurred.
-- Other account and deposit fees are already covered under the flat rate operating expenses deduction.
-- Dividends from certain German companies like Vonovia, Deutsche Telekom, Freenet are tax-free.
-- Losses can only be offset against gains from stocks in the same year. Remaining losses are carried forward indefinitely.
+## Requirements and installation
 
-**Options**:
-
-- Each option trade is settled individually, no combined calculation for complex strategies.
-- For writing (selling) options, gains/losses are calculated when the position is closed, either by buying back the option or through expiration/assignment.
-- For buying options, gains/losses are calculated similar to stocks based on sale proceeds less purchase costs using the FIFO method.
-- The FIFO method is used to match opening and closing transactions for accurate profit/loss calculation.
-
-## Installation & Setup
-
-### Dependencies Installation
-
-Before running the project, ensure all dependencies are installed. Execute the following command:
-
-```bash
-pip install -r requirements.txt
-```
-
-## Downloading Data from Tastyworks
-
-**IMPORTANT: You MUST download "Transactions" history, NOT "Orders" or "Activity" data.**
-
-1. Go to https://my.tastytrade.com/app.html#/trading/activity
-2. Click on "Transactions" tab (NOT "Orders" or "Activity")
-3. Set the date filter to your desired range
-4. Set to show only "filled" trades
-5. Click the export button to download the CSV file
-
-⚠️ Important Notes:
-- Export limit is 1000 rows per file
-- Only the new TastyTrade format (21 columns, ISO 8601 dates) is supported
-- The old TastyWorks format is no longer supported (as of November 2024)
-- If you have more than 1000 transactions, download multiple files with different date ranges and merge them (see below)
-
-## Usage
-
-After installing the dependencies, you can run the main program using:
+CI verifies Python 3.10, 3.11, and 3.12. Direct runtime and test dependencies
+are fixed in `pyproject.toml` so that a checkout resolves the reviewed versions.
+Install the package inside an isolated Python environment:
 
 ```bash
-python -m tastyworksTaxes.main [--write-closed-trades <output-file.csv>] <tastyworks-data.csv>
+python -m pip install .
 ```
 
-Example with test data (2018-2025):
+This installs the `tastyworks-taxes` console command and both packaged data
+resources. For development and scenario verification, install the test extra:
+
 ```bash
-python -m tastyworksTaxes.main test/transactions_2018_to_2025.csv
+python -m pip install '.[test]'
+python -m pytest test/
 ```
 
-### Manual Vorabpauschale utility
+`python -m pip install -r requirements.txt` is an equivalent checkout-local
+shortcut for the package plus its test extra. A system Python managed by an OS
+package manager can reject global `pip` installs; use that platform's isolated
+environment or application installer instead of overriding its protection.
 
-`tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is an explicit,
-standalone utility; the TastyTrade report pipeline neither calls it nor emits
-automatic Vorabpauschale warnings. The caller must supply complete applicable
-EUR values, including the fund redemption price (or exchange/market price) at
-the beginning of the calendar year, distributions, value increase, Basiszins,
-partial-exemption rate, and acquisition timing. The opening value is not the
-investor's acquisition cost. For a fund launched during the year, the first
-redemption, exchange, or market price may apply where § 18 InvStG and the BMF
-guidance provide for it. The utility's result covers only the supplied values:
-it does not make a broker report account-wide or taxpayer-wide, including
-holdings or distributions outside that export.
+## Obtain a supported export
 
-### Merging Multiple CSV Files
+Export **Transactions** history from the TastyTrade activity page, not Orders
+or Activity data. Broker exports can have a row limit, so use non-overlapping
+date ranges when one file is not enough.
 
-If you have multiple export files from Tastyworks due to the 1000 row limit, you can merge them using Python:
+The parser does not select a schema by a claimed column count. Broker fixtures
+used by this project have a 20-column header. A new-format row is recognized by
+these required columns:
+
+- `Date`
+- `Type`
+- `Sub Type`
+- `Value`
+- `Description`
+
+`Date` must be ISO 8601 with a timezone offset. The parser also understands the
+optional broker columns `Symbol`, `Action`, `Quantity`, `Expiration Date`,
+`Strike Price`, `Call or Put`, `Average Price`, `Commissions`, `Fees`,
+`Underlying Symbol`, and `Multiplier`; absent optional columns receive explicit
+defaults. Other broker layouts are rejected. A normalized 14-column internal
+schema is also accepted for programmatic workflows, but that is not a promise
+of compatibility with an old broker export.
+
+## Run the batch pipeline
+
+```bash
+tastyworks-taxes [--write-closed-trades <output-file.csv>] <transactions.csv>
+```
+
+For example:
+
+```bash
+tastyworks-taxes --write-closed-trades closed-trades.csv transactions.csv
+```
+
+The input must be a file. The output directory must already exist, and the
+closed-trades output cannot overwrite the input. Annual reports go to standard
+output; diagnostics go to standard error.
+
+The module entry point is equivalent:
+
+```bash
+python -m tastyworksTaxes.main transactions.csv
+```
+
+## Merge non-overlapping exports
+
+The loader sorts normalized transactions from oldest to newest before
+processing. Keeping the merged file in the same order makes it easier to audit:
 
 ```python
 import pandas as pd
 
-# Read all CSV files
-df1 = pd.read_csv('file1.csv')
-df2 = pd.read_csv('file2.csv')
-df3 = pd.read_csv('file3.csv')
-
-# Concatenate and remove duplicates (keep all if no duplicates)
-merged = pd.concat([df1, df2, df3], ignore_index=True)
-merged = merged.drop_duplicates()
-
-# Sort by date (oldest first)
-merged = merged.sort_values('Date', ascending=False)
-merged.to_csv('merged.csv', index=False)
+frames = [pd.read_csv(path) for path in ("file1.csv", "file2.csv", "file3.csv")]
+merged = pd.concat(frames, ignore_index=True)
+merged = merged.drop_duplicates()  # only for exact overlap between exports
+merged = merged.sort_values("Date", ascending=True)
+merged.to_csv("transactions.csv", index=False)
 ```
 
-Or use simple shell commands if files don't overlap:
-```bash
-# If date ranges don't overlap, simple concatenation works
-(head -1 file1.csv && tail -n +2 file1.csv && tail -n +2 file2.csv && tail -n +2 file3.csv) > merged.csv
-```
+Do not drop rows merely because two legitimate transactions look similar.
+Review overlap boundaries and broker order identifiers before removing anything.
 
-### Test-Driven Development
+## Configuration data
 
-The project uses pytest for test-driven development. To run tests, use:
+Asset classifications are bundled in `tastyworksTaxes/asset_registry.csv`.
+Each row records the symbol, classification, tax category, partial-exemption
+rate, verification state, effective dates, and evidence. The loader rejects
+malformed rows, unknown categories, inconsistent rates, and overlapping date
+ranges.
 
-```bash
-pytest test/
-```
+A `verified=false` row remains a review record only. The calculator treats it
+as an individual stock for tax calculations, applies no partial exemption, and
+marks affected annual output not filing-ready. Do not infer fund status from a
+ticker or product name. Verify the exact share class, preferably by ISIN,
+against applicable binding investment terms before changing registry data.
 
-For verbose debugging output, use:
+Configured reverse-split ratios are bundled in
+`tastyworksTaxes/corporate_actions.csv`. An ambiguous split without an explicit,
+finite, positive ratio fails before lot mutation. Changes to either bundled file
+are source changes: review them, retain evidence, run the scenarios, and rebuild
+the package. The current CLI does not load arbitrary user registry paths.
 
-```bash
-python -m pytest test -s --log-cli-level=DEBUG
-```
+## Standalone Vorabpauschale utility
 
-## Recent Improvements
+`tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is a standalone
+utility. The report pipeline does not call it and does not emit automatic
+Vorabpauschale warnings. The caller must supply all applicable EUR values,
+including the opening redemption/exchange/market price, distributions, value
+increase, Basiszins, partial-exemption rate, and acquisition timing. Its result
+does not account for holdings or distributions outside the supplied values.
 
-- **Split Handling Fixed**: Reverse splits now correctly handle short positions (ceiling rounding), scale cost basis to maintain per-share cost, and preserve basis for zero-quantity lots
-- **Corporate Actions Fixed**: Symbol Changes and Stock Mergers now preserve original cost basis instead of incorrectly realizing gains/losses
-- **Enhanced Partial Exemptions**: The generic fund calculation applies the configured Teilfreistellung to gains, losses, and transaction fees for verified equity (30%), mixed (15%), domestic real-estate (60%), and foreign real-estate (80%) registry entries
-- **Improved FIFO Processing**: Refactored to forward-chronological processing for more accurate trade matching
+## Current limitations
 
-## Known Limitations
+- Stock short-selling cases that can require a 30% substitute assessment base
+  under § 43a Absatz 2 Satz 7 EStG are detected but not calculated.
+- Fee treatment must be checked against the applicable form instructions and
+  broker statement.
+- Missing or unverified asset classifications require manual review. The
+  bundled registry currently contains no verified domestic or foreign
+  real-estate fund entries.
+- Symbol changes and mergers preserve original basis. Unsupported or ambiguous
+  corporate-action records fail rather than being estimated.
+- Option reverse-split Close/Open bookkeeping requires an OCC contract token,
+  explicit Open/Close operation, and valid option fields.
+- Vorabpauschale remains outside the batch report.
 
-The following areas are intentionally documented so users can decide whether the generated output is complete for their filing situation.
+## Verification approach
 
-**Unimplemented Tax Requirements**:
-- Short selling stocks beyond annual limits: 30% substitute assessment base (§ 43a Absatz 2 Satz 7 EStG) is not implemented.
-
-**Corporate Actions**:
-- Symbol Changes and Stock Mergers preserve their original basis. Stock reverse splits are applied only when a finite, positive ratio is unambiguous in the description or configured in `corporate_actions.csv`; otherwise processing fails closed before any lot is changed. Option reverse-split Close/Open bookkeeping remains safe FIFO activity when the record has an OCC contract token and an explicit Open/Close operation. Ambiguous option records also fail closed rather than mutating stock lots or disappearing.
-
-**Other Limitations**:
-- Fee treatment should be reviewed against the applicable tax form instructions and broker statements.
-- Partial exemptions are applied only when the exact symbol and transaction date match a `verified=true` registry row. The bundled registry currently has no verified domestic or foreign real-estate fund entries, so those instruments require a reviewed registry entry before the generic 60% or 80% calculation can apply.
-
-## Contributing
-
-Contributions are welcome, this software was a lot of work. Try opening an issue or better a pull request.
+The repository uses requirement tests for pure calculation rules and scenario
+tests for complete workflows. CI builds a wheel, installs that wheel with the
+`test` extra, verifies both packaged CSV resources and the console command, and
+runs the copied test suite outside the source checkout. CI rejects unexpected
+skipped scenarios. This checks the installed artifact rather than only imports
+from the repository directory.
 
 ## License
 
-This software is under the MIT License.
-
-### Asset classification registry
-
-Fund classifications are maintained in `tastyworksTaxes/asset_registry.csv`, rather
-than in Python symbol lists. Each row records the classification, tax properties,
-verification status, effective dates, and evidence. The loader rejects malformed
-rows, unknown categories, inconsistent rates, and overlapping date ranges.
-
-A row marked `verified=false` preserves the historical classification for review,
-but the calculator does **not** apply its partial exemption and the CLI marks the
-report not filing-ready. Change it to `true` only after checking the exact share
-class (preferably by ISIN) against binding investment terms applicable during the
-recorded dates, and replace the legacy evidence note with a document reference.
-The calculator supports all configured fund rates generically, but that arithmetic
-support does not verify that any particular instrument qualifies. In particular,
-the packaged registry currently contains no verified domestic or foreign
-real-estate fund rows.
-Do not infer fund status from a ticker or product name. Unknown instruments should
-not be added with a guessed classification.
+MIT. See `LICENSE`.

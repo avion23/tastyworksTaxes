@@ -10,9 +10,6 @@ from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.printer import Printer
 
 
-logging.basicConfig(
-    format='%(message)s',
-    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -26,6 +23,7 @@ def init_argparse() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    logging.basicConfig(format="%(message)s", level=logging.INFO)
     parser = init_argparse()
     args = parser.parse_args()
     if not args.input.is_file():

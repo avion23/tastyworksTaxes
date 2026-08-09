@@ -1,8 +1,25 @@
-from pathlib import Path
+import subprocess
+import sys
 
 
-def test_declared_dependencies_are_installable_on_supported_python():
-    metadata = Path("pyproject.toml").read_text(encoding="utf-8")
+def test_importing_cli_module_preserves_application_logging_configuration():
+    scenario = """
+import logging
 
-    assert 'requires-python = ">=3.10"' in metadata
-    assert '"pandas>=2.0"' in metadata
+root = logging.getLogger()
+before_level = root.level
+before_handlers = tuple(root.handlers)
+
+import tastyworksTaxes.main  # noqa: F401
+
+assert root.level == before_level
+assert tuple(root.handlers) == before_handlers
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", scenario],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
