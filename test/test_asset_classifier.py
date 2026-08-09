@@ -112,17 +112,21 @@ class TestAssetClassifier:
         with caplog.at_level(logging.WARNING):
             classifier.check_unsupported_assets(['BTC/USD', 'SCHG'])
         
-        assert "UNSUPPORTED TAX CATEGORY" in caplog.text
-        assert "BTC/USD" in caplog.text
-        assert "Anlage SO" in caplog.text
+        assert [record.getMessage() for record in caplog.records] == [
+            "Unsupported tax category requires manual review"
+        ]
+        assert "BTC/USD" not in caplog.text
+        assert "SCHG" not in caplog.text
+        assert "CRYPTO" not in caplog.text
     
     def test_check_unsupported_assets_unknown(self, classifier, caplog):
         with caplog.at_level(logging.WARNING):
             classifier.check_unsupported_assets(['UNKNOWN_FUND'])
         
-        assert "Unknown fund/stock type" in caplog.text
-        assert "UNKNOWN_FUND" in caplog.text
-        assert "Mischfonds or Immobilienfonds" in caplog.text
+        assert [record.getMessage() for record in caplog.records] == [
+            "Asset classification requires manual review"
+        ]
+        assert "UNKNOWN_FUND" not in caplog.text
     
     def test_check_unsupported_assets_special_funds(self, classifier, caplog):
         with caplog.at_level(logging.WARNING):
@@ -137,9 +141,10 @@ class TestAssetClassifier:
         with caplog.at_level(logging.WARNING):
             unverified_fund_classifier.check_unsupported_assets(['TESTUF'])
 
-        assert len(caplog.records) == 1
-        assert "UNVERIFIED ASSET CLASSIFICATION" in caplog.text
-        assert "TESTUF" in caplog.text
+        assert [record.getMessage() for record in caplog.records] == [
+            "Asset classification requires manual review"
+        ]
+        assert "TESTUF" not in caplog.text
 
 
 def test_unverified_registry_rows_do_not_grant_partial_exemption(unverified_fund_classifier):

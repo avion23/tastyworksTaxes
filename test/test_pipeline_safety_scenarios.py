@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
+from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.history import History
 from tastyworksTaxes.main import main
 from tastyworksTaxes.position_manager import PositionManager
@@ -261,6 +262,26 @@ print(json.dumps({"path": path == sys.path, "root": root == logging.getLogger().
     completed = subprocess.run([sys.executable, "-c", script], cwd=tmp_path,
                                env=env, text=True, capture_output=True, check=True)
     assert json.loads(completed.stdout) == {"path": True, "root": True, "named": True}
+
+
+def test_direct_asset_classifier_logs_are_generic(caplog):
+    classifier = AssetClassifier()
+    symbols = ["PRIVATE_UNKNOWN", "AOR", "BTC/USD"]
+    assert [
+        classifier.unsupported_asset_state(symbol)[0] for symbol in symbols
+    ] == ["unknown", "unverified", "unsupported_tax_category"]
+
+    with caplog.at_level(logging.WARNING):
+        classifier.check_unsupported_assets(symbols)
+
+    assert [record.getMessage() for record in caplog.records] == [
+        "Asset classification requires manual review",
+        "Asset classification requires manual review",
+        "Unsupported tax category requires manual review",
+    ]
+    messages = "\n".join(record.getMessage() for record in caplog.records)
+    for identifier in [*symbols, "INDIVIDUAL_STOCK", "CRYPTO", "SO"]:
+        assert identifier not in messages
 
 
 def test_position_logs_are_generic(caplog):

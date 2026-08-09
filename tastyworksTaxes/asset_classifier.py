@@ -106,22 +106,15 @@ class AssetClassifier:
             return "unsupported_tax_category", classification
         return None
 
-    def check_unsupported_assets(self, symbols: list[str], on_date: date | None = None) -> None:
+    def check_unsupported_assets(
+        self, symbols: list[str], on_date: date | None = None
+    ) -> None:
         for symbol in symbols:
             state = self.unsupported_asset_state(symbol, on_date)
-            classification = self.classify(symbol, PositionType.stock, on_date)
             if state is None:
                 continue
             warning_kind, _ = state
-            if warning_kind == "unknown":
-                logger.warning("Unknown fund/stock type for symbol '%s' - treating as individual stock. "
-                               "If this is a Mischfonds or Immobilienfonds, different Teilfreistellung rates apply.",
-                               symbol)
-            elif warning_kind == "unverified":
-                logger.warning("UNVERIFIED ASSET CLASSIFICATION: Symbol '%s' is treated as an individual stock "
-                               "for tax calculations; verify its exact instrument and applicable investment terms.",
-                               symbol)
-            elif warning_kind == "unsupported_tax_category":
-                logger.warning("UNSUPPORTED TAX CATEGORY: Symbol '%s' (%s) belongs in 'Anlage SO'. "
-                               "This program does not handle this. You must calculate it manually.",
-                               symbol, classification)
+            if warning_kind == "unsupported_tax_category":
+                logger.warning("Unsupported tax category requires manual review")
+                continue
+            logger.warning("Asset classification requires manual review")
