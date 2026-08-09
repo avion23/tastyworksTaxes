@@ -59,6 +59,7 @@ from tastyworksTaxes.money import Money
 
 logger = logging.getLogger(__name__)
 OPTION_SETTLEMENT_FIELD = "_Option Settlement"
+ACTUAL_DELIVERED_SHARES_FIELD = "_Actual Delivered Shares"
 
 
 @dataclass(frozen=True)
@@ -473,52 +474,45 @@ class PositionManager:
             )
 
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
-        ignores_direction = subcode in {
-            TransactionSubcode.EXPIRATION.value,
-            TransactionSubcode.ASSIGNMENT.value,
-            TransactionSubcode.EXERCISE.value,
-        }
-        candidates = [lot for lot in matching_lots if ignores_direction or lot.can_close_with(closing_quantity)]
+
+        def can_consume(lot):
+            if subcode == TransactionSubcode.ASSIGNMENT.value:
+                return lot.quantity < 0
+            if subcode == TransactionSubcode.EXERCISE.value:
+                return lot.quantity > 0
+            if subcode == TransactionSubcode.EXPIRATION.value:
+                return True
+            return lot.can_close_with(closing_quantity)
+
+        candidates = [lot for lot in matching_lots if can_consume(lot)]
         if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_close:
+            if subcode == TransactionSubcode.ASSIGNMENT.value:
+                raise ValueError("ASSIGNMENT REQUIRES SUFFICIENT SHORT OPTION LOTS")
+            if subcode == TransactionSubcode.EXERCISE.value:
+                raise ValueError("EXERCISE REQUIRES SUFFICIENT LONG OPTION LOTS")
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
 
-        planned_lots = []
-        planned_quantity = quantity_to_close
-        for lot in matching_lots:
-            if planned_quantity <= 1e-6:
-                break
-            if not ignores_direction and not lot.can_close_with(closing_quantity):
-                continue
-            consumed_quantity = lot.get_closable_quantity(planned_quantity)
-            planned_lots.append((lot, consumed_quantity))
-            planned_quantity -= consumed_quantity
-        planned_consumes_long = any(lot.quantity > 0 for lot, _ in planned_lots)
-
-        if (
-            subcode == TransactionSubcode.ASSIGNMENT.value
-            and planned_consumes_long
-        ):
-            raise ValueError(
-                "LONG OPTION ASSIGNMENT IS AMBIGUOUS: only explicit Exercise "
-                "transactions can transfer paid premium to stock"
-            )
-
-        exercise_multiplier = None
-        if (
-            subcode == TransactionSubcode.EXERCISE.value
-            and planned_consumes_long
-        ):
+        exercise_shares_per_contract = None
+        if subcode == TransactionSubcode.EXERCISE.value:
             multiplier_value = transaction.get(Fields.MULTIPLIER.value, 100)
+            delivered_value = transaction.get(ACTUAL_DELIVERED_SHARES_FIELD)
             try:
-                exercise_multiplier = abs(float(multiplier_value))
+                multiplier = abs(float(multiplier_value))
+                delivered_shares = abs(float(delivered_value))
             except (TypeError, ValueError) as exc:
                 raise ValueError(
-                    f"Invalid exercise multiplier: {multiplier_value!r}"
+                    "Exercise requires valid multiplier and matched delivered shares"
                 ) from exc
-            if not math.isfinite(exercise_multiplier) or exercise_multiplier <= 0:
+            if (
+                not math.isfinite(multiplier)
+                or multiplier <= 0
+                or not math.isfinite(delivered_shares)
+                or delivered_shares <= 0
+            ):
                 raise ValueError(
-                    f"Invalid exercise multiplier: {multiplier_value!r}"
+                    "Exercise requires valid multiplier and matched delivered shares"
                 )
+            exercise_shares_per_contract = delivered_shares / quantity_to_close
 
         closing_transaction = transaction
         pending_adjustment = Money()
@@ -556,7 +550,7 @@ class PositionManager:
         remaining_lots = deque()
         while matching_lots:
             lot_to_process = matching_lots.popleft()
-            if quantity_to_close <= 1e-6 or (not ignores_direction and not lot_to_process.can_close_with(closing_quantity)):
+            if quantity_to_close <= 1e-6 or not can_consume(lot_to_process):
                 remaining_lots.append(lot_to_process)
                 continue
 
@@ -599,7 +593,7 @@ class PositionManager:
                 underlying = str(underlying_value).strip()
                 if not underlying or underlying.lower() == "nan":
                     underlying = transaction.getSymbol()
-                shares = closable_quantity * exercise_multiplier
+                shares = closable_quantity * exercise_shares_per_contract
                 direction = (
                     "buy" if lot_to_process.position_type == PositionType.call else "sell"
                 )

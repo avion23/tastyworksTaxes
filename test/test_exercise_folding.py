@@ -5,7 +5,11 @@ import pytest
 from tastyworksTaxes.history import History
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.position_lot import PositionLot
-from tastyworksTaxes.position_manager import PositionManager, OPTION_SETTLEMENT_FIELD
+from tastyworksTaxes.position_manager import (
+    ACTUAL_DELIVERED_SHARES_FIELD,
+    OPTION_SETTLEMENT_FIELD,
+    PositionManager,
+)
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.trade_calculator import (
     calculate_long_option_losses,
@@ -34,6 +38,7 @@ def transaction(
     commissions=0,
     fees=0,
     option_settlement=None,
+    actual_delivered_shares=None,
 ):
     line = (
         f"{date},{transaction_type},{subcode},{action},{symbol},{instrument_type},"
@@ -43,6 +48,13 @@ def transaction(
     result = Transaction.fromString(line)
     if option_settlement is not None:
         result[OPTION_SETTLEMENT_FIELD] = option_settlement
+    if subcode == "Exercise":
+        delivered_shares = (
+            actual_delivered_shares
+            if actual_delivered_shares is not None
+            else abs(quantity) * 100
+        )
+        result[ACTUAL_DELIVERED_SHARES_FIELD] = delivered_shares
     return result
 
 
@@ -243,7 +255,7 @@ def test_long_assignment_is_rejected_without_mutation():
         "1/17/25", 50, "CALL", "Receive Deliver",
     )
 
-    with pytest.raises(ValueError, match="LONG OPTION ASSIGNMENT IS AMBIGUOUS"):
+    with pytest.raises(ValueError, match="ASSIGNMENT REQUIRES SUFFICIENT SHORT"):
         pm.add_position(assignment)
 
     assert pm.closed_trades == []
@@ -488,21 +500,28 @@ def test_same_day_exercise_and_assignment_use_only_exercise_stock_leg(
     ) == 4
 
 
-def test_short_assignment_ignores_later_long_lot_and_invalid_multiplier():
+def mixed_option_lots(position_type, call_put, short_first):
     pm = PositionManager()
     expiry = Transaction.fromString(
-        "2025-01-17T10:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,XYZ  250117P00050000,Equity Option,open,100,1,100,0,0,100,XYZ,XYZ,1/17/25,50,PUT,1,USD"
+        f"2025-01-17T10:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,XYZ  250117{call_put}00050000,Equity Option,open,100,1,100,0,0,100,XYZ,XYZ,1/17/25,50,{call_put},1,USD"
     ).getExpiry()
     short_lot = PositionLot(
-        "XYZ", PositionType.put, -1, 100, 90, 0, 0,
-        datetime(2025, 1, 2), 50, expiry, "P",
+        "XYZ", position_type, -1, 100, 90, 0, 0,
+        datetime(2025, 1, 2), 50, expiry, call_put,
     )
     long_lot = PositionLot(
-        "XYZ", PositionType.put, 1, -50, -45, 0, 0,
-        datetime(2025, 1, 3), 50, expiry, "P",
+        "XYZ", position_type, 1, -50, -45, 2, 1.8,
+        datetime(2025, 1, 3), 50, expiry, call_put,
     )
-    pm.add_lot_directly(short_lot)
-    pm.add_lot_directly(long_lot)
+    lots = [short_lot, long_lot] if short_first else [long_lot, short_lot]
+    for lot in lots:
+        pm.add_lot_directly(lot)
+    return pm, short_lot, long_lot
+
+
+@pytest.mark.parametrize("short_first", [True, False])
+def test_assignment_consumes_only_short_lot_in_both_queue_orders(short_first):
+    pm, _, long_lot = mixed_option_lots(PositionType.put, "P", short_first)
     assignment = transaction(
         "2025-01-17T10:00:00+0000", "Assignment", "ASSIGNMENT",
         "XYZ  250117P00050000", "Equity Option", 0, 1, "XYZ",
@@ -515,3 +534,146 @@ def test_short_assignment_ignores_later_long_lot_and_invalid_multiplier():
     assert pm.closed_trades[0].quantity == -1
     assert pm.closed_trades[0].profit_usd == 100
     assert pm.get_all_open_lots() == [long_lot]
+    assert pm._pending_exercises == {}
+
+
+@pytest.mark.parametrize("short_first", [True, False])
+def test_exercise_consumes_only_long_lot_and_transfers_actual_basis(short_first):
+    pm, short_lot, _ = mixed_option_lots(PositionType.call, "C", short_first)
+    exercise = transaction(
+        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+        "XYZ  250117C00050000", "Equity Option", 0, 1, "XYZ",
+        "1/17/25", 50, "CALL", "Receive Deliver",
+        actual_delivered_shares=100,
+    )
+    pm.add_position(exercise)
+    stock_delivery = transaction(
+        "2025-01-17T10:01:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        "XYZ", "Equity", -5000, 100, "XYZ",
+        transaction_type="Receive Deliver", commissions=1,
+        option_settlement="Exercise",
+    )
+    pm.add_position(stock_delivery)
+
+    option_lots = [
+        lot for lot in pm.get_all_open_lots()
+        if lot.position_type == PositionType.call
+    ]
+    stock_lot = next(
+        lot for lot in pm.get_all_open_lots()
+        if lot.position_type == PositionType.stock
+    )
+    assert option_lots == [short_lot]
+    assert pm.closed_trades[0].quantity == 1
+    assert (stock_lot.amount_usd, stock_lot.fees_usd) == (-5050, 3)
+    assert pm._pending_exercises == {}
+
+
+@pytest.mark.parametrize("short_first", [True, False])
+def test_exercise_validates_multiplier_for_selected_long_lot(short_first):
+    pm, short_lot, long_lot = mixed_option_lots(
+        PositionType.call, "C", short_first
+    )
+    exercise = transaction(
+        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+        "XYZ  250117C00050000", "Equity Option", 0, 1, "XYZ",
+        "1/17/25", 50, "CALL", "Receive Deliver",
+        actual_delivered_shares=100,
+    )
+    exercise["Multiplier"] = "invalid"
+
+    with pytest.raises(ValueError, match="valid multiplier"):
+        pm.add_position(exercise)
+
+    assert set(map(id, pm.get_all_open_lots())) == {id(short_lot), id(long_lot)}
+    assert pm.closed_trades == []
+    assert pm._pending_exercises == {}
+
+
+@pytest.mark.parametrize("semantic", ["Exercise", "Assignment"])
+def test_adjusted_deliverable_matches_exact_notional_and_actual_shares(semantic):
+    is_exercise = semantic == "Exercise"
+    opening_subcode = "Buy to Open" if is_exercise else "Sell to Open"
+    opening_action = "BUY_TO_OPEN" if is_exercise else "SELL_TO_OPEN"
+    opening_cash = -600 if is_exercise else 600
+    option_open = transaction(
+        "2025-01-02T10:00:00+0000", opening_subcode, opening_action,
+        "XYZ  250117P00022000", "Equity Option", opening_cash, 6, "XYZ",
+        "1/17/25", 22, "PUT", commissions=6,
+    )
+    settlement = transaction(
+        "2025-01-17T12:00:00+0000", semantic, semantic.upper(),
+        "XYZ  250117P00022000", "Equity Option", 0, 6, "XYZ",
+        "1/17/25", 22, "PUT", "Receive Deliver",
+    )
+    if is_exercise:
+        stock_subcode, stock_action, stock_cash = (
+            "Sell to Open", "SELL_TO_OPEN", 13200
+        )
+    else:
+        stock_subcode, stock_action, stock_cash = (
+            "Buy to Open", "BUY_TO_OPEN", -13200
+        )
+    stock_delivery = transaction(
+        "2025-01-17T08:00:00+0000", stock_subcode, stock_action,
+        "XYZ", "Equity", stock_cash, 66, "XYZ",
+        transaction_type="Receive Deliver", commissions=1,
+    )
+    tasty = Tasty()
+    tasty.history = History([option_open, stock_delivery, settlement])
+
+    tasty.processTransactionHistory()
+
+    option_trade = next(
+        trade for trade in tasty.position_manager.closed_trades
+        if trade.position_type == PositionType.put
+    )
+    stock_lot = next(
+        lot for lot in tasty.position_manager.get_all_open_lots()
+        if lot.position_type == PositionType.stock
+    )
+    if is_exercise:
+        assert (stock_lot.quantity, stock_lot.amount_usd, stock_lot.fees_usd) == (
+            -66, 12600, 7,
+        )
+        assert (option_trade.profit_usd, option_trade.fees_usd) == (0, 0)
+    else:
+        assert (stock_lot.quantity, stock_lot.amount_usd, stock_lot.fees_usd) == (
+            66, -13200, 1,
+        )
+        assert (option_trade.profit_usd, option_trade.fees_usd) == (600, 6)
+    assert stock_lot.amount_usd + option_trade.profit_usd == (
+        stock_cash + opening_cash
+    )
+    assert stock_lot.fees_usd + option_trade.fees_usd == 7
+
+
+def test_adjusted_deliverable_notional_collision_fails_closed():
+    settlements = [
+        transaction(
+            "2025-01-17T12:00:00+0000", "Exercise", "EXERCISE",
+            "XYZ  250117C00022000", "Equity Option", 0, 6, "XYZ",
+            "1/17/25", 22, "CALL", "Receive Deliver",
+        ),
+        transaction(
+            "2025-01-17T13:00:00+0000", "Exercise", "EXERCISE",
+            "XYZ  250117C00044000", "Equity Option", 0, 3, "XYZ",
+            "1/17/25", 44, "CALL", "Receive Deliver",
+        ),
+    ]
+    stocks = [
+        transaction(
+            f"2025-01-17T0{hour}:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+            "XYZ", "Equity", -13200, shares, "XYZ",
+            transaction_type="Receive Deliver",
+        )
+        for hour, shares in ((8, 66), (9, 132))
+    ]
+    tasty = Tasty()
+    tasty.history = History([*stocks, *settlements])
+
+    with pytest.raises(ValueError, match="AMBIGUOUS OR UNMATCHED OPTION"):
+        tasty.processTransactionHistory()
+
+    assert tasty.position_manager.get_all_open_lots() == []
+    assert tasty.position_manager.closed_trades == []

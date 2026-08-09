@@ -3,7 +3,11 @@ from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
-from tastyworksTaxes.position_manager import PositionManager, OPTION_SETTLEMENT_FIELD
+from tastyworksTaxes.position_manager import (
+    ACTUAL_DELIVERED_SHARES_FIELD,
+    OPTION_SETTLEMENT_FIELD,
+    PositionManager,
+)
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.constants import (
     TransactionCode,
@@ -214,6 +218,9 @@ class Tasty:
             ])
         )
         settlement_semantic = pd.Series("", index=self.history.index, dtype="object")
+        actual_delivered_shares = pd.Series(
+            float("nan"), index=self.history.index, dtype="float64"
+        )
         option_groups = {}
         stock_groups = {}
 
@@ -248,7 +255,7 @@ class Tasty:
                     row[Fields.STRIKE.value] * shares, "notional"
                 )
                 underlying = str(row[Fields.UNDERLYING_SYMBOL.value]).strip()
-                key = (date_iso, underlying, direction, shares, notional)
+                key = (date_iso, underlying, direction, notional)
                 option_groups.setdefault(key, []).append((index, semantic))
                 continue
 
@@ -258,32 +265,24 @@ class Tasty:
             shares = settlement_number(row[Fields.QUANTITY.value], "share quantity")
             notional = settlement_number(row[Fields.AMOUNT.value], "notional")
             symbol = str(row[Fields.SYMBOL.value]).strip()
-            key = (date_iso, symbol, direction, shares, notional)
-            stock_groups.setdefault(key, []).append(index)
+            key = (date_iso, symbol, direction, notional)
+            stock_groups.setdefault(key, []).append((index, shares))
 
         processing_datetime = self.history[Fields.DATE_TIME.value].copy()
         for key, option_entries in option_groups.items():
-            stock_indices = stock_groups.get(key, [])
-            if len(stock_indices) != len(option_entries):
+            stock_entries = stock_groups.get(key, [])
+            if len(option_entries) != 1 or len(stock_entries) != 1:
                 raise ValueError(
-                    "UNMATCHED OPTION SETTLEMENT: option and stock delivery legs "
-                    "do not have a unique quantity/notional match"
+                    "AMBIGUOUS OR UNMATCHED OPTION SETTLEMENT: exact notional, "
+                    "date, underlying, and direction do not identify one pair"
                 )
-            semantics = {semantic for _, semantic in option_entries}
-            if len(semantics) != 1:
-                raise ValueError(
-                    "AMBIGUOUS OPTION SETTLEMENT: Exercise and Assignment share "
-                    "the same date, symbol, direction, quantity, and notional"
-                )
-            semantic = next(iter(semantics))
-            anchor = max(
-                self.history.iloc[index][Fields.DATE_TIME.value]
-                for index, _ in option_entries
-            )
-            for stock_index in stock_indices:
-                settlement_semantic.iloc[stock_index] = semantic
-                if processing_datetime.iloc[stock_index] < anchor:
-                    processing_datetime.iloc[stock_index] = anchor
+            option_index, semantic = option_entries[0]
+            stock_index, delivered_shares = stock_entries[0]
+            settlement_semantic.iloc[stock_index] = semantic
+            actual_delivered_shares.iloc[option_index] = delivered_shares
+            anchor = self.history.iloc[option_index][Fields.DATE_TIME.value]
+            if processing_datetime.iloc[stock_index] < anchor:
+                processing_datetime.iloc[stock_index] = anchor
 
         settlement_order = physical_option_settlements.astype(int) * -1
         settlement_order += stock_settlements.astype(int)
@@ -293,7 +292,10 @@ class Tasty:
                 + open_legs.astype(int),
                 _processing_datetime=processing_datetime,
                 _settlement_order=settlement_order,
-                **{OPTION_SETTLEMENT_FIELD: settlement_semantic},
+                **{
+                    OPTION_SETTLEMENT_FIELD: settlement_semantic,
+                    ACTUAL_DELIVERED_SHARES_FIELD: actual_delivered_shares,
+                },
             )
             .sort_values(
                 by=[
