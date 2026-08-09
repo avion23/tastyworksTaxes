@@ -13,7 +13,7 @@ class TestNaNDescriptionEdgeCases:
         """
         t = Tasty()
         # Empty description becomes NaN in pandas
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Withdrawal,,,,,100.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Withdrawal,,,,,100.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
 
         # Should NOT crash, should be treated as normal withdrawal
@@ -25,7 +25,7 @@ class TestNaNDescriptionEdgeCases:
     def test_withdrawal_with_normal_description(self):
         """Baseline: Normal withdrawal with description works"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Withdrawal,,,,Normal Withdrawal,100.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Withdrawal,,,,Normal Withdrawal,100.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
         t.moneyMovement(trans)
 
@@ -34,7 +34,7 @@ class TestNaNDescriptionEdgeCases:
     def test_withdrawal_with_wire_funds_received(self):
         """Baseline: Wire Funds Received is correctly classified as deposit"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,100.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,100.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
         t.moneyMovement(trans)
 
@@ -44,7 +44,7 @@ class TestNaNDescriptionEdgeCases:
     def test_withdrawal_with_debit_interest_pattern(self):
         """Baseline: Debit interest regex pattern works"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Withdrawal,,,,FROM 01/01 THRU 01/31 @ 8%,-10.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Withdrawal,,,,FROM 01/01 THRU 01/31 @ 8%,-10.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
         t.moneyMovement(trans)
 
@@ -54,7 +54,7 @@ class TestNaNDescriptionEdgeCases:
     def test_deposit_with_empty_description(self):
         """Empty description in Deposit (also uses desc check at line 56)"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Deposit,,,,,100.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Deposit,,,,,100.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
 
         # This should work - no string comparison on empty desc
@@ -64,7 +64,7 @@ class TestNaNDescriptionEdgeCases:
     def test_fee_with_empty_description(self):
         """Empty description in Fee should work (no desc check)"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Fee,,,,,-10.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Fee,,,,,-10.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
 
         t.moneyMovement(trans)
@@ -73,7 +73,7 @@ class TestNaNDescriptionEdgeCases:
     def test_positive_fee_rebate(self):
         """Positive fees (rebates) should be handled correctly"""
         t = Tasty()
-        csv = "2020-01-01T00:00:00+0000,Money Movement,Fee,,,,FEE REBATE,10.0,0,,0,0.00,,,,,,,123456,USD"
+        csv = "2020-01-02T00:00:00+0000,Money Movement,Fee,,,,FEE REBATE,10.0,0,,0,0.00,,,,,,,123456,USD"
         trans = Transaction.fromString(csv)
 
         t.moneyMovement(trans)

@@ -21,9 +21,9 @@ class TestTasty:
 
     def test_money_movement_balance_adjustment(self):
         t = Tasty()
-        balance_adjustment_transaction = Transaction.fromString("2018-03-24T15:09:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD")
+        balance_adjustment_transaction = Transaction.fromString("2018-03-26T15:09:00+0000,Money Movement,Balance Adjustment,,,,Regulatory fee adjustment,-0.01,0,,0,0.00,,,,,,,123456,USD")
         t.moneyMovement(balance_adjustment_transaction)
-        assert t.year(2018).balanceAdjustment.eur == -0.008085599547206425
+        assert t.year(2018).balanceAdjustment.eur == -0.008057368463459834
         assert t.year(2018).balanceAdjustment.usd == -0.01
 
     def test_money_movement_fee(self):
@@ -186,13 +186,13 @@ class TestTasty:
 
     def test_symbol_change_close_is_processed_before_same_time_open(self):
         old_open = Transaction.fromString(
-            "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought stock,-100,10,10,0,0,,OLD,OLD,,,,123456,USD"
+            "2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought stock,-100,10,10,0,0,,OLD,OLD,,,,123456,USD"
         )
         new_open = Transaction.fromString(
-            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,-999,20,0,0,0,,NEW,NEW,,,,123456,USD"
+            "2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,-999,20,0,0,0,,NEW,NEW,,,,123456,USD"
         )
         old_close = Transaction.fromString(
-            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Symbol change close,250,10,0,0,0,,OLD,OLD,,,,123456,USD"
+            "2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Symbol change close,250,10,0,0,0,,OLD,OLD,,,,123456,USD"
         )
         t = Tasty()
         t.history = pd.DataFrame([old_open, new_open, old_close])
@@ -210,8 +210,8 @@ class TestTasty:
             return Transaction.fromString(line)
 
         rows = [
-            transaction("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
-            transaction("2024-01-01T09:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD2,Equity,open,-200,10,20,0,0,,OLD2,OLD2,,,,2,USD"),
+            transaction("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
+            transaction("2024-01-02T09:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD2,Equity,open,-200,10,20,0,0,,OLD2,OLD2,,,,2,USD"),
             transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,100,10,0,0,0,,OLD1,OLD1,,,,3,USD"),
             transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,200,10,0,0,0,,OLD2,OLD2,,,,4,USD"),
             transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,-100,10,0,0,0,,NEW1,NEW1,,,,5,USD"),
@@ -227,7 +227,7 @@ class TestTasty:
 
     def test_crossed_amounts_do_not_correlate_simultaneous_symbol_changes(self):
         rows = [
-            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,100,10,0,0,0,,OLD1,OLD1,,,,2,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,200,10,0,0,0,,OLD2,OLD2,,,,3,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,-200,10,0,0,0,,NEW1,NEW1,,,,4,USD"),
@@ -243,7 +243,7 @@ class TestTasty:
 
     def test_unmatched_conversion_fails_before_processing(self):
         rows = [
-            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,close,100,10,0,0,0,,OLD,OLD,,,,2,USD"),
         ]
         t = Tasty()
@@ -256,7 +256,7 @@ class TestTasty:
 
     def test_zero_quantity_conversion_with_basis_fails_without_ghost_lot(self):
         rows = [
-            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,close,50,0,0,0,0,,OLD,OLD,,,,2,USD"),
             Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,open,-50,0,0,0,0,,NEW,NEW,,,,3,USD"),
         ]
@@ -275,7 +275,7 @@ class TestTasty:
         ))
         manager = t.position_manager
         t.moneyMovement(Transaction.fromString(
-            "2023-12-02T09:00:00+0000,Money Movement,Deposit,,,,seed,25,0,,0,0.00,,,,,,,2,USD"
+            "2023-12-04T09:00:00+0000,Money Movement,Deposit,,,,seed,25,0,,0,0.00,,,,,,,2,USD"
         ))
         t.unverified_asset_symbols_by_year = {2023: {"KEEP"}}
         t.short_stock_trades_by_year = {2023: []}
@@ -289,9 +289,9 @@ class TestTasty:
             "_asset_classification_checks": t._asset_classification_checks,
         }
         rows = [
-            Transaction.fromString("2024-01-01T09:00:00+0000,Money Movement,Dividend,,UNKNOWN,Equity,cash,100,0,,0,0,,UNKNOWN,UNKNOWN,,,,3,USD"),
-            Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,MISSING,Equity,close,999,10,0,0,0,,MISSING,MISSING,,,,4,USD"),
-            Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,open,-1,10,0,0,0,,NEW,NEW,,,,5,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Money Movement,Dividend,,UNKNOWN,Equity,cash,100,0,,0,0,,UNKNOWN,UNKNOWN,,,,3,USD"),
+            Transaction.fromString("2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,MISSING,Equity,close,999,10,0,0,0,,MISSING,MISSING,,,,4,USD"),
+            Transaction.fromString("2024-01-03T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,open,-1,10,0,0,0,,NEW,NEW,,,,5,USD"),
         ]
         t.history = pd.DataFrame(rows)
 

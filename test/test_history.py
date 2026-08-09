@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
-import tempfile
-import os
 from tastyworksTaxes.history import History
+
+from test.broker_csv import broker_row, stock_trade, write_broker_csv
 
 
 def test_internal_format_csv_loads_and_normalizes(tmp_path):
@@ -103,15 +103,15 @@ def test_empty_csv_raises_clear_error(tmp_path, contents):
         History.fromFile(csv_path)
 
 
-def test_new_format_missing_optional_columns_uses_safe_defaults(tmp_path):
+def test_new_format_blank_optional_values_use_safe_defaults(tmp_path):
     csv_path = tmp_path / "minimal_tastytrade.csv"
-    pd.DataFrame({
-        "Date": ["2020-05-08T17:24:00-04:00"],
-        "Type": ["Money Movement"],
-        "Sub Type": ["Fee"],
-        "Value": ["-1.0"],
-        "Description": ["Regulatory fee"],
-    }).to_csv(csv_path, index=False)
+    write_broker_csv(csv_path, [broker_row(**{
+        'Date': '2020-05-08T17:24:00-04:00',
+        'Type': 'Money Movement',
+        'Sub Type': 'Fee',
+        'Value': '-1.0',
+        'Description': 'Regulatory fee',
+    })])
 
     history = History.fromFile(csv_path)
 
@@ -123,14 +123,11 @@ def test_new_format_missing_optional_columns_uses_safe_defaults(tmp_path):
 
 def test_new_format_invalid_optional_value_has_clear_error(tmp_path):
     csv_path = tmp_path / "bad_quantity.csv"
-    pd.DataFrame({
-        "Date": ["2020-05-08T17:24:00-04:00"],
-        "Type": ["Trade"],
-        "Sub Type": ["Buy to Open"],
-        "Value": ["-1.0"],
-        "Description": ["Bought stock"],
-        "Quantity": ["not-a-number"],
-    }).to_csv(csv_path, index=False)
+    write_broker_csv(csv_path, [stock_trade(**{
+        'Date': '2020-05-08T17:24:00-04:00',
+        'Description': 'Bought stock',
+        'Quantity': 'not-a-number',
+    })])
 
     with pytest.raises(ValueError, match="numeric values.*Quantity"):
         History.fromFile(csv_path)
@@ -138,67 +135,86 @@ def test_new_format_invalid_optional_value_has_clear_error(tmp_path):
 
 def test_new_format_option_with_invalid_expiration_has_clear_error(tmp_path):
     csv_path = tmp_path / "bad_option_expiration.csv"
-    pd.DataFrame({
-        "Date": ["2020-05-08T17:24:00-04:00"],
-        "Type": ["Trade"],
-        "Sub Type": ["Buy to Open"],
-        "Value": ["-1.0"],
-        "Description": ["Bought option"],
-        "Call or Put": ["CALL"],
-        "Expiration Date": ["not-a-date"],
-    }).to_csv(csv_path, index=False)
+    write_broker_csv(csv_path, [stock_trade(**{
+        'Date': '2020-05-08T17:24:00-04:00',
+        'Description': 'Bought option',
+        'Symbol': 'SYN  200619C00050000',
+        'Instrument Type': 'Equity Option',
+        'Expiration Date': 'not-a-date',
+        'Strike Price': '50',
+        'Call or Put': 'CALL',
+        'Multiplier': '100',
+    })])
 
     with pytest.raises(ValueError, match="Failed to parse Expiration Date"):
         History.fromFile(csv_path)
 
 
-def test_new_format_csv_sorting():
-    test_data = {
-        "Date": ["2020-05-08T17:24:00-04:00", "2020-05-07T14:00:00-04:00"],
-        "Type": ["Trade", "Trade"],
-        "Sub Type": ["Sell to Close", "Sell to Open"],
-        "Symbol": ["SVXY  200619P00030000", "SVXY  200619P00030000"],
-        "Quantity": [3, 3],
-        "Value": ["243.0", "240.0"],
-        "Average Price": [81, 80],
-        "Fees": [-0.44, -1.15],
-        "Expiration Date": ["06/19/20", "06/19/20"],
-        "Strike Price": [30, 30],
-        "Call or Put": ["PUT", "PUT"],
-        "Description": [
-            "Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81",
-            "Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80",
-        ],
-        "Action": ["SELL_TO_CLOSE", "SELL_TO_OPEN"],
-    }
+def test_new_format_csv_sorting(tmp_path):
+    csv_path = tmp_path / "sorting.csv"
+    write_broker_csv(csv_path, [
+        stock_trade(**{
+            'Date': '2020-05-08T17:24:00-04:00',
+            'Sub Type': 'Sell to Close',
+            'Action': 'SELL_TO_CLOSE',
+            'Symbol': 'SVXY  200619P00030000',
+            'Instrument Type': 'Equity Option',
+            'Description': 'Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81',
+            'Value': '243.0',
+            'Quantity': '3',
+            'Average Price': '81',
+            'Commissions': '0.00',
+            'Fees': '-0.44',
+            'Multiplier': '100',
+            'Root Symbol': 'SVXY',
+            'Underlying Symbol': 'SVXY',
+            'Expiration Date': '06/19/20',
+            'Strike Price': '30',
+            'Call or Put': 'PUT',
+            'Order #': 'ORDER-1',
+        }),
+        stock_trade(**{
+            'Date': '2020-05-07T14:00:00-04:00',
+            'Sub Type': 'Sell to Open',
+            'Action': 'SELL_TO_OPEN',
+            'Symbol': 'SVXY  200619P00030000',
+            'Instrument Type': 'Equity Option',
+            'Description': 'Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80',
+            'Value': '240.0',
+            'Quantity': '3',
+            'Average Price': '80',
+            'Commissions': '0.00',
+            'Fees': '-1.15',
+            'Multiplier': '100',
+            'Root Symbol': 'SVXY',
+            'Underlying Symbol': 'SVXY',
+            'Expiration Date': '06/19/20',
+            'Strike Price': '30',
+            'Call or Put': 'PUT',
+            'Order #': 'ORDER-2',
+        }),
+    ])
 
-    temp_file = tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False)
-    df = pd.DataFrame(test_data)
-    df.to_csv(temp_file.name, index=False)
-    temp_file.close()
+    hist = History.fromFile(csv_path)
 
-    try:
-        hist = History.fromFile(temp_file.name)
-        assert hist["Date/Time"].is_monotonic_increasing
-        assert hist["Transaction Subcode"].iloc[0] == "Sell to Open"
-        assert hist["Transaction Subcode"].iloc[1] == "Sell to Close"
-    finally:
-        os.unlink(temp_file.name)
+    assert hist["Date/Time"].is_monotonic_increasing
+    assert hist["Transaction Subcode"].iloc[0] == "Sell to Open"
+    assert hist["Transaction Subcode"].iloc[1] == "Sell to Close"
 
 
 def test_new_format_accepts_fractional_iso_date_and_normalizes_option(tmp_path):
     csv_path = tmp_path / "fractional_date.csv"
-    pd.DataFrame({
-        "Date": ["2024-01-02T03:04:05.123456Z"],
-        "Type": ["Trade"],
-        "Sub Type": ["Buy to Open"],
-        "Value": ["-100"],
-        "Description": ["Bought option"],
-        "Call or Put": ["call"],
-        "Expiration Date": ["01/19/24"],
-        "Strike Price": ["1,000"],
-        "Average Price": [125],
-    }).to_csv(csv_path, index=False)
+    write_broker_csv(csv_path, [stock_trade(**{
+        'Date': '2024-01-02T03:04:05.123456Z',
+        'Description': 'Bought option',
+        'Symbol': 'SYN  240119C01000000',
+        'Instrument Type': 'Equity Option',
+        'Expiration Date': '01/19/24',
+        'Strike Price': '1,000',
+        'Average Price': '125',
+        'Call or Put': 'call',
+        'Multiplier': '100',
+    })])
 
     history = History.fromFile(csv_path)
 

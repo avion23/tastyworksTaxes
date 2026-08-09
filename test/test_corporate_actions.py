@@ -299,7 +299,7 @@ class TestCorporateActions:
 
     def test_stock_reverse_split_does_not_mutate_same_symbol_option(self):
         stock_open = Transaction.fromString(
-            "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,open,-800,80,10,0,0,,XYZ,XYZ,,,,1,USD"
+            "2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,open,-800,80,10,0,0,,XYZ,XYZ,,,,1,USD"
         )
         option_open = Transaction.fromString(
             "2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ  240621C00010000,Equity Option,open,-100,2,50,0,0,100,XYZ,XYZ,6/21/24,10,CALL,2,USD"

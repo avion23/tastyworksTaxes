@@ -196,7 +196,7 @@ class TestTransaction:
         assert merger.getQuantity() == -6
         assert merger.getSymbol() == "GREE"
 def test_fractional_quantity_is_preserved():
-    transaction = Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FRAC,Equity,Bought fractional FRAC,-5,0.5,10,-1,0,,FRAC,FRAC,,,,1,USD")
+    transaction = Transaction.fromString("2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,FRAC,Equity,Bought fractional FRAC,-5,0.5,10,-1,0,,FRAC,FRAC,,,,1,USD")
     assert transaction.getQuantity() == 0.5
     transaction.setQuantity(-1.9)
     assert transaction.getQuantity() == -1.9

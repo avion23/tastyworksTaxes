@@ -160,7 +160,7 @@ def test_short_call_assignment_keeps_premium_separate():
         "TECL", "Equity", -4000, 100, "TECL",
     ))
     pm.add_position(transaction(
-        "2025-05-01T10:00:00+0000", "Sell to Open", "SELL_TO_OPEN",
+        "2025-05-02T10:00:00+0000", "Sell to Open", "SELL_TO_OPEN",
         "TECL  250516C00047000", "Equity Option", 570, 1, "TECL",
         "5/16/25", 47, "CALL",
     ))
@@ -186,7 +186,7 @@ def test_short_call_assignment_keeps_premium_separate():
 def test_short_put_assignment_keeps_premium_separate():
     pm = PositionManager()
     pm.add_position(transaction(
-        "2025-03-01T10:00:00+0000", "Sell to Open", "SELL_TO_OPEN",
+        "2025-03-03T10:00:00+0000", "Sell to Open", "SELL_TO_OPEN",
         "TECL  250321P00095000", "Equity Option", 1380, 1, "TECL",
         "3/21/25", 95, "PUT",
     ))
@@ -342,13 +342,13 @@ def test_long_exercise_cash_and_fees_conserve_for_every_stock_state(
         opening_subcode = "Sell to Open" if existing_stock == "short" else "Buy to Open"
         opening_action = "SELL_TO_OPEN" if existing_stock == "short" else "BUY_TO_OPEN"
         pm.add_position(transaction(
-            "2025-01-01T10:00:00+0000", opening_subcode, opening_action,
+            "2025-01-02T10:00:00+0000", opening_subcode, opening_action,
             "XYZ", "Equity", opening_cash, 100, "XYZ",
         ))
 
     letter = "C" if call_put == "CALL" else "P"
     option_open = transaction(
-        "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        "2025-01-03T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
         f"XYZ  250117{letter}00050000", "Equity Option", premium, 1,
         "XYZ", "1/17/25", 50, call_put, commissions=2,
     )

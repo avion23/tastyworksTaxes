@@ -2,6 +2,7 @@ from datetime import date
 from io import StringIO
 import logging
 
+import pandas as pd
 import pytest
 
 from tastyworksTaxes import money
@@ -9,13 +10,19 @@ from tastyworksTaxes.history import History
 from tastyworksTaxes.printer import Printer
 from tastyworksTaxes.tasty import Tasty
 
+from test.broker_csv import BROKER_COLUMNS, broker_row
+
 
 def _interest_history(transaction_date: str, amount: str) -> History:
-    csv = (
-        "Date,Type,Sub Type,Value,Description,Currency\n"
-        f"{transaction_date},Money Movement,Credit Interest,{amount},Interest,USD\n"
-    )
-    return History.fromFile(StringIO(csv))
+    buf = StringIO()
+    pd.DataFrame([broker_row(**{
+        'Date': transaction_date,
+        'Sub Type': 'Credit Interest',
+        'Value': amount,
+        'Description': 'Interest',
+    })], columns=BROKER_COLUMNS).to_csv(buf, index=False)
+    buf.seek(0)
+    return History.fromFile(buf)
 
 
 def test_available_weekday_rate_flows_into_the_annual_tax_report():
