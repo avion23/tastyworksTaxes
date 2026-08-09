@@ -1,3 +1,4 @@
+from datetime import date
 from io import StringIO
 import logging
 
@@ -87,6 +88,41 @@ def test_non_finite_usd_amounts_fail_before_converter_access(monkeypatch, amount
         money.convert_usd_to_eur(amount, "2021-07-06")
 
     assert str(exc_info.value) == "USD amount must be finite."
+
+
+class _DateLike:
+    def __init__(self, result):
+        self.result = result
+
+    def date(self):
+        return self.result
+
+
+@pytest.mark.parametrize(
+    "conversion_date",
+    [None, "", "2021-07-06", True, False, object(), _DateLike(None)],
+)
+def test_invalid_dates_fail_before_converter_access(monkeypatch, conversion_date):
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("converter must not be called for an invalid date")
+
+    monkeypatch.setattr(money._converter, "convert", fail_if_called)
+
+    for operation in (
+        lambda: money.convert_usd_to_eur(0.0, conversion_date),
+        lambda: money.get_used_rate(conversion_date),
+    ):
+        with pytest.raises(TypeError) as exc_info:
+            operation()
+        assert str(exc_info.value) == (
+            "Conversion date must be an explicit calendar date."
+        )
+
+
+def test_date_like_values_are_normalised_to_explicit_calendar_dates():
+    amount = money.convert_usd_to_eur(100, _DateLike(date(2021, 7, 6)))
+
+    assert amount == pytest.approx(84.47372867038351)
 
 
 def test_internal_converter_failures_propagate(monkeypatch):

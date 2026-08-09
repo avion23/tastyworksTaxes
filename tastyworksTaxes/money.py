@@ -16,27 +16,52 @@ _RATE_UNAVAILABLE_MESSAGE = (
 )
 
 
-def _convert_with_available_rate(amount: float, date) -> float:
+def _normalise_conversion_date(value) -> datetime.date:
+    if isinstance(value, bool) or value is None:
+        raise TypeError("Conversion date must be an explicit calendar date.")
+    if isinstance(value, datetime.datetime):
+        normalised = value.date()
+    elif isinstance(value, datetime.date):
+        normalised = value
+    else:
+        date_method = getattr(value, "date", None)
+        if not callable(date_method):
+            raise TypeError("Conversion date must be an explicit calendar date.")
+        normalised = date_method()
+
+    if isinstance(normalised, datetime.datetime) or not isinstance(
+        normalised, datetime.date
+    ):
+        raise TypeError("Conversion date must be an explicit calendar date.")
+    return normalised
+
+
+def _convert_with_available_rate(
+    amount: float, conversion_date: datetime.date
+) -> float:
     try:
-        return _converter.convert(amount, 'USD', 'EUR', date=date)
+        return _converter.convert(amount, 'USD', 'EUR', date=conversion_date)
     except RateNotFoundError:
         raise ValueError(_RATE_UNAVAILABLE_MESSAGE) from None
 
 
 def get_used_rate(date) -> float:
-    """Return the USD→EUR multiplier for a date with an available ECB rate."""
-    return _convert_with_available_rate(1, date)
+    """Return the USD→EUR multiplier for an explicit date with an ECB rate."""
+    conversion_date = _normalise_conversion_date(date)
+    return _convert_with_available_rate(1, conversion_date)
 
 
 def convert_usd_to_eur(amount: float, date) -> float:
-    """Convert a finite real USD amount when an ECB rate is available."""
+    """Convert a finite real USD amount for an explicit date with an ECB rate."""
     if isinstance(amount, bool) or not isinstance(amount, Real):
         raise TypeError("USD amount must be a finite real number.")
     if not math.isfinite(amount):
         raise ValueError("USD amount must be finite.")
+
+    conversion_date = _normalise_conversion_date(date)
     if amount == 0:
         return 0.0
-    return _convert_with_available_rate(amount, date)
+    return _convert_with_available_rate(amount, conversion_date)
 
 
 class Money:
