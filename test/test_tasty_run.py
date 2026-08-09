@@ -1,5 +1,3 @@
-import pytest
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from tastyworksTaxes.tasty import Tasty
@@ -7,9 +5,6 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.position import PositionType
-
-# Skip tests that require the full dataset if it's not available (CI environment)
-FULL_DATASET = Path("test/transactions_2018_to_2025.csv")
 
 
 class TestTastyRun:
@@ -135,55 +130,36 @@ class TestTastyRun:
 
         assert t.short_stock_trades_by_year == {}
 
-    @pytest.mark.skipif(
-        not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
-    )
-    def test_run_with_real_csv_data(self):
-        t = Tasty(FULL_DATASET)
+    def test_short_option_is_split_between_opening_and_closing_years(self):
+        from tastyworksTaxes.transaction import Transaction
 
-        result = t.run()
-
-        assert len(result) > 0
-        assert any(
-            hasattr(year_value, "fundProfits") for year_value in result.values()
+        tasty = Tasty()
+        tasty.position_manager.add_position(
+            Transaction.fromString(
+                "2022-12-30T15:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,"
+                "ANON  230120P00010000,Equity Option,Synthetic open,100,1,100,"
+                "0,0,100,ANON,ANON,01/20/23,10,PUT,1,USD"
+            )
+        )
+        tasty.position_manager.add_position(
+            Transaction.fromString(
+                "2023-01-03T15:00:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,"
+                "ANON  230120P00010000,Equity Option,Synthetic close,-40,1,40,"
+                "0,0,100,ANON,ANON,01/20/23,10,PUT,2,USD"
+            )
         )
 
-        for year, value in result.items():
-            assert isinstance(year, int)
-            assert isinstance(value.stockProfits, Money)
-            assert isinstance(value.stockLosses, Money)
-            assert isinstance(value.fundGrossProfits, Money)
-            assert isinstance(value.fundProfits, Money)
-            assert isinstance(value.fundLosses, Money)
-            assert isinstance(value.optionSum, Money)
+        trades_by_year = tasty.getYearlyTrades()
 
-    @pytest.mark.skipif(
-        not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
-    )
-    def test_short_options_grouped_by_opening_year(self):
-        from datetime import datetime
-        from tastyworksTaxes.position import PositionType
-
-        t = Tasty(FULL_DATASET)
-        t.processTransactionHistory()
-        trades_by_year = t.getYearlyTrades()
-
-        for trade in t.position_manager.closed_trades:
-            is_short_option = (
-                trade.quantity < 0
-                and trade.position_type in (PositionType.call, PositionType.put)
-            )
-            if not is_short_option:
-                continue
-            open_year = datetime.strptime(trade.opening_date, "%Y-%m-%d %H:%M:%S").year
-            close_year = datetime.strptime(trade.closing_date, "%Y-%m-%d %H:%M:%S").year
-            if open_year == close_year:
-                continue
-            open_year_trades = trades_by_year[open_year]
-            close_year_trades = trades_by_year[close_year]
-            opening_legs = [t for t in open_year_trades if t.symbol == trade.symbol and t.closing_date == trade.opening_date]
-            closing_legs = [t for t in close_year_trades if t.symbol == trade.symbol and t.opening_date == trade.closing_date]
-            assert len(opening_legs) >= 1, f"Expected opening leg(s) for {trade.symbol} in {open_year}"
-            assert len(closing_legs) >= 1, f"Expected closing leg(s) for {trade.symbol} in {close_year}"
-            assert opening_legs[0].profit_usd == pytest.approx(trade.opening_profit_usd)
-            assert closing_legs[0].profit_usd == pytest.approx(trade.closing_profit_usd)
+        assert set(trades_by_year) == {2022, 2023}
+        opening_leg = trades_by_year[2022]
+        closing_leg = trades_by_year[2023]
+        assert len(opening_leg) == 1
+        assert len(closing_leg) == 1
+        assert opening_leg[0].symbol == "ANON"
+        assert opening_leg[0].opening_date == opening_leg[0].closing_date
+        assert opening_leg[0].profit_usd == 100
+        assert closing_leg[0].symbol == "ANON"
+        assert closing_leg[0].opening_date == closing_leg[0].closing_date
+        assert closing_leg[0].profit_usd == -40
+        assert opening_leg[0].profit_usd + closing_leg[0].profit_usd == 60

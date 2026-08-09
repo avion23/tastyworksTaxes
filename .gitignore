@@ -141,7 +141,5 @@ dmypy.json
 /local-data/
 !requirements.txt
 
-# Test data with real transactions - users generate their own
-test/transactions_*.csv
-test/tastytrade_*.csv
-test/*merged*.csv
+# Recorded or derived financial data; build test scenarios at runtime
+test/*.csv

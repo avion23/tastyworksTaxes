@@ -2,32 +2,7 @@ import pytest
 import pandas as pd
 import tempfile
 import os
-from pathlib import Path
 from tastyworksTaxes.history import History
-
-# Skip tests that require the full dataset if it's not available (CI environment)
-FULL_DATASET = Path("test/transactions_2018_to_2025.csv")
-
-
-@pytest.mark.skipif(
-    not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
-)
-def test_fromFile():
-    t = History.fromFile(FULL_DATASET)
-    assert isinstance(t, History)
-    assert "Date/Time" in t.columns
-    assert "Expiration Date" in t.columns
-    assert "AmountEuro" in t.columns
-    assert "FeesEuro" in t.columns
-
-
-@pytest.mark.skipif(
-    not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
-)
-def test_addEuroConversion():
-    t = History.fromFile(FULL_DATASET)
-    assert "AmountEuro" in t.columns
-    assert "FeesEuro" in t.columns
 
 
 def test_internal_format_csv_loads_and_normalizes(tmp_path):

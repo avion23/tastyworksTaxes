@@ -3,16 +3,12 @@ import os
 import pytest
 import re
 from datetime import date
-from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tastyworksTaxes.money import Money, convert_usd_to_eur, get_used_rate
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.transaction import Transaction
-
-# Skip tests that require the full dataset if it's not available (CI environment)
-FULL_DATASET = Path("test/transactions_2018_to_2025.csv")
 
 
 def clean_numpy_str(s):
@@ -105,21 +101,3 @@ def test_deposit():
         clean_numpy_str(str(t.year(2021).deposit))
         == "{'eur': 3957.8528167261256, 'usd': 4770.4}"
     )
-
-
-@pytest.mark.skipif(
-    not FULL_DATASET.exists(), reason="Full dataset not available (CI environment)"
-)
-def test_securities_lending_income():
-    t = Tasty(FULL_DATASET)
-    lending_income_transaction = Transaction.fromString(
-        "2024-08-13T23:00:00+0000,Money Movement,Fully Paid Stock Lending Income,,,,FULLYPAID LENDING REBATE,0.20,0,,0,0.00,,,,,,,123456,USD"
-    )
-    t.moneyMovement(lending_income_transaction)
-    lending_income = t.year(2024).securitiesLendingIncome
-    assert (
-        0.18
-        <= float(clean_numpy_str(str(lending_income)).split(":")[1].split(",")[0])
-        <= 0.19
-    )
-    assert "'usd': 0.2" in clean_numpy_str(str(lending_income))

@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.printer import GermanTaxReport, Printer, _format_german_number
-from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.values import Values
 
 
@@ -21,13 +20,6 @@ def test_german_tax_report_uses_german_number_format():
     assert rendered.splitlines()[0].split() == ["Einzahlungen", "1.234,50"]
     assert rendered.splitlines()[1].split() == ["Auszahlungen", "-12,50"]
     assert "1,234.50" not in rendered
-
-def test_uso():
-    """Tests with the uso file"""
-
-
-    t = Tasty("test/uso.csv")
-    t.run()
 
 
 def test_tax_reports_use_existing_long_option_fields():
