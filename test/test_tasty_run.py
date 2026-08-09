@@ -5,6 +5,7 @@ from tastyworksTaxes.money import Money
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.position import PositionType
+from tastyworksTaxes.printer import Printer
 
 
 class TestTastyRun:
@@ -163,3 +164,40 @@ class TestTastyRun:
         assert closing_leg[0].opening_date == closing_leg[0].closing_date
         assert closing_leg[0].profit_usd == -40
         assert opening_leg[0].profit_usd + closing_leg[0].profit_usd == 60
+
+
+    def test_fund_holding_years_require_manual_review_and_include_gross_losses(self):
+        t = Tasty()
+        t.processTransactionHistory = MagicMock()
+        t.position_manager.closed_trades = [
+            TradeResult(
+                symbol="QQQ", position_type=PositionType.stock,
+                opening_date="2024-06-01 00:00:00",
+                closing_date="2025-02-01 00:00:00", quantity=1,
+                profit_usd=100, profit_eur=100, fees_usd=0, fees_eur=0,
+                worthless_expiry=False,
+            ),
+            TradeResult(
+                symbol="QQQ", position_type=PositionType.stock,
+                opening_date="2025-03-01 00:00:00",
+                closing_date="2025-04-01 00:00:00", quantity=1,
+                profit_usd=-50, profit_eur=-50, fees_usd=0, fees_eur=0,
+                worthless_expiry=False,
+            ),
+        ]
+
+        result = t.run()
+
+        assert result[2024].fundTaxReviewRequired is True
+        assert result[2024].fundGrossProfits.eur == 0
+        assert result[2024].fundGrossLosses.eur == 0
+        rendered_2024 = str(
+            Printer(result[2024], [], assessment_year=2024).generateGermanTaxReport()
+        )
+        assert "KAP-INV NOT FILING-READY" in rendered_2024
+        assert "Vorabpauschale" in rendered_2024
+        assert result[2025].fundTaxReviewRequired is True
+        assert result[2025].fundGrossProfits.eur == 100
+        assert result[2025].fundGrossLosses.eur == -50
+        assert result[2025].fundProfits.eur == 70
+        assert result[2025].fundLosses.eur == -35

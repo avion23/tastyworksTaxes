@@ -1,5 +1,9 @@
 import json
+import os
+import subprocess
+import sys
 from importlib.resources import files
+from pathlib import Path
 
 import pytest
 
@@ -152,3 +156,79 @@ def test_reports_do_not_render_uncalculated_tax_totals_as_zero():
     assert "kap kap inv" not in english
     assert "kerst soli" not in english
     assert "Soli/KESt are not computed" in german
+
+
+def test_vz_2025_uses_official_kap_lines_and_excludes_kap_inv():
+    values = Values(
+        dividend=Money(eur=100),
+        creditInterest=Money(eur=20),
+        securitiesLendingIncome=Money(eur=15),
+        stockProfits=Money(eur=40),
+        stockLosses=Money(eur=-30),
+        fundGrossProfits=Money(eur=100),
+        fundGrossLosses=Money(eur=-20),
+        fundProfits=Money(eur=70),
+        fundLosses=Money(eur=-15),
+        fundDistributions=Money(eur=80),
+        fundDistributionExempt=Money(eur=30),
+        fundDistributionTaxable=Money(eur=50),
+        z21_termingeschaefsgewinne=Money(eur=50),
+        z24_termingeschaefte_verluste=Money(eur=-60),
+        fundTaxReviewRequired=True,
+    )
+
+    report = Printer(values, [], assessment_year=2025).generateGermanTaxReport()
+    rendered = str(report)
+
+    # 100 + 20 + 15 + (40 - 30) + (50 - 60); no KAP-INV amount.
+    assert report.z19_auslaendische_kapitalertraege == 135
+    assert report.z22_verluste_ohne_aktienveraeusserungen == 60
+    assert report.aktienverluste_z23 == 30
+    assert report.fondveraeusserungsgewinne_brutto == 100
+    assert report.fondveraeusserungsverluste_brutto == -20
+    assert report.anlage_kap_inv == 105  # diagnostic post-exemption subtotal
+    assert "Z21 Termingeschäfte" not in rendered
+    assert "Z24 Termingeschäftsverluste" not in rendered
+    assert "Diagnose: ehemalige Zeile 21" in rendered
+    assert "Diagnose: ehemalige Zeile 24" in rendered
+    assert "KAP-INV NOT FILING-READY" in rendered
+    assert "Vorabpauschale" in rendered
+
+
+def test_non_2025_mapping_preserves_values_but_is_not_filing_ready():
+    values = Values(
+        dividend=Money(eur=135),
+        fundDistributionTaxable=Money(eur=50),
+        stockLosses=Money(eur=-30),
+    )
+
+    report = Printer(values, []).generateGermanTaxReport()
+    rendered = str(report)
+
+    assert report.z19_auslaendische_kapitalertraege == 185
+    assert report.aktienverluste_z23 == -30
+    assert "ASSESSMENT YEAR UNSPECIFIED" in rendered
+    assert "NOT FILING-READY" in rendered
+
+
+def test_package_import_from_arbitrary_cwd_does_not_mutate_sys_path(tmp_path):
+    package_root = Path(__file__).resolve().parents[1]
+    code = """
+import sys
+before = list(sys.path)
+import tastyworksTaxes.printer
+import tastyworksTaxes.values
+assert sys.path == before, (before, sys.path)
+"""
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = str(package_root)
+
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=tmp_path,
+        env=environment,
+        text=True,
+        capture_output=True,
+    )
+
+    assert result.returncode == 0, result.stderr

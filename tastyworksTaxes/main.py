@@ -60,7 +60,11 @@ def main() -> None:
                 "tax treatment; this rule is not calculated by this report."
             )
             print("Review these trades manually before using this annual report for a tax filing.\n")
-        p = Printer(values=values, closed_trades=t.position_manager.closed_trades)
+        p = Printer(
+            values=values,
+            closed_trades=t.position_manager.closed_trades,
+            assessment_year=year,
+        )
         print(p.generateGermanTaxReport())
     if args.write_closed_trades:
         logging.info(

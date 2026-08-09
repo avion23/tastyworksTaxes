@@ -26,6 +26,7 @@ from tastyworksTaxes.trade_calculator import (
     calculate_stock_profits,
     calculate_stock_losses,
     calculate_fund_gross_profits,
+    calculate_fund_gross_losses,
     calculate_fund_profits,
     calculate_fund_losses,
     calculate_stock_fees,
@@ -52,6 +53,7 @@ class Tasty:
         self.classifier = AssetClassifier()
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
+        self.fund_tax_review_years = set()
         self._withholding_remaining = {}
         self._asset_classification_checks = set()
 
@@ -474,6 +476,11 @@ class Tasty:
                     self._checkAssetClassification(
                         symbol, PositionType.stock, checkpoint
                     )
+                    classification = self.classifier.classify_for_tax(
+                        symbol, PositionType.stock, checkpoint
+                    )
+                    if self.classifier.get_tax_category(classification) == "KAP-INV":
+                        self.fund_tax_review_years.add(year)
         return exposure_years
 
     def _checkAssetClassifications(self, trades):
@@ -489,6 +496,7 @@ class Tasty:
     def run(self):
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
+        self.fund_tax_review_years = set()
         self._asset_classification_checks = set()
         self.processTransactionHistory()
 
@@ -530,6 +538,9 @@ class Tasty:
             yearly_trades = trades_by_year.get(key, [])
             self._checkAssetClassifications(yearly_trades)
             values_obj = self.year(key)
+            values_obj.fundTaxReviewRequired = (
+                values_obj.fundTaxReviewRequired or key in self.fund_tax_review_years
+            )
 
             values_obj.stockProfits = calculate_stock_profits(
                 yearly_trades, self.classifier
@@ -538,6 +549,9 @@ class Tasty:
                 yearly_trades, self.classifier
             )
             values_obj.fundGrossProfits = calculate_fund_gross_profits(
+                yearly_trades, self.classifier
+            )
+            values_obj.fundGrossLosses = calculate_fund_gross_losses(
                 yearly_trades, self.classifier
             )
             values_obj.fundProfits = calculate_fund_profits(

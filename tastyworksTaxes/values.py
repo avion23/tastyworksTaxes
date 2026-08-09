@@ -1,7 +1,3 @@
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from tastyworksTaxes.money import Money
 import json
 
@@ -41,19 +37,20 @@ class Values(object):
     optionDifferential: Money = field(default_factory=Money)
     stockFees: Money = field(default_factory=Money)
     otherFees: Money = field(default_factory=Money)
-    # NOTE: field NAMES keep the legacy Z21/Z24 Anlage-KAP line numbers, but since
-    # the JStG 2024 (BGBl. 2024 I Nr. 387, applies to all open cases) abolished the
-    # separate Termingeschäfte loss pot, Anlage KAP dropped Zeile 21 and 24 from
-    # VZ 2025 onward. The values are still computed the same way; for VZ 2025+
-    # gains and losses together form the Zeile 19 net saldo, with the losses
-    # additionally broken out in Zeile 22.
+    # Diagnostic components named after the former form lines. The VZ 2025
+    # Anlage KAP has no lines 21/24. Its line 19 includes both components and
+    # its line 22 repeats the applicable loss as a positive amount.
     z21_termingeschaefsgewinne: Money = field(default_factory=Money)
     z24_termingeschaefte_verluste: Money = field(default_factory=Money)
+    # Appended fields preserve the positional constructor order above.
+    fundGrossLosses: Money = field(default_factory=Money)
+    fundTaxReviewRequired: bool = False
 
     def __str__(self):
         """Pretty-print every annual value without double-encoding JSON."""
         values = {
-            name: {"eur": money.eur, "usd": money.usd}
-            for name, money in vars(self).items()
+            name: {"eur": value.eur, "usd": value.usd}
+            if isinstance(value, Money) else value
+            for name, value in vars(self).items()
         }
         return json.dumps(values, indent=4, sort_keys=True)

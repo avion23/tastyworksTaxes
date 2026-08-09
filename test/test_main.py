@@ -146,3 +146,6 @@ def test_cli_sorts_annual_report_years(tmp_path, monkeypatch, capsys):
 
     output = capsys.readouterr().out
     assert output.index("year 2020") < output.index("year 2021") < output.index("year 2022")
+    assert [
+        call.kwargs["assessment_year"] for call in printer.call_args_list
+    ] == [2020, 2021, 2022]
