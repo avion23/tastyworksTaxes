@@ -1,66 +1,41 @@
-import os
-import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import datetime
-import logging
-import math
-from currency_converter import CurrencyConverter
 
-logger = logging.getLogger(__name__)
+from currency_converter import CurrencyConverter, RateNotFoundError
 
-# Shared currency converter instance
-_converter = CurrencyConverter(fallback_on_missing_rate=True, fallback_on_wrong_date=True)
-_strict_converter = CurrencyConverter(
-    fallback_on_missing_rate=False, fallback_on_wrong_date=False
+
+_converter = CurrencyConverter(
+    fallback_on_missing_rate=False,
+    fallback_on_wrong_date=False,
+)
+
+_RATE_UNAVAILABLE_MESSAGE = (
+    "USD to EUR conversion failed because no ECB reference rate is available. "
+    "Check that the transaction date is within the bundled rate range and is an ECB publication day."
 )
 
 
-def _normalise_date(date):
+def _convert_with_available_rate(amount: float, date) -> float:
     try:
-        return date.date()
-    except AttributeError:
-        return date
-
-
-def _fallback_reason(date):
-    first_date, last_date = _strict_converter.bounds['USD']
-    if date < first_date or date > last_date:
-        return 'date out of range'
-    return 'missing rate for date'
+        return _converter.convert(amount, 'USD', 'EUR', date=date)
+    except RateNotFoundError:
+        raise ValueError(_RATE_UNAVAILABLE_MESSAGE) from None
 
 
 def get_used_rate(date) -> float:
-    """Return the USD→EUR multiplier applied to a USD amount."""
-    return _converter.convert(1, 'USD', 'EUR', date=date)
+    """Return the USD→EUR multiplier for a date with an available ECB rate."""
+    return _convert_with_available_rate(1, date)
+
 
 def convert_usd_to_eur(amount: float, date) -> float:
-    """Centralized USD to EUR conversion"""
-    converted_amount = _converter.convert(amount, 'USD', 'EUR', date=date)
+    """Convert USD to EUR only when an ECB rate is available for the date."""
+    if amount == 0:
+        return 0.0
+    return _convert_with_available_rate(amount, date)
 
-    if not math.isfinite(amount):
-        return converted_amount
-
-    fallback_used = False
-    try:
-        _strict_converter.convert(amount, 'USD', 'EUR', date=date)
-    except Exception:
-        fallback_used = True
-
-    if fallback_used:
-        used_date = _normalise_date(date)
-        logger.warning(
-            'USD to EUR conversion used fallback: date=%s amount=%s rate=%s reason=%s',
-            used_date,
-            amount,
-            get_used_rate(date),
-            _fallback_reason(used_date),
-        )
-    return converted_amount
 
 class Money:
     """replaces eur and usd"""
-    
+
     def __init__(self, eur=0.0, usd=0.0, row=None, date=''):
         self.eur = eur
         self.usd = usd
@@ -99,7 +74,7 @@ class Money:
         m.eur = self.eur - x.eur
         m.usd = self.usd - x.usd
         return m
-    
+
     def __neg__(self):
         """Returns a new Money instance with negated eur and usd values."""
         return Money(eur=-self.eur, usd=-self.usd)
