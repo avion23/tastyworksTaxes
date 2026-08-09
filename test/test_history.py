@@ -1,10 +1,16 @@
+import logging
 from datetime import datetime, timezone
 
 import pytest
 import pandas as pd
 from tastyworksTaxes.history import History
 
-from test.broker_csv import broker_row, stock_trade, write_broker_csv
+from test.broker_csv import (
+    BROKER_COLUMNS,
+    broker_row,
+    stock_trade,
+    write_broker_csv,
+)
 
 
 def test_internal_format_csv_loads_and_normalizes(tmp_path):
@@ -242,3 +248,48 @@ def test_parse_datetime_converts_compact_negative_offset_to_utc():
     )
 
     assert absolute_time == datetime(2025, 9, 13, 19, 21, 4, tzinfo=timezone.utc)
+
+
+def test_new_format_with_total_column_loads_and_ignores_total(tmp_path):
+    csv_path = tmp_path / "with_total.csv"
+    columns = list(BROKER_COLUMNS)
+    columns.insert(columns.index('Currency'), 'Total')
+    row = broker_row()
+    row['Total'] = '100.00'
+    pd.DataFrame([row], columns=columns).to_csv(csv_path, index=False)
+
+    history = History.fromFile(csv_path)
+
+    assert len(history) == 1
+    assert 'Total' not in history.columns
+    assert history.loc[0, 'Amount'] == 100
+
+
+def test_identical_duplicate_trade_rows_with_order_identity_are_dropped(
+    tmp_path, caplog
+):
+    csv_path = tmp_path / "duplicates_with_order.csv"
+    write_broker_csv(csv_path, [stock_trade(), stock_trade()])
+
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.history'):
+        history = History.fromFile(csv_path)
+
+    assert len(history) == 1
+    assert history.loc[0, 'Order #'] == 'ORDER-1'
+    assert 'Dropped 1 byte-identical duplicate row(s)' in caplog.text
+
+
+def test_identical_duplicate_trade_rows_with_blank_order_identity_raise(
+    tmp_path,
+):
+    csv_path = tmp_path / "duplicates_blank_order.csv"
+    write_broker_csv(csv_path, [
+        stock_trade(**{'Order #': ''}),
+        stock_trade(**{'Order #': ''}),
+    ])
+
+    with pytest.raises(
+        ValueError,
+        match='ambiguous identical rows.*cannot distinguish.*legitimate identical fills',
+    ):
+        History.fromFile(csv_path)

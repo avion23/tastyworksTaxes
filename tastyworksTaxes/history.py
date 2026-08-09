@@ -1,3 +1,4 @@
+import logging
 import math
 import re
 from datetime import datetime, timezone
@@ -8,6 +9,9 @@ import pandas as pd
 from tastyworksTaxes.money import convert_usd_to_eur
 
 
+logger = logging.getLogger(__name__)
+
+
 class History(pd.DataFrame):
 
     _NEW_FORMAT_COLUMNS = (
@@ -15,6 +19,13 @@ class History(pd.DataFrame):
         'Description', 'Value', 'Quantity', 'Average Price', 'Commissions',
         'Fees', 'Multiplier', 'Root Symbol', 'Underlying Symbol',
         'Expiration Date', 'Strike Price', 'Call or Put', 'Order #', 'Currency',
+    )
+    _NEW_FORMAT_COLUMNS_WITH_TOTAL = (
+        'Date', 'Type', 'Sub Type', 'Action', 'Symbol', 'Instrument Type',
+        'Description', 'Value', 'Quantity', 'Average Price', 'Commissions',
+        'Fees', 'Multiplier', 'Root Symbol', 'Underlying Symbol',
+        'Expiration Date', 'Strike Price', 'Call or Put', 'Order #', 'Total',
+        'Currency',
     )
     _NEW_FORMAT_REQUIRED_COLUMNS = set(_NEW_FORMAT_COLUMNS)
     _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
@@ -55,13 +66,24 @@ class History(pd.DataFrame):
 
         identical_rows = df_raw.duplicated(keep=False)
         if identical_rows.any():
-            rows = [int(index) + 2 for index in df_raw.index[identical_rows]]
-            raise ValueError(
-                "Input CSV contains ambiguous identical rows at CSV lines "
-                f"{rows}. Without a distinct broker fill identity, the loader cannot "
-                "distinguish a duplicate export row from two legitimate identical fills; review "
-                "these rows and remove only confirmed duplicates before accounting"
+            duplicated_order = (
+                df_raw.loc[identical_rows, 'Order #'].astype(str).str.strip() != ''
             )
+            if duplicated_order.all():
+                drop_count = int(identical_rows.sum() - df_raw.duplicated().sum())
+                df_raw = df_raw.drop_duplicates(keep='first')
+                logger.warning(
+                    'Dropped %d byte-identical duplicate row(s) sharing the same '
+                    'order identity', drop_count
+                )
+            else:
+                rows = [int(index) + 2 for index in df_raw.index[identical_rows]]
+                raise ValueError(
+                    "Input CSV contains ambiguous identical rows at CSV lines "
+                    f"{rows}. Without a distinct broker fill identity, the loader cannot "
+                    "distinguish a duplicate export row from two legitimate identical fills; review "
+                    "these rows and remove only confirmed duplicates before accounting"
+                )
 
         df = History(cls._load_supported_schema(df_raw))
         order_key = df['Order #'].fillna('').astype(str)
@@ -80,6 +102,8 @@ class History(pd.DataFrame):
     @staticmethod
     def _load_supported_schema(df: pd.DataFrame) -> pd.DataFrame:
         if History._is_new_format(df):
+            if 'Total' in df.columns:
+                df = df.drop(columns=['Total'])
             return History._transform(df, validate_broker=True)
         if History._is_internal_format(df):
             return History._normalize_internal(df)
@@ -90,7 +114,8 @@ class History(pd.DataFrame):
         )
         raise ValueError(
             "Unsupported CSV schema. Expected either the complete 20-column "
-            "TastyTrade transaction export or the normalized internal schema. "
+            "TastyTrade transaction export, the 21-column export with the trailing "
+            "Total column, or the normalized internal schema. "
             f"Missing new-format columns: {missing_new}; "
             f"missing internal-format columns: {missing_internal}; "
             f"found columns: {list(df.columns)}"
@@ -98,7 +123,10 @@ class History(pd.DataFrame):
 
     @staticmethod
     def _is_new_format(df: pd.DataFrame) -> bool:
-        return list(df.columns) == list(History._NEW_FORMAT_COLUMNS)
+        return list(df.columns) in (
+            list(History._NEW_FORMAT_COLUMNS),
+            list(History._NEW_FORMAT_COLUMNS_WITH_TOTAL),
+        )
 
     @staticmethod
     def _is_internal_format(df: pd.DataFrame) -> bool:
@@ -472,19 +500,11 @@ class History(pd.DataFrame):
         self['Date/Time'] = pd.to_datetime(self['Date/Time'])
         self['Expiration Date'] = pd.to_datetime(self['Expiration Date'])
         self['AmountEuro'] = self.apply(
-            lambda row: convert_usd_to_eur(
-                row['Amount'],
-                row['Date/Time'],
-                money_movement=(row['Transaction Code'] == 'Money Movement'),
-            ),
+            lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']),
             axis=1,
         )
         self['FeesEuro'] = self.apply(
-            lambda row: convert_usd_to_eur(
-                row['Fees'],
-                row['Date/Time'],
-                money_movement=(row['Transaction Code'] == 'Money Movement'),
-            ),
+            lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']),
             axis=1,
         )
 

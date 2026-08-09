@@ -53,10 +53,15 @@ def test_usd_to_eur_uses_available_weekday_rate():
     )
 
 
-@pytest.mark.parametrize("conversion_date", [date(2021, 7, 4), date(2100, 1, 1)])
-def test_usd_to_eur_fails_when_no_rate_is_available(conversion_date):
+def test_usd_to_eur_fails_when_no_rate_is_available():
     with pytest.raises(ValueError, match="no ECB reference rate is available"):
-        convert_usd_to_eur(100, conversion_date)
+        convert_usd_to_eur(100, date(2100, 1, 1))
+
+
+def test_usd_to_eur_uses_nearest_prior_rate_on_non_publication_day():
+    assert convert_usd_to_eur(100, date(2021, 7, 4)) == pytest.approx(
+        convert_usd_to_eur(100, date(2021, 7, 2))
+    )
 
 
 def test_zero_usd_does_not_require_an_exchange_rate():

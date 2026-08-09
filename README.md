@@ -145,13 +145,19 @@ the package. The current CLI does not load arbitrary user registry paths.
 
 ## USD to EUR conversion of cash flows
 
-Securities transactions (trades, assignments, expirations) fail closed when
-the transaction date has no ECB reference rate: the date must be an ECB
-publication day within the bundled rate range. Cash flows recorded as
-`Money Movement` (deposits, withdrawals, dividends, interest, fees) convert at
-the nearest earlier ECB reference rate when the exact date is a weekend,
-holiday, or outside the bundled rate range. A zero amount returns `0.00` EUR
-without any rate lookup.
+USD amounts convert to EUR with the ECB reference rates bundled with the
+`currencyconverter` package. Within the bundled rate range, non-publication
+dates (weekends and ECB holidays) use the nearest earlier ECB reference rate,
+for both securities transactions and cash flows recorded as `Money Movement`
+(deposits, withdrawals, dividends, interest, fees). Dates outside the bundled
+rate range fail with an explicit error that asks to update the bundled ECB
+reference-rate data; `get_used_rate` remains strict and only accepts exact ECB
+publication dates. A zero amount returns `0.00` EUR without any rate lookup.
+Byte-identical duplicate rows that share a real broker order number are dropped
+automatically (the dropped count is logged without any financial details);
+identical rows without an order identity still fail for manual review. The
+current 21-column export with the trailing `Total` column is accepted in
+addition to the 20-column export; the `Total` column is ignored.
 
 ## Standalone Vorabpauschale utility
 

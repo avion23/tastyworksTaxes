@@ -36,19 +36,11 @@ class Transaction(pd.core.series.Series):
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
 
             df['AmountEuro'] = df.apply(
-                lambda row: convert_usd_to_eur(
-                    row['Amount'],
-                    row['Date/Time'],
-                    money_movement=(row['Transaction Code'] == 'Money Movement'),
-                ),
+                lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']),
                 axis=1,
             )
             df['FeesEuro'] = df.apply(
-                lambda row: convert_usd_to_eur(
-                    row['Fees'],
-                    row['Date/Time'],
-                    money_movement=(row['Transaction Code'] == 'Money Movement'),
-                ),
+                lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']),
                 axis=1,
             )
 

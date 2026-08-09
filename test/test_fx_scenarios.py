@@ -50,16 +50,10 @@ def test_available_weekday_rate_flows_into_the_annual_tax_report():
     )
 
 
-@pytest.mark.parametrize(
-    "transaction_date",
-    ["2021-07-04T12:00:00Z", "2100-01-01T12:00:00Z"],
-)
-def test_unavailable_rates_fail_closed_without_logging_financial_data(
-    transaction_date, caplog
-):
+def test_unavailable_rates_fail_closed_without_logging_financial_data(caplog):
     with caplog.at_level(logging.WARNING):
         with pytest.raises(ValueError) as exc_info:
-            _trade_history(transaction_date, "123.45")
+            _trade_history("2100-01-01T12:00:00Z", "123.45")
 
     message = str(exc_info.value)
     assert "no ECB reference rate is available" in message
@@ -71,6 +65,20 @@ def test_unavailable_rates_fail_closed_without_logging_financial_data(
     assert not caplog.records
 
 
+def test_trades_on_ecb_holidays_use_nearest_prior_rate():
+    history = _trade_history("2020-04-13T12:00:00Z", "123.45")
+
+    nearest_prior_date = max(
+        rate_date
+        for rate_date, rate in money._converter._rates['USD'].items()
+        if rate is not None and rate_date <= date(2020, 4, 13)
+    )
+    expected = money.convert_usd_to_eur(123.45, nearest_prior_date)
+
+    assert history.loc[0, "AmountEuro"] == pytest.approx(expected)
+    assert history.loc[0, "AmountEuro"] > 0
+
+
 @pytest.mark.parametrize(
     "transaction_date",
     [date(2021, 7, 4), date(2100, 1, 1)],
@@ -78,6 +86,13 @@ def test_unavailable_rates_fail_closed_without_logging_financial_data(
 def test_money_movements_on_unavailable_dates_use_nearest_prior_rate(
     transaction_date,
 ):
+    if transaction_date == date(2100, 1, 1):
+        with pytest.raises(ValueError, match="no ECB reference rate is available"):
+            _interest_history(
+                f"{transaction_date.isoformat()}T12:00:00Z", "123.45"
+            )
+        return
+
     history = _interest_history(
         f"{transaction_date.isoformat()}T12:00:00Z", "123.45"
     )
@@ -87,11 +102,8 @@ def test_money_movements_on_unavailable_dates_use_nearest_prior_rate(
         for rate_date, rate in money._converter._rates['USD'].items()
         if rate is not None and rate_date <= transaction_date
     )
-    if transaction_date == date(2021, 7, 4):
-        assert nearest_prior_date == date(2021, 7, 2)
-    expected = money.convert_usd_to_eur(
-        123.45, nearest_prior_date, money_movement=False
-    )
+    assert nearest_prior_date == date(2021, 7, 2)
+    expected = money.convert_usd_to_eur(123.45, nearest_prior_date)
 
     assert history.loc[0, "AmountEuro"] == pytest.approx(expected)
     assert history.loc[0, "AmountEuro"] > 0

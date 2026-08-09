@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "pandas==2.2.3",
-    "currencyconverter==0.18.18",
+    "currencyconverter==0.18.21",
     "dataclasses_json==0.6.7",
 ]
 

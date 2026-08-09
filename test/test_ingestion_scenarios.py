@@ -16,7 +16,7 @@ from test.broker_csv import (
 def deterministic_fx(monkeypatch):
     monkeypatch.setattr(
         'tastyworksTaxes.history.convert_usd_to_eur',
-        lambda amount, date, *, money_movement=False: amount,
+        lambda amount, date: amount,
     )
 
 
@@ -117,7 +117,10 @@ def test_broker_order_then_source_row_break_absolute_time_ties(tmp_path):
 
 def test_ambiguous_identical_rows_require_manual_review(tmp_path):
     source = tmp_path / 'transactions.csv'
-    write_broker_csv(source, [stock_trade(), stock_trade()])
+    write_broker_csv(source, [
+        stock_trade(**{'Order #': ''}),
+        stock_trade(**{'Order #': ''}),
+    ])
 
     with pytest.raises(
         ValueError,

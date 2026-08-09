@@ -12,13 +12,14 @@ _converter = CurrencyConverter(
 )
 
 _RATE_UNAVAILABLE_MESSAGE = (
-    "USD to EUR conversion failed because no ECB reference rate is available. "
-    "Check that the transaction date is within the bundled rate range and is an ECB publication day."
+    "USD to EUR conversion failed because no ECB reference rate is available "
+    "within the bundled rate range for this date. "
+    "Update the bundled ECB reference-rate data or review the transaction date."
 )
 
 # Sorted ECB USD->EUR publication dates (rows without an actual rate are
-# excluded), cached once so money movements can bisect to the nearest earlier
-# rate when the exact date is a non-publication day.
+# excluded), cached once so conversions can bisect to the nearest earlier rate
+# when the exact date is a non-publication day.
 _USD_RATE_DATES = tuple(
     sorted(
         rate_date
@@ -56,12 +57,14 @@ def _nearest_earlier_rate_date(conversion_date: datetime.date) -> datetime.date:
 
 
 def _convert_with_available_rate(
-    amount: float, conversion_date: datetime.date, *, money_movement: bool = False
+    amount: float, conversion_date: datetime.date
 ) -> float:
     try:
         return _converter.convert(amount, 'USD', 'EUR', date=conversion_date)
     except RateNotFoundError:
-        if not money_movement:
+        if not (
+            min(_USD_RATE_DATES) <= conversion_date <= max(_USD_RATE_DATES)
+        ):
             raise ValueError(_RATE_UNAVAILABLE_MESSAGE) from None
         return _converter.convert(
             amount, 'USD', 'EUR', date=_nearest_earlier_rate_date(conversion_date)
@@ -69,20 +72,25 @@ def _convert_with_available_rate(
 
 
 def get_used_rate(date) -> float:
-    """Return the USD→EUR multiplier for an explicit date with an ECB rate."""
+    """Return the USD→EUR multiplier for an explicit date with an ECB rate.
+
+    Strict: only the exact ECB publication date is used. Non-publication days
+    and dates outside the bundled rate range fail.
+    """
     conversion_date = _normalise_conversion_date(date)
-    return _convert_with_available_rate(1, conversion_date)
+    try:
+        return _converter.convert(1, 'USD', 'EUR', date=conversion_date)
+    except RateNotFoundError:
+        raise ValueError(_RATE_UNAVAILABLE_MESSAGE) from None
 
 
-def convert_usd_to_eur(
-    amount: float, date, *, money_movement: bool = False
-) -> float:
+def convert_usd_to_eur(amount: float, date) -> float:
     """Convert a finite real USD amount for an explicit date with an ECB rate.
 
-    Securities amounts fail closed when the exact date has no ECB reference
-    rate. With money_movement=True, cash flows on non-publication or
-    out-of-range dates convert at the nearest earlier available ECB reference
-    rate. Zero amounts return 0.0 before any rate lookup.
+    Within the bundled rate range, non-publication dates (weekends and ECB
+    holidays) convert at the nearest earlier available ECB reference rate.
+    Dates outside the bundled rate range fail. Zero amounts return 0.0 before
+    any rate lookup.
     """
     if isinstance(amount, bool) or not isinstance(amount, Real):
         raise TypeError("USD amount must be a finite real number.")
@@ -92,9 +100,7 @@ def convert_usd_to_eur(
     conversion_date = _normalise_conversion_date(date)
     if amount == 0:
         return 0.0
-    return _convert_with_available_rate(
-        amount, conversion_date, money_movement=money_movement
-    )
+    return _convert_with_available_rate(amount, conversion_date)
 
 
 class Money:
