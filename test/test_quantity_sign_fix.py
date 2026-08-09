@@ -1,116 +1,83 @@
-from tastyworksTaxes.tasty import Tasty
+from tastyworksTaxes.position_manager import PositionManager
 from tastyworksTaxes.transaction import Transaction
 
-def test_long_option_quantity_sign_fix():
-    """
-    Test that long options (BUY_TO_OPEN) show positive quantities in TradeResults.
 
-    This test verifies the fix for the bug where opening_lot.quantity was checked
-    AFTER lot.consume() modified it to 0, causing long options to be misclassified
-    as short options (negative quantity).
+def test_long_option_closes_keep_positive_quantities_and_fifo_results():
+    position_manager = PositionManager()
+    transactions = [
+        "2022-01-03T15:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
+        "TESTA  220218C00010000,Equity Option,Synthetic long open,-100,1,100,"
+        "0,0,100,TESTA,TESTA,02/18/22,10,CALL,ORDER-A,USD",
+        "2022-01-04T15:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
+        "TESTA  220218C00010000,Equity Option,Synthetic long open,-400,2,200,"
+        "0,0,100,TESTA,TESTA,02/18/22,10,CALL,ORDER-B,USD",
+        "2022-01-10T15:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,"
+        "TESTA  220218C00010000,Equity Option,Synthetic long close,600,2,300,"
+        "0,0,100,TESTA,TESTA,02/18/22,10,CALL,ORDER-C,USD",
+        "2022-01-11T15:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,"
+        "TESTA  220218C00010000,Equity Option,Synthetic long close,250,1,250,"
+        "0,0,100,TESTA,TESTA,02/18/22,10,CALL,ORDER-D,USD",
+    ]
 
-    Real data from NKLA 22C trades (2020-09-29 to 2020-10-01):
-    - BUY_TO_OPEN 1 @ $85
-    - BUY_TO_OPEN 2 @ $170
-    - SELL_TO_CLOSE 2 @ $698 (closes the 2-contract lot)
-    - SELL_TO_CLOSE 1 @ $349 (closes the 1-contract lot)
+    for row in transactions:
+        position_manager.add_position(Transaction.fromString(row))
 
-    Expected: Both trades should show POSITIVE quantities (long options)
-    Bug would cause: Negative quantities (misclassified as short)
-    """
-    tasty = Tasty()
+    closed_trades = position_manager.closed_trades
+    assert [trade.quantity for trade in closed_trades] == [1, 1, 1]
+    assert [trade.profit_usd for trade in closed_trades] == [200, 100, 50]
+    assert sum(trade.profit_usd for trade in closed_trades) == 350
+    assert position_manager.get_all_open_lots() == []
 
-    buy1_str = "2020-09-29T16:30:52+0200,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00022000,Equity Option,Bought 1 NKLA 10/09/20 Call 22.00 @ 0.85,-85.00,1,-85.00,-1.00,-0.14,100.0,NKLA,NKLA,10/09/20,22.0,CALL,104942780.0,USD"
 
-    buy2_str = "2020-09-29T16:30:52+0200,Trade,Buy to Open,BUY_TO_OPEN,NKLA  201009C00022000,Equity Option,Bought 2 NKLA 10/09/20 Call 22.00 @ 0.85,-170.00,2,-85.00,-2.00,-0.27,100.0,NKLA,NKLA,10/09/20,22.0,CALL,104942780.0,USD"
-
-    sell1_str = "2020-10-01T16:24:05+0200,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00022000,Equity Option,Sold 2 NKLA 10/09/20 Call 22.00 @ 3.49,698.00,2,349.00,0.00,-0.29,100.0,NKLA,NKLA,10/09/20,22.0,CALL,105398837.0,USD"
-
-    sell2_str = "2020-10-01T16:24:05+0200,Trade,Sell to Close,SELL_TO_CLOSE,NKLA  201009C00022000,Equity Option,Sold 1 NKLA 10/09/20 Call 22.00 @ 3.49,349.00,1,349.00,0.00,-0.15,100.0,NKLA,NKLA,10/09/20,22.0,CALL,105398837.0,USD"
-
-    tasty.position_manager.add_position(Transaction.fromString(buy1_str))
-    tasty.position_manager.add_position(Transaction.fromString(buy2_str))
-    tasty.position_manager.add_position(Transaction.fromString(sell1_str))
-    tasty.position_manager.add_position(Transaction.fromString(sell2_str))
-
-    closed_trades = tasty.position_manager.closed_trades
-
-    assert len(closed_trades) == 3, f"Expected 3 closed trades, got {len(closed_trades)}"
-
-    for i, trade in enumerate(closed_trades):
-        assert trade.quantity > 0, (
-            f"Trade {i+1} has negative quantity {trade.quantity}. "
-            f"Long options (BUY_TO_OPEN) must have positive quantities. "
-            f"This indicates the quantity sign bug is present."
+def test_short_option_close_keeps_negative_quantity_and_exact_result():
+    position_manager = PositionManager()
+    position_manager.add_position(
+        Transaction.fromString(
+            "2022-03-01T15:00:00+0000,Trade,Sell to Open,SELL_TO_OPEN,"
+            "TESTB  220415P00020000,Equity Option,Synthetic short open,400,2,"
+            "200,0,0,100,TESTB,TESTB,04/15/22,20,PUT,ORDER-E,USD"
         )
-
-    quantities = sorted([trade.quantity for trade in closed_trades])
-    assert quantities == [1, 1, 1], f"Expected quantities [1, 1, 1], got {quantities}"
-
-    total_profit_usd = sum(t.profit_usd for t in closed_trades)
-    assert 785 < total_profit_usd <= 792, (
-        f"Unexpected profit calculation: {total_profit_usd}. "
-        f"Expected approximately 788-792 USD"
+    )
+    position_manager.add_position(
+        Transaction.fromString(
+            "2022-03-02T15:00:00+0000,Trade,Buy to Close,BUY_TO_CLOSE,"
+            "TESTB  220415P00020000,Equity Option,Synthetic short close,-250,"
+            "1,250,0,0,100,TESTB,TESTB,04/15/22,20,PUT,ORDER-F,USD"
+        )
     )
 
-    assert len(tasty.position_manager.open_lots) == 0, "All positions should be closed"
+    assert len(position_manager.closed_trades) == 1
+    closed_trade = position_manager.closed_trades[0]
+    assert closed_trade.quantity == -1
+    assert closed_trade.profit_usd == -50
+    assert len(position_manager.get_all_open_lots()) == 1
+    open_lot = position_manager.get_all_open_lots()[0]
+    assert open_lot.quantity == -1
+    assert open_lot.amount_usd == 200
 
 
-def test_short_option_quantity_sign():
-    """
-    Test that short options (SELL_TO_OPEN) show negative quantities in TradeResults.
-
-    This ensures the sign convention is consistent:
-    - Long (BUY_TO_OPEN) = positive quantity
-    - Short (SELL_TO_OPEN) = negative quantity
-    """
-    tasty = Tasty()
-
-    sell_open_str = "2020-09-29T16:30:52+0200,Trade,Sell to Open,SELL_TO_OPEN,NKLA  201009C00017000,Equity Option,Sold 2 NKLA 10/09/20 Call 17.00 @ 3.01,602.00,2,301.00,-2.00,-0.29,100.0,NKLA,NKLA,10/09/20,17.0,CALL,104942780.0,USD"
-
-    buy_close_str = "2020-10-05T19:06:32+0200,Trade,Buy to Close,BUY_TO_CLOSE,NKLA  201009C00017000,Equity Option,Bought 1 NKLA 10/09/20 Call 17.00 @ 6.04,-604.00,1,-604.00,0.00,-0.14,100.0,NKLA,NKLA,10/09/20,17.0,CALL,105952215.0,USD"
-
-    tasty.position_manager.add_position(Transaction.fromString(sell_open_str))
-    tasty.position_manager.add_position(Transaction.fromString(buy_close_str))
-
-    closed_trades = tasty.position_manager.closed_trades
-
-    assert len(closed_trades) == 1, f"Expected 1 closed trade, got {len(closed_trades)}"
-
-    trade = closed_trades[0]
-    assert trade.quantity < 0, (
-        f"Short option has positive quantity {trade.quantity}. "
-        f"Short options (SELL_TO_OPEN) must have negative quantities."
+def test_partial_long_close_keeps_positive_closed_and_open_quantities():
+    position_manager = PositionManager()
+    position_manager.add_position(
+        Transaction.fromString(
+            "2023-01-03T15:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
+            "TESTC  230217C00030000,Equity Option,Synthetic partial open,-1000,"
+            "10,100,0,0,100,TESTC,TESTC,02/17/23,30,CALL,ORDER-G,USD"
+        )
+    )
+    position_manager.add_position(
+        Transaction.fromString(
+            "2023-01-04T15:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,"
+            "TESTC  230217C00030000,Equity Option,Synthetic partial close,450,"
+            "3,150,0,0,100,TESTC,TESTC,02/17/23,30,CALL,ORDER-H,USD"
+        )
     )
 
-    assert trade.quantity == -1, f"Expected quantity -1, got {trade.quantity}"
-
-    assert -305 < trade.profit_usd < -300, (
-        f"Unexpected profit: {trade.profit_usd}. Expected ~-303 USD"
-    )
-
-
-def test_partial_close_maintains_sign():
-    """
-    Test that partially closing a long position maintains positive quantity
-    for both the closed trade and remaining open lot.
-
-    This is an edge case: the bug only affected FULLY consumed lots (quantity = 0).
-    Partial closes should always work correctly.
-    """
-    tasty = Tasty()
-
-    buy_str = "2024-01-01T10:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPY  251219C00400000,Equity Option,Bought 10 SPY 400C @ 10.00,-10000.00,10,1000.0,-10.00,0.0,100,SPY,SPY,12/19/25,400,CALL,123456,USD"
-
-    sell_str = "2024-01-02T10:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,SPY  251219C00400000,Equity Option,Sold 3 SPY 400C @ 15.00,4500.00,3,1500.0,-3.00,0.0,100,SPY,SPY,12/19/25,400,CALL,123456,USD"
-
-    tasty.position_manager.add_position(Transaction.fromString(buy_str))
-    tasty.position_manager.add_position(Transaction.fromString(sell_str))
-
-    closed_trades = tasty.position_manager.closed_trades
-    assert len(closed_trades) == 1
-    assert closed_trades[0].quantity == 3, "Closed trade quantity should be positive"
-
-    open_lots = tasty.position_manager.get_all_open_lots()
-    assert len(open_lots) == 1
-    assert open_lots[0].quantity == 7, "Remaining lot should have 7 contracts (positive)"
+    assert len(position_manager.closed_trades) == 1
+    closed_trade = position_manager.closed_trades[0]
+    assert closed_trade.quantity == 3
+    assert closed_trade.profit_usd == 150
+    assert len(position_manager.get_all_open_lots()) == 1
+    open_lot = position_manager.get_all_open_lots()[0]
+    assert open_lot.quantity == 7
+    assert open_lot.amount_usd == -700
