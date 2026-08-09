@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/avion23/tastyworksTaxes/actions/workflows/tests.yml/badge.svg)](https://github.com/avion23/tastyworksTaxes/actions)
 
-`tastyworksTaxes` is a batch ETL, accounting, and reporting pipeline for
+`tastyworksTaxes` is a batch ETL-style accounting and reporting pipeline for
 TastyTrade/Tastyworks transaction exports in the context of German private
 investment taxation. It:
 
@@ -37,9 +37,10 @@ reports option gains and losses without applying that former limit.
 
 ## Requirements and installation
 
-CI verifies Python 3.10, 3.11, and 3.12. Direct runtime and test dependencies
-are fixed in `pyproject.toml` so that a checkout resolves the reviewed versions.
-Install the package inside an isolated Python environment:
+CI verifies Python 3.10, 3.11, and 3.12. The direct runtime, test, and build
+dependencies have exact pins in `pyproject.toml`. Their transitive dependencies
+remain resolved by `pip` and can vary between installations. Install the package
+inside an isolated Python environment:
 
 ```bash
 python -m pip install .

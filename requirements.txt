@@ -1,2 +1,2 @@
-# Install this checkout and its reproducible test dependency set.
+# Install this checkout and its exact direct test dependency set.
 .[test]
