@@ -66,6 +66,13 @@ class Tasty:
         pay_date = transaction.loc[Fields.DATE_TIME.value].date()
         symbol = transaction.getSymbol()
         self._checkAssetClassification(symbol, PositionType.stock, pay_date)
+        classification = self.classifier.classify_for_tax(
+            symbol, PositionType.stock, pay_date
+        )
+        is_fund = self.classifier.get_tax_category(classification) == "KAP-INV"
+        if is_fund:
+            year_values.fundTaxReviewRequired = True
+            self.fund_tax_review_years.add(pay_date.year)
 
         if money.usd < 0:
             key = (transaction.getDate(), symbol)
@@ -84,10 +91,7 @@ class Tasty:
             self._withholding_remaining[key] = remaining - withholding_amount
             return
 
-        classification = self.classifier.classify_for_tax(
-            symbol, PositionType.stock, pay_date
-        )
-        if self.classifier.get_tax_category(classification) != "KAP-INV":
+        if not is_fund:
             year_values.dividend += money
             return
 
@@ -162,6 +166,7 @@ class Tasty:
             "yearValues",
             "unverified_asset_symbols_by_year",
             "short_stock_trades_by_year",
+            "fund_tax_review_years",
             "_withholding_remaining",
             "_asset_classification_checks",
         )

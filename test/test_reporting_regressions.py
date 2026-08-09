@@ -232,3 +232,81 @@ assert sys.path == before, (before, sys.path)
     )
 
     assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("assessment_year", [None, 2024])
+def test_non_2025_german_render_preserves_legacy_labels_and_order(assessment_year):
+    expected_labels = [
+        'Einzahlungen', 'Auszahlungen',
+        'Aktiengebühren (Info; bereits im Nettoergebnis)',
+        'Alle Gebühren in USD (Info; Handelsgebühren bereits im Nettoergebnis)',
+        'Alle Gebühren in EUR (Info; Handelsgebühren bereits im Nettoergebnis)',
+        'Währungsgewinne USD', 'Währungsgewinne USD steuerfrei',
+        'Währungsgewinne USD Gesamt', 'Krypto Gewinne', 'Krypto Verluste',
+        'Anlage SO', 'Anlage SO Steuerbetrag', 'Anlage SO Verlustvortrag',
+        'Investmentfondsgewinne', 'Investmentfondsverluste', 'Anlage KAP-INV',
+        'Fondsausschüttungen brutto', 'Fondsausschüttungen steuerfrei',
+        'Fondsausschüttungen steuerpflichtig', 'Aktiengewinne Z20',
+        'Aktienverluste Z23', 'Aktien Gesamt', 'Aktien Steuerbetrag',
+        'Aktien Verlustvortrag', 'Sonstige Gewinne', 'Sonstige Verluste',
+        'Sonstige Gesamt', 'Stillhalter Gewinne', 'Stillhalter Verluste',
+        'Stillhalter Gesamt', 'Durchschnitt behaltene Prämien pro Tag',
+        'Stillhalter Gewinne Calls (FIFO)', 'Stillhalter Verluste Calls (FIFO)',
+        'Stillhalter Calls Gesamt (FIFO)', 'Stillhalter Gewinne Puts (FIFO)',
+        'Stillhalter Verluste Puts (FIFO)', 'Stillhalter Puts Gesamt (FIFO)',
+        'Stillhalter-Gewinne (FIFO)', 'Stillhalter-Verluste (FIFO)',
+        'Stillhalter-Gesamt (FIFO)', 'Long-Optionen-Gewinne',
+        'Long-Optionen-Verluste', 'Long-Optionen-Verluste aus wertlosem Verfall',
+        'Long-Optionen-Gesamt', 'Future-Gewinne', 'Future-Verluste',
+        'Future-Gesamt', 'Optionsgebühren (Info; bereits im Nettoergebnis)',
+        'Dividenden', 'bezahlte Dividenden', 'Quellensteuer Z41',
+        'Zinseinnahmen', 'Zinsausgaben', 'Zinsen insgesamt',
+        'Z19 Ausländische Kapitalerträge', 'Z21 Termingeschäfte+Stillhalter',
+        'Z24 Termingeschäftsverluste', 'Cash Balance USD',
+        'Net Liquidating Value', 'Wertpapierleihe Einkommen',
+    ]
+    expected_lines = [f"{label:<40} 0,00" for label in expected_labels]
+
+    rendered = str(
+        Printer(Values(), [], assessment_year=assessment_year).generateGermanTaxReport()
+    )
+
+    assert rendered.splitlines()[:len(expected_lines)] == expected_lines
+
+
+@pytest.mark.parametrize("assessment_year", [None, 2024])
+def test_non_2025_english_render_preserves_legacy_labels_and_order(assessment_year):
+    expected_labels = [
+        'deposits', 'withdrawals', 'stock fees (info; already included in net P&L)',
+        'all fees in USD (info; trade fees already included in net P&L)',
+        'all fees in EUR (info; trade fees already included in net P&L)',
+        'currency gains usd', 'currency gains usd tax free',
+        'currency gains usd total', 'crypto gains', 'crypto losses',
+        'investment so', 'investment so tax amount',
+        'investment so loss carryforward', 'investment fund gains',
+        'investment fund losses', 'investment kap inv', 'fund distributions gross',
+        'fund distributions exempt', 'fund distributions taxable',
+        'stock gains z20', 'stock losses z23', 'stock total', 'stock tax amount',
+        'stock loss carryforward', 'other gains', 'other losses', 'other total',
+        'short option writer gains', 'short option writer losses',
+        'short option writer total', 'average held premium per day',
+        'short call writer gains fifo', 'short call writer losses fifo',
+        'short call writer total fifo', 'short put writer gains fifo',
+        'short put writer losses fifo', 'short put writer total fifo',
+        'short option writer gains fifo', 'short option writer losses fifo',
+        'short option writer total fifo', 'long option gains', 'long option losses',
+        'long option worthless-expiry losses', 'long option total', 'future gains',
+        'future losses', 'future total',
+        'option fees (info; already included in net P&L)', 'dividends',
+        'paid dividends', 'withholding tax z41', 'interest income',
+        'interest expenses', 'interest total', 'z19 foreign capital gains',
+        'z21 term gains', 'z24 term losses', 'cash balance usd',
+        'net liquidating value', 'securities lending income',
+    ]
+    expected_lines = [f"{label:<40} 0.00" for label in expected_labels]
+
+    rendered = str(
+        Printer(Values(), [], assessment_year=assessment_year).generateEnglishTaxReport()
+    )
+
+    assert rendered.splitlines()[:len(expected_lines)] == expected_lines

@@ -1,11 +1,15 @@
 from unittest.mock import MagicMock
 
+import pandas as pd
+
+from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.tasty import Tasty
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.values import Values
 from tastyworksTaxes.fifo_processor import TradeResult
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.printer import Printer
+from tastyworksTaxes.transaction import Transaction
 
 
 class TestTastyRun:
@@ -201,3 +205,41 @@ class TestTastyRun:
         assert result[2025].fundGrossLosses.eur == -50
         assert result[2025].fundProfits.eur == 70
         assert result[2025].fundLosses.eur == -35
+
+
+    def test_negative_only_verified_fund_dividend_marks_pipeline_not_ready(
+        self, tmp_path
+    ):
+        registry = tmp_path / "assets.csv"
+        registry.write_text(
+            "symbol,classification,tax_category,teilfreistellung_pct,verified,"
+            "effective_from,effective_to,evidence\n"
+            "ANONFUND,EQUITY_ETF,KAP-INV,30,true,2020-01-01,,Official factsheet\n",
+            encoding="utf-8",
+        )
+        t = Tasty()
+        t.classifier = AssetClassifier(registry)
+        t.processTransactionHistory = MagicMock()
+        negative_fund_row = Transaction({
+            "Date/Time": pd.Timestamp("2025-06-02T12:00:00Z"),
+            "Transaction Subcode": "Dividend",
+            "Description": "Anonymous fund distribution adjustment",
+            "Symbol": "ANONFUND",
+            "Amount": -10.0,
+            "AmountEuro": -9.0,
+        })
+
+        t.moneyMovement(negative_fund_row)
+        result = t.run()
+        values = result[2025]
+        rendered = str(
+            Printer(values, [], assessment_year=2025).generateGermanTaxReport()
+        )
+
+        assert values.fundTaxReviewRequired is True
+        assert values.fundDistributions.usd == 0
+        assert values.fundDistributionTaxable.usd == 0
+        assert values.paidDividend.usd == -10
+        assert values.paidDividend.eur == -9
+        assert "KAP-INV NOT FILING-READY" in rendered
+        assert "Vorabpauschale" in rendered

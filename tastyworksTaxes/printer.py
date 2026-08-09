@@ -219,6 +219,46 @@ class GermanTaxReport(object):
     fund_tax_review_required: bool = False
 
     def __str__(self) -> str:
+        is_vz_2025 = self.assessment_year == 2025
+        fund_gain_label = (
+            'Diagnose: Fonds-Veräußerungsgewinne nach Teilfreistellung'
+            if is_vz_2025 else 'Investmentfondsgewinne'
+        )
+        fund_loss_label = (
+            'Diagnose: Fonds-Veräußerungsverluste nach Teilfreistellung'
+            if is_vz_2025 else 'Investmentfondsverluste'
+        )
+        kap_inv_label = (
+            'Diagnose: KAP-INV Saldo nach Teilfreistellung'
+            if is_vz_2025 else 'Anlage KAP-INV'
+        )
+        fund_distribution_gross_label = (
+            'KAP-INV Ausschüttungen brutto'
+            if is_vz_2025 else 'Fondsausschüttungen brutto'
+        )
+        fund_distribution_exempt_label = (
+            'Diagnose: Ausschüttungen teilfreigestellt'
+            if is_vz_2025 else 'Fondsausschüttungen steuerfrei'
+        )
+        fund_distribution_taxable_label = (
+            'Diagnose: Ausschüttungen nach Teilfreistellung'
+            if is_vz_2025 else 'Fondsausschüttungen steuerpflichtig'
+        )
+        stock_gain_label = (
+            'Anlage KAP Z20 Aktienveräußerungsgewinne'
+            if is_vz_2025 else 'Aktiengewinne Z20'
+        )
+        stock_loss_label = (
+            'Anlage KAP Z23 Aktienveräußerungsverluste'
+            if is_vz_2025 else 'Aktienverluste Z23'
+        )
+        stock_total_label = (
+            'Diagnose: Aktien-Nettoergebnis' if is_vz_2025 else 'Aktien Gesamt'
+        )
+        line_19_label = (
+            'Anlage KAP Z19 Ausländische Kapitalerträge'
+            if is_vz_2025 else 'Z19 Ausländische Kapitalerträge'
+        )
         fields = [
             ('Einzahlungen', self.einzahlungen),
             ('Auszahlungen', self.auszahlungen),
@@ -233,17 +273,15 @@ class GermanTaxReport(object):
             ('Anlage SO', self.anlage_so),
             ('Anlage SO Steuerbetrag', self.anlage_so_steuerbetrag),
             ('Anlage SO Verlustvortrag', self.anlage_so_verlustvortrag),
-            ('Diagnose: Fonds-Veräußerungsgewinne nach Teilfreistellung', self.investmentfondsgewinne),
-            ('Diagnose: Fonds-Veräußerungsverluste nach Teilfreistellung', self.investmentfondsverluste),
-            ('Diagnose: KAP-INV Saldo nach Teilfreistellung', self.anlage_kap_inv),
-            ('KAP-INV Ausschüttungen brutto', self.fondsausschuettungen_brutto),
-            ('Diagnose: Ausschüttungen teilfreigestellt', self.fondsausschuettungen_steuerfrei),
-            ('Diagnose: Ausschüttungen nach Teilfreistellung', self.fondsausschuettungen_steuerpflichtig),
-            ('KAP-INV Fonds-Veräußerungsgewinne brutto', self.fondveraeusserungsgewinne_brutto),
-            ('KAP-INV Fonds-Veräußerungsverluste brutto', self.fondveraeusserungsverluste_brutto),
-            ('Anlage KAP Z20 Aktienveräußerungsgewinne', self.aktiengewinne_z20),
-            ('Anlage KAP Z23 Aktienveräußerungsverluste', self.aktienverluste_z23),
-            ('Diagnose: Aktien-Nettoergebnis', self.aktien_gesamt),
+            (fund_gain_label, self.investmentfondsgewinne),
+            (fund_loss_label, self.investmentfondsverluste),
+            (kap_inv_label, self.anlage_kap_inv),
+            (fund_distribution_gross_label, self.fondsausschuettungen_brutto),
+            (fund_distribution_exempt_label, self.fondsausschuettungen_steuerfrei),
+            (fund_distribution_taxable_label, self.fondsausschuettungen_steuerpflichtig),
+            (stock_gain_label, self.aktiengewinne_z20),
+            (stock_loss_label, self.aktienverluste_z23),
+            (stock_total_label, self.aktien_gesamt),
             ('Aktien Steuerbetrag', self.aktien_steuerbetrag),
             ('Aktien Verlustvortrag', self.aktien_verlustvortrag),
             ('Sonstige Gewinne', self.sonstige_gewinne),
@@ -276,12 +314,20 @@ class GermanTaxReport(object):
             ('Zinseinnahmen', self.zinseinnahmen),
             ('Zinsausgaben', self.zinsausgaben),
             ('Zinsen insgesamt', self.zinsen_gesamt),
-            ('Anlage KAP Z19 Ausländische Kapitalerträge', self.z19_auslaendische_kapitalertraege),
+            (line_19_label, self.z19_auslaendische_kapitalertraege),
+            *([] if is_vz_2025 else [
+                ('Z21 Termingeschäfte+Stillhalter', self.z21_termingeschaefsgewinne),
+                ('Z24 Termingeschäftsverluste', self.z24_termingeschaefte_verluste),
+            ]),
             ('Cash Balance USD', self.cash_balance_usd),
             ('Net Liquidating Value', self.net_liquidating_value),
             ('Wertpapierleihe Einkommen', self.wertpapierleihe_einkommen),
         ]
-        if self.assessment_year == 2025:
+        fields.extend([
+            ('KAP-INV Fonds-Veräußerungsgewinne brutto', self.fondveraeusserungsgewinne_brutto),
+            ('KAP-INV Fonds-Veräußerungsverluste brutto', self.fondveraeusserungsverluste_brutto),
+        ])
+        if is_vz_2025:
             fields.append((
                 'Anlage KAP Z22 Verluste ohne Aktienveräußerungen',
                 self.z22_verluste_ohne_aktienveraeusserungen,
@@ -296,10 +342,12 @@ class GermanTaxReport(object):
                 f'ASSESSMENT YEAR {self.assessment_year or "UNSPECIFIED"} - '
                 'NOT FILING-READY ***\n'
             )
-        diagnostics = [
-            ('Diagnose: ehemalige Zeile 21 Gewinne', self.z21_termingeschaefsgewinne),
-            ('Diagnose: ehemalige Zeile 24 Verluste', self.z24_termingeschaefte_verluste),
-        ]
+        diagnostics = []
+        if is_vz_2025:
+            diagnostics = [
+                ('Diagnose: ehemalige Zeile 21 Gewinne', self.z21_termingeschaefsgewinne),
+                ('Diagnose: ehemalige Zeile 24 Verluste', self.z24_termingeschaefte_verluste),
+            ]
         fund_note = ''
         if self.fund_tax_review_required:
             fund_note = (
@@ -390,6 +438,29 @@ class EnglishTaxReport(object):
     fund_tax_review_required: bool = False
 
     def __str__(self) -> str:
+        is_vz_2025 = self.assessment_year == 2025
+        fund_gain_label = (
+            'diagnostic fund disposal gains after exemption'
+            if is_vz_2025 else 'investment fund gains'
+        )
+        fund_loss_label = (
+            'diagnostic fund disposal losses after exemption'
+            if is_vz_2025 else 'investment fund losses'
+        )
+        kap_inv_label = (
+            'diagnostic KAP-INV total after exemption'
+            if is_vz_2025 else 'investment kap inv'
+        )
+        fund_distribution_taxable_label = (
+            'diagnostic fund distributions after exemption'
+            if is_vz_2025 else 'fund distributions taxable'
+        )
+        former_line_21_label = (
+            'diagnostic former line 21 gains' if is_vz_2025 else 'z21 term gains'
+        )
+        former_line_24_label = (
+            'diagnostic former line 24 losses' if is_vz_2025 else 'z24 term losses'
+        )
         fields = [
             ('deposits', self.deposits),
             ('withdrawals', self.withdrawals),
@@ -404,17 +475,15 @@ class EnglishTaxReport(object):
             ('investment so', self.investment_so),
             ('investment so tax amount', self.investment_so_tax_amount),
             ('investment so loss carryforward', self.investment_so_loss_carryforward),
-            ('diagnostic fund disposal gains after exemption', self.investment_fund_gains),
-            ('diagnostic fund disposal losses after exemption', self.investment_fund_losses),
-            ('diagnostic KAP-INV total after exemption', self.investment_kap_inv),
+            (fund_gain_label, self.investment_fund_gains),
+            (fund_loss_label, self.investment_fund_losses),
+            (kap_inv_label, self.investment_kap_inv),
             ('fund distributions gross', self.fund_distributions_gross),
             ('fund distributions exempt', self.fund_distributions_exempt),
-            ('diagnostic fund distributions after exemption', self.fund_distributions_taxable),
-            ('KAP-INV fund disposal gains gross', self.fund_disposal_gains_gross),
-            ('KAP-INV fund disposal losses gross', self.fund_disposal_losses_gross),
+            (fund_distribution_taxable_label, self.fund_distributions_taxable),
             ('stock gains z20', self.stock_gains_z20),
             ('stock losses z23', self.stock_losses_z23),
-            ('diagnostic stock net result', self.stock_total),
+            ('stock total', self.stock_total),
             ('stock tax amount', self.stock_tax_amount),
             ('stock loss carryforward', self.stock_loss_carryforward),
             ('other gains', self.other_gains),
@@ -448,13 +517,17 @@ class EnglishTaxReport(object):
             ('interest expenses', self.interest_expenses),
             ('interest total', self.interest_total),
             ('z19 foreign capital gains', self.z19_foreign_capital_gains),
-            ('diagnostic former line 21 gains', self.z21_term_gains),
-            ('diagnostic former line 24 losses', self.z24_term_losses),
+            (former_line_21_label, self.z21_term_gains),
+            (former_line_24_label, self.z24_term_losses),
             ('cash balance usd', self.cash_balance_usd),
             ('net liquidating value', self.net_liquidating_value),
             ('securities lending income', self.securities_lending_income),
         ]
-        if self.assessment_year == 2025:
+        fields.extend([
+            ('KAP-INV fund disposal gains gross', self.fund_disposal_gains_gross),
+            ('KAP-INV fund disposal losses gross', self.fund_disposal_losses_gross),
+        ])
+        if is_vz_2025:
             fields.append(('z22 non-stock losses', self.z22_non_stock_losses))
             mapping_note = 'NOTE: official German form mapping applies to VZ 2025 only.\n'
         else:
