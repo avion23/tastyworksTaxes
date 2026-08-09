@@ -1,4 +1,6 @@
 import datetime
+import math
+from numbers import Real
 
 from currency_converter import CurrencyConverter, RateNotFoundError
 
@@ -27,7 +29,11 @@ def get_used_rate(date) -> float:
 
 
 def convert_usd_to_eur(amount: float, date) -> float:
-    """Convert USD to EUR only when an ECB rate is available for the date."""
+    """Convert a finite real USD amount when an ECB rate is available."""
+    if isinstance(amount, bool) or not isinstance(amount, Real):
+        raise TypeError("USD amount must be a finite real number.")
+    if not math.isfinite(amount):
+        raise ValueError("USD amount must be finite.")
     if amount == 0:
         return 0.0
     return _convert_with_available_rate(amount, date)

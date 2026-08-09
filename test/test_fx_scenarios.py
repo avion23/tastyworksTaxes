@@ -63,6 +63,32 @@ def test_zero_value_rows_do_not_access_the_converter(monkeypatch):
     assert history.loc[0, "FeesEuro"] == 0.0
 
 
+@pytest.mark.parametrize("amount", [True, False, "100", None, 1 + 2j])
+def test_non_real_usd_amounts_fail_before_converter_access(monkeypatch, amount):
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("converter must not be called for an invalid amount")
+
+    monkeypatch.setattr(money._converter, "convert", fail_if_called)
+
+    with pytest.raises(TypeError) as exc_info:
+        money.convert_usd_to_eur(amount, "2021-07-06")
+
+    assert str(exc_info.value) == "USD amount must be a finite real number."
+
+
+@pytest.mark.parametrize("amount", [float("nan"), float("inf"), float("-inf")])
+def test_non_finite_usd_amounts_fail_before_converter_access(monkeypatch, amount):
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("converter must not be called for an invalid amount")
+
+    monkeypatch.setattr(money._converter, "convert", fail_if_called)
+
+    with pytest.raises(ValueError) as exc_info:
+        money.convert_usd_to_eur(amount, "2021-07-06")
+
+    assert str(exc_info.value) == "USD amount must be finite."
+
+
 def test_internal_converter_failures_propagate(monkeypatch):
     def corrupted_converter(*args, **kwargs):
         raise RuntimeError("converter corruption")
