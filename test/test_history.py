@@ -265,18 +265,15 @@ def test_new_format_with_total_column_loads_and_ignores_total(tmp_path):
     assert history.loc[0, 'Amount'] == 100
 
 
-def test_identical_duplicate_trade_rows_with_order_identity_are_dropped(
-    tmp_path, caplog
-):
+def test_identical_duplicate_trade_rows_with_order_identity_raise(tmp_path):
     csv_path = tmp_path / "duplicates_with_order.csv"
     write_broker_csv(csv_path, [stock_trade(), stock_trade()])
 
-    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.history'):
-        history = History.fromFile(csv_path)
-
-    assert len(history) == 1
-    assert history.loc[0, 'Order #'] == 'ORDER-1'
-    assert 'Dropped 1 byte-identical duplicate row(s)' in caplog.text
+    with pytest.raises(
+        ValueError,
+        match='ambiguous identical rows.*cannot distinguish.*legitimate identical fills',
+    ):
+        History.fromFile(csv_path)
 
 
 def test_identical_duplicate_trade_rows_with_blank_order_identity_raise(
@@ -293,3 +290,24 @@ def test_identical_duplicate_trade_rows_with_blank_order_identity_raise(
         match='ambiguous identical rows.*cannot distinguish.*legitimate identical fills',
     ):
         History.fromFile(csv_path)
+
+
+def test_duplicates_keep_loads_all_rows_and_logs_warning(tmp_path, caplog):
+    csv_path = tmp_path / "duplicates_keep.csv"
+    write_broker_csv(csv_path, [stock_trade(), stock_trade()])
+
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.history'):
+        history = History.fromFile(csv_path, duplicates='keep')
+
+    assert len(history) == 2
+    assert history.loc[0, 'Order #'] == 'ORDER-1'
+    assert history.loc[1, 'Order #'] == 'ORDER-1'
+    assert 'Loaded 2 byte-identical row(s) as separate fills' in caplog.text
+
+
+def test_duplicates_policy_rejects_unknown_values(tmp_path):
+    csv_path = tmp_path / "duplicates_bad_policy.csv"
+    write_broker_csv(csv_path, [stock_trade()])
+
+    with pytest.raises(ValueError, match="duplicates must be 'fail' or 'keep'"):
+        History.fromFile(csv_path, duplicates='drop')

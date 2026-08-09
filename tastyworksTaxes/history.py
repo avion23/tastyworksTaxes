@@ -44,7 +44,11 @@ class History(pd.DataFrame):
         super().__init__(*args, **kwargs)
 
     @classmethod
-    def fromFile(cls, path):
+    def fromFile(cls, path, *, duplicates='fail'):
+        if duplicates not in ('fail', 'keep'):
+            raise ValueError(
+                "duplicates must be 'fail' or 'keep', got " f"{duplicates!r}"
+            )
         try:
             df_raw = pd.read_csv(
                 path,
@@ -66,15 +70,10 @@ class History(pd.DataFrame):
 
         identical_rows = df_raw.duplicated(keep=False)
         if identical_rows.any():
-            duplicated_order = (
-                df_raw.loc[identical_rows, 'Order #'].astype(str).str.strip() != ''
-            )
-            if duplicated_order.all():
-                drop_count = int(identical_rows.sum() - df_raw.duplicated().sum())
-                df_raw = df_raw.drop_duplicates(keep='first')
+            if duplicates == 'keep':
                 logger.warning(
-                    'Dropped %d byte-identical duplicate row(s) sharing the same '
-                    'order identity', drop_count
+                    'Loaded %d byte-identical row(s) as separate fills',
+                    int(identical_rows.sum()),
                 )
             else:
                 rows = [int(index) + 2 for index in df_raw.index[identical_rows]]

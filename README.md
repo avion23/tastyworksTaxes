@@ -105,6 +105,28 @@ The module entry point is equivalent:
 python -m tastyworksTaxes.main transactions.csv
 ```
 
+## Duplicate rows in exports
+
+Tastytrade can export byte-identical rows for one order: an order filled in
+several identical sub-fills (execution legs) and an echo of a single fill are
+indistinguishable from the export alone. Review of real exports found that most
+identical-row groups balance only as real positions (their close quantity
+matches the number of rows), so automatic removal is unsafe.
+
+The loader therefore rejects every file containing identical rows unless you
+explicitly opt in. The default `--duplicates fail` raises the
+"ambiguous identical rows" error and requires manual review before accounting.
+`--duplicates keep` loads every byte-identical row as a separate fill and logs
+the loaded count without any financial details:
+
+```bash
+tastyworks-taxes --duplicates keep transactions.csv
+```
+
+`keep` is only safe for a single-source export that was never assembled by
+concatenating overlapping export windows, where a real fill can appear twice.
+Review the broker activity page before choosing `keep`.
+
 ## Merge non-overlapping exports
 
 The loader sorts normalized transactions from oldest to newest before
@@ -153,11 +175,9 @@ for both securities transactions and cash flows recorded as `Money Movement`
 rate range fail with an explicit error that asks to update the bundled ECB
 reference-rate data; `get_used_rate` remains strict and only accepts exact ECB
 publication dates. A zero amount returns `0.00` EUR without any rate lookup.
-Byte-identical duplicate rows that share a real broker order number are dropped
-automatically (the dropped count is logged without any financial details);
-identical rows without an order identity still fail for manual review. The
-current 21-column export with the trailing `Total` column is accepted in
-addition to the 20-column export; the `Total` column is ignored.
+The current 21-column export with the trailing `Total` column is accepted in
+addition to the 20-column export; the `Total` column is ignored. Byte-identical
+rows are handled by the explicit `--duplicates` policy described below.
 
 ## Standalone Vorabpauschale utility
 

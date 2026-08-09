@@ -19,6 +19,15 @@ def init_argparse() -> argparse.ArgumentParser:
         "input", help="Input file path to the tastyworks csv export", type=pathlib.Path)
     parser.add_argument("-w", "--write-closed-trades", help="optional output path for the closed trades csv",
                         type=pathlib.Path, required=False)
+    parser.add_argument(
+        "--duplicates", choices=['fail', 'keep'], default='fail',
+        help=(
+            "how to treat byte-identical duplicate rows (default: fail). "
+            "'fail' rejects files with identical rows as ambiguous; 'keep' loads "
+            "every byte-identical row as a separate fill and is only safe for a "
+            "single-source export without concatenation overlaps"
+        ),
+    )
     return parser
 
 
@@ -34,7 +43,7 @@ def main() -> None:
             parser.error("closed-trades output must not overwrite the input CSV")
         if not output.parent.is_dir():
             parser.error(f"output directory does not exist or is not a directory: {output.parent}")
-    t = Tasty(path=args.input)
+    t = Tasty(path=args.input, duplicates=args.duplicates)
     t.run()
     for year in sorted(t.yearValues):
         values = t.yearValues[year]

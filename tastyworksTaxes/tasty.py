@@ -45,9 +45,11 @@ logger = logging.getLogger(__name__)
 
 
 class Tasty:
-    def __init__(self, path=None):
+    def __init__(self, path=None, *, duplicates='fail'):
         self.yearValues = {}
-        self.history = History.fromFile(path) if path else History()
+        self.history = (
+            History.fromFile(path, duplicates=duplicates) if path else History()
+        )
         self.position_manager = PositionManager()
         self.classifier = AssetClassifier()
         self.unverified_asset_symbols_by_year = {}

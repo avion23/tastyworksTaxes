@@ -149,3 +149,40 @@ def test_cli_sorts_annual_report_years(tmp_path, monkeypatch, capsys):
     assert [
         call.kwargs["assessment_year"] for call in printer.call_args_list
     ] == [2020, 2021, 2022]
+
+
+@pytest.mark.parametrize("argv_duplicates, expected", [
+    (["--duplicates", "keep"], "keep"),
+    ([], "fail"),
+])
+def test_cli_passes_duplicates_policy_to_tasty(
+    tmp_path, monkeypatch, argv_duplicates, expected
+):
+    source = tmp_path / "transactions.csv"
+    source.write_text("data")
+    monkeypatch.setattr(
+        "sys.argv",
+        ["tastyworks-taxes", str(source)] + argv_duplicates,
+    )
+    tasty = MagicMock()
+    tasty.yearValues = {}
+    tasty.position_manager.closed_trades = []
+
+    with patch("tastyworksTaxes.main.Tasty", return_value=tasty) as tasty_cls:
+        main()
+
+    tasty_cls.assert_called_once_with(path=source, duplicates=expected)
+
+
+def test_cli_rejects_unknown_duplicates_policy(tmp_path, monkeypatch):
+    source = tmp_path / "transactions.csv"
+    source.write_text("data")
+    monkeypatch.setattr(
+        "sys.argv",
+        ["tastyworks-taxes", str(source), "--duplicates", "drop"],
+    )
+
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+
+    assert exc_info.value.code == 2
