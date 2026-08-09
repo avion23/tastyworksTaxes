@@ -190,3 +190,17 @@ def test_internal_converter_failures_propagate(monkeypatch):
 
     with pytest.raises(RuntimeError, match="converter corruption"):
         _interest_history("2021-07-06T12:00:00Z", "100")
+
+
+def test_nearest_prior_rate_fallback_is_reported_once_per_load(caplog):
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.history'):
+        _interest_history("2021-07-04T12:00:00Z", "123.45")
+
+    assert "1 row(s) converted at the nearest earlier ECB reference rate" in caplog.text
+    assert caplog.text.count("nearest earlier ECB reference rate") == 1
+
+    caplog.clear()
+    with caplog.at_level(logging.WARNING, logger='tastyworksTaxes.history'):
+        _interest_history("2021-07-06T12:00:00Z", "100")
+
+    assert "row(s) converted at the nearest earlier ECB reference rate" not in caplog.text

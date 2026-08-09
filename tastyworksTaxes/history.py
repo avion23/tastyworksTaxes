@@ -6,7 +6,11 @@ from decimal import Decimal, InvalidOperation
 
 import pandas as pd
 
-from tastyworksTaxes.money import convert_usd_to_eur
+from tastyworksTaxes.money import (
+    convert_usd_to_eur,
+    nearest_prior_conversion_count,
+    reset_nearest_prior_conversion_count,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -49,6 +53,7 @@ class History(pd.DataFrame):
             raise ValueError(
                 "duplicates must be 'fail' or 'keep', got " f"{duplicates!r}"
             )
+        reset_nearest_prior_conversion_count()
         try:
             df_raw = pd.read_csv(
                 path,
@@ -96,6 +101,12 @@ class History(pd.DataFrame):
         df.reset_index(drop=True, inplace=True)
         df.addEuroConversion()
         df._selfTest()
+        fallback_count = nearest_prior_conversion_count()
+        if fallback_count:
+            logger.warning(
+                '%d row(s) converted at the nearest earlier ECB reference rate',
+                fallback_count,
+            )
         return df
 
     @staticmethod

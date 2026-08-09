@@ -28,6 +28,19 @@ _USD_RATE_DATES = tuple(
     )
 )
 
+# Count of nearest-prior fallback conversions since the last reset, so loaders
+# can report a generic count-only signal instead of logging financial data.
+_nearest_prior_conversions = 0
+
+
+def reset_nearest_prior_conversion_count() -> None:
+    global _nearest_prior_conversions
+    _nearest_prior_conversions = 0
+
+
+def nearest_prior_conversion_count() -> int:
+    return _nearest_prior_conversions
+
 
 def _normalise_conversion_date(value) -> datetime.date:
     if isinstance(value, bool) or value is None:
@@ -66,6 +79,8 @@ def _convert_with_available_rate(
             min(_USD_RATE_DATES) <= conversion_date <= max(_USD_RATE_DATES)
         ):
             raise ValueError(_RATE_UNAVAILABLE_MESSAGE) from None
+        global _nearest_prior_conversions
+        _nearest_prior_conversions += 1
         return _converter.convert(
             amount, 'USD', 'EUR', date=_nearest_earlier_rate_date(conversion_date)
         )

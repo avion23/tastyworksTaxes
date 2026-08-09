@@ -65,23 +65,24 @@ Export **Transactions** history from the TastyTrade activity page, not Orders
 or Activity data. Broker exports can have a row limit, so use non-overlapping
 date ranges when one file is not enough.
 
-The parser does not select a schema by a claimed column count. Broker fixtures
-used by this project have a 20-column header. A new-format row is recognized by
-these required columns:
+The parser does not select a schema by a claimed column count. The TastyTrade
+broker export header must exactly match the ordered 20-column schema:
 
-- `Date`
-- `Type`
-- `Sub Type`
-- `Value`
-- `Description`
+- `Date`, `Type`, `Sub Type`, `Action`, `Symbol`, `Instrument Type`,
+  `Description`, `Value`, `Quantity`, `Average Price`, `Commissions`, `Fees`,
+  `Multiplier`, `Root Symbol`, `Underlying Symbol`, `Expiration Date`,
+  `Strike Price`, `Call or Put`, `Order #`, `Currency`
 
-`Date` must be ISO 8601 with a timezone offset. The parser also understands the
-optional broker columns `Symbol`, `Action`, `Quantity`, `Expiration Date`,
-`Strike Price`, `Call or Put`, `Average Price`, `Commissions`, `Fees`,
-`Underlying Symbol`, and `Multiplier`; absent optional columns receive explicit
-defaults. Other broker layouts are rejected. A normalized 14-column internal
-schema is also accepted for programmatic workflows, but that is not a promise
-of compatibility with an old broker export.
+The current 21-column variant with `Total` between `Order #` and `Currency` is
+accepted as well; the `Total` column is ignored. Nothing in the broker format
+is optional: a file with only a subset of these columns (for example just
+`Date`, `Type`, `Sub Type`, `Value`, `Description`) is rejected, and `Date`
+must be ISO 8601 with a timezone offset. Other broker layouts are rejected. A
+normalized 14-column internal schema is also accepted for programmatic
+workflows, but that is not a promise of compatibility with an old broker
+export; only the internal schema fills defaults for absent fields (`Underlying
+Symbol` falls back to `Symbol`, `Multiplier` defaults to `100`, `Order #` to
+empty, and `Currency` to `USD`).
 
 ## Run the batch pipeline
 
@@ -175,15 +176,18 @@ for both securities transactions and cash flows recorded as `Money Movement`
 rate range fail with an explicit error that asks to update the bundled ECB
 reference-rate data; `get_used_rate` remains strict and only accepts exact ECB
 publication dates. A zero amount returns `0.00` EUR without any rate lookup.
-The current 21-column export with the trailing `Total` column is accepted in
-addition to the 20-column export; the `Total` column is ignored. Byte-identical
-rows are handled by the explicit `--duplicates` policy described below.
+The current 21-column export with the `Total` column between `Order #` and
+`Currency` is accepted in addition to the 20-column export; the `Total` column
+is ignored. Byte-identical rows are handled by the explicit `--duplicates`
+policy described below.
 
 ## Standalone Vorabpauschale utility
 
 `tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is a standalone
-utility. The report pipeline does not call it and does not emit automatic
-Vorabpauschale warnings. The caller must supply all applicable EUR values,
+utility. The report pipeline never computes Vorabpauschale and never emits
+amounts for it, but for every detected fund year the report prints an
+automatic "Vorabpauschale and per-fund KAP-INV lines are manual" note. The
+caller must supply all applicable EUR values,
 including the opening redemption/exchange/market price, distributions, value
 increase, Basiszins, partial-exemption rate, and acquisition timing. Its result
 does not account for holdings or distributions outside the supplied values.
