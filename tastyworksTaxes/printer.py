@@ -10,19 +10,26 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def _round_for_presentation(value: float) -> float:
+    """Round only rendered values and normalize rounded negative zero."""
+    rounded = round(value, 2)
+    return 0.0 if rounded == 0 else rounded
+
+
 def _format_german_number(value: float) -> str:
     """Format a number deterministically without changing process-wide locale."""
-    if value == 0:
-        value = 0.0
+    value = _round_for_presentation(value)
     return f"{value:,.2f}".translate(str.maketrans({",": ".", ".": ","}))
 
 
 def _format_report_line(label: str, value: float, width: int = 40) -> str:
     """Helper to format tax report lines consistently"""
+    value = _round_for_presentation(value)
     return f"{label:<{width}}{value: .2f}\n"
 
 
 def _format_german_report_line(label: str, value: float, width: int = 40) -> str:
+    value = _round_for_presentation(value)
     formatted = _format_german_number(abs(value))
     sign = "-" if value < 0 else " "
     return f"{label:<{width}}{sign}{formatted}\n"
@@ -145,6 +152,7 @@ class GermanTaxReport(object):
     stillhalter_gesamt_fifo: float = 0
     long_optionen_gewinne: float = 0
     long_optionen_verluste: float = 0
+    long_optionen_verfallverluste: float = 0
     long_optionen_gesamt: float = 0
     future_gewinne: float = 0
     future_verluste: float = 0
@@ -172,9 +180,9 @@ class GermanTaxReport(object):
         fields = [
             ('Einzahlungen', self.einzahlungen),
             ('Auszahlungen', self.auszahlungen),
-            ('Brokergebühren', self.brokergebuehren),
-            ('Alle Gebühren in USD', self.alle_gebuehren_in_usd),
-            ('Alle Gebühren in EUR', self.alle_gebuehren_in_euro),
+            ('Aktiengebühren (Info; bereits im Nettoergebnis)', self.brokergebuehren),
+            ('Alle Gebühren in USD (Info; Handelsgebühren bereits im Nettoergebnis)', self.alle_gebuehren_in_usd),
+            ('Alle Gebühren in EUR (Info; Handelsgebühren bereits im Nettoergebnis)', self.alle_gebuehren_in_euro),
             ('Währungsgewinne USD', self.waehrungsgewinne_usd),
             ('Währungsgewinne USD steuerfrei', self.waehrungsgewinne_usd_steuerfrei),
             ('Währungsgewinne USD Gesamt', self.waehrungsgewinne_usd_gesamt),
@@ -212,11 +220,12 @@ class GermanTaxReport(object):
             ('Stillhalter-Gesamt (FIFO)', self.stillhalter_gesamt_fifo),
             ('Long-Optionen-Gewinne', self.long_optionen_gewinne),
             ('Long-Optionen-Verluste', self.long_optionen_verluste),
+            ('Long-Optionen-Verluste aus wertlosem Verfall', self.long_optionen_verfallverluste),
             ('Long-Optionen-Gesamt', self.long_optionen_gesamt),
             ('Future-Gewinne', self.future_gewinne),
             ('Future-Verluste', self.future_verluste),
             ('Future-Gesamt', self.future_gesamt),
-            ('zusätzliche Ordergebühren', self.zusatzliche_ordergebuehren),
+            ('Optionsgebühren (Info; bereits im Nettoergebnis)', self.zusatzliche_ordergebuehren),
             ('Dividenden', self.dividenden),
             ('bezahlte Dividenden', self.bezahlte_dividenden),
             ('Quellensteuer Z41', self.quellensteuer_z41),
@@ -285,6 +294,7 @@ class EnglishTaxReport(object):
     option_holder_total_fifo: float = 0
     long_option_gains: float = 0
     long_option_losses: float = 0
+    long_option_worthless_expiry_losses: float = 0
     long_option_total: float = 0
     future_gains: float = 0
     future_losses: float = 0
@@ -310,9 +320,9 @@ class EnglishTaxReport(object):
         fields = [
             ('deposits', self.deposits),
             ('withdrawals', self.withdrawals),
-            ('broker fees', self.broker_fees),
-            ('all fees in USD', self.all_fees_in_usd),
-            ('all fees in EUR', self.all_fees_in_euro),
+            ('stock fees (info; already included in net P&L)', self.broker_fees),
+            ('all fees in USD (info; trade fees already included in net P&L)', self.all_fees_in_usd),
+            ('all fees in EUR (info; trade fees already included in net P&L)', self.all_fees_in_euro),
             ('currency gains usd', self.currency_gains_usd),
             ('currency gains usd tax free', self.currency_gains_usd_tax_free),
             ('currency gains usd total', self.currency_gains_usd_total),
@@ -335,26 +345,27 @@ class EnglishTaxReport(object):
             ('other gains', self.other_gains),
             ('other losses', self.other_losses),
             ('other total', self.other_total),
-            ('option holder gains', self.option_holder_gains),
-            ('option holder losses', self.option_holder_losses),
-            ('option holder total', self.option_holder_total),
+            ('short option writer gains', self.option_holder_gains),
+            ('short option writer losses', self.option_holder_losses),
+            ('short option writer total', self.option_holder_total),
             ('average held premium per day', self.average_held_premium_per_day),
-            ('option holder gains calls fifo', self.option_holder_gains_calls_fifo),
-            ('option holder losses calls fifo', self.option_holder_losses_calls_fifo),
-            ('option holder calls total fifo', self.option_holder_calls_total_fifo),
-            ('option holder gains puts fifo', self.option_holder_gains_puts_fifo),
-            ('option holder losses puts fifo', self.option_holder_losses_puts_fifo),
-            ('option holder puts total fifo', self.option_holder_puts_total_fifo),
-            ('option holder gains fifo', self.option_holder_gains_fifo),
-            ('option holder losses fifo', self.option_holder_losses_fifo),
-            ('option holder total fifo', self.option_holder_total_fifo),
+            ('short call writer gains fifo', self.option_holder_gains_calls_fifo),
+            ('short call writer losses fifo', self.option_holder_losses_calls_fifo),
+            ('short call writer total fifo', self.option_holder_calls_total_fifo),
+            ('short put writer gains fifo', self.option_holder_gains_puts_fifo),
+            ('short put writer losses fifo', self.option_holder_losses_puts_fifo),
+            ('short put writer total fifo', self.option_holder_puts_total_fifo),
+            ('short option writer gains fifo', self.option_holder_gains_fifo),
+            ('short option writer losses fifo', self.option_holder_losses_fifo),
+            ('short option writer total fifo', self.option_holder_total_fifo),
             ('long option gains', self.long_option_gains),
             ('long option losses', self.long_option_losses),
+            ('long option worthless-expiry losses', self.long_option_worthless_expiry_losses),
             ('long option total', self.long_option_total),
             ('future gains', self.future_gains),
             ('future losses', self.future_losses),
             ('future total', self.future_total),
-            ('additional order fees', self.additional_order_fees),
+            ('option fees (info; already included in net P&L)', self.additional_order_fees),
             ('dividends', self.dividends),
             ('paid dividends', self.paid_dividends),
             ('withholding tax z41', self.withholding_tax_z41),
@@ -380,6 +391,9 @@ class Printer(object):
         report = EnglishTaxReport()
         report.deposits = self.values.deposit.eur
         report.withdrawals = self.values.withdrawal.eur
+        report.broker_fees = self.values.stockFees.eur
+        report.all_fees_in_usd = self.values.fee.usd
+        report.all_fees_in_euro = self.values.fee.eur
         report.interest_income = self.values.creditInterest.eur
         report.interest_expenses = self.values.debitInterest.eur
         report.dividends = self.values.dividend.eur
@@ -407,6 +421,7 @@ class Printer(object):
         )
         report.long_option_gains = self.values.longOptionProfits.eur
         report.long_option_losses = self.values.longOptionLosses.eur
+        report.long_option_worthless_expiry_losses = self.values.longOptionTotalLosses.eur
         report.long_option_total = (
             self.values.longOptionProfits.eur
             + self.values.longOptionLosses.eur
@@ -428,6 +443,9 @@ class Printer(object):
         report = GermanTaxReport()
         report.einzahlungen = self.values.deposit.eur
         report.auszahlungen = self.values.withdrawal.eur
+        report.brokergebuehren = self.values.stockFees.eur
+        report.alle_gebuehren_in_usd = self.values.fee.usd
+        report.alle_gebuehren_in_euro = self.values.fee.eur
         report.zinseinnahmen = self.values.creditInterest.eur
         report.zinsausgaben = self.values.debitInterest.eur
         report.dividenden = self.values.dividend.eur
@@ -455,6 +473,7 @@ class Printer(object):
         )
         report.long_optionen_gewinne = self.values.longOptionProfits.eur
         report.long_optionen_verluste = self.values.longOptionLosses.eur
+        report.long_optionen_verfallverluste = self.values.longOptionTotalLosses.eur
         report.long_optionen_gesamt = (
             self.values.longOptionProfits.eur
             + self.values.longOptionLosses.eur

@@ -51,7 +51,9 @@ class Values(object):
     z24_termingeschaefte_verluste: Money = field(default_factory=Money)
 
     def __str__(self):
-        """pretty prints all the contained Values
-        """
-        j = self.to_json()
-        return str(json.dumps(j, indent=4, sort_keys=True))
+        """Pretty-print every annual value without double-encoding JSON."""
+        values = {
+            name: {"eur": money.eur, "usd": money.usd}
+            for name, money in vars(self).items()
+        }
+        return json.dumps(values, indent=4, sort_keys=True)
