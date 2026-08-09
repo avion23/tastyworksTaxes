@@ -1,31 +1,31 @@
+import re
+from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
+
 import pandas as pd
-from datetime import datetime
+
 from tastyworksTaxes.money import convert_usd_to_eur
 
 
 class History(pd.DataFrame):
 
     _NEW_FORMAT_REQUIRED_COLUMNS = {
-        'Date', 'Type', 'Sub Type', 'Value', 'Description',
-    }
-    _NEW_FORMAT_DEFAULTS = {
-        'Symbol': '',
-        'Action': '',
-        'Quantity': 0,
-        'Expiration Date': '',
-        'Strike Price': 0,
-        'Call or Put': '',
-        'Average Price': 0,
-        'Commissions': 0,
-        'Fees': 0,
-        'Underlying Symbol': '',
-        'Multiplier': 100,
+        'Date', 'Type', 'Sub Type', 'Action', 'Symbol', 'Instrument Type',
+        'Description', 'Value', 'Quantity', 'Average Price', 'Commissions',
+        'Fees', 'Multiplier', 'Root Symbol', 'Underlying Symbol',
+        'Expiration Date', 'Strike Price', 'Call or Put', 'Order #', 'Currency',
     }
     _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
         'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
         'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
         'Call/Put', 'Price', 'Fees', 'Amount', 'Description',
     }
+    _US_NUMBER = re.compile(
+        r'^[+-]?(?:(?:\d{1,3}(?:,\d{3})+)|\d+)(?:\.\d+)?$'
+    )
+    _BLANK_NUMBERS = {'', '--'}
+    _SOURCE_ROW = '_Source Row'
+    _ABSOLUTE_DATE_TIME = '_Absolute Date/Time'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,16 +33,41 @@ class History(pd.DataFrame):
     @classmethod
     def fromFile(cls, path):
         try:
-            df_raw = pd.read_csv(path)
+            df_raw = pd.read_csv(
+                path,
+                encoding='utf-8-sig',
+                dtype=object,
+                keep_default_na=False,
+            )
+        except UnicodeDecodeError as exc:
+            raise ValueError(
+                f"Input CSV must be UTF-8 encoded (UTF-8 BOM is accepted): {path}"
+            ) from exc
         except pd.errors.EmptyDataError as exc:
             raise ValueError(f"Input CSV is empty: {path}") from exc
+        except pd.errors.ParserError as exc:
+            raise ValueError(f"Input CSV is malformed: {path}: {exc}") from exc
 
         if df_raw.empty:
             raise ValueError(f"Input CSV contains no transactions: {path}")
-        df = cls._load_supported_schema(df_raw)
 
-        df = History(df)
-        df.sort_values('Date/Time', inplace=True)
+        duplicate_rows = df_raw.duplicated(keep=False)
+        if duplicate_rows.any():
+            rows = [int(index) + 2 for index in df_raw.index[duplicate_rows]]
+            raise ValueError(
+                "Input CSV contains exact duplicate broker rows at CSV lines "
+                f"{rows}; merge exports without duplicate transactions"
+            )
+
+        df = History(cls._load_supported_schema(df_raw))
+        order_key = df['Order #'].fillna('').astype(str)
+        df['_Broker Order Sort'] = order_key
+        df.sort_values(
+            [cls._ABSOLUTE_DATE_TIME, '_Broker Order Sort', cls._SOURCE_ROW],
+            kind='stable',
+            inplace=True,
+        )
+        df.drop(columns=['_Broker Order Sort'], inplace=True)
         df.reset_index(drop=True, inplace=True)
         df.addEuroConversion()
         df._selfTest()
@@ -51,15 +76,20 @@ class History(pd.DataFrame):
     @staticmethod
     def _load_supported_schema(df: pd.DataFrame) -> pd.DataFrame:
         if History._is_new_format(df):
-            return History._transform(df)
+            return History._transform(df, validate_broker=True)
         if History._is_internal_format(df):
             return History._normalize_internal(df)
 
+        missing_new = sorted(History._NEW_FORMAT_REQUIRED_COLUMNS - set(df.columns))
+        missing_internal = sorted(
+            History._INTERNAL_FORMAT_REQUIRED_COLUMNS - set(df.columns)
+        )
         raise ValueError(
-            "Unsupported CSV schema. Expected either new TastyTrade export columns "
-            "('Date', 'Type', 'Sub Type', 'Value', ...) or normalized internal columns "
-            "('Date/Time', 'Transaction Code', 'Transaction Subcode', 'Amount', ...). "
-            f"Found columns: {list(df.columns)}"
+            "Unsupported CSV schema. Expected either the complete 20-column "
+            "TastyTrade transaction export or the normalized internal schema. "
+            f"Missing new-format columns: {missing_new}; "
+            f"missing internal-format columns: {missing_internal}; "
+            f"found columns: {list(df.columns)}"
         )
 
     @staticmethod
@@ -71,200 +101,342 @@ class History(pd.DataFrame):
         return History._INTERNAL_FORMAT_REQUIRED_COLUMNS.issubset(df.columns)
 
     @staticmethod
-    def _numeric_column(series: pd.Series, column_name: str) -> pd.Series:
-        raw = series.copy()
-        text = raw.astype(str).str.strip()
-        blank = raw.isna() | text.isin(['', '--', 'nan'])
-        cleaned = text.str.replace(',', '', regex=False)
-        parsed = pd.to_numeric(cleaned.where(~blank, '0'), errors='coerce')
-
-        invalid = parsed.isna() & ~blank
-        if invalid.any():
-            bad_values = raw.loc[invalid].tolist()
+    def _parse_numeric_value(
+        value,
+        column_name: str,
+        *,
+        allow_blank: bool = False,
+        blank_value: float = 0.0,
+    ) -> float:
+        text = '' if pd.isna(value) else str(value).strip()
+        if text in History._BLANK_NUMBERS:
+            if allow_blank:
+                return blank_value
             raise ValueError(
-                f"Failed to parse numeric values in normalized CSV column "
-                f"'{column_name}': {bad_values}"
+                f"Required numeric value is blank in CSV column '{column_name}'"
             )
+        if not History._US_NUMBER.fullmatch(text):
+            raise ValueError(
+                f"Failed to parse numeric values in CSV column '{column_name}': "
+                f"invalid US-format value {value!r}"
+            )
+        try:
+            parsed = Decimal(text.replace(',', ''))
+        except InvalidOperation as exc:
+            raise ValueError(
+                f"Invalid numeric value in CSV column '{column_name}': {value!r}"
+            ) from exc
+        if not parsed.is_finite():
+            raise ValueError(
+                f"Non-finite numeric value in CSV column '{column_name}': {value!r}"
+            )
+        return float(parsed)
 
-        return parsed
+    @staticmethod
+    def _numeric_column(
+        series: pd.Series,
+        column_name: str,
+        *,
+        allow_blank: bool = False,
+        blank_value: float = 0.0,
+    ) -> pd.Series:
+        return series.apply(
+            lambda value: History._parse_numeric_value(
+                value,
+                column_name,
+                allow_blank=allow_blank,
+                blank_value=blank_value,
+            )
+        )
+
+    @staticmethod
+    def _parse_datetime(value, column_name: str, *, require_offset: bool):
+        text = str(value).strip()
+        if not text:
+            raise ValueError(f"Required date value is blank in CSV column '{column_name}'")
+        try:
+            parsed = datetime.fromisoformat(text.replace('Z', '+00:00'))
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Failed to parse date in CSV column '{column_name}': {value!r}"
+            ) from exc
+        if require_offset and parsed.tzinfo is None:
+            raise ValueError(
+                f"Failed to parse date in CSV column '{column_name}': "
+                "timezone offset is missing"
+            )
+        wall_time = parsed.replace(tzinfo=None)
+        if parsed.tzinfo is None:
+            absolute_time = parsed.replace(tzinfo=timezone.utc)
+        else:
+            absolute_time = parsed.astimezone(timezone.utc)
+        return wall_time, absolute_time
+
+    @staticmethod
+    def _validate_usd_currency(series: pd.Series) -> pd.Series:
+        normalized = series.astype(str).str.strip().str.upper()
+        invalid = normalized != 'USD'
+        if invalid.any():
+            rows = [int(index) + 2 for index in series.index[invalid]]
+            values = sorted(set(normalized.loc[invalid]))
+            raise ValueError(
+                "Only USD TastyTrade transactions are supported; invalid Currency "
+                f"values {values} at CSV lines {rows}"
+            )
+        return normalized
+
+    @staticmethod
+    def _require_nonblank(df: pd.DataFrame, column: str, mask, context: str):
+        blank = df[column].astype(str).str.strip().isin(['', '--'])
+        invalid = mask & blank
+        if invalid.any():
+            rows = [int(index) + 2 for index in df.index[invalid]]
+            raise ValueError(
+                f"Required {context} field '{column}' is blank at CSV lines {rows}"
+            )
 
     @staticmethod
     def _normalize_internal(df: pd.DataFrame) -> pd.DataFrame:
         internal_df = df.copy()
+        internal_df[History._SOURCE_ROW] = range(len(internal_df))
 
         if 'Underlying Symbol' not in internal_df:
             internal_df['Underlying Symbol'] = internal_df['Symbol']
         else:
             missing_underlying = (
-                internal_df['Underlying Symbol'].isna()
-                | (internal_df['Underlying Symbol'].astype(str).str.strip() == '')
+                internal_df['Underlying Symbol'].astype(str).str.strip() == ''
             )
             internal_df.loc[missing_underlying, 'Underlying Symbol'] = internal_df.loc[
                 missing_underlying, 'Symbol'
             ]
         if 'Multiplier' not in internal_df:
-            internal_df['Multiplier'] = 100
+            internal_df['Multiplier'] = '100'
+        if 'Order #' not in internal_df:
+            internal_df['Order #'] = ''
+        else:
+            internal_df['Order #'] = internal_df['Order #'].astype(str).str.strip()
+        if 'Currency' not in internal_df:
+            internal_df['Currency'] = 'USD'
+        internal_df['Currency'] = History._validate_usd_currency(
+            internal_df['Currency']
+        )
 
-        internal_df['Date/Time'] = pd.to_datetime(internal_df['Date/Time'], errors='coerce')
-        if internal_df['Date/Time'].isna().any():
-            bad_values = df.loc[internal_df['Date/Time'].isna(), 'Date/Time'].tolist()
-            raise ValueError(f"Failed to parse Date/Time values in normalized CSV: {bad_values}")
+        parsed_dates = internal_df['Date/Time'].apply(
+            lambda value: History._parse_datetime(
+                value, 'Date/Time', require_offset=False
+            )
+        )
+        internal_df['Date/Time'] = parsed_dates.apply(lambda value: value[0])
+        internal_df[History._ABSOLUTE_DATE_TIME] = pd.to_datetime(
+            parsed_dates.apply(lambda value: value[1]), utc=True
+        )
 
         raw_expiration = internal_df['Expiration Date'].copy()
-        internal_df['Expiration Date'] = pd.to_datetime(raw_expiration, errors='coerce')
-
-        has_option_type = internal_df['Call/Put'].astype(str).str.strip().isin(['C', 'P'])
-        invalid_option_expiry = has_option_type & internal_df['Expiration Date'].isna()
-        if invalid_option_expiry.any():
-            bad_values = raw_expiration.loc[invalid_option_expiry].tolist()
-            raise ValueError(
-                "Failed to parse Expiration Date values for option rows in "
-                f"normalized CSV: {bad_values}"
-            )
-
-        for column in ['Amount', 'Fees', 'Quantity', 'Strike', 'Price', 'Multiplier']:
-            internal_df[column] = History._numeric_column(internal_df[column], column)
-
-        return internal_df
-
-    @staticmethod
-    def _transform(df: pd.DataFrame) -> pd.DataFrame:
-        df = df.copy()
-        for column, default in History._NEW_FORMAT_DEFAULTS.items():
-            if column not in df:
-                df[column] = default
-
-        internal_df = pd.DataFrame()
-
-        def parse_date(date_str):
-            if pd.isna(date_str):
-                raise ValueError("Failed to parse date: value is missing")
-            try:
-                dt = datetime.fromisoformat(str(date_str).strip().replace('Z', '+00:00'))
-                if dt.tzinfo is None:
-                    raise ValueError("timezone offset is missing")
-                return dt.replace(tzinfo=None)
-            except (ValueError, TypeError) as e:
-                raise ValueError(f"Failed to parse date '{date_str}': {e}")
-
-        internal_df['Date/Time'] = df['Date'].apply(parse_date)
-        internal_df['Transaction Code'] = df['Type']
-        internal_df['Transaction Subcode'] = df['Sub Type']
-        def parse_symbol(symbol):
-            if pd.isna(symbol):
-                return ''
-            parts = str(symbol).strip().split()
-            return parts[0] if parts else ''
-
-        internal_df['Symbol'] = df['Symbol'].apply(parse_symbol)
-        underlying = df['Underlying Symbol'].where(
-            df['Underlying Symbol'].notna() & (df['Underlying Symbol'].astype(str).str.strip() != ''),
-            df['Symbol'],
-        )
-        internal_df['Underlying Symbol'] = underlying.apply(parse_symbol)
-        internal_df['Multiplier'] = History._numeric_column(df['Multiplier'], 'Multiplier')
-
-        def extract_buy_sell(row):
-            sub_type = str(row.get('Sub Type', ''))
-            action = str(row.get('Action', ''))
-            if 'Buy' in sub_type:
-                return 'Buy'
-            elif 'Sell' in sub_type:
-                return 'Sell'
-            elif 'BUY' in action:
-                return 'Buy'
-            elif 'SELL' in action:
-                return 'Sell'
-            return ''
-
-        internal_df['Buy/Sell'] = df.apply(extract_buy_sell, axis=1)
-        internal_df['Open/Close'] = df['Action'].apply(
-            lambda x: str(x).split('_TO_')[-1].capitalize() if pd.notna(x) and '_TO_' in str(x) else '')
-        internal_df['Quantity'] = History._numeric_column(df['Quantity'], 'Quantity')
-        raw_expiration = df['Expiration Date']
         internal_df['Expiration Date'] = pd.to_datetime(
-            raw_expiration, format='%m/%d/%y', errors='coerce')
+            raw_expiration.where(
+                ~raw_expiration.astype(str).str.strip().isin(['', '--']), None
+            ),
+            errors='coerce',
+        )
 
-        def parse_strike(strike):
-            if pd.isna(strike) or strike == '':
-                return 0.0
-            try:
-                return float(str(strike).replace(',', ''))
-            except (ValueError, TypeError) as e:
-                raise ValueError(f"Failed to parse strike '{strike}': {e}")
-
-        internal_df['Strike'] = df['Strike Price'].apply(parse_strike) if 'Strike Price' in df else 0.0
-
-        def format_call_put(cp):
-            if pd.notna(cp) and cp not in ('', '--'):
-                value = str(cp).strip().upper()
-                return value[0] if value else ''
-            return ''
-
-        internal_df['Call/Put'] = df['Call or Put'].apply(format_call_put) if 'Call or Put' in df else ''
+        internal_df['Call/Put'] = (
+            internal_df['Call/Put'].astype(str).str.strip().str.upper()
+        )
+        invalid_call_put = ~internal_df['Call/Put'].isin(['', 'C', 'P'])
+        if invalid_call_put.any():
+            values = sorted(set(internal_df.loc[invalid_call_put, 'Call/Put']))
+            raise ValueError(f"Invalid normalized Call/Put values: {values}")
         has_option_type = internal_df['Call/Put'].isin(['C', 'P'])
         invalid_option_expiry = has_option_type & internal_df['Expiration Date'].isna()
         if invalid_option_expiry.any():
-            bad_values = raw_expiration.loc[invalid_option_expiry].tolist()
+            rows = [int(index) + 2 for index in internal_df.index[invalid_option_expiry]]
             raise ValueError(
-                "Failed to parse Expiration Date values for option rows in "
-                f"TastyTrade CSV: {bad_values}"
+                "Failed to parse Expiration Date for normalized option rows at "
+                f"CSV lines {rows}"
             )
 
-        def parse_price(row):
-            price = row.get('Average Price', None)
-            if pd.isna(price) or price == '--' or price == 0 or price == '':
-                return 0.0
-            try:
-                price_float = float(str(price).replace(',', ''))
-                symbol = row.get('Symbol', '')
-                call_put = str(row.get('Call or Put', '')).strip().upper()
-                is_option = call_put in {'CALL', 'PUT', 'C', 'P'} or len(str(symbol).split()) > 1
-                if is_option:
-                    return price_float / 100
-                else:
-                    return price_float
-            except (ValueError, TypeError) as e:
-                raise ValueError(f"Failed to parse price '{price}' for symbol '{row.get('Symbol', '')}': {e}")
+        internal_df['Amount'] = History._numeric_column(
+            internal_df['Amount'], 'Amount'
+        )
+        internal_trade = (
+            internal_df['Transaction Code'].astype(str).str.strip() == 'Trade'
+        )
+        History._require_nonblank(
+            internal_df, 'Fees', internal_trade, 'normalized trade'
+        )
+        internal_df['Fees'] = History._numeric_column(
+            internal_df['Fees'], 'Fees', allow_blank=True
+        )
+        negative_fees = internal_df['Fees'] < 0
+        if negative_fees.any():
+            rows = [int(index) + 2 for index in internal_df.index[negative_fees]]
+            raise ValueError(
+                "Normalized internal Fees must be nonnegative costs at CSV lines "
+                f"{rows}"
+            )
+        for column in ['Quantity', 'Strike', 'Price']:
+            internal_df[column] = History._numeric_column(
+                internal_df[column], column, allow_blank=True
+            )
+        internal_df['Multiplier'] = History._numeric_column(
+            internal_df['Multiplier'], 'Multiplier', allow_blank=True, blank_value=100
+        )
+        return internal_df
 
-        internal_df['Price'] = df.apply(parse_price, axis=1)
+    @staticmethod
+    def _transform(
+        df: pd.DataFrame, *, validate_broker: bool = False
+    ) -> pd.DataFrame:
+        missing = History._NEW_FORMAT_REQUIRED_COLUMNS - set(df.columns)
+        if missing:
+            raise ValueError(
+                "Incomplete TastyTrade export; missing required columns: "
+                f"{sorted(missing)}"
+            )
 
-        def calc_fees(row):
-            commissions = row.get('Commissions', 0)
-            fees = row.get('Fees', 0)
-            try:
-                comm_val = abs(float(str(commissions).replace(',', ''))) if commissions != '--' and pd.notna(commissions) else 0
-                fees_val = abs(float(str(fees).replace(',', ''))) if fees != '--' and pd.notna(fees) else 0
-                return comm_val + fees_val
-            except (ValueError, TypeError) as e:
-                raise ValueError(f"Failed to parse fees - commissions: '{commissions}', fees: '{fees}': {e}")
+        source_df = df.copy().where(pd.notna(df), '')
+        source_df['Currency'] = History._validate_usd_currency(source_df['Currency'])
+        source_df[History._SOURCE_ROW] = range(len(source_df))
 
-        internal_df['Fees'] = df.apply(calc_fees, axis=1)
+        recognized_position = source_df['Type'].astype(str).str.strip().isin(
+            ['Trade', 'Receive Deliver']
+        )
+        trade = source_df['Type'].astype(str).str.strip() == 'Trade'
+        for column in ['Value', 'Quantity', 'Fees']:
+            History._require_nonblank(
+                source_df, column, pd.Series(True, index=source_df.index), 'transaction'
+            )
+        for column in ['Symbol', 'Instrument Type']:
+            History._require_nonblank(
+                source_df, column, recognized_position, 'position transaction'
+            )
+        if validate_broker:
+            for column in ['Action', 'Average Price', 'Commissions', 'Order #']:
+                History._require_nonblank(source_df, column, trade, 'trade')
 
-        def parse_amount(amount):
-            if pd.isna(amount):
-                return 0.0
-            try:
-                return float(str(amount).replace(',', ''))
-            except (ValueError, TypeError) as e:
-                raise ValueError(f"Failed to parse amount '{amount}': {e}")
+        instrument = source_df['Instrument Type'].astype(str).str.strip()
+        invalid_instrument = recognized_position & ~instrument.isin(
+            ['Equity', 'Equity Option']
+        )
+        if invalid_instrument.any():
+            values = sorted(set(instrument.loc[invalid_instrument]))
+            raise ValueError(f"Unsupported Instrument Type values: {values}")
 
-        internal_df['Amount'] = df['Value'].apply(parse_amount)
-        internal_df['Description'] = df['Description']
+        parsed_dates = source_df['Date'].apply(
+            lambda value: History._parse_datetime(value, 'Date', require_offset=True)
+        )
+        internal_df = pd.DataFrame(index=source_df.index)
+        internal_df['Date/Time'] = parsed_dates.apply(lambda value: value[0])
+        internal_df[History._ABSOLUTE_DATE_TIME] = pd.to_datetime(
+            parsed_dates.apply(lambda value: value[1]), utc=True
+        )
+        internal_df[History._SOURCE_ROW] = source_df[History._SOURCE_ROW]
+        internal_df['Order #'] = source_df['Order #'].astype(str).str.strip()
+        internal_df['Currency'] = source_df['Currency']
+        internal_df['Transaction Code'] = source_df['Type'].astype(str).str.strip()
+        internal_df['Transaction Subcode'] = source_df['Sub Type'].astype(str).str.strip()
 
+        def parse_symbol(symbol):
+            parts = str(symbol).strip().split()
+            return parts[0] if parts else ''
+
+        internal_df['Symbol'] = source_df['Symbol'].apply(parse_symbol)
+        underlying = source_df['Underlying Symbol'].where(
+            source_df['Underlying Symbol'].astype(str).str.strip() != '',
+            source_df['Symbol'],
+        )
+        internal_df['Underlying Symbol'] = underlying.apply(parse_symbol)
+        internal_df['Multiplier'] = History._numeric_column(
+            source_df['Multiplier'], 'Multiplier', allow_blank=True, blank_value=0
+        )
+
+        def extract_buy_sell(row):
+            sub_type = str(row['Sub Type'])
+            action = str(row['Action'])
+            if 'Buy' in sub_type:
+                return 'Buy'
+            if 'Sell' in sub_type:
+                return 'Sell'
+            if 'BUY' in action:
+                return 'Buy'
+            if 'SELL' in action:
+                return 'Sell'
+            return ''
+
+        internal_df['Buy/Sell'] = source_df.apply(extract_buy_sell, axis=1)
+        internal_df['Open/Close'] = source_df['Action'].apply(
+            lambda value: str(value).split('_TO_')[-1].capitalize()
+            if '_TO_' in str(value) else ''
+        )
+        internal_df['Quantity'] = History._numeric_column(
+            source_df['Quantity'], 'Quantity'
+        )
+
+        raw_expiration = source_df['Expiration Date']
+        internal_df['Expiration Date'] = pd.to_datetime(
+            raw_expiration.where(
+                ~raw_expiration.astype(str).str.strip().isin(['', '--']), None
+            ),
+            format='%m/%d/%y',
+            errors='coerce',
+        )
+        internal_df['Strike'] = History._numeric_column(
+            source_df['Strike Price'], 'Strike Price', allow_blank=True
+        )
+
+        call_put = source_df['Call or Put'].astype(str).str.strip().str.upper()
+        call_put = call_put.replace({'CALL': 'C', 'PUT': 'P'})
+        invalid_call_put = ~call_put.isin(['', '--', 'C', 'P'])
+        if invalid_call_put.any():
+            values = sorted(set(call_put.loc[invalid_call_put]))
+            raise ValueError(f"Invalid Call or Put values: {values}")
+        internal_df['Call/Put'] = call_put.replace({'--': ''})
+
+        option = recognized_position & (instrument == 'Equity Option')
+        invalid_option_expiry = option & internal_df['Expiration Date'].isna()
+        if invalid_option_expiry.any():
+            rows = [int(index) + 2 for index in source_df.index[invalid_option_expiry]]
+            raise ValueError(
+                "Failed to parse Expiration Date for option rows at CSV lines "
+                f"{rows}"
+            )
+        invalid_option_fields = option & (
+            ~internal_df['Call/Put'].isin(['C', 'P'])
+            | (internal_df['Strike'] <= 0)
+            | (internal_df['Multiplier'] <= 0)
+        )
+        if invalid_option_fields.any():
+            rows = [int(index) + 2 for index in source_df.index[invalid_option_fields]]
+            raise ValueError(
+                "Option rows require Call or Put, positive Strike Price, and positive "
+                f"Multiplier at CSV lines {rows}"
+            )
+
+        average_price = History._numeric_column(
+            source_df['Average Price'], 'Average Price', allow_blank=True
+        )
+        internal_df['Price'] = average_price.where(~option, average_price / 100)
+
+        commissions = History._numeric_column(
+            source_df['Commissions'], 'Commissions', allow_blank=True
+        )
+        broker_fees = History._numeric_column(source_df['Fees'], 'Fees')
+        internal_df['Fees'] = commissions.abs() + broker_fees.abs()
+        internal_df['Amount'] = History._numeric_column(source_df['Value'], 'Value')
+        internal_df['Description'] = source_df['Description']
         return internal_df
 
     def addEuroConversion(self):
-        """ adds a new column called "AmountEuro" and "FeesEuro" to the dataframe
-        """
+        """Add EUR amount and fee columns using the local broker wall date."""
         self['Date/Time'] = pd.to_datetime(self['Date/Time'])
         self['Expiration Date'] = pd.to_datetime(self['Expiration Date'])
-        self['AmountEuro'] = self.apply(lambda x: convert_usd_to_eur(
-            x['Amount'], x['Date/Time']), axis=1)
-        self['FeesEuro'] = self.apply(lambda x: convert_usd_to_eur(
-            x['Fees'], x['Date/Time']), axis=1)
+        self['AmountEuro'] = self.apply(
+            lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1
+        )
+        self['FeesEuro'] = self.apply(
+            lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1
+        )
 
     def _selfTest(self):
-        if "Date/Time" not in self.columns:
-            raise ValueError(
-                "Couldn't find the first column labeled Date/Time in the csv file")
+        if 'Date/Time' not in self.columns:
+            raise ValueError("Couldn't find the Date/Time column in the CSV file")
