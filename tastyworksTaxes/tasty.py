@@ -3,7 +3,7 @@ from tastyworksTaxes.transaction import Transaction
 from tastyworksTaxes.money import Money
 from tastyworksTaxes.history import History
 from tastyworksTaxes.asset_classifier import AssetClassifier
-from tastyworksTaxes.position_manager import PositionManager
+from tastyworksTaxes.position_manager import PositionManager, OPTION_SETTLEMENT_FIELD
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.constants import (
     TransactionCode,
@@ -29,8 +29,12 @@ from tastyworksTaxes.trade_calculator import (
     calculate_fees_sum,
     get_stock_trades,
 )
+import copy
 import logging
+import math
 from datetime import date, datetime
+
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -146,6 +150,32 @@ class Tasty:
             print(value)
 
     def processTransactionHistory(self):
+        manager = self.position_manager
+        staged_manager = copy.deepcopy(manager)
+        state_names = (
+            "yearValues",
+            "unverified_asset_symbols_by_year",
+            "short_stock_trades_by_year",
+            "_withholding_remaining",
+            "_asset_classification_checks",
+        )
+        original_state = {name: getattr(self, name) for name in state_names}
+        for name, value in original_state.items():
+            setattr(self, name, copy.deepcopy(value))
+        self.position_manager = staged_manager
+        try:
+            self._processTransactionHistory()
+        except Exception:
+            self.position_manager = manager
+            for name, value in original_state.items():
+                setattr(self, name, value)
+            raise
+
+        manager.__dict__.clear()
+        manager.__dict__.update(staged_manager.__dict__)
+        self.position_manager = manager
+
+    def _processTransactionHistory(self):
         corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin([
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
@@ -173,30 +203,6 @@ class Tasty:
             ])
             & self.history[Fields.CALL_PUT.value].isin(["C", "P"])
         )
-        settlement_dates = self.history[Fields.DATE_TIME.value].dt.date.astype(str)
-        settlement_symbols = self.history[Fields.SYMBOL.value].copy()
-        settlement_symbols.loc[physical_option_settlements] = self.history.loc[
-            physical_option_settlements, Fields.UNDERLYING_SYMBOL.value
-        ]
-        settlement_directions = self.history[Fields.BUY_SELL.value].str.lower()
-        settlement_directions.loc[
-            physical_option_settlements
-            & (self.history[Fields.CALL_PUT.value] == "C")
-        ] = "buy"
-        settlement_directions.loc[
-            physical_option_settlements
-            & (self.history[Fields.CALL_PUT.value] == "P")
-        ] = "sell"
-        settlement_keys = list(zip(
-            settlement_dates,
-            settlement_symbols,
-            settlement_directions,
-        ))
-        option_keys = {
-            settlement_keys[index]
-            for index in range(len(self.history))
-            if physical_option_settlements.iloc[index]
-        }
         stock_settlements = (
             receive_deliver
             & ~self.history[Fields.CALL_PUT.value].isin(["C", "P"])
@@ -207,34 +213,78 @@ class Tasty:
                 TransactionSubcode.SELL_TO_CLOSE.value,
             ])
         )
-        stock_keys = {
-            settlement_keys[index]
-            for index in range(len(self.history))
-            if stock_settlements.iloc[index]
-        }
-        paired_keys = option_keys & stock_keys
-        settlement_anchors = {
-            key: self.history.loc[
-                [
-                    row_key == key and bool(physical_option_settlements.iloc[index])
-                    for index, row_key in enumerate(settlement_keys)
-                ],
-                Fields.DATE_TIME.value,
-            ].max()
-            for key in paired_keys
-        }
+        settlement_semantic = pd.Series("", index=self.history.index, dtype="object")
+        option_groups = {}
+        stock_groups = {}
+
+        def settlement_number(value, field_name):
+            try:
+                number = abs(float(value))
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    f"Invalid option settlement {field_name}: {value!r}"
+                ) from exc
+            if not math.isfinite(number):
+                raise ValueError(
+                    f"Invalid option settlement {field_name}: {value!r}"
+                )
+            return round(number, 8)
+
+        for index in range(len(self.history)):
+            row = self.history.iloc[index]
+            date_iso = str(row[Fields.DATE_TIME.value].date())
+            if physical_option_settlements.iloc[index]:
+                semantic = row[Fields.TRANSACTION_SUBCODE.value]
+                call_put = row[Fields.CALL_PUT.value]
+                if semantic == TransactionSubcode.EXERCISE.value:
+                    direction = "buy" if call_put == "C" else "sell"
+                else:
+                    direction = "sell" if call_put == "C" else "buy"
+                shares = settlement_number(
+                    row[Fields.QUANTITY.value] * row[Fields.MULTIPLIER.value],
+                    "share quantity",
+                )
+                notional = settlement_number(
+                    row[Fields.STRIKE.value] * shares, "notional"
+                )
+                underlying = str(row[Fields.UNDERLYING_SYMBOL.value]).strip()
+                key = (date_iso, underlying, direction, shares, notional)
+                option_groups.setdefault(key, []).append((index, semantic))
+                continue
+
+            if not stock_settlements.iloc[index]:
+                continue
+            direction = str(row[Fields.BUY_SELL.value]).lower()
+            shares = settlement_number(row[Fields.QUANTITY.value], "share quantity")
+            notional = settlement_number(row[Fields.AMOUNT.value], "notional")
+            symbol = str(row[Fields.SYMBOL.value]).strip()
+            key = (date_iso, symbol, direction, shares, notional)
+            stock_groups.setdefault(key, []).append(index)
+
         processing_datetime = self.history[Fields.DATE_TIME.value].copy()
-        stock_needs_delay = [
-            bool(stock_settlements.iloc[index])
-            and key in paired_keys
-            and processing_datetime.iloc[index] < settlement_anchors[key]
-            for index, key in enumerate(settlement_keys)
-        ]
-        processing_datetime.loc[stock_needs_delay] = [
-            settlement_anchors[key]
-            for key, delayed in zip(settlement_keys, stock_needs_delay)
-            if delayed
-        ]
+        for key, option_entries in option_groups.items():
+            stock_indices = stock_groups.get(key, [])
+            if len(stock_indices) != len(option_entries):
+                raise ValueError(
+                    "UNMATCHED OPTION SETTLEMENT: option and stock delivery legs "
+                    "do not have a unique quantity/notional match"
+                )
+            semantics = {semantic for _, semantic in option_entries}
+            if len(semantics) != 1:
+                raise ValueError(
+                    "AMBIGUOUS OPTION SETTLEMENT: Exercise and Assignment share "
+                    "the same date, symbol, direction, quantity, and notional"
+                )
+            semantic = next(iter(semantics))
+            anchor = max(
+                self.history.iloc[index][Fields.DATE_TIME.value]
+                for index, _ in option_entries
+            )
+            for stock_index in stock_indices:
+                settlement_semantic.iloc[stock_index] = semantic
+                if processing_datetime.iloc[stock_index] < anchor:
+                    processing_datetime.iloc[stock_index] = anchor
+
         settlement_order = physical_option_settlements.astype(int) * -1
         settlement_order += stock_settlements.astype(int)
         chronological_history = (
@@ -243,6 +293,7 @@ class Tasty:
                 + open_legs.astype(int),
                 _processing_datetime=processing_datetime,
                 _settlement_order=settlement_order,
+                **{OPTION_SETTLEMENT_FIELD: settlement_semantic},
             )
             .sort_values(
                 by=[

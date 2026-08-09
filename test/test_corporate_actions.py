@@ -319,3 +319,31 @@ class TestCorporateActions:
         assert (option_lot.quantity, option_lot.strike, option_lot.amount_usd) == (
             2, 10, -100
         )
+
+    def test_large_split_fraction_is_not_hidden_by_relative_tolerance(
+        self, position_manager
+    ):
+        lot = PositionLot(
+            symbol="BIG", position_type=PositionType.stock,
+            quantity=1_000_000_000_000.5,
+            amount_usd=-1000, amount_eur=-900, fees_usd=1, fees_eur=0.9,
+            date=datetime(2024, 1, 1),
+        )
+        position_manager.add_lot_directly(lot)
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2024, 2, 1),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "BIG",
+            "Description": "1-for-2 reverse split",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        with pytest.raises(ValueError, match="FRACTIONAL RESIDUAL UNKNOWN"):
+            position_manager.add_position(transaction)
+
+        assert lot.quantity == 1_000_000_000_000.5
+        assert lot.amount_usd == -1000

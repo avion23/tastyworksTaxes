@@ -58,6 +58,7 @@ from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.money import Money
 
 logger = logging.getLogger(__name__)
+OPTION_SETTLEMENT_FIELD = "_Option Settlement"
 
 
 @dataclass(frozen=True)
@@ -285,14 +286,10 @@ class PositionManager:
     def _get_conversion_key(transaction) -> tuple:
         """Identify one broker conversion pair without trusting replacement basis."""
         position_type = transaction.getType()
-        amount = abs(float(transaction.getValue().usd))
-        if not math.isfinite(amount):
-            raise ValueError("Corporate action amount must be finite")
-
         event = transaction[Fields.TRANSACTION_SUBCODE.value]
         event_time = transaction.getDateTime()
         if position_type == PositionType.stock:
-            return event, event_time, position_type, amount
+            return event, event_time, position_type
 
         quantity = abs(float(transaction.getQuantity()))
         if not math.isfinite(quantity):
@@ -304,7 +301,6 @@ class PositionManager:
             transaction.getExpiry(),
             transaction.loc[Fields.CALL_PUT.value],
             quantity,
-            amount,
         )
 
     def _open_position(self, transaction):
@@ -336,6 +332,8 @@ class PositionManager:
             lot.position_type == PositionType.stock
             and transaction[Fields.TRANSACTION_CODE.value]
             == TransactionCode.RECEIVE_DELIVER.value
+            and transaction.get(OPTION_SETTLEMENT_FIELD)
+            == TransactionSubcode.EXERCISE.value
         ):
             direction = "buy" if lot.quantity > 0 else "sell"
             adjustment, exercise_fees = self._consume_pending_exercise(
@@ -409,7 +407,7 @@ class PositionManager:
         if conversion_key in pending_store:
             raise ValueError(
                 "AMBIGUOUS CORPORATE ACTION: multiple close legs share the same "
-                "event time, type, instrument fields, quantity, and amount"
+                "event time, type, and stable instrument fields"
             )
 
         key = self._get_key_from_transaction(transaction)
@@ -484,11 +482,32 @@ class PositionManager:
         if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_close:
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
 
+        planned_lots = []
+        planned_quantity = quantity_to_close
+        for lot in matching_lots:
+            if planned_quantity <= 1e-6:
+                break
+            if not ignores_direction and not lot.can_close_with(closing_quantity):
+                continue
+            consumed_quantity = lot.get_closable_quantity(planned_quantity)
+            planned_lots.append((lot, consumed_quantity))
+            planned_quantity -= consumed_quantity
+        planned_consumes_long = any(lot.quantity > 0 for lot, _ in planned_lots)
+
+        if (
+            subcode == TransactionSubcode.ASSIGNMENT.value
+            and planned_consumes_long
+        ):
+            raise ValueError(
+                "LONG OPTION ASSIGNMENT IS AMBIGUOUS: only explicit Exercise "
+                "transactions can transfer paid premium to stock"
+            )
+
         exercise_multiplier = None
-        if subcode in {
-            TransactionSubcode.EXERCISE.value,
-            TransactionSubcode.ASSIGNMENT.value,
-        } and any(lot.quantity > 0 for lot in candidates):
+        if (
+            subcode == TransactionSubcode.EXERCISE.value
+            and planned_consumes_long
+        ):
             multiplier_value = transaction.get(Fields.MULTIPLIER.value, 100)
             try:
                 exercise_multiplier = abs(float(multiplier_value))
@@ -504,12 +523,14 @@ class PositionManager:
         closing_transaction = transaction
         pending_adjustment = Money()
         pending_exercise_fees = Money()
-        is_stock_delivery = (
+        is_exercise_stock_delivery = (
             transaction.getType() == PositionType.stock
             and transaction[Fields.TRANSACTION_CODE.value]
             == TransactionCode.RECEIVE_DELIVER.value
+            and transaction.get(OPTION_SETTLEMENT_FIELD)
+            == TransactionSubcode.EXERCISE.value
         )
-        if is_stock_delivery:
+        if is_exercise_stock_delivery:
             direction = "sell" if closing_quantity < 0 else "buy"
             pending_adjustment, pending_exercise_fees = self._consume_pending_exercise(
                 transaction.getDate(),
@@ -563,10 +584,7 @@ class PositionManager:
             is_long_physical_exercise = (
                 opening_was_long
                 and lot_to_process.position_type in (PositionType.call, PositionType.put)
-                and subcode in {
-                    TransactionSubcode.EXERCISE.value,
-                    TransactionSubcode.ASSIGNMENT.value,
-                }
+                and subcode == TransactionSubcode.EXERCISE.value
             )
             if is_long_physical_exercise:
                 option_amount = Money(
@@ -816,7 +834,7 @@ class PositionManager:
             ):
                 target = quantity * ratio
                 if quantity and not math.isclose(
-                    target, round(target), abs_tol=1e-6
+                    target, round(target), rel_tol=0, abs_tol=1e-6
                 ):
                     raise ValueError(
                         "REVERSE SPLIT FRACTIONAL RESIDUAL UNKNOWN: "

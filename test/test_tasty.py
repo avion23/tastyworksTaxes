@@ -189,7 +189,7 @@ class TestTasty:
             "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,Bought stock,-100,10,10,0,0,,OLD,OLD,,,,123456,USD"
         )
         new_open = Transaction.fromString(
-            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,-250,20,0,0,0,,NEW,NEW,,,,123456,USD"
+            "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,Symbol change open,-999,20,0,0,0,,NEW,NEW,,,,123456,USD"
         )
         old_close = Transaction.fromString(
             "2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,Symbol change close,250,10,0,0,0,,OLD,OLD,,,,123456,USD"
@@ -205,7 +205,7 @@ class TestTasty:
         ]
         assert t.position_manager._pending_symbol_change_lots == {}
 
-    def test_simultaneous_symbol_changes_keep_each_basis_with_its_pair(self):
+    def test_multiple_same_time_symbol_changes_reject_distinct_amounts(self):
         def transaction(line):
             return Transaction.fromString(line)
 
@@ -220,20 +220,18 @@ class TestTasty:
         t = Tasty()
         t.history = pd.DataFrame(rows)
 
-        t.processTransactionHistory()
+        with pytest.raises(ValueError, match="AMBIGUOUS OR UNMATCHED"):
+            t.processTransactionHistory()
 
-        assert sorted(
-            (lot.symbol, lot.quantity, lot.amount_usd)
-            for lot in t.position_manager.get_all_open_lots()
-        ) == [("NEW1", 10, -100), ("NEW2", 10, -200)]
+        assert t.position_manager.get_all_open_lots() == []
 
-    def test_ambiguous_simultaneous_symbol_changes_fail_before_processing(self):
+    def test_crossed_amounts_do_not_correlate_simultaneous_symbol_changes(self):
         rows = [
             Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
-            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,0,10,0,0,0,,OLD1,OLD1,,,,2,USD"),
-            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,0,10,0,0,0,,OLD2,OLD2,,,,3,USD"),
-            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,0,10,0,0,0,,NEW1,NEW1,,,,4,USD"),
-            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW2,Equity,open,0,10,0,0,0,,NEW2,NEW2,,,,5,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,100,10,0,0,0,,OLD1,OLD1,,,,2,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,200,10,0,0,0,,OLD2,OLD2,,,,3,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,-200,10,0,0,0,,NEW1,NEW1,,,,4,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW2,Equity,open,-100,10,0,0,0,,NEW2,NEW2,,,,5,USD"),
         ]
         t = Tasty()
         t.history = pd.DataFrame(rows)
@@ -269,3 +267,48 @@ class TestTasty:
             t.processTransactionHistory()
 
         assert t.position_manager.get_all_open_lots() == []
+
+    def test_later_conversion_failure_rolls_back_all_processing_state(self):
+        t = Tasty()
+        t.position_manager.add_position(Transaction.fromString(
+            "2023-12-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,KEEP,Equity,keep,-50,5,10,0,0,,KEEP,KEEP,,,,1,USD"
+        ))
+        manager = t.position_manager
+        t.moneyMovement(Transaction.fromString(
+            "2023-12-02T09:00:00+0000,Money Movement,Deposit,,,,seed,25,0,,0,0.00,,,,,,,2,USD"
+        ))
+        t.unverified_asset_symbols_by_year = {2023: {"KEEP"}}
+        t.short_stock_trades_by_year = {2023: []}
+        t._withholding_remaining = {("seed", "KEEP"): 7}
+        t._asset_classification_checks = {("seed",)}
+        original_state_objects = {
+            "yearValues": t.yearValues,
+            "unverified_asset_symbols_by_year": t.unverified_asset_symbols_by_year,
+            "short_stock_trades_by_year": t.short_stock_trades_by_year,
+            "_withholding_remaining": t._withholding_remaining,
+            "_asset_classification_checks": t._asset_classification_checks,
+        }
+        rows = [
+            Transaction.fromString("2024-01-01T09:00:00+0000,Money Movement,Dividend,,UNKNOWN,Equity,cash,100,0,,0,0,,UNKNOWN,UNKNOWN,,,,3,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,MISSING,Equity,close,999,10,0,0,0,,MISSING,MISSING,,,,4,USD"),
+            Transaction.fromString("2024-01-02T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,open,-1,10,0,0,0,,NEW,NEW,,,,5,USD"),
+        ]
+        t.history = pd.DataFrame(rows)
+
+        with pytest.raises(ValueError, match="found no open position"):
+            t.processTransactionHistory()
+
+        assert t.position_manager is manager
+        assert [
+            (lot.symbol, lot.quantity, lot.amount_usd)
+            for lot in manager.get_all_open_lots()
+        ] == [("KEEP", 5, -50)]
+        assert manager.closed_trades == []
+        assert sorted(t.yearValues) == [2023]
+        assert t.year(2023).deposit.usd == 25
+        assert t.unverified_asset_symbols_by_year == {2023: {"KEEP"}}
+        assert t.short_stock_trades_by_year == {2023: []}
+        assert t._withholding_remaining == {("seed", "KEEP"): 7}
+        assert t._asset_classification_checks == {("seed",)}
+        for name, value in original_state_objects.items():
+            assert getattr(t, name) is value
