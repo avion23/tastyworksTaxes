@@ -9,27 +9,27 @@ from tastyworksTaxes.position_lot import PositionLot
 class TestPositionManager:
     def test_lfin_calls_open_and_close(self):
         pm = PositionManager()
-        pm.add_position(Transaction.fromString("2018-03-12T17:08:00+0000,Trade,Buy to Open,BUY_TO_OPEN,LFIN  180615C00040000,Equity Option,Bought 2 LFIN 06/15/18 Call 40.00 @ 2.20,-440,2,220.00000000000003,-1.00,1.2799999999999998,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
+        pm.add_position(Transaction.fromString("2019-09-10T17:08:00+0000,Trade,Buy to Open,BUY_TO_OPEN,HJKL  191220C00035000,Equity Option,Bought 2 HJKL 12/20/19 Call 35.00 @ 3.10,-620,2,310.0,-1.00,1.27,100,HJKL,HJKL,12/20/19,35,CALL,123456,USD"))
         lot = pm.get_all_open_lots()[0]
-        assert lot.symbol == 'LFIN'
+        assert lot.symbol == 'HJKL'
         assert lot.quantity == 2
         
-        pm.add_position(Transaction.fromString("2018-03-16T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LFIN  180615C00040000,Equity Option,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,1660,1,1660.0000000000002,-1.00,0.18999999999999995,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
+        pm.add_position(Transaction.fromString("2019-09-19T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,HJKL  191220C00035000,Equity Option,Sold 1 HJKL 12/20/19 Call 35.00 @ 9.40,940,1,940.0,-1.00,0.19,100,HJKL,HJKL,12/20/19,35,CALL,123456,USD"))
         lot = pm.get_all_open_lots()[0]
         assert lot.quantity == 1
         assert pm.closed_trades[0].quantity == 1
         
-        pm.add_position(Transaction.fromString("2018-03-16T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,LFIN  180615C00040000,Equity Option,Sold 1 LFIN 06/15/18 Call 40.00 @ 16.60,1660,1,1660.0000000000002,-1.00,0.18999999999999995,100,LFIN,LFIN,6/15/18,40,CALL,123456,USD"))
+        pm.add_position(Transaction.fromString("2019-09-19T16:09:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,HJKL  191220C00035000,Equity Option,Sold 1 HJKL 12/20/19 Call 35.00 @ 9.40,940,1,940.0,-1.00,0.19,100,HJKL,HJKL,12/20/19,35,CALL,123456,USD"))
         assert len(pm.open_lots) == 0
         assert len(pm.closed_trades) == 2
     
     def test_sprt_position(self):
         pm = PositionManager()
-        pm.add_position(Transaction.fromString("2021-07-01T20:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,SPRT,Equity,Bought 200 SPRT @ 3.87,-774,200,3.87,-1.00,0.16,,SPRT,SPRT,,,,123456,USD"))
+        pm.add_position(Transaction.fromString("2022-10-04T20:57:00+0000,Trade,Buy to Open,BUY_TO_OPEN,STUV,Equity,Bought 200 STUV @ 5.25,-1050,200,5.25,-1.00,0.16,,STUV,STUV,,,,123456,USD"))
         lot = pm.get_all_open_lots()[0]
-        assert lot.symbol == 'SPRT'
+        assert lot.symbol == 'STUV'
         assert lot.quantity == 200
-        assert lot.amount_usd == -774
+        assert lot.amount_usd == -1050
     
     def test_true_fifo_stock_logic(self):
         pm = PositionManager()

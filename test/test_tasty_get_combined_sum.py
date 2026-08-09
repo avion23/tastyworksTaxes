@@ -17,57 +17,57 @@ class TestTastyFinancialCalculations:
     def sample_trades(self):
         return [
             TradeResult(
-                symbol='LFIN',
+                symbol='HJKL',
                 position_type=PositionType.call,
-                opening_date='2018-03-12 17:08:00',
-                closing_date='2018-03-19 22:00:00',
+                opening_date='2019-09-10 17:08:00',
+                closing_date='2019-09-19 22:00:00',
                 quantity=-2,
-                profit_usd=1420.0,
-                profit_eur=1154.28,
-                fees_usd=2.324,
-                fees_eur=1.89,
+                profit_usd=1240.0,
+                profit_eur=1009.36,
+                fees_usd=2.15,
+                fees_eur=1.75,
                 worthless_expiry=False,
-                strike=30.0,
-                expiry='2018-06-15'
+                strike=42.5,
+                expiry='2019-12-20'
             ),
             TradeResult(
-                symbol='LFIN',
+                symbol='HJKL',
                 position_type=PositionType.call,
-                opening_date='2018-03-12 17:08:00',
-                closing_date='2018-03-21 18:42:00',
+                opening_date='2019-09-10 17:08:00',
+                closing_date='2019-09-20 18:42:00',
                 quantity=1,
-                profit_usd=1458.0,
-                profit_eur=1186.95,
-                fees_usd=1.32,
-                fees_eur=1.07,
+                profit_usd=1310.0,
+                profit_eur=1065.38,
+                fees_usd=1.20,
+                fees_eur=0.98,
                 worthless_expiry=False,
-                strike=40.0,
-                expiry='2018-06-15'
+                strike=48.5,
+                expiry='2019-12-20'
             ),
             TradeResult(
-                symbol='LFIN',
+                symbol='HJKL',
                 position_type=PositionType.stock,
-                opening_date='2018-03-19 22:00:00',
-                closing_date='2018-03-21 18:42:00',
+                opening_date='2019-09-19 22:00:00',
+                closing_date='2019-09-20 18:42:00',
                 quantity=-100,
-                profit_usd=-2676.0,
-                profit_eur=-2182.65,
-                fees_usd=2.662,
-                fees_eur=2.16,
+                profit_usd=-2440.0,
+                profit_eur=-1987.16,
+                fees_usd=2.40,
+                fees_eur=1.95,
                 worthless_expiry=False,
                 strike=None,
                 expiry=None
             ),
             TradeResult(
-                symbol='LFIN',
+                symbol='HJKL',
                 position_type=PositionType.stock,
-                opening_date='2018-03-19 22:00:00',
-                closing_date='2018-03-21 19:59:00',
+                opening_date='2019-09-19 22:00:00',
+                closing_date='2019-09-20 19:59:00',
                 quantity=-100,
-                profit_usd=-2720.0,
-                profit_eur=-2218.46,
-                fees_usd=2.662,
-                fees_eur=2.16,
+                profit_usd=-2560.0,
+                profit_eur=-2084.36,
+                fees_usd=2.40,
+                fees_eur=1.95,
                 worthless_expiry=False,
                 strike=None,
                 expiry=None
@@ -75,8 +75,8 @@ class TestTastyFinancialCalculations:
         ]
 
     @pytest.mark.parametrize("method_name,expected_usd,expected_eur", [
-        ("calculate_combined_sum", -2526.968, -2067.16),
-        ("calculate_option_sum", 2874.356, 2338.27)
+        ("calculate_combined_sum", -2458.15, -2003.41),
+        ("calculate_option_sum", 2546.65, 2072.01)
     ])
     def test_money_calculations_with_sample_df(self, method_name, expected_usd, expected_eur, sample_trades):
         function_map = {
@@ -96,8 +96,8 @@ class TestTastyFinancialCalculations:
         losses = calculate_stock_losses(sample_trades, t.classifier)
         total_stock = profits + losses
         
-        assert total_stock.usd == -5401.324
-        assert round(total_stock.eur, 2) == -4405.43
+        assert total_stock.usd == -5004.8
+        assert round(total_stock.eur, 2) == -4075.42
         
     def test_getCombinedSum_minimal_data(self):
         trades = [

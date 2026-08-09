@@ -149,22 +149,22 @@ class TestReverseSplitConfig:
 
     def test_confirmed_option_close_and_open_keep_fifo_processing(self, position_manager):
         position_manager.add_position(Transaction.fromString(
-            "2020-04-23T19:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
-            "USO  200717P00002000,Equity Option,Bought 6 USO 07/17/20 Put 2.00 @ 0.29,"
-            "-174,6,29,-1,5.83,100,USO,USO,7/17/20,2,PUT,123456,USD"
+            "2022-04-29T19:30:00+0000,Trade,Buy to Open,BUY_TO_OPEN,"
+            "OPQR  220715P00001500,Equity Option,Bought 6 OPQR 07/15/22 Put 1.50 @ 0.35,"
+            "-210,6,35,-1,4.20,100,OPQR,OPQR,7/15/22,1.5,PUT,123456,USD"
         ))
 
         position_manager.add_position(Transaction.fromString(
-            "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
-            "SELL_TO_CLOSE,USO  200717P00002000,Equity Option,"
-            "OCC adjustment after reverse split; retiring 6 USO   200717P00002000,174,6,,0,0,100,"
-            "USO,USO,7/17/20,2,PUT,123456,USD"
+            "2022-05-06T12:35:00+0000,Receive Deliver,Reverse Split,"
+            "SELL_TO_CLOSE,OPQR  220715P00001500,Equity Option,"
+            "OCC adjustment after reverse split; retiring 6 OPQR   220715P00001500,210,6,,0,0,100,"
+            "OPQR,OPQR,7/15/22,1.5,PUT,123456,USD"
         ))
         position_manager.add_position(Transaction.fromString(
-            "2020-04-29T12:35:00+0000,Receive Deliver,Reverse Split,"
-            "BUY_TO_OPEN,USO1  200717P00002000,Equity Option,"
-            "Replacement contract from reverse split 6 USO1  200717P00002000,-174,6,,0,0,100,"
-            "USO,USO,7/17/20,2,PUT,123456,USD"
+            "2022-05-06T12:35:00+0000,Receive Deliver,Reverse Split,"
+            "BUY_TO_OPEN,OPQR1  220715P00001500,Equity Option,"
+            "Replacement contract from reverse split 6 OPQR1  220715P00001500,-210,6,,0,0,100,"
+            "OPQR,OPQR,7/15/22,1.5,PUT,123456,USD"
         ))
 
         assert len(position_manager.closed_trades) == 1
@@ -176,7 +176,7 @@ class TestReverseSplitConfig:
 
     def test_ambiguous_option_split_fails_without_mutating_stock_lots(self, position_manager):
         stock_lot = PositionLot(
-            symbol="USO",
+            symbol="OPQR",
             position_type=PositionType.stock,
             quantity=100,
             amount_usd=-1000,
@@ -187,17 +187,17 @@ class TestReverseSplitConfig:
         )
         position_manager.add_lot_directly(stock_lot)
         transaction = Transaction(pd.Series({
-            "Date/Time": datetime(2020, 4, 29),
+            "Date/Time": datetime(2022, 5, 6),
             "Transaction Code": "Receive Deliver",
             "Transaction Subcode": "Reverse Split",
-            "Symbol": "USO  200717P00002000",
+            "Symbol": "OPQR  220715P00001500",
             "Buy/Sell": "Sell",
             "Open/Close": "",
             "Quantity": 6,
-            "Expiration Date": datetime(2020, 7, 17),
-            "Strike": 2.0,
+            "Expiration Date": datetime(2022, 7, 15),
+            "Strike": 1.5,
             "Call/Put": "P",
-            "Description": "Reverse split adjustment USO 200717P00002000",
+            "Description": "Reverse split adjustment OPQR 220715P00001500",
             "Amount": 0,
             "AmountEuro": 0,
             "Fees": 0,

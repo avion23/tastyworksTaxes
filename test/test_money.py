@@ -70,34 +70,34 @@ def test_get_used_rate_returns_available_usd_to_eur_multiplier():
 def test_debit_interest():
     t = Tasty()
     debit_interest_tx = Transaction.fromString(
-        "2021-06-16T23:00:00+0000,Money Movement,Debit Interest,,,,FROM 05/16 THRU 06/15 @ 8    %,-0.87,0,,0,0.00,,,,,,,123456,USD"
+        "2022-03-15T23:00:00+0000,Money Movement,Debit Interest,,,,FROM 02/16 THRU 03/15 @ 6    %,-1.25,0,,0,0.00,,,,,,,123456,USD"
     )
     t.moneyMovement(debit_interest_tx)
     assert (
-        clean_numpy_str(str(t.year(2021).debitInterest))
-        == "{'eur': -0.7175849554602441, 'usd': -0.87}"
+        clean_numpy_str(str(t.year(2022).debitInterest))
+        == "{'eur': -1.1372941497588938, 'usd': -1.25}"
     )
 
 
 def test_dividend():
     t = Tasty()
     dividend_tx = Transaction.fromString(
-        "2021-07-06T23:00:00+0000,Money Movement,Dividend,,UWMC,Equity,UWM HOLDINGS CORPORATION,-3,0,,0,0.00,,UWMC,UWMC,,,,123456,USD"
+        "2023-09-20T23:00:00+0000,Money Movement,Dividend,,TUVW,Equity,TUVW HOLDINGS CORPORATION,-4.0,0,,0,0.00,,TUVW,TUVW,,,,123456,USD"
     )
     t.moneyMovement(dividend_tx)
     assert (
-        clean_numpy_str(str(t.year(2021).paidDividend))
-        == "{'eur': -2.5342118601115056, 'usd': -3.0}"
+        clean_numpy_str(str(t.year(2023).paidDividend))
+        == "{'eur': -3.7376191366099794, 'usd': -4.0}"
     )
 
 
 def test_deposit():
     t = Tasty()
     deposit_tx = Transaction.fromString(
-        "2021-03-01T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,4770.4,0,,0,0.00,,,,,,,123456,USD"
+        "2022-06-14T23:00:00+0000,Money Movement,Withdrawal,,,,Wire Funds Received,5125.0,0,,0,0.00,,,,,,,123456,USD"
     )
     t.moneyMovement(deposit_tx)
     assert (
-        clean_numpy_str(str(t.year(2021).deposit))
-        == "{'eur': 3957.8528167261256, 'usd': 4770.4}"
+        clean_numpy_str(str(t.year(2022).deposit))
+        == "{'eur': 4903.367776502106, 'usd': 5125.0}"
     )
