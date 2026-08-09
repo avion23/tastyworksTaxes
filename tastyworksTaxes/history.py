@@ -1,3 +1,4 @@
+import math
 import re
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
@@ -9,12 +10,13 @@ from tastyworksTaxes.money import convert_usd_to_eur
 
 class History(pd.DataFrame):
 
-    _NEW_FORMAT_REQUIRED_COLUMNS = {
+    _NEW_FORMAT_COLUMNS = (
         'Date', 'Type', 'Sub Type', 'Action', 'Symbol', 'Instrument Type',
         'Description', 'Value', 'Quantity', 'Average Price', 'Commissions',
         'Fees', 'Multiplier', 'Root Symbol', 'Underlying Symbol',
         'Expiration Date', 'Strike Price', 'Call or Put', 'Order #', 'Currency',
-    }
+    )
+    _NEW_FORMAT_REQUIRED_COLUMNS = set(_NEW_FORMAT_COLUMNS)
     _INTERNAL_FORMAT_REQUIRED_COLUMNS = {
         'Date/Time', 'Transaction Code', 'Transaction Subcode', 'Symbol',
         'Buy/Sell', 'Open/Close', 'Quantity', 'Expiration Date', 'Strike',
@@ -51,12 +53,14 @@ class History(pd.DataFrame):
         if df_raw.empty:
             raise ValueError(f"Input CSV contains no transactions: {path}")
 
-        duplicate_rows = df_raw.duplicated(keep=False)
-        if duplicate_rows.any():
-            rows = [int(index) + 2 for index in df_raw.index[duplicate_rows]]
+        identical_rows = df_raw.duplicated(keep=False)
+        if identical_rows.any():
+            rows = [int(index) + 2 for index in df_raw.index[identical_rows]]
             raise ValueError(
-                "Input CSV contains exact duplicate broker rows at CSV lines "
-                f"{rows}; merge exports without duplicate transactions"
+                "Input CSV contains ambiguous identical rows at CSV lines "
+                f"{rows}. Without a distinct broker fill identity, the loader cannot "
+                "distinguish a duplicate export row from two legitimate identical fills; review "
+                "these rows and remove only confirmed duplicates before accounting"
             )
 
         df = History(cls._load_supported_schema(df_raw))
@@ -94,7 +98,7 @@ class History(pd.DataFrame):
 
     @staticmethod
     def _is_new_format(df: pd.DataFrame) -> bool:
-        return History._NEW_FORMAT_REQUIRED_COLUMNS.issubset(df.columns)
+        return list(df.columns) == list(History._NEW_FORMAT_COLUMNS)
 
     @staticmethod
     def _is_internal_format(df: pd.DataFrame) -> bool:
@@ -130,7 +134,13 @@ class History(pd.DataFrame):
             raise ValueError(
                 f"Non-finite numeric value in CSV column '{column_name}': {value!r}"
             )
-        return float(parsed)
+        converted = float(parsed)
+        if not math.isfinite(converted):
+            raise ValueError(
+                f"Numeric value overflows finite float range in CSV column "
+                f"'{column_name}': {value!r}"
+            )
+        return converted
 
     @staticmethod
     def _numeric_column(
@@ -247,13 +257,7 @@ class History(pd.DataFrame):
             values = sorted(set(internal_df.loc[invalid_call_put, 'Call/Put']))
             raise ValueError(f"Invalid normalized Call/Put values: {values}")
         has_option_type = internal_df['Call/Put'].isin(['C', 'P'])
-        invalid_option_expiry = has_option_type & internal_df['Expiration Date'].isna()
-        if invalid_option_expiry.any():
-            rows = [int(index) + 2 for index in internal_df.index[invalid_option_expiry]]
-            raise ValueError(
-                "Failed to parse Expiration Date for normalized option rows at "
-                f"CSV lines {rows}"
-            )
+        expiration_provided = ~raw_expiration.astype(str).str.strip().isin(['', '--'])
 
         internal_df['Amount'] = History._numeric_column(
             internal_df['Amount'], 'Amount'
@@ -281,17 +285,37 @@ class History(pd.DataFrame):
         internal_df['Multiplier'] = History._numeric_column(
             internal_df['Multiplier'], 'Multiplier', allow_blank=True, blank_value=100
         )
+        option_metadata = (
+            has_option_type | expiration_provided | (internal_df['Strike'] != 0)
+        )
+        invalid_option_fields = option_metadata & (
+            ~has_option_type
+            | internal_df['Expiration Date'].isna()
+            | (internal_df['Strike'] <= 0)
+            | (internal_df['Multiplier'] <= 0)
+        )
+        if invalid_option_fields.any():
+            rows = [
+                int(index) + 2
+                for index in internal_df.index[invalid_option_fields]
+            ]
+            raise ValueError(
+                "Failed to parse Expiration Date or option fields. Normalized "
+                "option rows require C/P, a valid Expiration Date, positive Strike, "
+                "and positive Multiplier at CSV lines "
+                f"{rows}"
+            )
         return internal_df
 
     @staticmethod
     def _transform(
         df: pd.DataFrame, *, validate_broker: bool = False
     ) -> pd.DataFrame:
-        missing = History._NEW_FORMAT_REQUIRED_COLUMNS - set(df.columns)
-        if missing:
+        if list(df.columns) != list(History._NEW_FORMAT_COLUMNS):
             raise ValueError(
-                "Incomplete TastyTrade export; missing required columns: "
-                f"{sorted(missing)}"
+                "TastyTrade export header must exactly match the ordered 20-column "
+                f"schema; expected {list(History._NEW_FORMAT_COLUMNS)}, "
+                f"found {list(df.columns)}"
             )
 
         source_df = df.copy().where(pd.notna(df), '')

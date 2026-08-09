@@ -169,11 +169,14 @@ def test_broker_order_then_source_row_break_absolute_time_ties(tmp_path):
     ]
 
 
-def test_exact_duplicate_broker_rows_are_rejected(tmp_path):
+def test_ambiguous_identical_rows_require_manual_review(tmp_path):
     source = tmp_path / 'transactions.csv'
     write_broker_csv(source, [stock_trade(), stock_trade()])
 
-    with pytest.raises(ValueError, match='exact duplicate broker rows'):
+    with pytest.raises(
+        ValueError,
+        match='ambiguous identical rows.*cannot distinguish.*legitimate identical fills',
+    ):
         History.fromFile(source)
 
 
@@ -226,3 +229,80 @@ def test_utf8_bom_is_accepted_and_non_utf8_has_actionable_error(tmp_path):
     )
     with pytest.raises(ValueError, match='must be UTF-8 encoded'):
         History.fromFile(non_utf8_source)
+
+
+@pytest.mark.parametrize('mutation', ['extra', 'reordered'])
+def test_broker_header_must_match_exact_order_without_extras(tmp_path, mutation):
+    source = tmp_path / 'transactions.csv'
+    columns = list(BROKER_COLUMNS)
+    row = broker_row()
+    if mutation == 'extra':
+        columns.append('Unexpected')
+        row['Unexpected'] = 'value'
+    else:
+        columns[0], columns[1] = columns[1], columns[0]
+    pd.DataFrame([row], columns=columns).to_csv(source, index=False)
+
+    with pytest.raises(ValueError, match='ordered 20-column|Unsupported CSV schema'):
+        History.fromFile(source)
+
+
+def test_decimal_to_float_overflow_fails_closed(tmp_path):
+    source = tmp_path / 'transactions.csv'
+    write_broker_csv(source, [broker_row(Value='9' * 400)])
+
+    with pytest.raises(ValueError, match='overflows finite float range.*Value'):
+        History.fromFile(source)
+
+
+def internal_option_row(**updates):
+    row = {
+        'Date/Time': '2024-01-02 12:00:00',
+        'Transaction Code': 'Trade',
+        'Transaction Subcode': 'Buy to Open',
+        'Symbol': 'SYN',
+        'Buy/Sell': 'Buy',
+        'Open/Close': 'Open',
+        'Quantity': '1',
+        'Expiration Date': '2024-06-21',
+        'Strike': '10',
+        'Call/Put': 'C',
+        'Price': '1',
+        'Fees': '1',
+        'Amount': '-100',
+        'Description': 'SYNTHETIC INTERNAL OPTION',
+        'Multiplier': '100',
+    }
+    row.update(updates)
+    return row
+
+
+@pytest.mark.parametrize(
+    'updates',
+    [
+        {'Strike': '0'},
+        {'Strike': '-1'},
+        {'Multiplier': '0'},
+        {'Multiplier': '-1'},
+        {'Call/Put': ''},
+        {'Expiration Date': ''},
+        {'Expiration Date': 'not-a-date'},
+    ],
+)
+def test_internal_option_fields_must_be_complete_and_positive(tmp_path, updates):
+    source = tmp_path / 'internal_option.csv'
+    pd.DataFrame([internal_option_row(**updates)]).to_csv(source, index=False)
+
+    with pytest.raises(ValueError, match='Normalized option rows require'):
+        History.fromFile(source)
+
+
+def test_valid_internal_option_fields_are_retained(tmp_path):
+    source = tmp_path / 'internal_option.csv'
+    pd.DataFrame([internal_option_row()]).to_csv(source, index=False)
+
+    history = History.fromFile(source)
+
+    assert history.loc[0, 'Call/Put'] == 'C'
+    assert history.loc[0, 'Strike'] == 10
+    assert history.loc[0, 'Multiplier'] == 100
