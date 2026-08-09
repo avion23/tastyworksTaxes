@@ -91,6 +91,17 @@ class GermanTaxReport(object):
     Z24 Termingeschäftsverluste
     Cash Balance USD
     Net Liquidating Value
+
+    Z21/Z24 form mapping (Anlage KAP):
+      Until VZ 2024 the gains below were reported in Zeile 21 and the losses in
+      Zeile 24. The JStG 2024 (BGBl. 2024 I Nr. 387, § 52 Abs. 28 Sätze 25 und 26
+      EStG -> applies to all open cases incl. VZ 2024 and 2025) removed the
+      separate Termingeschäfte loss pot, so Anlage KAP dropped Zeile 21 and 24
+      from VZ 2025 onward. The values are still computed here for traceability.
+      For VZ 2025+: gains AND losses together form the Zeile 19 net saldo
+      (Nettoertrag); the Termingeschäftsverluste are ADDITIONALLY broken out in
+      Zeile 22 (Verluste ohne Aktienveräußerungen). Stock losses stay in Zeile 23
+      and remain restricted to stock gains (§ 20 Abs. 6 Satz 4 EStG).
     """
     einzahlungen: float = 0
     auszahlungen: float = 0
@@ -146,6 +157,8 @@ class GermanTaxReport(object):
     zinsausgaben: float = 0
     zinsen_gesamt: float = 0
     z19_auslaendische_kapitalertraege: float = 0
+    # legacy Z21/Z24 names kept; Anlage KAP removed these lines from VZ 2025
+    # (JStG 2024). See class docstring for the current form mapping.
     z21_termingeschaefsgewinne: float = 0
     z24_termingeschaefte_verluste: float = 0
     kap_kap_inv: float = 0
@@ -220,6 +233,10 @@ class GermanTaxReport(object):
         return (
             ''.join(_format_german_report_line(label, value) for label, value in fields)
             + 'NOTE: Soli/KESt are not computed; the Finanzamt computes German tax.\n'
+            + 'NOTE: Since VZ 2025 (JStG 2024) Anlage KAP has no Zeile 21/24. '
+            'Gains and losses together form the Zeile 19 net saldo; report the '
+            'Termingeschäftsverluste additionally in Zeile 22. Stock losses (Z23) '
+            'stay restricted to stock gains (§ 20 Abs. 6 S. 4 EStG).\n'
         )
 
 

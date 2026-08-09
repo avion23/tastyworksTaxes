@@ -41,6 +41,12 @@ class Values(object):
     optionDifferential: Money = field(default_factory=Money)
     stockFees: Money = field(default_factory=Money)
     otherFees: Money = field(default_factory=Money)
+    # NOTE: field NAMES keep the legacy Z21/Z24 Anlage-KAP line numbers, but since
+    # the JStG 2024 (BGBl. 2024 I Nr. 387, applies to all open cases) abolished the
+    # separate Termingeschäfte loss pot, Anlage KAP dropped Zeile 21 and 24 from
+    # VZ 2025 onward. The values are still computed the same way; for VZ 2025+
+    # gains and losses together form the Zeile 19 net saldo, with the losses
+    # additionally broken out in Zeile 22.
     z21_termingeschaefsgewinne: Money = field(default_factory=Money)
     z24_termingeschaefte_verluste: Money = field(default_factory=Money)
 
