@@ -70,17 +70,21 @@ class Tasty:
         classification = self.classifier.classify_for_tax(
             symbol, PositionType.stock, pay_date
         )
-        is_fund = self.classifier.get_tax_category(classification) == "KAP-INV"
+        tax_category = self.classifier.get_tax_category(classification)
+        if tax_category not in {"KAP", "KAP-INV"}:
+            return
+        is_fund = tax_category == "KAP-INV"
         if is_fund:
             year_values.fundTaxReviewRequired = True
             self.fund_tax_review_years.add(pay_date.year)
 
         if money.usd < 0:
-            self.ambiguous_withholding_years.add(pay_date.year)
             key = (transaction.getDate(), symbol)
             remaining = self._withholding_remaining.get(key, 0.0)
             negative_amount = -money.usd
             withholding_amount = min(negative_amount, remaining)
+            if withholding_amount > 0:
+                self.ambiguous_withholding_years.add(pay_date.year)
             withholding_ratio = withholding_amount / negative_amount
             year_values.withholdingTax += Money(
                 usd=withholding_amount,
@@ -549,7 +553,7 @@ class Tasty:
                 trade.symbol, trade.position_type, trade.closing_date
             )
 
-    def run(self):
+    def _reset_calculation_state(self):
         self.yearValues = {}
         self.position_manager.reset_calculation_state()
         self.unverified_asset_symbols_by_year = {}
@@ -559,6 +563,16 @@ class Tasty:
         self.unsupported_tax_category_symbols_by_year = {}
         self._withholding_remaining = {}
         self._asset_classification_checks = set()
+
+    def run(self):
+        self._reset_calculation_state()
+        try:
+            return self._run()
+        except Exception:
+            self._reset_calculation_state()
+            raise
+
+    def _run(self):
         self.processTransactionHistory()
 
         trades_by_year = self.getYearlyTrades()

@@ -179,6 +179,6 @@ class TestTastyRun:
         assert values.fundDistributions.usd == 0
         assert values.fundDistributionTaxable.usd == 0
         assert values.paidDividend.usd == -10
-        assert t.ambiguous_withholding_years == {2025}
+        assert t.ambiguous_withholding_years == set()
         assert "KAP-INV NOT FILING-READY" in rendered
         assert "Vorabpauschale" in rendered

@@ -88,8 +88,7 @@ def main() -> None:
         )
         print(p.generateGermanTaxReport())
     if args.write_closed_trades:
-        logging.info(
-            f"Writing closed trades to: '{args.write_closed_trades}'")
+        logging.info("Writing closed trades")
         closed_trades = t.position_manager.closed_trades
         trades_data = [asdict(trade) for trade in closed_trades]
         columns = [field.name for field in fields(TradeResult)]

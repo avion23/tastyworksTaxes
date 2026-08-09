@@ -103,7 +103,7 @@ class TestPositionManager:
         pm.add_position(Transaction.fromString(
             "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,Bought 10 XYZ @ 10,-100,10,10,-1.00,4.00,,XYZ,XYZ,,,,123456,USD"))
 
-        with pytest.raises(ValueError, match="Tried to close more shares than available for XYZ"):
+        with pytest.raises(ValueError, match="Position close exceeds available position"):
             pm.add_position(Transaction.fromString(
                 "2024-01-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,XYZ,Equity,Sold 20 XYZ @ 12,240,20,12,-1.00,2.00,,XYZ,XYZ,,,,123456,USD"))
     def test_overclose_is_atomic(self):

@@ -114,7 +114,7 @@ class PositionManager:
         except (FileNotFoundError, ModuleNotFoundError, OSError) as exc:
             raise ValueError(
                 "Corporate actions configuration is unavailable"
-            ) from exc
+            ) from None
 
         try:
             reader = csv.DictReader(lines, strict=True)
@@ -152,7 +152,7 @@ class PositionManager:
         except (csv.Error, KeyError, TypeError, ValueError) as exc:
             raise ValueError(
                 "Corporate actions configuration is invalid"
-            ) from exc
+            ) from None
 
         return {"reverse_splits": splits}
 
@@ -255,7 +255,7 @@ class PositionManager:
                 continue
             raise ValueError(
                 "AMBIGUOUS OR UNMATCHED CORPORATE ACTION: expected exactly one "
-                f"close and one open leg for {key!r}, found {counts!r}"
+                "close and one open leg"
             )
 
     def add_position(self, transaction):
@@ -269,7 +269,7 @@ class PositionManager:
             quantity = abs(float(transaction.getQuantity()))
             if not math.isfinite(quantity) or quantity <= 1e-6:
                 raise ValueError(
-                    f"Corporate action '{subcode}' requires a finite nonzero quantity; "
+                    "Corporate action requires a finite nonzero quantity; "
                     "zero-quantity basis or cash rows cannot be allocated safely"
                 )
             key = self._get_key_from_transaction(transaction)
@@ -393,8 +393,8 @@ class PositionManager:
             old_lots = self._pending_symbol_change_lots.pop(conversion_key, None)
         if not old_lots:
             raise ValueError(
-                f"Corporate action open leg for {transaction.getSymbol()} has no "
-                "unique matching close leg; refusing replacement CSV basis"
+                "Corporate action open leg has no unique matching close leg; "
+                "refusing replacement CSV basis"
             )
 
         key = self._get_key_from_transaction(transaction)
@@ -435,13 +435,15 @@ class PositionManager:
         key = self._get_key_from_transaction(transaction)
         matching_lots = self.open_lots.get(key)
         if not matching_lots:
-            raise ValueError(f"Symbol Change 'close' leg for {transaction.getSymbol()} found no open position to mutate.")
+            raise ValueError(
+                "Corporate action close leg found no open position to mutate"
+            )
 
         quantity_to_move = abs(transaction.getQuantity())
         closing_quantity = transaction.getQuantity()
         candidates = [lot for lot in matching_lots if lot.can_close_with(closing_quantity)]
         if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_move:
-            raise ValueError(f"Tried to convert more shares than available for {transaction.getSymbol()}")
+            raise ValueError("Corporate action close exceeds available position")
 
         pending, remaining = [], deque()
         for lot in matching_lots:
@@ -490,9 +492,7 @@ class PositionManager:
         matching_lots = self.open_lots.get(key)
 
         if not matching_lots:
-            raise ValueError(
-                f"Tried to close a position but no previous position found for {transaction}"
-            )
+            raise ValueError("Position close found no open position")
 
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
 
@@ -511,7 +511,7 @@ class PositionManager:
                 raise ValueError("ASSIGNMENT REQUIRES SUFFICIENT SHORT OPTION LOTS")
             if subcode == TransactionSubcode.EXERCISE.value:
                 raise ValueError("EXERCISE REQUIRES SUFFICIENT LONG OPTION LOTS")
-            raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
+            raise ValueError("Position close exceeds available position")
 
         exercise_shares_per_contract = None
         if subcode == TransactionSubcode.EXERCISE.value:
@@ -523,7 +523,7 @@ class PositionManager:
             except (TypeError, ValueError) as exc:
                 raise ValueError(
                     "Exercise requires valid multiplier and matched delivered shares"
-                ) from exc
+                ) from None
             if (
                 not math.isfinite(multiplier)
                 or multiplier <= 0
@@ -578,15 +578,7 @@ class PositionManager:
             closable_quantity = lot_to_process.get_closable_quantity(quantity_to_close)
 
             opening_was_long = lot_to_process.quantity > 0
-            lot_before = f"{lot_to_process.quantity} @ {lot_to_process.amount_usd:.2f}"
-
             new_lot, consumed_values = lot_to_process.consume(closable_quantity)
-
-            lot_after = (
-                f"{new_lot.quantity} @ {new_lot.amount_usd:.2f}"
-                if not new_lot.is_empty()
-                else "empty"
-            )
 
             trade_result = FifoProcessor.create_trade_result(
                 lot_to_process,
@@ -677,7 +669,7 @@ class PositionManager:
         if available + 1e-6 < shares_left:
             raise ValueError(
                 "PARTIAL EXERCISE ADJUSTMENT: stock delivery exceeds the matching "
-                f"exercised-option shares ({shares_left} > {available})"
+                "exercised-option quantity"
             )
 
         while pending and shares_left > 1e-6:
@@ -702,14 +694,8 @@ class PositionManager:
                 "UNMATCHED CORPORATE ACTION: a close leg has no unique open leg"
             )
         if self._pending_exercises:
-            remaining = sum(
-                entry.remaining_shares
-                for pending in self._pending_exercises.values()
-                for entry in pending
-            )
             raise ValueError(
-                "UNMATCHED EXERCISE ADJUSTMENT: no complete paired stock delivery "
-                f"for {remaining} shares"
+                "UNMATCHED EXERCISE ADJUSTMENT: no complete paired stock delivery"
             )
 
     def _handle_reverse_split(self, transaction):
@@ -763,14 +749,12 @@ class PositionManager:
                 return False
             raise ValueError(
                 "AMBIGUOUS OPTION REVERSE SPLIT: expected an OCC option token and "
-                "an explicit Open/Close operation with valid option fields; "
-                f"refusing to process '{description}'"
+                "an explicit Open/Close operation with valid option fields"
             )
         if declared_option or has_occ_token:
             raise ValueError(
                 "AMBIGUOUS OPTION REVERSE SPLIT: option metadata or an OCC token "
-                "was present, but the transaction's resolved type was not an option; "
-                f"refusing to process '{description}'"
+                "was present, but the resolved type was not an option"
             )
         symbol_to_split = transaction.getSymbol()
 
@@ -806,13 +790,11 @@ class PositionManager:
                 ratio = float(ratio)
             except (TypeError, ValueError) as exc:
                 raise ValueError(
-                    f"Invalid split ratio for {symbol_to_split}: {ratio!r}; "
-                    "ratio must be finite and greater than zero"
-                ) from exc
+                    "Invalid split ratio; ratio must be finite and greater than zero"
+                ) from None
             if not math.isfinite(ratio) or ratio <= 0:
                 raise ValueError(
-                    f"Invalid split ratio for {symbol_to_split}: {ratio!r}; "
-                    "ratio must be finite and greater than zero"
+                    "Invalid split ratio; ratio must be finite and greater than zero"
                 )
 
             affected_keys = [
@@ -833,9 +815,8 @@ class PositionManager:
                     target, round(target), rel_tol=0, abs_tol=1e-6
                 ):
                     raise ValueError(
-                        "REVERSE SPLIT FRACTIONAL RESIDUAL UNKNOWN: "
-                        f"{symbol_to_split} {side} aggregate would become {target} shares; "
-                        "cash-in-lieu basis and proceeds are not available"
+                        "REVERSE SPLIT FRACTIONAL RESIDUAL UNKNOWN: cash-in-lieu "
+                        "basis and proceeds are not available"
                     )
 
             logger.warning("Applying configured reverse split")
@@ -843,35 +824,7 @@ class PositionManager:
                 lot.adjust_for_split(ratio)
             return True
         else:
-            affected_keys = [
-                key
-                for key in self.open_lots
-                if key.symbol == symbol_to_split
-                and key.position_type == PositionType.stock
-            ]
-            affected_lots = sum(len(self.open_lots[key]) for key in affected_keys)
-            transaction_date = transaction.get("Date/Time") or transaction.get("Date")
-            date_str = (
-                transaction_date.strftime("%Y-%m-%d")
-                if hasattr(transaction_date, "strftime")
-                else str(transaction_date)[:10]
-            )
-
             raise ValueError(
-                f"\n{'=' * 80}\n"
-                f"REVERSE SPLIT RATIO UNKNOWN: {symbol_to_split}\n"
-                f"{'=' * 80}\n\n"
-                f"Cannot automatically determine split ratio from:\n"
-                f"  Date: {date_str}\n"
-                f"  Description: '{description}'\n"
-                f"  Open lots affected: {affected_lots}\n\n"
-                f"REQUIRED ACTION:\n"
-                f"Add this line to corporate_actions.csv in the tastyworksTaxes package:\n\n"
-                f"{date_str},{symbol_to_split},???,Broker announcement or SEC filing\n\n"
-                f"Replace ??? with the actual ratio:\n"
-                f"  - 1:8 reverse split → 0.125\n"
-                f"  - 1:5 reverse split → 0.2\n"
-                f"  - 2:1 forward split → 2.0\n\n"
-                f"Then re-run the program.\n"
-                f"{'=' * 80}\n"
+                "REVERSE SPLIT RATIO UNKNOWN: add a validated event to "
+                "corporate_actions.csv and re-run"
             )

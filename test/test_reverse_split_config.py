@@ -101,12 +101,13 @@ class TestReverseSplitConfig:
             position_manager.add_position(transaction)
 
         error_msg = str(exc_info.value)
-        assert "REVERSE SPLIT RATIO UNKNOWN" in error_msg
-        assert "XYZ" in error_msg
-        assert "2023-06-15" in error_msg
-        assert description in error_msg
-        assert "corporate_actions.csv" in error_msg
-        assert "???" in error_msg
+        assert error_msg == (
+            "REVERSE SPLIT RATIO UNKNOWN: add a validated event to "
+            "corporate_actions.csv and re-run"
+        )
+        assert "XYZ" not in error_msg
+        assert "2023-06-15" not in error_msg
+        assert description not in error_msg
         assert position_manager.closed_trades == []
         assert position_manager.get_all_open_lots() == [xyz_lot]
         assert xyz_lot.quantity == 100

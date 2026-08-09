@@ -27,11 +27,12 @@ HEADER = (
 
 def row(date, code, subcode, *, action="", symbol="", instrument="",
         description="pipeline marker", value="0", quantity="0", price="",
-        multiplier="", root="", underlying="", order="1"):
+        commissions="0", fees="0", multiplier="", root="", underlying="",
+        expiration="", strike="", call_put="", order="1"):
     return ",".join([
         date, code, subcode, action, symbol, instrument, description, str(value),
-        str(quantity), str(price), "0", "0", str(multiplier), root, underlying,
-        "", "", "", str(order), "USD",
+        str(quantity), str(price), str(commissions), str(fees), str(multiplier),
+        root, underlying, expiration, str(strike), call_put, str(order), "USD",
     ])
 
 
@@ -154,6 +155,66 @@ def test_absolute_time_controls_cross_timezone_order_and_is_required():
         tasty.run()
 
 
+@pytest.mark.parametrize(("open_offset", "close_offset", "succeeds"), [
+    ("+02:00", "-02:00", True),
+    ("-02:00", "+02:00", False),
+])
+def test_absolute_time_breaks_same_local_wall_time_ties(
+    open_offset, close_offset, succeeds
+):
+    tasty = Tasty()
+    tasty.history = history(
+        row(f"2024-01-03T10:00:00{open_offset}", "Trade", "Buy to Open",
+            action="BUY_TO_OPEN", symbol="WALL", instrument="Equity",
+            value="-100", quantity="1", price="100", root="WALL",
+            underlying="WALL", order="1"),
+        row(f"2024-01-03T10:00:00{close_offset}", "Trade", "Sell to Close",
+            action="SELL_TO_CLOSE", symbol="WALL", instrument="Equity",
+            value="110", quantity="1", price="110", root="WALL",
+            underlying="WALL", order="2"),
+    )
+
+    if succeeds:
+        assert tasty.run()[2024].stockProfits.usd == 10
+        return
+    with pytest.raises(ValueError, match="Position close found no open position"):
+        tasty.run()
+    assert tasty.yearValues == {}
+    assert tasty.position_manager.closed_trades == []
+    assert tasty.position_manager.get_all_open_lots() == []
+
+
+def test_late_run_failure_is_atomic_and_corrected_rerun_succeeds():
+    tasty = Tasty()
+    tasty.history = history(stock_rows()[0])
+    original_history = tasty.history
+    classifier = tasty.classifier
+    config = tasty.position_manager._corporate_actions_config
+
+    with patch.object(
+        classifier, "effective_checkpoints", side_effect=RuntimeError("late failure")
+    ):
+        with pytest.raises(RuntimeError, match="late failure"):
+            tasty.run()
+
+    assert tasty.yearValues == {}
+    assert tasty.position_manager.closed_trades == []
+    assert tasty.position_manager.get_all_open_lots() == []
+    assert tasty.unverified_asset_symbols_by_year == {}
+    assert tasty.short_stock_trades_by_year == {}
+    assert tasty.fund_tax_review_years == set()
+    assert tasty.ambiguous_withholding_years == set()
+    assert tasty.unsupported_tax_category_symbols_by_year == {}
+    assert tasty._withholding_remaining == {}
+    assert tasty._asset_classification_checks == set()
+    assert tasty.history is original_history
+    assert tasty.classifier is classifier
+    assert tasty.position_manager._corporate_actions_config is config
+
+    assert 2024 in tasty.run()
+    assert len(tasty.position_manager.get_all_open_lots()) == 1
+
+
 def dividend(value, order):
     return row("2025-01-27T12:00:00+00:00", "Money Movement", "Dividend",
                symbol="AMAT", description="dividend marker", value=value,
@@ -175,6 +236,13 @@ def test_withholding_ambiguity_state_and_main_warning(tmp_path, monkeypatch, cap
     assert positive_only.run()[2025].dividend.usd == 100
     assert positive_only.ambiguous_withholding_years == set()
 
+    negative_only = Tasty()
+    negative_only.history = history(dividend("-15", "3"))
+    negative_values = negative_only.run()[2025]
+    assert negative_values.withholdingTax.usd == 0
+    assert negative_values.paidDividend.usd == -15
+    assert negative_only.ambiguous_withholding_years == set()
+
     csv_path = tmp_path / "dividend.csv"
     csv_path.write_text(HEADER + "\n" + positive + "\n" + negative + "\n")
     monkeypatch.setattr(sys, "argv", ["tastyworks-taxes", str(csv_path)])
@@ -194,6 +262,19 @@ def test_unsupported_category_state_generic_log_and_main_warning(
     assert result[2024].stockProfits.usd == 0
     assert tasty.position_manager.closed_trades[0].profit_usd == 10
     assert tasty.unsupported_tax_category_symbols_by_year == {2024: {"BTC/USD"}}
+    dividend_tasty = Tasty()
+    dividend_tasty.history = history(row(
+        "2024-01-03T12:00:00+00:00", "Money Movement", "Dividend",
+        symbol="BTC/USD", description="unsupported income", value="25", order="3",
+    ))
+    dividend_values = dividend_tasty.run()[2024]
+    assert dividend_values.dividend.usd == 0
+    assert dividend_values.paidDividend.usd == 0
+    assert dividend_values.fundDistributions.usd == 0
+    assert dividend_values.fundDistributionTaxable.usd == 0
+    assert dividend_tasty.unsupported_tax_category_symbols_by_year == {
+        2024: {"BTC/USD"}
+    }
     assert any(r.getMessage() == "Unsupported tax category requires manual review"
                for r in caplog.records)
     assert all("BTC/USD" not in r.getMessage() for r in caplog.records)
@@ -224,10 +305,21 @@ class ConfigResource:
 
 @pytest.mark.parametrize("resource", [
     ConfigResource(error=FileNotFoundError()),
+    ConfigResource(""),
     ConfigResource('date,symbol,ratio,source\n"unterminated'),
+    ConfigResource("date,symbol,ratio\n2024-01-02,PIPE,0.5\n"),
+    ConfigResource("date,symbol,ratio,source,extra\n2024-01-02,PIPE,0.5,evidence,x\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,0.5,evidence,x\n"),
     ConfigResource("symbol,date,ratio,source\nPIPE,2024-01-02,0.5,evidence\n"),
     ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,nan,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,inf,evidence\n"),
     ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,0,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,-0.5,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-02-30,PIPE,0.5,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-1-02,PIPE,0.5,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,0.5,evidence\n2024-01-02,PIPE,0.25,other\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,,0.5,evidence\n"),
+    ConfigResource("date,symbol,ratio,source\n2024-01-02,PIPE,0.5,\n"),
 ])
 def test_corporate_action_config_fails_closed_and_sanitized(resource):
     with patch("tastyworksTaxes.position_manager.files", return_value=resource):
@@ -293,3 +385,65 @@ def test_position_logs_are_generic(caplog):
     assert "Opened position" in messages
     for secret in ["SECRET", "opening marker", "-100", "100.0", "2024-01-02"]:
         assert secret not in messages
+
+
+
+def test_position_manager_exceptions_are_generic_and_sanitized():
+    manager = PositionManager()
+    manager.add_position(Transaction(history(row(
+        "2024-01-03T09:00:00+00:00", "Trade", "Buy to Open",
+        action="BUY_TO_OPEN", symbol="PRIVATE_ID", instrument="Equity",
+        description="PRIVATE_DESCRIPTION", value="-987654", quantity="1",
+        price="987654", root="PRIVATE_ID", underlying="PRIVATE_ID",
+    )).iloc[0]))
+    close = Transaction(history(row(
+        "2024-01-04T09:00:00+00:00", "Trade", "Sell to Close",
+        action="SELL_TO_CLOSE", symbol="PRIVATE_ID", instrument="Equity",
+        description="PRIVATE_DESCRIPTION", value="1975308", quantity="2",
+        price="987654", root="PRIVATE_ID", underlying="PRIVATE_ID",
+    )).iloc[0])
+    with pytest.raises(ValueError) as exc_info:
+        manager.add_position(close)
+    assert str(exc_info.value) == "Position close exceeds available position"
+    assert exc_info.value.__cause__ is None
+
+    reverse_split = Transaction(history(row(
+        "2024-01-05T09:00:00+00:00", "Receive Deliver", "Reverse Split",
+        symbol="PRIVATE_ID", instrument="Equity",
+        description="PRIVATE_DESCRIPTION", value="0", quantity="0",
+        root="PRIVATE_ID", underlying="PRIVATE_ID",
+    )).iloc[0])
+    with pytest.raises(ValueError) as exc_info:
+        manager.add_position(reverse_split)
+    assert str(exc_info.value) == (
+        "REVERSE SPLIT RATIO UNKNOWN: add a validated event to "
+        "corporate_actions.csv and re-run"
+    )
+    assert exc_info.value.__cause__ is None
+
+    messages = "\n".join([
+        "Position close exceeds available position",
+        str(exc_info.value),
+    ])
+    for secret in [
+        "PRIVATE_ID", "PRIVATE_DESCRIPTION", "987654", "1975308", "2024-01-05"
+    ]:
+        assert secret not in messages
+
+
+def test_closed_trades_sink_log_is_generic(tmp_path, monkeypatch, caplog):
+    input_path = tmp_path / "input.csv"
+    input_path.write_text(HEADER + "\n" + "\n".join(stock_rows()) + "\n")
+    sink_path = tmp_path / "PRIVATE_SINK.csv"
+    monkeypatch.setattr(sys, "argv", [
+        "tastyworks-taxes", str(input_path), "--write-closed-trades", str(sink_path),
+    ])
+
+    with caplog.at_level(logging.INFO):
+        main()
+
+    assert sink_path.is_file()
+    messages = [record.getMessage() for record in caplog.records]
+    assert "Writing closed trades" in messages
+    assert all("PRIVATE_SINK" not in message for message in messages)
+    assert all(str(sink_path) not in message for message in messages)

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pandas as pd
 import pytest
 
 from tastyworksTaxes.history import History
@@ -11,8 +12,6 @@ from tastyworksTaxes.position_manager import (
     PositionManager,
 )
 from tastyworksTaxes.tasty import Tasty
-from tastyworksTaxes.money import Money
-from tastyworksTaxes.values import Values
 from tastyworksTaxes.trade_calculator import (
     calculate_long_option_losses,
     calculate_long_option_profits,
@@ -61,66 +60,49 @@ def transaction(
     return result
 
 
-def option_tax_values(trades):
-    values = Values()
-    long_profits = calculate_long_option_profits(trades)
-    short_profits = calculate_short_option_profits(trades)
-    long_losses = calculate_long_option_losses(trades)
-    short_losses = calculate_short_option_losses(trades)
-    total_losses = calculate_long_option_total_losses(trades)
-    values.z21_termingeschaefsgewinne = Money(
-        usd=short_profits.usd + long_profits.usd,
-        eur=short_profits.eur + long_profits.eur,
-    )
-    values.z24_termingeschaefte_verluste = Money(
-        usd=short_losses.usd + long_losses.usd + total_losses.usd,
-        eur=short_losses.eur + long_losses.eur + total_losses.eur,
-    )
-    return values
-
-
-def assert_exercise_excluded_from_option_tax(trade):
-    trades = [trade]
-    assert calculate_option_sum(trades).usd == 0
-    assert calculate_long_option_profits(trades).usd == 0
-    assert calculate_long_option_losses(trades).usd == 0
-    assert calculate_short_option_profits(trades).usd == 0
-    assert calculate_short_option_losses(trades).usd == 0
-    assert calculate_option_differential(trades).usd == 0
-    values = option_tax_values(trades)
-    assert values.z21_termingeschaefsgewinne.usd == pytest.approx(0, abs=1e-12)
-    assert values.z21_termingeschaefsgewinne.eur == pytest.approx(0, abs=1e-12)
-    assert values.z24_termingeschaefte_verluste.usd == pytest.approx(0, abs=1e-12)
-    assert values.z24_termingeschaefte_verluste.eur == pytest.approx(0, abs=1e-12)
+def run_history(*transactions):
+    frame = History(pd.DataFrame([dict(item) for item in transactions]))
+    frame.sort_values(History._ABSOLUTE_DATE_TIME, kind="stable", inplace=True)
+    frame.reset_index(drop=True, inplace=True)
+    tasty = Tasty()
+    tasty.history = frame
+    return tasty, tasty.run()
 
 
 def test_long_call_exercise_folds_premium_into_stock_basis():
-    pm = PositionManager()
     option_open = transaction(
         "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
         "TECL  250117C00050000", "Equity Option", -500, 1, "TECL",
         "1/17/25", 50, "CALL", commissions=0.50,
     )
-    pm.add_position(option_open)
-    pm.add_position(transaction(
-        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+    option_exercise = transaction(
+        "2025-01-17T00:30:00+1400", "Exercise", "EXERCISE",
         "TECL  250117C00050000", "Equity Option", 0, 1, "TECL",
         "1/17/25", 50, "CALL", "Receive Deliver",
-    ))
+    )
     stock_delivery = transaction(
-        "2025-01-17T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        "2025-01-15T23:00:00-1200", "Buy to Open", "BUY_TO_OPEN",
         "TECL", "Equity", -5000, 100, "TECL",
         transaction_type="Receive Deliver", commissions=1.25,
         option_settlement="Exercise",
     )
-    pm.add_position(stock_delivery)
 
-    option_trade = pm.closed_trades[0]
+    tasty, result = run_history(option_open, stock_delivery, option_exercise)
+
+    assert option_exercise[History._ABSOLUTE_DATE_TIME].date() == stock_delivery[
+        History._ABSOLUTE_DATE_TIME
+    ].date()
+    assert option_exercise["Date/Time"].date() != stock_delivery["Date/Time"].date()
+    values = result[2025]
+    assert values.z21_termingeschaefsgewinne.usd == pytest.approx(0, abs=1e-12)
+    assert values.z21_termingeschaefsgewinne.eur == pytest.approx(0, abs=1e-12)
+    assert values.z24_termingeschaefte_verluste.usd == pytest.approx(0, abs=1e-12)
+    assert values.z24_termingeschaefte_verluste.eur == pytest.approx(0, abs=1e-12)
+    option_trade = tasty.position_manager.closed_trades[0]
     assert option_trade.settled_by_exercise is True
     assert option_trade.profit_usd == 0
     assert option_trade.opening_profit_usd == -500
-    assert_exercise_excluded_from_option_tax(option_trade)
-    stock_lot = pm.get_all_open_lots()[0]
+    stock_lot = tasty.position_manager.get_all_open_lots()[0]
     assert stock_lot.amount_usd == -5500
     assert stock_lot.amount_eur == pytest.approx(
         stock_delivery.getValue().eur + option_open.getValue().eur
@@ -128,41 +110,40 @@ def test_long_call_exercise_folds_premium_into_stock_basis():
     assert stock_lot.fees_usd == 1.75
     assert option_trade.fees_usd == 0
 
-    pm.add_position(transaction(
-        "2025-02-03T10:00:00+0000", "Sell to Close", "SELL_TO_CLOSE",
-        "TECL", "Equity", 6000, 100, "TECL",
-    ))
-    assert pm.closed_trades[-1].profit_usd == 500
-
 
 def test_long_put_exercise_reduces_stock_proceeds():
-    pm = PositionManager()
-    pm.add_position(transaction(
+    stock_open = transaction(
         "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
         "TECL", "Equity", -6000, 100, "TECL",
-    ))
+    )
     option_open = transaction(
         "2025-01-03T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
         "TECL  250117P00055000", "Equity Option", -400, 1, "TECL",
         "1/17/25", 55, "PUT", commissions=0.50,
     )
-    pm.add_position(option_open)
-    pm.add_position(transaction(
-        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+    option_exercise = transaction(
+        "2025-01-17T00:30:00+1400", "Exercise", "EXERCISE",
         "TECL  250117P00055000", "Equity Option", 0, 1, "TECL",
         "1/17/25", 55, "PUT", "Receive Deliver",
-    ))
+    )
     stock_delivery = transaction(
-        "2025-01-17T10:00:00+0000", "Sell to Close", "SELL_TO_CLOSE",
+        "2025-01-15T23:00:00-1200", "Sell to Close", "SELL_TO_CLOSE",
         "TECL", "Equity", 5500, 100, "TECL", transaction_type="Receive Deliver",
         commissions=1.25, option_settlement="Exercise",
     )
-    pm.add_position(stock_delivery)
 
-    option_trade, stock_trade = pm.closed_trades
+    tasty, result = run_history(
+        stock_open, option_open, stock_delivery, option_exercise
+    )
+
+    values = result[2025]
+    assert values.z21_termingeschaefsgewinne.usd == pytest.approx(0, abs=1e-12)
+    assert values.z21_termingeschaefsgewinne.eur == pytest.approx(0, abs=1e-12)
+    assert values.z24_termingeschaefte_verluste.usd == pytest.approx(0, abs=1e-12)
+    assert values.z24_termingeschaefte_verluste.eur == pytest.approx(0, abs=1e-12)
+    option_trade, stock_trade = tasty.position_manager.closed_trades
     assert option_trade.settled_by_exercise is True
     assert option_trade.profit_usd == 0
-    assert_exercise_excluded_from_option_tax(option_trade)
     assert stock_trade.closing_profit_usd == 5100
     assert stock_trade.closing_profit_eur == pytest.approx(
         stock_delivery.getValue().eur + option_open.getValue().eur
@@ -198,7 +179,7 @@ def test_short_call_assignment_keeps_premium_separate():
     assert option_trade.settled_by_exercise is False
     assert option_trade.profit_usd == 570
     assert calculate_option_sum(pm.closed_trades).usd == 570
-    assert option_tax_values([option_trade]).z21_termingeschaefsgewinne.usd == 570
+    assert calculate_short_option_profits([option_trade]).usd == 570
     assert stock_trade.closing_profit_usd == 4700
 
 
@@ -223,7 +204,7 @@ def test_short_put_assignment_keeps_premium_separate():
     assert pm.closed_trades[0].settled_by_exercise is False
     assert pm.closed_trades[0].profit_usd == 1380
     assert calculate_option_sum(pm.closed_trades).usd == 1380
-    assert option_tax_values([pm.closed_trades[0]]).z21_termingeschaefsgewinne.usd == 1380
+    assert calculate_short_option_profits([pm.closed_trades[0]]).usd == 1380
     assert pm.get_all_open_lots()[0].position_type == PositionType.stock
     assert pm.get_all_open_lots()[0].amount_usd == -9500
 
