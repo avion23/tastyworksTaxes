@@ -21,27 +21,27 @@ class TestCorporateActions:
         return PositionLot(
             symbol='USO',
             position_type=PositionType.stock,
-            quantity=96,
-            amount_usd=-1000.0,
-            amount_eur=-850.0,
+            quantity=80,
+            amount_usd=-800.0,
+            amount_eur=-680.0,
             fees_usd=1.0,
             fees_eur=0.85,
-            date=datetime(2020, 4, 1)
+            date=datetime(2022, 3, 15)
         )
     
     @pytest.fixture
     def sample_option_lot(self):
         return PositionLot(
-            symbol='USO',
+            symbol='OPQR',
             position_type=PositionType.put,
             quantity=-6,
-            amount_usd=648.0,
-            amount_eur=551.0,
-            fees_usd=6.86,
-            fees_eur=5.83,
-            date=datetime(2020, 4, 23),
-            strike=3.5,
-            expiry=datetime(2020, 7, 17),
+            amount_usd=161.5,
+            amount_eur=137.3,
+            fees_usd=5.80,
+            fees_eur=4.93,
+            date=datetime(2022, 4, 26),
+            strike=1.5,
+            expiry=datetime(2022, 7, 15),
             call_put='P'
         )
     
@@ -71,7 +71,7 @@ class TestCorporateActions:
         
         position_manager._handle_reverse_split(transaction)
         
-        assert sample_stock_lot.quantity == 12
+        assert sample_stock_lot.quantity == 10
         assert sample_stock_lot.strike is None
         
     def test_reverse_split_adjusts_option_quantity_and_strike(self, position_manager, sample_option_lot):
@@ -79,19 +79,19 @@ class TestCorporateActions:
         position_manager.add_lot_directly(sample_option_lot)
         
         reverse_split_data = {
-            'Date/Time': '2020-04-29 12:34:00',
+            'Date/Time': '2022-05-06 12:34:00',
             'Transaction Code': 'Receive Deliver', 
             'Transaction Subcode': 'Reverse Split',
-            'Symbol': 'USO',
+            'Symbol': 'OPQR',
             'Buy/Sell': 'Sell',
             'Open/Close': 'Open',
             'Quantity': 6,
-            'Expiration Date': '2020-07-17',
-            'Strike': 3.5,
+            'Expiration Date': '2022-07-15',
+            'Strike': 1.5,
             'Call/Put': 'P',
             'Price': '',
             'Amount': 0.0,
-            'Description': 'Reverse split: Close 6 USO   200717P00003500',
+            'Description': 'Reverse split: Close 6 OPQR   220715P00001500',
             'Fees': 0.0,
             'AmountEuro': 0.0,
             'FeesEuro': 0.0
@@ -102,7 +102,7 @@ class TestCorporateActions:
         
         assert not result
         assert sample_option_lot.quantity == -6
-        assert sample_option_lot.strike == 3.5
+        assert sample_option_lot.strike == 1.5
         
     def test_reverse_split_no_effect_on_other_symbols(self, position_manager, sample_stock_lot):
         """Test that reverse split only affects the target symbol"""
@@ -142,7 +142,7 @@ class TestCorporateActions:
         
         position_manager._handle_reverse_split(transaction)
         
-        assert sample_stock_lot.quantity == 12
+        assert sample_stock_lot.quantity == 10
         assert other_lot.quantity == 50
         
     def test_reverse_split_regex_parsing(self, position_manager, sample_stock_lot):
@@ -197,7 +197,7 @@ class TestCorporateActions:
         with pytest.raises(ValueError, match='REVERSE SPLIT RATIO UNKNOWN'):
             position_manager._handle_reverse_split(transaction)
 
-        assert sample_stock_lot.quantity == 96
+        assert sample_stock_lot.quantity == 80
 
     def test_short_position_reverse_split_preserves_basis(self, position_manager):
         short_lot = PositionLot(

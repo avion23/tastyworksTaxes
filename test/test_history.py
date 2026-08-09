@@ -8,22 +8,22 @@ from test.broker_csv import broker_row, stock_trade, write_broker_csv
 def test_internal_format_csv_loads_and_normalizes(tmp_path):
     csv_path = tmp_path / "internal.csv"
     pd.DataFrame({
-        "Date/Time": ["2020-05-08 17:24:00", "2020-05-07 14:00:00"],
+        "Date/Time": ["2022-11-08 09:15:00", "2022-11-07 14:00:00"],
         "Transaction Code": ["Money Movement", "Trade"],
         "Transaction Subcode": ["Fee", "Sell to Open"],
-        "Symbol": ["", "SVXY"],
+        "Symbol": ["", "UVWX"],
         "Buy/Sell": ["", "Sell"],
         "Open/Close": ["", "Open"],
         "Quantity": ["", "3"],
-        "Expiration Date": ["", "2020-06-19"],
-        "Strike": ["", "30"],
+        "Expiration Date": ["", "2022-12-16"],
+        "Strike": ["", "22.5"],
         "Call/Put": ["", "P"],
-        "Price": ["", "0.80"],
-        "Fees": ["", "1.15"],
-        "Amount": ["-1.0", "240.0"],
+        "Price": ["", "0.43"],
+        "Fees": ["", "1.05"],
+        "Amount": ["-1.0", "129.0"],
         "Description": [
             "Regulatory fee",
-            "Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80",
+            "Sold 3 UVWX 12/16/22 Put 22.50 @ 0.43",
         ],
         "Account Reference": ["acct", "acct"],
     }).to_csv(csv_path, index=False)
@@ -36,27 +36,27 @@ def test_internal_format_csv_loads_and_normalizes(tmp_path):
     assert hist.loc[1, "Quantity"] == 0
     assert hist.loc[1, "Fees"] == 0
     assert pd.isna(hist.loc[1, "Expiration Date"])
-    assert hist.loc[0, "Strike"] == 30
-    assert hist.loc[0, "Price"] == 0.80
+    assert hist.loc[0, "Strike"] == 22.5
+    assert hist.loc[0, "Price"] == 0.43
 
 
 def test_internal_format_invalid_numeric_raises(tmp_path):
     csv_path = tmp_path / "internal_bad_numeric.csv"
     pd.DataFrame({
-        "Date/Time": ["2020-05-07 14:00:00"],
+        "Date/Time": ["2022-11-07 14:00:00"],
         "Transaction Code": ["Trade"],
         "Transaction Subcode": ["Sell to Open"],
-        "Symbol": ["SVXY"],
+        "Symbol": ["UVWX"],
         "Buy/Sell": ["Sell"],
         "Open/Close": ["Open"],
         "Quantity": ["not-a-number"],
-        "Expiration Date": ["2020-06-19"],
-        "Strike": ["30"],
+        "Expiration Date": ["2022-12-16"],
+        "Strike": ["22.5"],
         "Call/Put": ["P"],
-        "Price": ["0.80"],
-        "Fees": ["1.15"],
-        "Amount": ["240.0"],
-        "Description": ["Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80"],
+        "Price": ["0.43"],
+        "Fees": ["1.05"],
+        "Amount": ["129.0"],
+        "Description": ["Sold 3 UVWX 12/16/22 Put 22.50 @ 0.43"],
     }).to_csv(csv_path, index=False)
 
     with pytest.raises(ValueError, match="Failed to parse numeric values"):
@@ -66,20 +66,20 @@ def test_internal_format_invalid_numeric_raises(tmp_path):
 def test_internal_format_invalid_option_expiration_raises(tmp_path):
     csv_path = tmp_path / "internal_bad_expiration.csv"
     pd.DataFrame({
-        "Date/Time": ["2020-05-07 14:00:00"],
+        "Date/Time": ["2022-11-07 14:00:00"],
         "Transaction Code": ["Trade"],
         "Transaction Subcode": ["Sell to Open"],
-        "Symbol": ["SVXY"],
+        "Symbol": ["UVWX"],
         "Buy/Sell": ["Sell"],
         "Open/Close": ["Open"],
         "Quantity": ["3"],
         "Expiration Date": ["bad-date"],
-        "Strike": ["30"],
+        "Strike": ["22.5"],
         "Call/Put": ["P"],
-        "Price": ["0.80"],
-        "Fees": ["1.15"],
-        "Amount": ["240.0"],
-        "Description": ["Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80"],
+        "Price": ["0.43"],
+        "Fees": ["1.05"],
+        "Amount": ["129.0"],
+        "Description": ["Sold 3 UVWX 12/16/22 Put 22.50 @ 0.43"],
     }).to_csv(csv_path, index=False)
 
     with pytest.raises(ValueError, match="Failed to parse Expiration Date"):
@@ -88,7 +88,7 @@ def test_internal_format_invalid_option_expiration_raises(tmp_path):
 
 def test_unsupported_csv_schema_raises_clear_error(tmp_path):
     csv_path = tmp_path / "unsupported.csv"
-    pd.DataFrame({"Not Date": ["2020-05-08"], "Value": [1]}).to_csv(csv_path, index=False)
+    pd.DataFrame({"Not Date": ["2022-11-08"], "Value": [1]}).to_csv(csv_path, index=False)
 
     with pytest.raises(ValueError, match="Unsupported CSV schema"):
         History.fromFile(csv_path)
@@ -106,7 +106,7 @@ def test_empty_csv_raises_clear_error(tmp_path, contents):
 def test_new_format_blank_optional_values_use_safe_defaults(tmp_path):
     csv_path = tmp_path / "minimal_tastytrade.csv"
     write_broker_csv(csv_path, [broker_row(**{
-        'Date': '2020-05-08T17:24:00-04:00',
+        'Date': '2022-11-08T09:15:00-04:00',
         'Type': 'Money Movement',
         'Sub Type': 'Fee',
         'Value': '-1.0',
@@ -124,7 +124,7 @@ def test_new_format_blank_optional_values_use_safe_defaults(tmp_path):
 def test_new_format_invalid_optional_value_has_clear_error(tmp_path):
     csv_path = tmp_path / "bad_quantity.csv"
     write_broker_csv(csv_path, [stock_trade(**{
-        'Date': '2020-05-08T17:24:00-04:00',
+        'Date': '2022-11-08T09:15:00-04:00',
         'Description': 'Bought stock',
         'Quantity': 'not-a-number',
     })])
@@ -136,7 +136,7 @@ def test_new_format_invalid_optional_value_has_clear_error(tmp_path):
 def test_new_format_option_with_invalid_expiration_has_clear_error(tmp_path):
     csv_path = tmp_path / "bad_option_expiration.csv"
     write_broker_csv(csv_path, [stock_trade(**{
-        'Date': '2020-05-08T17:24:00-04:00',
+        'Date': '2022-11-08T09:15:00-04:00',
         'Description': 'Bought option',
         'Symbol': 'SYN  200619C00050000',
         'Instrument Type': 'Equity Option',
@@ -154,42 +154,42 @@ def test_new_format_csv_sorting(tmp_path):
     csv_path = tmp_path / "sorting.csv"
     write_broker_csv(csv_path, [
         stock_trade(**{
-            'Date': '2020-05-08T17:24:00-04:00',
+            'Date': '2022-11-08T09:15:00-04:00',
             'Sub Type': 'Sell to Close',
             'Action': 'SELL_TO_CLOSE',
-            'Symbol': 'SVXY  200619P00030000',
+            'Symbol': 'UVWX  221216P00022500',
             'Instrument Type': 'Equity Option',
-            'Description': 'Sold 3 SVXY 06/19/20 Put 30.00 @ 0.81',
-            'Value': '243.0',
+            'Description': 'Sold 3 UVWX 12/16/22 Put 22.50 @ 0.44',
+            'Value': '132.0',
             'Quantity': '3',
-            'Average Price': '81',
+            'Average Price': '44',
             'Commissions': '0.00',
-            'Fees': '-0.44',
+            'Fees': '0.35',
             'Multiplier': '100',
-            'Root Symbol': 'SVXY',
-            'Underlying Symbol': 'SVXY',
-            'Expiration Date': '06/19/20',
-            'Strike Price': '30',
+            'Root Symbol': 'UVWX',
+            'Underlying Symbol': 'UVWX',
+            'Expiration Date': '12/16/22',
+            'Strike Price': '22.5',
             'Call or Put': 'PUT',
             'Order #': 'ORDER-1',
         }),
         stock_trade(**{
-            'Date': '2020-05-07T14:00:00-04:00',
+            'Date': '2022-11-07T14:00:00-04:00',
             'Sub Type': 'Sell to Open',
             'Action': 'SELL_TO_OPEN',
-            'Symbol': 'SVXY  200619P00030000',
+            'Symbol': 'UVWX  221216P00022500',
             'Instrument Type': 'Equity Option',
-            'Description': 'Sold 3 SVXY 06/19/20 Put 30.00 @ 0.80',
-            'Value': '240.0',
+            'Description': 'Sold 3 UVWX 12/16/22 Put 22.50 @ 0.43',
+            'Value': '129.0',
             'Quantity': '3',
-            'Average Price': '80',
+            'Average Price': '43',
             'Commissions': '0.00',
-            'Fees': '-1.15',
+            'Fees': '1.05',
             'Multiplier': '100',
-            'Root Symbol': 'SVXY',
-            'Underlying Symbol': 'SVXY',
-            'Expiration Date': '06/19/20',
-            'Strike Price': '30',
+            'Root Symbol': 'UVWX',
+            'Underlying Symbol': 'UVWX',
+            'Expiration Date': '12/16/22',
+            'Strike Price': '22.5',
             'Call or Put': 'PUT',
             'Order #': 'ORDER-2',
         }),
