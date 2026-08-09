@@ -60,6 +60,27 @@ def main() -> None:
                 "tax treatment; this rule is not calculated by this report."
             )
             print("Review these trades manually before using this annual report for a tax filing.\n")
+        if year in getattr(t, "ambiguous_withholding_years", set()):
+            print("*** AMBIGUOUS DIVIDEND WITHHOLDING - NOT FILING-READY ***")
+            print(
+                "A negative dividend cash movement was allocated by the withholding "
+                "heuristic. Review the broker statement before using this annual "
+                "report for a tax filing.\n"
+            )
+        unsupported_symbols = getattr(
+            t, "unsupported_tax_category_symbols_by_year", {}
+        ).get(year, set())
+        if unsupported_symbols:
+            symbols = ", ".join(sorted(unsupported_symbols))
+            print("*** UNSUPPORTED TAX CATEGORY - NOT FILING-READY ***")
+            print(
+                "The following symbols require a tax category that this report does "
+                f"not calculate: {symbols}"
+            )
+            print(
+                "Calculate these entries manually before using this annual report "
+                "for a tax filing.\n"
+            )
         p = Printer(
             values=values,
             closed_trades=t.position_manager.closed_trades,

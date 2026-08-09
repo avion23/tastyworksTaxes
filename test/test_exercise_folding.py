@@ -11,9 +11,12 @@ from tastyworksTaxes.position_manager import (
     PositionManager,
 )
 from tastyworksTaxes.tasty import Tasty
+from tastyworksTaxes.money import Money
+from tastyworksTaxes.values import Values
 from tastyworksTaxes.trade_calculator import (
     calculate_long_option_losses,
     calculate_long_option_profits,
+    calculate_long_option_total_losses,
     calculate_option_differential,
     calculate_option_sum,
     calculate_short_option_losses,
@@ -59,10 +62,21 @@ def transaction(
 
 
 def option_tax_values(trades):
-    tasty = Tasty()
-    tasty.processTransactionHistory = lambda: None
-    tasty.position_manager.closed_trades = trades
-    return tasty.run()[2025]
+    values = Values()
+    long_profits = calculate_long_option_profits(trades)
+    short_profits = calculate_short_option_profits(trades)
+    long_losses = calculate_long_option_losses(trades)
+    short_losses = calculate_short_option_losses(trades)
+    total_losses = calculate_long_option_total_losses(trades)
+    values.z21_termingeschaefsgewinne = Money(
+        usd=short_profits.usd + long_profits.usd,
+        eur=short_profits.eur + long_profits.eur,
+    )
+    values.z24_termingeschaefte_verluste = Money(
+        usd=short_losses.usd + long_losses.usd + total_losses.usd,
+        eur=short_losses.eur + long_losses.eur + total_losses.eur,
+    )
+    return values
 
 
 def assert_exercise_excluded_from_option_tax(trade):

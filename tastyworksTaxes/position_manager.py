@@ -100,53 +100,83 @@ class PositionManager:
 
     @staticmethod
     def _load_corporate_actions_config() -> dict:
-        """
-        Load corporate actions configuration from CSV file.
-
-        Returns dict with structure:
-        {
-            'reverse_splits': [
-                {'date': '2020-04-29', 'symbol': 'USO', 'ratio': 0.125, 'source': '...'},
-                ...
-            ]
-        }
-        """
+        """Load and validate the packaged corporate-action configuration."""
         try:
-            splits = []
-            config_resource = files("tastyworksTaxes").joinpath("corporate_actions.csv")
-            with config_resource.open("r", encoding="utf-8") as f:
-                # Filter out comment lines before passing to CSV reader
+            config_resource = files("tastyworksTaxes").joinpath(
+                "corporate_actions.csv"
+            )
+            with config_resource.open("r", encoding="utf-8") as source:
                 lines = [
                     line
-                    for line in f
-                    if line.strip() and not line.strip().startswith("#")
+                    for line in source
+                    if line.strip() and not line.lstrip().startswith("#")
                 ]
+        except (FileNotFoundError, ModuleNotFoundError, OSError) as exc:
+            raise ValueError(
+                "Corporate actions configuration is unavailable"
+            ) from exc
 
-            # Parse the filtered lines
-            reader = csv.DictReader(lines)
+        try:
+            reader = csv.DictReader(lines, strict=True)
+            if reader.fieldnames != ["date", "symbol", "ratio", "source"]:
+                raise ValueError
+
+            splits = []
+            configured_events = set()
             for row in reader:
-                try:
-                    splits.append(
-                        {
-                            "date": row["date"].strip(),
-                            "symbol": row["symbol"].strip(),
-                            "ratio": float(row["ratio"]),
-                            "source": row.get("source", "").strip(),
-                        }
-                    )
-                except (KeyError, ValueError) as e:
-                    logger.warning(
-                        f"Skipping invalid row in corporate_actions.csv: {row} ({e})"
-                    )
-                    continue
+                if set(row) != {"date", "symbol", "ratio", "source"}:
+                    raise ValueError
+                event_date = row["date"].strip()
+                symbol = row["symbol"].strip()
+                source = row["source"].strip()
+                parsed_date = datetime.strptime(event_date, "%Y-%m-%d")
+                if parsed_date.strftime("%Y-%m-%d") != event_date:
+                    raise ValueError
+                if not symbol or not source:
+                    raise ValueError
+                ratio = float(row["ratio"])
+                if not math.isfinite(ratio) or ratio <= 0:
+                    raise ValueError
+                event = event_date, symbol
+                if event in configured_events:
+                    raise ValueError
+                configured_events.add(event)
+                splits.append(
+                    {
+                        "date": event_date,
+                        "symbol": symbol,
+                        "ratio": ratio,
+                        "source": source,
+                    }
+                )
+        except (csv.Error, KeyError, TypeError, ValueError) as exc:
+            raise ValueError(
+                "Corporate actions configuration is invalid"
+            ) from exc
 
-            return {"reverse_splits": splits}
-        except (FileNotFoundError, ModuleNotFoundError) as e:
-            logger.warning("Corporate actions config not found: %s", e)
-            return {"reverse_splits": []}
-        except (OSError, csv.Error) as e:
-            logger.error(f"Failed to load corporate actions config: {e}")
-            return {"reverse_splits": []}
+        return {"reverse_splits": splits}
+
+    def reset_calculation_state(self) -> None:
+        """Clear derived position state while preserving validated configuration."""
+        self.open_lots = defaultdict(deque)
+        self.closed_trades = []
+        self._pending_symbol_change_lots = {}
+        self._pending_special_dividend_lots = {}
+        self._pending_exercises = defaultdict(deque)
+
+    @staticmethod
+    def _absolute_datetime(transaction):
+        absolute_time = transaction.get("_Absolute Date/Time")
+        if absolute_time is None or absolute_time != absolute_time:
+            raise ValueError("Absolute transaction timestamp is required")
+        return absolute_time
+
+    @classmethod
+    def _absolute_date(cls, transaction) -> str:
+        absolute_time = cls._absolute_datetime(transaction)
+        if hasattr(absolute_time, "date"):
+            return str(absolute_time.date())
+        return str(absolute_time)[:10]
 
     def _get_reverse_split_ratio_from_config(
         self, symbol: str, date: datetime
@@ -169,10 +199,7 @@ class PositionManager:
         for split in reverse_splits:
             if split.get("symbol") == symbol and split.get("date") == date_str:
                 ratio = split.get("ratio")
-                logger.info(
-                    f"Using configured reverse split ratio {ratio} for {symbol} on {date_str} "
-                    f"(source: {split.get('source', 'unknown')})"
-                )
+                logger.info("Using configured corporate action")
                 return float(ratio)
 
         return None
@@ -283,12 +310,12 @@ class PositionManager:
         open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
         return subcode in CLOSING_SUBCODES or open_close == OpenClose.CLOSE.value
 
-    @staticmethod
-    def _get_conversion_key(transaction) -> tuple:
+    @classmethod
+    def _get_conversion_key(cls, transaction) -> tuple:
         """Identify one broker conversion pair without trusting replacement basis."""
         position_type = transaction.getType()
         event = transaction[Fields.TRANSACTION_SUBCODE.value]
-        event_time = transaction.getDateTime()
+        event_time = cls._absolute_datetime(transaction)
         if position_type == PositionType.stock:
             return event, event_time, position_type
 
@@ -305,9 +332,7 @@ class PositionManager:
         )
 
     def _open_position(self, transaction):
-        logger.info(
-            f"{transaction.getDateTime():<19} Adding '{transaction.getQuantity():>4}' of '{transaction.getSymbol():<6}' to positions"
-        )
+        logger.info("Opened position")
 
         lot = PositionLot(
             symbol=transaction.getSymbol(),
@@ -338,7 +363,10 @@ class PositionManager:
         ):
             direction = "buy" if lot.quantity > 0 else "sell"
             adjustment, exercise_fees = self._consume_pending_exercise(
-                transaction.getDate(), lot.symbol, direction, abs(lot.quantity)
+                self._absolute_date(transaction),
+                lot.symbol,
+                direction,
+                abs(lot.quantity),
             )
             if adjustment.usd or adjustment.eur or exercise_fees.usd or exercise_fees.eur:
                 # The paid option premium is a negative signed cash flow for every
@@ -347,14 +375,7 @@ class PositionManager:
                 lot.amount_eur += adjustment.eur
                 lot.fees_usd += exercise_fees.usd
                 lot.fees_eur += exercise_fees.eur
-                logger.info(
-                    "Long option exercise: adjusted %s stock %s on %s by USD %.2f / EUR %.2f",
-                    lot.symbol,
-                    direction,
-                    transaction.getDate(),
-                    adjustment.usd,
-                    adjustment.eur,
-                )
+                logger.info("Applied option exercise adjustment")
 
         key = self._get_key_from_transaction(transaction)
         self.open_lots[key].append(lot)
@@ -391,7 +412,7 @@ class PositionManager:
                 call_put=transaction.loc[Fields.CALL_PUT.value] if transaction.getType() != PositionType.stock else None,
             )
             self.open_lots[key].append(lot)
-            logger.debug(f"Symbol Change: Added {lot.symbol} qty={lot.quantity} basis={lot.amount_usd:.2f} (preserved from {old_lot.symbol})")
+            logger.debug("Applied corporate action")
 
     def _close_position_for_symbol_change(self, transaction):
         """Move the requested FIFO slices to the pending conversion buffer."""
@@ -527,7 +548,7 @@ class PositionManager:
         if is_exercise_stock_delivery:
             direction = "sell" if closing_quantity < 0 else "buy"
             pending_adjustment, pending_exercise_fees = self._consume_pending_exercise(
-                transaction.getDate(),
+                self._absolute_date(transaction),
                 transaction.getSymbol(),
                 direction,
                 quantity_to_close,
@@ -597,7 +618,7 @@ class PositionManager:
                 direction = (
                     "buy" if lot_to_process.position_type == PositionType.call else "sell"
                 )
-                exercise_key = (transaction.getDate(), underlying, direction)
+                exercise_key = (self._absolute_date(transaction), underlying, direction)
                 self._pending_exercises[exercise_key].append(PendingExercise(
                     date_iso=exercise_key[0],
                     symbol=underlying,
@@ -617,24 +638,11 @@ class PositionManager:
                 trade_result.opening_fees_eur = 0.0
                 trade_result.closing_fees_usd = 0.0
                 trade_result.closing_fees_eur = 0.0
-                logger.info(
-                    "Long %s exercise: pending %s shares for %s %s on %s: USD %.2f / EUR %.2f",
-                    lot_to_process.position_type.name,
-                    shares,
-                    underlying,
-                    direction,
-                    exercise_key[0],
-                    option_amount.usd,
-                    option_amount.eur,
-                )
+                logger.info("Recorded option exercise adjustment")
             self.closed_trades.append(trade_result)
 
-            logger.info(
-                f"{trade_result.opening_date:<19} - {trade_result.closing_date:<19} closing {trade_result.quantity:>4} {trade_result.symbol:<6}"
-            )
-            logger.debug(
-                f"Consumed {closable_quantity} from lot: {lot_before} -> {lot_after}"
-            )
+            logger.info("Closed position")
+            logger.debug("Consumed position lot")
 
             if not new_lot.is_empty():
                 remaining_lots.append(new_lot)
@@ -647,13 +655,7 @@ class PositionManager:
             del self.open_lots[key]
 
         if pending_adjustment.usd or pending_adjustment.eur:
-            logger.info(
-                "Long option exercise: adjusted %s stock close on %s by USD %.2f / EUR %.2f",
-                transaction.getSymbol(),
-                transaction.getDate(),
-                pending_adjustment.usd,
-                pending_adjustment.eur,
-            )
+            logger.info("Applied option exercise adjustment")
 
     def _consume_pending_exercise(
         self,
@@ -757,7 +759,7 @@ class PositionManager:
                 OpenClose.CLOSE.value,
                 OpenClose.OPEN.value,
             }:
-                logger.debug(f"Reverse split is an option trade: {description}")
+                logger.debug("Processing option corporate action")
                 return False
             raise ValueError(
                 "AMBIGUOUS OPTION REVERSE SPLIT: expected an OCC option token and "
@@ -836,12 +838,7 @@ class PositionManager:
                         "cash-in-lieu basis and proceeds are not available"
                     )
 
-            logger.warning(
-                "Applying reverse split ratio %s to %s open stock lots for '%s'.",
-                ratio,
-                len(affected_lots),
-                symbol_to_split,
-            )
+            logger.warning("Applying configured reverse split")
             for lot in affected_lots:
                 lot.adjust_for_split(ratio)
             return True

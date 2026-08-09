@@ -42,7 +42,6 @@ from datetime import date, datetime
 import pandas as pd
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 class Tasty:
@@ -54,6 +53,8 @@ class Tasty:
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
         self.fund_tax_review_years = set()
+        self.ambiguous_withholding_years = set()
+        self.unsupported_tax_category_symbols_by_year = {}
         self._withholding_remaining = {}
         self._asset_classification_checks = set()
 
@@ -75,6 +76,7 @@ class Tasty:
             self.fund_tax_review_years.add(pay_date.year)
 
         if money.usd < 0:
+            self.ambiguous_withholding_years.add(pay_date.year)
             key = (transaction.getDate(), symbol)
             remaining = self._withholding_remaining.get(key, 0.0)
             negative_amount = -money.usd
@@ -147,11 +149,8 @@ class Tasty:
                 self._record_cash_dividend(t, m, year_values)
             case "Fully Paid Stock Lending Income":
                 year_values.securitiesLendingIncome += m
-            case subcode:
-                raise ValueError(
-                    f"CRITICAL: Unknown money movement subcode '{subcode}' in transaction: {desc}. "
-                    f"This could affect tax calculations."
-                )
+            case _:
+                raise ValueError("Unsupported transaction subcode in input history")
 
     def print(self):
         for key in sorted(self.yearValues):
@@ -161,12 +160,15 @@ class Tasty:
 
     def processTransactionHistory(self):
         manager = self.position_manager
+        configured_actions = manager._corporate_actions_config
         staged_manager = copy.deepcopy(manager)
         state_names = (
             "yearValues",
             "unverified_asset_symbols_by_year",
             "short_stock_trades_by_year",
             "fund_tax_review_years",
+            "ambiguous_withholding_years",
+            "unsupported_tax_category_symbols_by_year",
             "_withholding_remaining",
             "_asset_classification_checks",
         )
@@ -184,9 +186,51 @@ class Tasty:
 
         manager.__dict__.clear()
         manager.__dict__.update(staged_manager.__dict__)
+        manager._corporate_actions_config = configured_actions
         self.position_manager = manager
 
     def _processTransactionHistory(self):
+        if self.history.empty:
+            return
+        absolute_time_field = History._ABSOLUTE_DATE_TIME
+        if absolute_time_field not in self.history.columns:
+            raise ValueError("Absolute transaction timestamp is required")
+        if self.history[absolute_time_field].isna().any():
+            raise ValueError("Absolute transaction timestamp is required")
+
+        supported_subcodes = {
+            TransactionCode.MONEY_MOVEMENT.value: {
+                "Transfer",
+                "Withdrawal",
+                "Balance Adjustment",
+                "Fee",
+                "Deposit",
+                "Credit Interest",
+                "Debit Interest",
+                "Special Dividend",
+                "Dividend",
+                "Fully Paid Stock Lending Income",
+            },
+            TransactionCode.TRADE.value: {
+                TransactionSubcode.BUY_TO_OPEN.value,
+                TransactionSubcode.SELL_TO_OPEN.value,
+                TransactionSubcode.BUY_TO_CLOSE.value,
+                TransactionSubcode.SELL_TO_CLOSE.value,
+            },
+            TransactionCode.RECEIVE_DELIVER.value: {
+                subcode.value for subcode in TransactionSubcode
+            },
+        }
+        transaction_codes = self.history[Fields.TRANSACTION_CODE.value]
+        if not transaction_codes.isin(supported_subcodes).all():
+            raise ValueError("Unsupported transaction code in input history")
+        for code, subcodes in supported_subcodes.items():
+            code_rows = transaction_codes == code
+            if not self.history.loc[
+                code_rows, Fields.TRANSACTION_SUBCODE.value
+            ].isin(subcodes).all():
+                raise ValueError("Unsupported transaction subcode in input history")
+
         corporate_actions = self.history[Fields.TRANSACTION_SUBCODE.value].isin([
             TransactionSubcode.SYMBOL_CHANGE.value,
             TransactionSubcode.STOCK_MERGER.value,
@@ -246,7 +290,7 @@ class Tasty:
 
         for index in range(len(self.history)):
             row = self.history.iloc[index]
-            date_iso = str(row[Fields.DATE_TIME.value].date())
+            date_iso = str(row[absolute_time_field].date())
             if physical_option_settlements.iloc[index]:
                 semantic = row[Fields.TRANSACTION_SUBCODE.value]
                 call_put = row[Fields.CALL_PUT.value]
@@ -275,7 +319,7 @@ class Tasty:
             key = (date_iso, symbol, direction, notional)
             stock_groups.setdefault(key, []).append((index, shares))
 
-        processing_datetime = self.history[Fields.DATE_TIME.value].copy()
+        processing_datetime = self.history[absolute_time_field].copy()
         for key, option_entries in option_groups.items():
             stock_entries = stock_groups.get(key, [])
             if len(option_entries) != 1 or len(stock_entries) != 1:
@@ -287,7 +331,7 @@ class Tasty:
             stock_index, delivered_shares = stock_entries[0]
             settlement_semantic.iloc[stock_index] = semantic
             actual_delivered_shares.iloc[option_index] = delivered_shares
-            anchor = self.history.iloc[option_index][Fields.DATE_TIME.value]
+            anchor = self.history.iloc[option_index][absolute_time_field]
             if processing_datetime.iloc[stock_index] < anchor:
                 processing_datetime.iloc[stock_index] = anchor
 
@@ -432,7 +476,14 @@ class Tasty:
         if warning_state is None or key in self._asset_classification_checks:
             return
         self._asset_classification_checks.add(key)
-        self.classifier.check_unsupported_assets([symbol], operation_date)
+        warning_kind, _ = warning_state
+        if warning_kind == "unsupported_tax_category":
+            self.unsupported_tax_category_symbols_by_year.setdefault(
+                operation_date.year, set()
+            ).add(symbol)
+            logger.warning("Unsupported tax category requires manual review")
+            return
+        logger.warning("Asset classification requires manual review")
 
     def _stockHoldingPeriods(self):
         periods = [
@@ -499,9 +550,14 @@ class Tasty:
             )
 
     def run(self):
+        self.yearValues = {}
+        self.position_manager.reset_calculation_state()
         self.unverified_asset_symbols_by_year = {}
         self.short_stock_trades_by_year = {}
         self.fund_tax_review_years = set()
+        self.ambiguous_withholding_years = set()
+        self.unsupported_tax_category_symbols_by_year = {}
+        self._withholding_remaining = {}
         self._asset_classification_checks = set()
         self.processTransactionHistory()
 
