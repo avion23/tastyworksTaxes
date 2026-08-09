@@ -270,7 +270,9 @@ def test_unsupported_category_state_generic_log_and_main_warning(
     dividend_values = dividend_tasty.run()[2024]
     assert dividend_values.dividend.usd == 0
     assert dividend_values.paidDividend.usd == 0
+    assert dividend_values.withholdingTax.usd == 0
     assert dividend_values.fundDistributions.usd == 0
+    assert dividend_values.fundDistributionExempt.usd == 0
     assert dividend_values.fundDistributionTaxable.usd == 0
     assert dividend_tasty.unsupported_tax_category_symbols_by_year == {
         2024: {"BTC/USD"}
