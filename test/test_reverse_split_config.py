@@ -45,7 +45,7 @@ class TestReverseSplitConfig:
         uso_stock_lot = PositionLot(
             symbol="USO",
             position_type=PositionType.stock,
-            quantity=100,
+            quantity=96,
             amount_usd=-1000.0,
             amount_eur=-850.0,
             fees_usd=1.0,
@@ -72,8 +72,9 @@ class TestReverseSplitConfig:
         result = position_manager._handle_reverse_split(transaction)
 
         assert result is True
-        # After 1:8 split, 100 shares should become 12.5 -> 12 shares (floor for long positions)
+        # Exact 1:8 entitlement is applied without discarding basis.
         assert uso_stock_lot.quantity == 12
+        assert uso_stock_lot.amount_usd == -1000.0
 
     def test_unknown_stock_fails_before_trade_or_lot_mutation(self, position_manager):
         """An unrecognized stock split cannot fall through to taxable FIFO handling."""

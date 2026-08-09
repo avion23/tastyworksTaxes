@@ -91,7 +91,8 @@ def test_long_call_exercise_folds_premium_into_stock_basis():
     assert stock_lot.amount_eur == pytest.approx(
         stock_delivery.getValue().eur + option_open.getValue().eur
     )
-    assert stock_lot.fees_usd == 1.25
+    assert stock_lot.fees_usd == 1.75
+    assert option_trade.fees_usd == 0
 
     pm.add_position(transaction(
         "2025-02-03T10:00:00+0000", "Sell to Close", "SELL_TO_CLOSE",
@@ -132,7 +133,8 @@ def test_long_put_exercise_reduces_stock_proceeds():
     assert stock_trade.closing_profit_eur == pytest.approx(
         stock_delivery.getValue().eur + option_open.getValue().eur
     )
-    assert stock_trade.closing_fees_usd == 1.25
+    assert stock_trade.closing_fees_usd == 1.75
+    assert option_trade.fees_usd == 0
     assert stock_trade.profit_usd == -900
 
 
@@ -218,7 +220,7 @@ def test_normal_option_closes_and_expiration_do_not_fold():
     assert pm._pending_exercises == {}
 
 
-def test_long_assignment_is_accepted_as_exercise_and_unpaired_stays_pending(caplog):
+def test_long_assignment_without_stock_delivery_fails_closed():
     pm = PositionManager()
     pm.add_position(transaction(
         "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
@@ -230,13 +232,13 @@ def test_long_assignment_is_accepted_as_exercise_and_unpaired_stays_pending(capl
         "ONE  250117C00050000", "Equity Option", 0, 1, "ONE",
         "1/17/25", 50, "CALL", "Receive Deliver",
     ))
-    pm.warn_unmatched_exercise_adjustments()
+    with pytest.raises(ValueError, match="UNMATCHED EXERCISE ADJUSTMENT"):
+        pm.validate_no_pending_adjustments()
 
     assert pm.closed_trades[0].settled_by_exercise is True
     pending = pm._pending_exercises[("2025-01-17", "ONE", "buy")][0]
     assert pending.remaining_shares == 100
-    assert pending.per_share_premium_usd == 5
-    assert "no paired stock delivery" in caplog.text
+    assert pending.per_share_amount_usd == -5
 
 
 def test_multiple_same_day_exercises_fold_by_quantity_fifo():
@@ -293,3 +295,112 @@ def test_receive_deliver_exercise_precedes_earlier_timestamp_stock_row():
 
     assert tasty.position_manager.get_all_open_lots()[0].amount_usd == -5500
     assert tasty.position_manager._pending_exercises == {}
+
+
+@pytest.mark.parametrize(
+    "call_put,existing_stock,delivery_subcode,delivery_action,opening_cash,"
+    "delivery_cash,premium,expected_stock_cash,expected_profit",
+    [
+        ("CALL", None, "Buy to Open", "BUY_TO_OPEN", None, -5000, -500, -5500, None),
+        ("CALL", "short", "Buy to Close", "BUY_TO_CLOSE", 6000, -5000, -500, -5500, 500),
+        ("PUT", "long", "Sell to Close", "SELL_TO_CLOSE", -6000, 5500, -400, 5100, -900),
+        ("PUT", None, "Sell to Open", "SELL_TO_OPEN", None, 5500, -400, 5100, None),
+    ],
+)
+def test_long_exercise_cash_and_fees_conserve_for_every_stock_state(
+    call_put,
+    existing_stock,
+    delivery_subcode,
+    delivery_action,
+    opening_cash,
+    delivery_cash,
+    premium,
+    expected_stock_cash,
+    expected_profit,
+):
+    pm = PositionManager()
+    if existing_stock:
+        opening_subcode = "Sell to Open" if existing_stock == "short" else "Buy to Open"
+        opening_action = "SELL_TO_OPEN" if existing_stock == "short" else "BUY_TO_OPEN"
+        pm.add_position(transaction(
+            "2025-01-01T10:00:00+0000", opening_subcode, opening_action,
+            "XYZ", "Equity", opening_cash, 100, "XYZ",
+        ))
+
+    letter = "C" if call_put == "CALL" else "P"
+    option_open = transaction(
+        "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        f"XYZ  250117{letter}00050000", "Equity Option", premium, 1,
+        "XYZ", "1/17/25", 50, call_put, commissions=2,
+    )
+    pm.add_position(option_open)
+    pm.add_position(transaction(
+        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+        f"XYZ  250117{letter}00050000", "Equity Option", 0, 1,
+        "XYZ", "1/17/25", 50, call_put, "Receive Deliver",
+    ))
+    stock_delivery = transaction(
+        "2025-01-17T10:00:00+0000", delivery_subcode, delivery_action,
+        "XYZ", "Equity", delivery_cash, 100, "XYZ",
+        transaction_type="Receive Deliver", commissions=1,
+    )
+    pm.add_position(stock_delivery)
+    pm.validate_no_pending_adjustments()
+
+    option_trade = next(
+        trade for trade in pm.closed_trades if trade.position_type != PositionType.stock
+    )
+    assert option_trade.settled_by_exercise is True
+    assert option_trade.fees_usd == 0
+    expected_fees = option_open.getFees().usd + stock_delivery.getFees().usd
+    expected_fees_eur = option_open.getFees().eur + stock_delivery.getFees().eur
+    expected_cash_eur = option_open.getValue().eur + stock_delivery.getValue().eur
+
+    if existing_stock:
+        stock_trade = next(
+            trade for trade in pm.closed_trades
+            if trade.position_type == PositionType.stock
+        )
+        assert stock_trade.closing_profit_usd == expected_stock_cash
+        assert stock_trade.closing_profit_eur == pytest.approx(expected_cash_eur)
+        assert stock_trade.closing_fees_usd == expected_fees
+        assert stock_trade.closing_fees_eur == pytest.approx(expected_fees_eur)
+        assert stock_trade.profit_usd == expected_profit
+        return
+
+    stock_lot = next(
+        lot for lot in pm.get_all_open_lots()
+        if lot.position_type == PositionType.stock
+    )
+    assert stock_lot.amount_usd == expected_stock_cash
+    assert stock_lot.amount_eur == pytest.approx(expected_cash_eur)
+    assert stock_lot.fees_usd == expected_fees
+    assert stock_lot.fees_eur == pytest.approx(expected_fees_eur)
+
+
+def test_partial_exercise_delivery_fails_before_stock_mutation():
+    pm = PositionManager()
+    pm.add_position(transaction(
+        "2025-01-02T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        "XYZ  250117C00050000", "Equity Option", -500, 1, "XYZ",
+        "1/17/25", 50, "CALL", commissions=2,
+    ))
+    pm.add_position(transaction(
+        "2025-01-17T10:00:00+0000", "Exercise", "EXERCISE",
+        "XYZ  250117C00050000", "Equity Option", 0, 1, "XYZ",
+        "1/17/25", 50, "CALL", "Receive Deliver",
+    ))
+    delivery = transaction(
+        "2025-01-17T10:00:00+0000", "Buy to Open", "BUY_TO_OPEN",
+        "XYZ", "Equity", -7500, 150, "XYZ",
+        transaction_type="Receive Deliver", commissions=1,
+    )
+
+    with pytest.raises(ValueError, match="PARTIAL EXERCISE ADJUSTMENT"):
+        pm.add_position(delivery)
+
+    assert not any(
+        lot.position_type == PositionType.stock
+        for lot in pm.get_all_open_lots()
+    )
+    assert pm._pending_exercises[("2025-01-17", "XYZ", "buy")][0].remaining_shares == 100

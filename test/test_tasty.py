@@ -135,16 +135,20 @@ class TestTasty:
         assert values.withholdingTax.usd == expected_withholding
         assert values.paidDividend.usd == expected_paid
 
-    def test_money_movement_special_dividend_is_cash_income(self):
+    def test_money_movement_special_dividend_uses_fund_classification(self):
         t = Tasty()
         transaction = Transaction.fromString(
-            "2025-12-17T19:00:00+0000,Money Movement,Special Dividend,,TECL,Equity,"
-            "Cash special dividend,8.04,0,,0,0.00,,TECL,TECL,,,,123456,USD"
+            "2025-12-17T19:00:00+0000,Money Movement,Special Dividend,,SCHG,Equity,"
+            "Cash special dividend,100,0,,0,0.00,,SCHG,SCHG,,,,123456,USD"
         )
 
         t.moneyMovement(transaction)
 
-        assert t.year(2025).dividend.usd == 8.04
+        values = t.year(2025)
+        assert values.dividend.usd == 0
+        assert values.fundDistributions.usd == 100
+        assert values.fundDistributionExempt.usd == 30
+        assert values.fundDistributionTaxable.usd == 70
 
     def test_paired_special_dividend_bookkeeping_is_not_withholding(self):
         opening = Transaction.fromString(
@@ -200,3 +204,68 @@ class TestTasty:
             ("NEW", 20, -100),
         ]
         assert t.position_manager._pending_symbol_change_lots == {}
+
+    def test_simultaneous_symbol_changes_keep_each_basis_with_its_pair(self):
+        def transaction(line):
+            return Transaction.fromString(line)
+
+        rows = [
+            transaction("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
+            transaction("2024-01-01T09:01:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD2,Equity,open,-200,10,20,0,0,,OLD2,OLD2,,,,2,USD"),
+            transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,100,10,0,0,0,,OLD1,OLD1,,,,3,USD"),
+            transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,200,10,0,0,0,,OLD2,OLD2,,,,4,USD"),
+            transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,-100,10,0,0,0,,NEW1,NEW1,,,,5,USD"),
+            transaction("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW2,Equity,open,-200,10,0,0,0,,NEW2,NEW2,,,,6,USD"),
+        ]
+        t = Tasty()
+        t.history = pd.DataFrame(rows)
+
+        t.processTransactionHistory()
+
+        assert sorted(
+            (lot.symbol, lot.quantity, lot.amount_usd)
+            for lot in t.position_manager.get_all_open_lots()
+        ) == [("NEW1", 10, -100), ("NEW2", 10, -200)]
+
+    def test_ambiguous_simultaneous_symbol_changes_fail_before_processing(self):
+        rows = [
+            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD1,Equity,open,-100,10,10,0,0,,OLD1,OLD1,,,,1,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD1,Equity,close,0,10,0,0,0,,OLD1,OLD1,,,,2,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD2,Equity,close,0,10,0,0,0,,OLD2,OLD2,,,,3,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW1,Equity,open,0,10,0,0,0,,NEW1,NEW1,,,,4,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW2,Equity,open,0,10,0,0,0,,NEW2,NEW2,,,,5,USD"),
+        ]
+        t = Tasty()
+        t.history = pd.DataFrame(rows)
+
+        with pytest.raises(ValueError, match="AMBIGUOUS OR UNMATCHED"):
+            t.processTransactionHistory()
+
+        assert t.position_manager.get_all_open_lots() == []
+
+    def test_unmatched_conversion_fails_before_processing(self):
+        rows = [
+            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,close,100,10,0,0,0,,OLD,OLD,,,,2,USD"),
+        ]
+        t = Tasty()
+        t.history = pd.DataFrame(rows)
+
+        with pytest.raises(ValueError, match="AMBIGUOUS OR UNMATCHED"):
+            t.processTransactionHistory()
+
+        assert t.position_manager.get_all_open_lots() == []
+
+    def test_zero_quantity_conversion_with_basis_fails_without_ghost_lot(self):
+        rows = [
+            Transaction.fromString("2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,OLD,Equity,open,-100,10,10,0,0,,OLD,OLD,,,,1,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,SELL_TO_CLOSE,OLD,Equity,close,50,0,0,0,0,,OLD,OLD,,,,2,USD"),
+            Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Symbol Change,BUY_TO_OPEN,NEW,Equity,open,-50,0,0,0,0,,NEW,NEW,,,,3,USD"),
+        ]
+        t = Tasty()
+        t.history = pd.DataFrame(rows)
+
+        with pytest.raises(ValueError, match="finite nonzero quantity"):
+            t.processTransactionHistory()
+
+        assert t.position_manager.get_all_open_lots() == []

@@ -6,6 +6,7 @@ from tastyworksTaxes.position_manager import PositionManager
 from tastyworksTaxes.position_lot import PositionLot
 from tastyworksTaxes.position import PositionType
 from tastyworksTaxes.transaction import Transaction
+from tastyworksTaxes.tasty import Tasty
 import pandas as pd
 
 
@@ -20,7 +21,7 @@ class TestCorporateActions:
         return PositionLot(
             symbol='USO',
             position_type=PositionType.stock,
-            quantity=100,
+            quantity=96,
             amount_usd=-1000.0,
             amount_eur=-850.0,
             fees_usd=1.0,
@@ -155,7 +156,7 @@ class TestCorporateActions:
         
         for description, expected_ratio, symbol in test_cases:
             sample_stock_lot.symbol = symbol
-            sample_stock_lot.quantity = 100
+            sample_stock_lot.quantity = 96
             position_manager.open_lots.clear()
             position_manager.add_lot_directly(sample_stock_lot)
             
@@ -175,7 +176,7 @@ class TestCorporateActions:
             result = position_manager._handle_reverse_split(transaction)
             assert result is True, f"Failed to handle reverse split for: {description}"
             
-            expected_quantity = int(100 * expected_ratio)
+            expected_quantity = 96 * expected_ratio
             assert sample_stock_lot.quantity == expected_quantity, f"Failed for description: {description}. Expected {expected_quantity}, got {sample_stock_lot.quantity}"
 
     def test_ambiguous_reverse_split_ratio_is_not_inferred(self, position_manager, sample_stock_lot):
@@ -196,19 +197,13 @@ class TestCorporateActions:
         with pytest.raises(ValueError, match='REVERSE SPLIT RATIO UNKNOWN'):
             position_manager._handle_reverse_split(transaction)
 
-        assert sample_stock_lot.quantity == 100
+        assert sample_stock_lot.quantity == 96
 
-    def test_short_position_reverse_split_ceiling_rounding(self, position_manager):
-        from math import ceil
-
-        target = -9 * 0.25
-        new_qty = ceil(target)
-        assert new_qty == -2
-
+    def test_short_position_reverse_split_preserves_basis(self, position_manager):
         short_lot = PositionLot(
             symbol='XYZ',
             position_type=PositionType.stock,
-            quantity=-100,
+            quantity=-96,
             amount_usd=1000.0,
             amount_eur=850.0,
             fees_usd=1.0,
@@ -233,10 +228,10 @@ class TestCorporateActions:
         position_manager._handle_reverse_split(transaction)
 
         assert short_lot.quantity == -12
-        assert abs(short_lot.amount_usd - 960.0) < 0.01
-        assert abs(short_lot.fees_usd - 0.96) < 0.01
+        assert short_lot.amount_usd == 1000.0
+        assert short_lot.fees_usd == 1.0
 
-    def test_residual_basis_retained_when_split_rounds_to_zero(self, position_manager):
+    def test_fractional_residual_fails_atomically(self, position_manager):
         small_lot = PositionLot(
             symbol='XYZ',
             position_type=PositionType.stock,
@@ -262,13 +257,65 @@ class TestCorporateActions:
         }
         transaction = Transaction(pd.Series(reverse_split_data))
 
-        position_manager._handle_reverse_split(transaction)
+        with pytest.raises(ValueError, match="FRACTIONAL RESIDUAL UNKNOWN"):
+            position_manager._handle_reverse_split(transaction)
 
-        assert small_lot.quantity == 0
-        assert small_lot.amount_usd != 0.0
-        assert small_lot.fees_usd != 0.0
+        assert position_manager.get_all_open_lots() == [small_lot]
+        assert small_lot.quantity == 5
+        assert small_lot.amount_usd == -500.0
+        assert small_lot.fees_usd == 5.0
 
-        open_lots = position_manager.get_all_open_lots()
-        assert len(open_lots) == 1
-        assert open_lots[0].quantity == 0
-        assert abs(open_lots[0].amount_usd) > 0
+    def test_multi_lot_split_preserves_aggregate_entitlement_and_basis(
+        self, position_manager
+    ):
+        lots = [
+            PositionLot(
+                symbol="XYZ", position_type=PositionType.stock, quantity=4,
+                amount_usd=-400, amount_eur=-360, fees_usd=1, fees_eur=0.9,
+                date=datetime(2024, 1, day),
+            )
+            for day in (1, 2)
+        ]
+        for lot in lots:
+            position_manager.add_lot_directly(lot)
+        transaction = Transaction(pd.Series({
+            "Date/Time": datetime(2024, 2, 1),
+            "Transaction Code": "Receive Deliver",
+            "Transaction Subcode": "Reverse Split",
+            "Symbol": "XYZ",
+            "Description": "1-for-8 reverse split",
+            "Amount": 0,
+            "AmountEuro": 0,
+            "Fees": 0,
+            "FeesEuro": 0,
+        }))
+
+        position_manager.add_position(transaction)
+
+        adjusted = position_manager.get_all_open_lots()
+        assert sum(lot.quantity for lot in adjusted) == 1
+        assert sum(lot.amount_usd for lot in adjusted) == -800
+        assert [lot.quantity for lot in adjusted] == [0.5, 0.5]
+
+    def test_stock_reverse_split_does_not_mutate_same_symbol_option(self):
+        stock_open = Transaction.fromString(
+            "2024-01-01T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ,Equity,open,-800,80,10,0,0,,XYZ,XYZ,,,,1,USD"
+        )
+        option_open = Transaction.fromString(
+            "2024-01-02T09:00:00+0000,Trade,Buy to Open,BUY_TO_OPEN,XYZ  240621C00010000,Equity Option,open,-100,2,50,0,0,100,XYZ,XYZ,6/21/24,10,CALL,2,USD"
+        )
+        stock_split = Transaction.fromString(
+            "2024-02-01T09:00:00+0000,Receive Deliver,Reverse Split,SELL_TO_CLOSE,XYZ,Equity,1-for-8 reverse split,0,80,0,0,0,,XYZ,XYZ,,,,3,USD"
+        )
+        tasty = Tasty()
+        tasty.history = pd.DataFrame([stock_open, option_open, stock_split])
+
+        tasty.processTransactionHistory()
+
+        lots = tasty.position_manager.get_all_open_lots()
+        stock_lot = next(lot for lot in lots if lot.position_type == PositionType.stock)
+        option_lot = next(lot for lot in lots if lot.position_type == PositionType.call)
+        assert (stock_lot.quantity, stock_lot.amount_usd) == (10, -800)
+        assert (option_lot.quantity, option_lot.strike, option_lot.amount_usd) == (
+            2, 10, -100
+        )

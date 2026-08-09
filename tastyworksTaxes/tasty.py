@@ -52,6 +52,46 @@ class Tasty:
             self.yearValues[year] = Values()
         return self.yearValues[year]
 
+    def _record_cash_dividend(self, transaction, money, year_values):
+        pay_date = transaction.loc[Fields.DATE_TIME.value].date()
+        symbol = transaction.getSymbol()
+        self._checkAssetClassification(symbol, PositionType.stock, pay_date)
+
+        if money.usd < 0:
+            key = (transaction.getDate(), symbol)
+            remaining = self._withholding_remaining.get(key, 0.0)
+            negative_amount = -money.usd
+            withholding_amount = min(negative_amount, remaining)
+            withholding_ratio = withholding_amount / negative_amount
+            year_values.withholdingTax += Money(
+                usd=withholding_amount,
+                eur=-money.eur * withholding_ratio,
+            )
+            year_values.paidDividend += Money(
+                usd=-(negative_amount - withholding_amount),
+                eur=money.eur * (1 - withholding_ratio),
+            )
+            self._withholding_remaining[key] = remaining - withholding_amount
+            return
+
+        classification = self.classifier.classify_for_tax(
+            symbol, PositionType.stock, pay_date
+        )
+        if self.classifier.get_tax_category(classification) != "KAP-INV":
+            year_values.dividend += money
+            return
+
+        exemption = self.classifier.get_exemption_percentage_for(
+            symbol, PositionType.stock, pay_date
+        ) / 100.0
+        year_values.fundDistributions += money
+        year_values.fundDistributionExempt += Money(
+            usd=money.usd * exemption, eur=money.eur * exemption
+        )
+        year_values.fundDistributionTaxable += Money(
+            usd=money.usd * (1 - exemption), eur=money.eur * (1 - exemption)
+        )
+
     def moneyMovement(self, row):
         import re
 
@@ -86,49 +126,11 @@ class Tasty:
             case "Debit Interest":
                 year_values.debitInterest += m
             case "Special Dividend":
-                # Tastytrade also uses this subcode for paired option/corporate-
-                # action bookkeeping entries. Preserve their signed net amount;
-                # treating the negative leg as withholding would create fictitious
-                # dividend income and foreign tax.
-                year_values.dividend += m
+                if t.isOption():
+                    return
+                self._record_cash_dividend(t, m, year_values)
             case "Dividend":
-                pay_date = t.loc["Date/Time"].date()
-                symbol = t.getSymbol()
-                self._checkAssetClassification(
-                    symbol, PositionType.stock, pay_date
-                )
-                if m.usd < 0:
-                    key = (t.getDate(), t.getSymbol())
-                    remaining = getattr(self, "_withholding_remaining", {}).get(key, 0.0)
-                    negative_amount = -m.usd
-                    withholding_amount = min(negative_amount, remaining)
-                    withholding_ratio = withholding_amount / negative_amount
-                    year_values.withholdingTax += Money(
-                        usd=withholding_amount,
-                        eur=-m.eur * withholding_ratio,
-                    )
-                    year_values.paidDividend += Money(
-                        usd=-(negative_amount - withholding_amount),
-                        eur=m.eur * (1 - withholding_ratio),
-                    )
-                    self._withholding_remaining[key] = remaining - withholding_amount
-                else:
-                    classification = self.classifier.classify_for_tax(
-                        symbol, PositionType.stock, pay_date
-                    )
-                    if self.classifier.get_tax_category(classification) == "KAP-INV":
-                        exemption = self.classifier.get_exemption_percentage_for(
-                            symbol, PositionType.stock, pay_date
-                        ) / 100.0
-                        year_values.fundDistributions += m
-                        year_values.fundDistributionExempt += Money(
-                            usd=m.usd * exemption, eur=m.eur * exemption
-                        )
-                        year_values.fundDistributionTaxable += Money(
-                            usd=m.usd * (1 - exemption), eur=m.eur * (1 - exemption)
-                        )
-                    else:
-                        year_values.dividend += m
+                self._record_cash_dividend(t, m, year_values)
             case "Fully Paid Stock Lending Income":
                 year_values.securitiesLendingIncome += m
             case subcode:
@@ -158,6 +160,10 @@ class Tasty:
         receive_deliver = (
             self.history[Fields.TRANSACTION_CODE.value]
             == TransactionCode.RECEIVE_DELIVER.value
+        )
+        conversion_rows = self.history.loc[receive_deliver & corporate_actions]
+        self.position_manager.validate_conversion_pairs(
+            Transaction(row) for _, row in conversion_rows.iterrows()
         )
         physical_option_settlements = (
             receive_deliver
@@ -253,13 +259,18 @@ class Tasty:
                 "_settlement_order",
             ])
         )
-        dividends = chronological_history[
-            chronological_history[Fields.TRANSACTION_SUBCODE.value] == "Dividend"
-        ]
-        dividend_dates = self.history.loc[
-            self.history[Fields.TRANSACTION_SUBCODE.value] == "Dividend",
-            Fields.DATE_TIME.value,
-        ].dt.date.astype(str)
+        cash_dividend_rows = (
+            chronological_history[Fields.TRANSACTION_SUBCODE.value]
+            == "Dividend"
+        ) | (
+            (
+                chronological_history[Fields.TRANSACTION_SUBCODE.value]
+                == TransactionSubcode.SPECIAL_DIVIDEND.value
+            )
+            & ~chronological_history[Fields.CALL_PUT.value].isin(["C", "P"])
+        )
+        dividends = chronological_history.loc[cash_dividend_rows]
+        dividend_dates = dividends[Fields.DATE_TIME.value].dt.date.astype(str)
         amounts = dividends.assign(_pay_date=dividend_dates).groupby(
             ["_pay_date", Fields.SYMBOL.value]
         )[Fields.AMOUNT.value]
@@ -277,7 +288,7 @@ class Tasty:
                 TransactionCode.RECEIVE_DELIVER.value,
             }:
                 self.position_manager.add_position(Transaction(row))
-        self.position_manager.warn_unmatched_exercise_adjustments()
+        self.position_manager.validate_no_pending_adjustments()
 
     def getYearlyTrades(self):
         if not self.position_manager.closed_trades:

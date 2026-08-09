@@ -79,8 +79,10 @@ class PendingExercise:
     symbol: str
     direction: str
     remaining_shares: float
-    per_share_premium_usd: float
-    per_share_premium_eur: float
+    per_share_amount_usd: float
+    per_share_amount_eur: float
+    per_share_fees_usd: float
+    per_share_fees_eur: float
 
 
 class PositionManager:
@@ -89,9 +91,7 @@ class PositionManager:
         self.closed_trades = []
         self._corporate_actions_config = self._load_corporate_actions_config()
         self._pending_symbol_change_lots: dict[tuple, list[PositionLot]] = {}
-        self._pending_special_dividend_lots: dict[
-            tuple, deque[list[PositionLot]]
-        ] = defaultdict(deque)
+        self._pending_special_dividend_lots: dict[tuple, list[PositionLot]] = {}
         self._pending_exercises: dict[
             tuple[str, str, str], deque[PendingExercise]
         ] = defaultdict(deque)
@@ -204,6 +204,31 @@ class PositionManager:
         )
         self.open_lots[key].append(lot)
 
+    def validate_conversion_pairs(self, transactions):
+        """Fail before processing if conversion legs cannot be paired uniquely."""
+        pairs = defaultdict(lambda: {OpenClose.CLOSE.value: 0, OpenClose.OPEN.value: 0})
+        for transaction in transactions:
+            open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
+            if open_close not in {OpenClose.CLOSE.value, OpenClose.OPEN.value}:
+                raise ValueError(
+                    "Corporate action requires an explicit Open/Close operation"
+                )
+            quantity = abs(float(transaction.getQuantity()))
+            if not math.isfinite(quantity) or quantity <= 1e-6:
+                raise ValueError(
+                    "Corporate action requires a finite nonzero quantity; "
+                    "zero-quantity basis or cash rows cannot be allocated safely"
+                )
+            pairs[self._get_conversion_key(transaction)][open_close] += 1
+
+        for key, counts in pairs.items():
+            if counts == {OpenClose.CLOSE.value: 1, OpenClose.OPEN.value: 1}:
+                continue
+            raise ValueError(
+                "AMBIGUOUS OR UNMATCHED CORPORATE ACTION: expected exactly one "
+                f"close and one open leg for {key!r}, found {counts!r}"
+            )
+
     def add_position(self, transaction):
         subcode = transaction[Fields.TRANSACTION_SUBCODE.value]
 
@@ -212,6 +237,12 @@ class PositionManager:
             TransactionSubcode.STOCK_MERGER.value,
             TransactionSubcode.SPECIAL_DIVIDEND.value,
         }:
+            quantity = abs(float(transaction.getQuantity()))
+            if not math.isfinite(quantity) or quantity <= 1e-6:
+                raise ValueError(
+                    f"Corporate action '{subcode}' requires a finite nonzero quantity; "
+                    "zero-quantity basis or cash rows cannot be allocated safely"
+                )
             key = self._get_key_from_transaction(transaction)
             open_close = transaction.get(Fields.OPEN_CLOSE.value, "")
             if open_close == OpenClose.CLOSE.value:
@@ -252,26 +283,28 @@ class PositionManager:
 
     @staticmethod
     def _get_conversion_key(transaction) -> tuple:
+        """Identify one broker conversion pair without trusting replacement basis."""
         position_type = transaction.getType()
+        amount = abs(float(transaction.getValue().usd))
+        if not math.isfinite(amount):
+            raise ValueError("Corporate action amount must be finite")
+
+        event = transaction[Fields.TRANSACTION_SUBCODE.value]
+        event_time = transaction.getDateTime()
         if position_type == PositionType.stock:
-            return position_type, None, None, None
-        if (
-            transaction[Fields.TRANSACTION_SUBCODE.value]
-            == TransactionSubcode.SPECIAL_DIVIDEND.value
-        ):
-            return (
-                TransactionSubcode.SPECIAL_DIVIDEND.value,
-                position_type,
-                transaction.getExpiry(),
-                transaction.loc[Fields.CALL_PUT.value],
-                abs(transaction.getQuantity()),
-                abs(transaction.getValue().usd),
-            )
+            return event, event_time, position_type, amount
+
+        quantity = abs(float(transaction.getQuantity()))
+        if not math.isfinite(quantity):
+            raise ValueError("Corporate action quantity must be finite")
         return (
+            event,
+            event_time,
             position_type,
-            transaction.getStrike(),
             transaction.getExpiry(),
             transaction.loc[Fields.CALL_PUT.value],
+            quantity,
+            amount,
         )
 
     def _open_position(self, transaction):
@@ -305,18 +338,16 @@ class PositionManager:
             == TransactionCode.RECEIVE_DELIVER.value
         ):
             direction = "buy" if lot.quantity > 0 else "sell"
-            adjustment = self._consume_pending_exercise(
+            adjustment, exercise_fees = self._consume_pending_exercise(
                 transaction.getDate(), lot.symbol, direction, abs(lot.quantity)
             )
-            if adjustment.usd or adjustment.eur:
-                # PositionLot amounts are signed cash flows. Subtracting the positive
-                # premium makes the negative acquisition amount (basis) larger.
-                if direction == "buy":
-                    lot.amount_usd -= adjustment.usd
-                    lot.amount_eur -= adjustment.eur
-                else:
-                    lot.amount_usd += adjustment.usd
-                    lot.amount_eur += adjustment.eur
+            if adjustment.usd or adjustment.eur or exercise_fees.usd or exercise_fees.eur:
+                # The paid option premium is a negative signed cash flow for every
+                # resulting stock lifecycle: buy/sell and open/close alike.
+                lot.amount_usd += adjustment.usd
+                lot.amount_eur += adjustment.eur
+                lot.fees_usd += exercise_fees.usd
+                lot.fees_eur += exercise_fees.eur
                 logger.info(
                     "Long option exercise: adjusted %s stock %s on %s by USD %.2f / EUR %.2f",
                     lot.symbol,
@@ -335,18 +366,16 @@ class PositionManager:
             transaction[Fields.TRANSACTION_SUBCODE.value]
             == TransactionSubcode.SPECIAL_DIVIDEND.value
         ):
-            pending = self._pending_special_dividend_lots.get(conversion_key)
-            old_lots = pending.popleft() if pending else None
-            if pending is not None and not pending:
-                del self._pending_special_dividend_lots[conversion_key]
+            old_lots = self._pending_special_dividend_lots.pop(
+                conversion_key, None
+            )
         else:
             old_lots = self._pending_symbol_change_lots.pop(conversion_key, None)
         if not old_lots:
-            logger.warning(
-                f"Symbol Change 'open' leg for {transaction.getSymbol()} has no pending lot to transfer basis from. Using CSV values."
+            raise ValueError(
+                f"Corporate action open leg for {transaction.getSymbol()} has no "
+                "unique matching close leg; refusing replacement CSV basis"
             )
-            self._open_position(transaction)
-            return
 
         key = self._get_key_from_transaction(transaction)
         total_old_quantity = sum(abs(lot.quantity) for lot in old_lots)
@@ -367,6 +396,22 @@ class PositionManager:
 
     def _close_position_for_symbol_change(self, transaction):
         """Move the requested FIFO slices to the pending conversion buffer."""
+        conversion_key = self._get_conversion_key(transaction)
+        is_special_dividend = (
+            transaction[Fields.TRANSACTION_SUBCODE.value]
+            == TransactionSubcode.SPECIAL_DIVIDEND.value
+        )
+        pending_store = (
+            self._pending_special_dividend_lots
+            if is_special_dividend
+            else self._pending_symbol_change_lots
+        )
+        if conversion_key in pending_store:
+            raise ValueError(
+                "AMBIGUOUS CORPORATE ACTION: multiple close legs share the same "
+                "event time, type, instrument fields, quantity, and amount"
+            )
+
         key = self._get_key_from_transaction(transaction)
         matching_lots = self.open_lots.get(key)
         if not matching_lots:
@@ -398,14 +443,7 @@ class PositionManager:
             self.open_lots[key] = remaining
         else:
             del self.open_lots[key]
-        conversion_key = self._get_conversion_key(transaction)
-        if (
-            transaction[Fields.TRANSACTION_SUBCODE.value]
-            == TransactionSubcode.SPECIAL_DIVIDEND.value
-        ):
-            self._pending_special_dividend_lots[conversion_key].append(pending)
-        else:
-            self._pending_symbol_change_lots.setdefault(conversion_key, []).extend(pending)
+        pending_store[conversion_key] = pending
 
     def _close_position(self, transaction):
         """
@@ -446,8 +484,26 @@ class PositionManager:
         if sum(abs(lot.quantity) for lot in candidates) + 1e-6 < quantity_to_close:
             raise ValueError(f"Tried to close more shares than available for {transaction.getSymbol()}")
 
+        exercise_multiplier = None
+        if subcode in {
+            TransactionSubcode.EXERCISE.value,
+            TransactionSubcode.ASSIGNMENT.value,
+        } and any(lot.quantity > 0 for lot in candidates):
+            multiplier_value = transaction.get(Fields.MULTIPLIER.value, 100)
+            try:
+                exercise_multiplier = abs(float(multiplier_value))
+            except (TypeError, ValueError) as exc:
+                raise ValueError(
+                    f"Invalid exercise multiplier: {multiplier_value!r}"
+                ) from exc
+            if not math.isfinite(exercise_multiplier) or exercise_multiplier <= 0:
+                raise ValueError(
+                    f"Invalid exercise multiplier: {multiplier_value!r}"
+                )
+
         closing_transaction = transaction
         pending_adjustment = Money()
+        pending_exercise_fees = Money()
         is_stock_delivery = (
             transaction.getType() == PositionType.stock
             and transaction[Fields.TRANSACTION_CODE.value]
@@ -455,20 +511,25 @@ class PositionManager:
         )
         if is_stock_delivery:
             direction = "sell" if closing_quantity < 0 else "buy"
-            pending_adjustment = self._consume_pending_exercise(
+            pending_adjustment, pending_exercise_fees = self._consume_pending_exercise(
                 transaction.getDate(),
                 transaction.getSymbol(),
                 direction,
                 quantity_to_close,
             )
-            if pending_adjustment.usd or pending_adjustment.eur:
+            if (
+                pending_adjustment.usd
+                or pending_adjustment.eur
+                or pending_exercise_fees.usd
+                or pending_exercise_fees.eur
+            ):
                 closing_transaction = type(transaction)(transaction.copy())
-                effective_value = (
-                    transaction.getValue() - pending_adjustment
-                    if direction == "sell"
-                    else transaction.getValue() + pending_adjustment
+                closing_transaction.setValue(
+                    transaction.getValue() + pending_adjustment
                 )
-                closing_transaction.setValue(effective_value)
+                closing_transaction.setFees(
+                    transaction.getFees() + pending_exercise_fees
+                )
 
         # Validate the full close before mutating lots or creating trade results.
         remaining_lots = deque()
@@ -508,22 +569,19 @@ class PositionManager:
                 }
             )
             if is_long_physical_exercise:
-                premium = Money(
-                    usd=-consumed_values[Fields.AMOUNT.value],
-                    eur=-consumed_values[Fields.AMOUNT_EURO.value],
+                option_amount = Money(
+                    usd=trade_result.opening_profit_usd + trade_result.closing_profit_usd,
+                    eur=trade_result.opening_profit_eur + trade_result.closing_profit_eur,
+                )
+                option_fees = Money(
+                    usd=trade_result.fees_usd,
+                    eur=trade_result.fees_eur,
                 )
                 underlying_value = transaction.get(Fields.UNDERLYING_SYMBOL.value)
                 underlying = str(underlying_value).strip()
                 if not underlying or underlying.lower() == "nan":
                     underlying = transaction.getSymbol()
-                multiplier_value = transaction.get(Fields.MULTIPLIER.value, 100)
-                try:
-                    multiplier = abs(float(multiplier_value))
-                except (TypeError, ValueError):
-                    multiplier = 100.0
-                if not multiplier:
-                    multiplier = 100.0
-                shares = closable_quantity * multiplier
+                shares = closable_quantity * exercise_multiplier
                 direction = (
                     "buy" if lot_to_process.position_type == PositionType.call else "sell"
                 )
@@ -533,12 +591,20 @@ class PositionManager:
                     symbol=underlying,
                     direction=direction,
                     remaining_shares=shares,
-                    per_share_premium_usd=premium.usd / shares,
-                    per_share_premium_eur=premium.eur / shares,
+                    per_share_amount_usd=option_amount.usd / shares,
+                    per_share_amount_eur=option_amount.eur / shares,
+                    per_share_fees_usd=option_fees.usd / shares,
+                    per_share_fees_eur=option_fees.eur / shares,
                 ))
                 trade_result.settled_by_exercise = True
                 trade_result.profit_usd = 0.0
                 trade_result.profit_eur = 0.0
+                trade_result.fees_usd = 0.0
+                trade_result.fees_eur = 0.0
+                trade_result.opening_fees_usd = 0.0
+                trade_result.opening_fees_eur = 0.0
+                trade_result.closing_fees_usd = 0.0
+                trade_result.closing_fees_eur = 0.0
                 logger.info(
                     "Long %s exercise: pending %s shares for %s %s on %s: USD %.2f / EUR %.2f",
                     lot_to_process.position_type.name,
@@ -546,8 +612,8 @@ class PositionManager:
                     underlying,
                     direction,
                     exercise_key[0],
-                    premium.usd,
-                    premium.eur,
+                    option_amount.usd,
+                    option_amount.eur,
                 )
             self.closed_trades.append(trade_result)
 
@@ -583,39 +649,54 @@ class PositionManager:
         symbol: str,
         direction: str,
         stock_shares: float,
-    ) -> Money:
-        """Consume matching premium entries by share quantity in FIFO order."""
+    ) -> tuple[Money, Money]:
+        """Consume matching signed cash and fees by share quantity in FIFO order."""
         exercise_key = (date_iso, symbol, direction)
         pending = self._pending_exercises.get(exercise_key)
         adjustment = Money()
+        fees = Money()
         shares_left = abs(stock_shares)
+        if not pending:
+            return adjustment, fees
+
+        available = sum(entry.remaining_shares for entry in pending)
+        if available + 1e-6 < shares_left:
+            raise ValueError(
+                "PARTIAL EXERCISE ADJUSTMENT: stock delivery exceeds the matching "
+                f"exercised-option shares ({shares_left} > {available})"
+            )
+
         while pending and shares_left > 1e-6:
             entry = pending[0]
             consumed_shares = min(entry.remaining_shares, shares_left)
-            adjustment.usd += consumed_shares * entry.per_share_premium_usd
-            adjustment.eur += consumed_shares * entry.per_share_premium_eur
+            adjustment.usd += consumed_shares * entry.per_share_amount_usd
+            adjustment.eur += consumed_shares * entry.per_share_amount_eur
+            fees.usd += consumed_shares * entry.per_share_fees_usd
+            fees.eur += consumed_shares * entry.per_share_fees_eur
             entry.remaining_shares -= consumed_shares
             shares_left -= consumed_shares
             if entry.remaining_shares <= 1e-6:
                 pending.popleft()
-        if pending is not None and not pending:
+        if not pending:
             del self._pending_exercises[exercise_key]
-        return adjustment
+        return adjustment, fees
 
-    def warn_unmatched_exercise_adjustments(self):
-        """Warn about exercised options for which no stock delivery row was found."""
-        for (date_iso, symbol, direction), pending in self._pending_exercises.items():
-            for entry in pending:
-                logger.warning(
-                    "Long option exercise has no paired stock delivery: %s %s on %s, "
-                    "pending %.4f shares at USD %.6f / EUR %.6f per share",
-                    symbol,
-                    direction,
-                    date_iso,
-                    entry.remaining_shares,
-                    entry.per_share_premium_usd,
-                    entry.per_share_premium_eur,
-                )
+    def validate_no_pending_adjustments(self):
+        """Fail before reporting if any basis/proceeds transfer is incomplete."""
+        if self._pending_symbol_change_lots or self._pending_special_dividend_lots:
+            raise ValueError(
+                "UNMATCHED CORPORATE ACTION: a close leg has no unique open leg"
+            )
+        if self._pending_exercises:
+            remaining = sum(
+                entry.remaining_shares
+                for pending in self._pending_exercises.values()
+                for entry in pending
+            )
+            raise ValueError(
+                "UNMATCHED EXERCISE ADJUSTMENT: no complete paired stock delivery "
+                f"for {remaining} shares"
+            )
 
     def _handle_reverse_split(self, transaction):
         description = str(transaction.loc[Fields.DESCRIPTION.value])
@@ -719,33 +800,45 @@ class PositionManager:
                     f"Invalid split ratio for {symbol_to_split}: {ratio!r}; "
                     "ratio must be finite and greater than zero"
                 )
+
             affected_keys = [
-                key for key in self.open_lots.keys() if key.symbol == symbol_to_split
+                key
+                for key in self.open_lots
+                if key.symbol == symbol_to_split
+                and key.position_type == PositionType.stock
             ]
-            total_lots = sum(len(self.open_lots[key]) for key in affected_keys)
-            logger.warning(
-                f"Applying reverse split ratio {ratio} to {total_lots} open '{symbol_to_split}' lots."
-            )
-
-            adjusted_lots = []
-            for key in affected_keys:
-                for lot in self.open_lots[key]:
-                    old_qty = lot.quantity
-                    old_strike = getattr(lot, "strike", None)
-                    lot.adjust_for_split(ratio)
-                    logger.debug(
-                        f"Split adjusted lot: qty {old_qty} -> {lot.quantity}, strike {old_strike} -> {getattr(lot, 'strike', None)}"
+            affected_lots = [
+                lot for key in affected_keys for lot in self.open_lots[key]
+            ]
+            for side, quantity in (
+                ("long", sum(lot.quantity for lot in affected_lots if lot.quantity > 0)),
+                ("short", sum(lot.quantity for lot in affected_lots if lot.quantity < 0)),
+            ):
+                target = quantity * ratio
+                if quantity and not math.isclose(
+                    target, round(target), abs_tol=1e-6
+                ):
+                    raise ValueError(
+                        "REVERSE SPLIT FRACTIONAL RESIDUAL UNKNOWN: "
+                        f"{symbol_to_split} {side} aggregate would become {target} shares; "
+                        "cash-in-lieu basis and proceeds are not available"
                     )
-                    adjusted_lots.append(lot)
-                del self.open_lots[key]
-            for lot in adjusted_lots:
-                key = InstrumentKey(lot.symbol, lot.position_type, lot.strike, lot.expiry, lot.call_put)
-                self.open_lots[key].append(lot)
 
+            logger.warning(
+                "Applying reverse split ratio %s to %s open stock lots for '%s'.",
+                ratio,
+                len(affected_lots),
+                symbol_to_split,
+            )
+            for lot in affected_lots:
+                lot.adjust_for_split(ratio)
             return True
         else:
             affected_keys = [
-                key for key in self.open_lots.keys() if key.symbol == symbol_to_split
+                key
+                for key in self.open_lots
+                if key.symbol == symbol_to_split
+                and key.position_type == PositionType.stock
             ]
             affected_lots = sum(len(self.open_lots[key]) for key in affected_keys)
             transaction_date = transaction.get("Date/Time") or transaction.get("Date")

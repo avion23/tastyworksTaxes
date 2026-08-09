@@ -138,14 +138,21 @@ class TestPositionManager:
         assert [(lot.quantity, lot.amount_usd) for lot in old] == [(5, -100)]
         assert [(lot.quantity, lot.amount_usd) for lot in new] == [(20, -100), (10, -100)]
 
-    def test_reverse_split_rekeys_adjusted_option(self):
+    def test_stock_shaped_reverse_split_does_not_adjust_option(self):
         pm = PositionManager()
         expiry = datetime(2024, 6, 21)
-        pm.add_lot_directly(PositionLot("OPT", PositionType.call, 2, -100, -100, 0, 0, datetime(2024, 1, 1), 100, expiry, "C"))
-        pm.add_position(Transaction.fromString("2024-02-01T09:00:00+0000,Receive Deliver,Reverse Split,BUY,OPT,Equity,OPT reverse split 1:2,0,0,0,0,0,,OPT,OPT,,,,123456,USD"))
-        pm.add_position(Transaction.fromString("2024-02-02T09:00:00+0000,Trade,Sell to Close,SELL_TO_CLOSE,OPT  240621C00200000,Equity Option,Sold 1 OPT 06/21/24 Call 200,100,1,100,-1,0,100,OPT,OPT,6/21/24,200,CALL,123456,USD"))
-        assert pm.closed_trades[0].quantity == 1
-        assert pm.get_all_open_lots() == []
+        option = PositionLot(
+            "OPT", PositionType.call, 2, -100, -100, 0, 0,
+            datetime(2024, 1, 1), 100, expiry, "C",
+        )
+        pm.add_lot_directly(option)
+
+        pm.add_position(Transaction.fromString(
+            "2024-02-01T09:00:00+0000,Receive Deliver,Reverse Split,BUY,OPT,Equity,OPT reverse split 1:2,0,0,0,0,0,,OPT,OPT,,,,123456,USD"
+        ))
+
+        assert pm.get_all_open_lots() == [option]
+        assert (option.quantity, option.strike, option.amount_usd) == (2, 100, -100)
 
     def test_symbol_change_open_does_not_consume_existing_new_symbol_lot(self):
         pm = PositionManager()

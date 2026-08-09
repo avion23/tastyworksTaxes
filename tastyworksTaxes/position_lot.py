@@ -1,12 +1,9 @@
 from dataclasses import dataclass, replace
 from datetime import datetime
-from math import floor, ceil, isfinite
-import logging
+from math import isfinite
 from typing import Optional
 from tastyworksTaxes.constants import Fields
 from tastyworksTaxes.position import PositionType
-
-logger = logging.getLogger(__name__)
 
 @dataclass
 class PositionLot:
@@ -82,19 +79,7 @@ class PositionLot:
         if self.quantity == 0:
             return
 
-        target = self.quantity * ratio
-        new_qty = floor(target) if self.quantity > 0 else ceil(target)
-
-        if new_qty == 0:
-            logger.warning(f"Split rounding produced 0 from {self.quantity} with ratio {ratio} for {self.symbol}. The lot will be zeroed but basis retained for reporting.")
-        elif target != 0:
-            scale = new_qty / target
-            self.amount_usd *= scale
-            self.amount_eur *= scale
-            self.fees_usd *= scale
-            self.fees_eur *= scale
-
-        self.quantity = new_qty
+        self.quantity *= ratio
 
         if self.strike is not None:
             self.strike = self.strike / ratio
