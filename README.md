@@ -143,6 +143,16 @@ finite, positive ratio fails before lot mutation. Changes to either bundled file
 are source changes: review them, retain evidence, run the scenarios, and rebuild
 the package. The current CLI does not load arbitrary user registry paths.
 
+## USD to EUR conversion of cash flows
+
+Securities transactions (trades, assignments, expirations) fail closed when
+the transaction date has no ECB reference rate: the date must be an ECB
+publication day within the bundled rate range. Cash flows recorded as
+`Money Movement` (deposits, withdrawals, dividends, interest, fees) convert at
+the nearest earlier ECB reference rate when the exact date is a weekend,
+holiday, or outside the bundled rate range. A zero amount returns `0.00` EUR
+without any rate lookup.
+
 ## Standalone Vorabpauschale utility
 
 `tastyworksTaxes.vorabpauschale.calculate_vorabpauschale` is a standalone

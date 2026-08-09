@@ -10,7 +10,7 @@ from tastyworksTaxes.history import History
 from tastyworksTaxes.printer import Printer
 from tastyworksTaxes.tasty import Tasty
 
-from test.broker_csv import BROKER_COLUMNS, broker_row
+from test.broker_csv import BROKER_COLUMNS, broker_row, stock_trade
 
 
 def _interest_history(transaction_date: str, amount: str) -> History:
@@ -20,6 +20,18 @@ def _interest_history(transaction_date: str, amount: str) -> History:
         'Sub Type': 'Credit Interest',
         'Value': amount,
         'Description': 'Interest',
+    })], columns=BROKER_COLUMNS).to_csv(buf, index=False)
+    buf.seek(0)
+    return History.fromFile(buf)
+
+
+def _trade_history(transaction_date: str, amount: str) -> History:
+    buf = StringIO()
+    pd.DataFrame([stock_trade(**{
+        'Date': transaction_date,
+        'Sub Type': 'Buy to Open',
+        'Value': amount,
+        'Description': 'SYNTHETIC STOCK FILL',
     })], columns=BROKER_COLUMNS).to_csv(buf, index=False)
     buf.seek(0)
     return History.fromFile(buf)
@@ -47,7 +59,7 @@ def test_unavailable_rates_fail_closed_without_logging_financial_data(
 ):
     with caplog.at_level(logging.WARNING):
         with pytest.raises(ValueError) as exc_info:
-            _interest_history(transaction_date, "123.45")
+            _trade_history(transaction_date, "123.45")
 
     message = str(exc_info.value)
     assert "no ECB reference rate is available" in message
@@ -57,6 +69,32 @@ def test_unavailable_rates_fail_closed_without_logging_financial_data(
     assert "123.45" not in message
     assert "rate=" not in message
     assert not caplog.records
+
+
+@pytest.mark.parametrize(
+    "transaction_date",
+    [date(2021, 7, 4), date(2100, 1, 1)],
+)
+def test_money_movements_on_unavailable_dates_use_nearest_prior_rate(
+    transaction_date,
+):
+    history = _interest_history(
+        f"{transaction_date.isoformat()}T12:00:00Z", "123.45"
+    )
+
+    nearest_prior_date = max(
+        rate_date
+        for rate_date, rate in money._converter._rates['USD'].items()
+        if rate is not None and rate_date <= transaction_date
+    )
+    if transaction_date == date(2021, 7, 4):
+        assert nearest_prior_date == date(2021, 7, 2)
+    expected = money.convert_usd_to_eur(
+        123.45, nearest_prior_date, money_movement=False
+    )
+
+    assert history.loc[0, "AmountEuro"] == pytest.approx(expected)
+    assert history.loc[0, "AmountEuro"] > 0
 
 
 def test_zero_value_rows_do_not_access_the_converter(monkeypatch):

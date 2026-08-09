@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 import pytest
 import pandas as pd
 from tastyworksTaxes.history import History
@@ -222,3 +224,21 @@ def test_new_format_accepts_fractional_iso_date_and_normalizes_option(tmp_path):
     assert history.loc[0, "Call/Put"] == "C"
     assert history.loc[0, "Strike"] == 1000
     assert history.loc[0, "Price"] == 1.25
+
+
+def test_parse_datetime_accepts_compact_utc_offsets_without_colon():
+    wall_time, absolute_time = History._parse_datetime(
+        '2022-01-03T15:00:00+0000', 'Date', require_offset=True
+    )
+
+    assert wall_time == datetime(2022, 1, 3, 15, 0, 0)
+    assert wall_time.tzinfo is None
+    assert absolute_time == datetime(2022, 1, 3, 15, 0, 0, tzinfo=timezone.utc)
+
+
+def test_parse_datetime_converts_compact_negative_offset_to_utc():
+    wall_time, absolute_time = History._parse_datetime(
+        '2025-09-13T16:21:04-0300', 'Date', require_offset=True
+    )
+
+    assert absolute_time == datetime(2025, 9, 13, 19, 21, 4, tzinfo=timezone.utc)

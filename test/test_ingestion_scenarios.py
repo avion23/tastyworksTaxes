@@ -16,7 +16,7 @@ from test.broker_csv import (
 def deterministic_fx(monkeypatch):
     monkeypatch.setattr(
         'tastyworksTaxes.history.convert_usd_to_eur',
-        lambda amount, date: amount,
+        lambda amount, date, *, money_movement=False: amount,
     )
 
 

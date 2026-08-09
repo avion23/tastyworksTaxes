@@ -35,8 +35,22 @@ class Transaction(pd.core.series.Series):
             df['Date/Time'] = pd.to_datetime(df['Date/Time'])
             df['Expiration Date'] = pd.to_datetime(df['Expiration Date'])
 
-            df['AmountEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1)
-            df['FeesEuro'] = df.apply(lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1)
+            df['AmountEuro'] = df.apply(
+                lambda row: convert_usd_to_eur(
+                    row['Amount'],
+                    row['Date/Time'],
+                    money_movement=(row['Transaction Code'] == 'Money Movement'),
+                ),
+                axis=1,
+            )
+            df['FeesEuro'] = df.apply(
+                lambda row: convert_usd_to_eur(
+                    row['Fees'],
+                    row['Date/Time'],
+                    money_movement=(row['Transaction Code'] == 'Money Movement'),
+                ),
+                axis=1,
+            )
 
         header = "Date,Type,Sub Type,Action,Symbol,Instrument Type,Description,Value,Quantity,Average Price,Commissions,Fees,Multiplier,Root Symbol,Underlying Symbol,Expiration Date,Strike Price,Call or Put,Order #,Currency"
         csv = header + "\n" + line

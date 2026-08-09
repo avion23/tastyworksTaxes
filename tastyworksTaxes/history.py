@@ -160,12 +160,29 @@ class History(pd.DataFrame):
         )
 
     @staticmethod
+    def _normalize_iso_offset(text: str) -> str:
+        """Normalize a trailing +HHMM/+HH UTC offset to ISO +HH:MM/+HH:00."""
+        match = re.search(r'([+-]\d{2})(\d{2})?$', text)
+        if match is None:
+            return text
+        prefix = text[:match.start()]
+        if ':' not in prefix:
+            return text
+        sign_hours = match.group(1)
+        minutes = match.group(2)
+        if minutes is None:
+            return prefix + f'{sign_hours}:00'
+        return prefix + f'{sign_hours}:{minutes}'
+
+    @staticmethod
     def _parse_datetime(value, column_name: str, *, require_offset: bool):
         text = str(value).strip()
         if not text:
             raise ValueError(f"Required date value is blank in CSV column '{column_name}'")
         try:
-            parsed = datetime.fromisoformat(text.replace('Z', '+00:00'))
+            parsed = datetime.fromisoformat(
+                History._normalize_iso_offset(text.replace('Z', '+00:00'))
+            )
         except (TypeError, ValueError) as exc:
             raise ValueError(
                 f"Failed to parse date in CSV column '{column_name}': {value!r}"
@@ -455,10 +472,20 @@ class History(pd.DataFrame):
         self['Date/Time'] = pd.to_datetime(self['Date/Time'])
         self['Expiration Date'] = pd.to_datetime(self['Expiration Date'])
         self['AmountEuro'] = self.apply(
-            lambda row: convert_usd_to_eur(row['Amount'], row['Date/Time']), axis=1
+            lambda row: convert_usd_to_eur(
+                row['Amount'],
+                row['Date/Time'],
+                money_movement=(row['Transaction Code'] == 'Money Movement'),
+            ),
+            axis=1,
         )
         self['FeesEuro'] = self.apply(
-            lambda row: convert_usd_to_eur(row['Fees'], row['Date/Time']), axis=1
+            lambda row: convert_usd_to_eur(
+                row['Fees'],
+                row['Date/Time'],
+                money_movement=(row['Transaction Code'] == 'Money Movement'),
+            ),
+            axis=1,
         )
 
     def _selfTest(self):
