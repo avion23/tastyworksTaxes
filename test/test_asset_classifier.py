@@ -34,9 +34,14 @@ class TestAssetClassifier:
         assert classifier.classify('VGSH', PositionType.stock) == 'BOND_ETF'
         assert classifier.classify('TLT', PositionType.stock) == 'BOND_ETF'
     
-    def test_classify_mixed_fund_etf(self, classifier):
-        assert classifier.classify('AOA', PositionType.stock) == 'MIXED_FUND_ETF'
-        assert classifier.classify('AOR', PositionType.stock) == 'MIXED_FUND_ETF'
+    @pytest.mark.parametrize('symbol', ['AOA', 'AOR'])
+    def test_unverified_mixed_fund_metadata_does_not_grant_exemption(
+        self, classifier, symbol
+    ):
+        assert classifier.classify(symbol, PositionType.stock) == 'MIXED_FUND_ETF'
+        assert classifier.classify_for_tax(symbol, PositionType.stock) == 'INDIVIDUAL_STOCK'
+        assert not classifier.is_verified(symbol, PositionType.stock)
+        assert classifier.get_exemption_percentage_for(symbol, PositionType.stock) == 0
 
     def test_classify_other_fund(self, classifier):
         for symbol in ('TECL', 'TQQQ', 'UPRO', 'SQQQ', 'SOXL', 'MSTY', 'NVDY', 'YMAG'):
@@ -48,10 +53,18 @@ class TestAssetClassifier:
         assert classifier.classify('VNQ', PositionType.stock) == 'EQUITY_ETF'
         assert classifier.classify('IYR', PositionType.stock) == 'EQUITY_ETF'
     
-    def test_classify_crypto_lambda(self, classifier):
-        assert classifier.classify('BTC/USD', PositionType.stock) == 'CRYPTO'
-        assert classifier.classify('ETH/EUR', PositionType.stock) == 'CRYPTO'
-        assert classifier.classify('BTC', PositionType.stock) == 'CRYPTO'
+    def test_currency_pair_notation_is_verified_crypto(self, classifier):
+        assert classifier.classify_for_tax('BTC/USD', PositionType.stock) == 'CRYPTO'
+        assert classifier.classify_for_tax('ETH/EUR', PositionType.stock) == 'CRYPTO'
+
+    @pytest.mark.parametrize('symbol', ['BTC', 'ETH'])
+    def test_unverified_bare_crypto_ticker_metadata_falls_back_for_tax(
+        self, classifier, symbol
+    ):
+        assert classifier.classify(symbol, PositionType.stock) == 'CRYPTO'
+        assert classifier.classify_for_tax(symbol, PositionType.stock) == 'INDIVIDUAL_STOCK'
+        assert not classifier.is_verified(symbol, PositionType.stock)
+        assert classifier.unsupported_asset_state(symbol)[0] == 'unverified'
     
     def test_classify_unknown_stock(self, classifier):
         assert classifier.classify('UNKNOWN_SYMBOL', PositionType.stock) == 'INDIVIDUAL_STOCK'

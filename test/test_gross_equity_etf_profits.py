@@ -94,14 +94,16 @@ def test_fees_determine_result_sign_and_are_exempted(classifier):
     assert calculate_fund_losses(trades, classifier).eur == pytest.approx(-0.7)
 
 
-def test_mixed_fund_gain_and_loss_use_fifteen_percent_exemption(classifier):
+def test_unverified_aor_falls_back_without_partial_exemption(classifier):
     gains = [trade("AOR", 100, 120)]
     losses = [trade("AOR", -100, -120)]
 
-    assert calculate_fund_profits(gains, classifier).eur == 85
-    assert calculate_fund_profits(gains, classifier).usd == 102
-    assert calculate_fund_losses(losses, classifier).eur == -85
-    assert calculate_fund_losses(losses, classifier).usd == -102
+    assert calculate_fund_profits(gains, classifier).eur == 0
+    assert calculate_fund_losses(losses, classifier).eur == 0
+    assert calculate_stock_profits(gains, classifier).eur == 100
+    assert calculate_stock_profits(gains, classifier).usd == 120
+    assert calculate_stock_losses(losses, classifier).eur == -100
+    assert calculate_stock_losses(losses, classifier).usd == -120
 
 
 @pytest.mark.parametrize(

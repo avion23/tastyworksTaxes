@@ -1,7 +1,6 @@
 import pytest
 import logging
 from datetime import date, datetime
-from unittest.mock import patch
 
 from tastyworksTaxes.asset_classifier import AssetClassifier
 from tastyworksTaxes.tasty import Tasty
@@ -37,26 +36,6 @@ class TestTastyWithAssetClassifier:
         assert "Unknown fund/stock type" in caplog.text
         assert "UNKNOWN_FUND" in caplog.text
     
-    def test_warnings_called_via_check_asset_classifications(self, tasty_instance):
-        trades = [
-            TradeResult(
-                symbol='UNKNOWN_FUND',
-                position_type=PositionType.stock,
-                opening_date='2020-01-01 00:00:00',
-                closing_date='2020-01-02 00:00:00',
-                quantity=1,
-                profit_usd=120.0,
-                profit_eur=100.0,
-                fees_usd=0,
-                fees_eur=0,
-                worthless_expiry=False,
-            )
-        ]
-        
-        with patch.object(tasty_instance.classifier, 'check_unsupported_assets') as mock_check:
-            tasty_instance._checkAssetClassifications(trades)
-            mock_check.assert_called_once()
-    
     def test_no_warnings_for_empty_trades(self, tasty_instance, caplog):
         empty_trades = []
         
@@ -85,6 +64,41 @@ class TestTastyWithAssetClassifier:
             tasty_instance._checkAssetClassifications(option_trades)
         
         assert len(caplog.records) == 0
+
+
+def test_bundled_unverified_symbols_fall_back_to_stock_totals_and_warn(caplog):
+    tasty = Tasty()
+    tasty.processTransactionHistory = lambda: None
+    symbols = {'AOR', 'AOA', 'BTC', 'ETH'}
+    tasty.position_manager.closed_trades = [
+        TradeResult(
+            symbol=symbol,
+            position_type=PositionType.stock,
+            opening_date='2025-01-01 00:00:00',
+            closing_date='2025-12-31 00:00:00',
+            quantity=1,
+            profit_usd=100,
+            profit_eur=100,
+            fees_usd=0,
+            fees_eur=0,
+            worthless_expiry=False,
+        )
+        for symbol in symbols
+    ]
+
+    with caplog.at_level(logging.WARNING):
+        result = tasty.run()
+
+    assert tasty.unverified_asset_symbols_by_year == {2025: symbols}
+    assert result[2025].stockProfits.eur == 400
+    assert result[2025].fundProfits.eur == 0
+    warnings = [
+        record.getMessage()
+        for record in caplog.records
+        if record.getMessage().startswith('UNVERIFIED ASSET CLASSIFICATION')
+    ]
+    assert len(warnings) == 4
+    assert all(any(symbol in warning for warning in warnings) for symbol in symbols)
 
 
 def test_unverified_symbols_are_recorded_by_closing_year_and_effective_period(tmp_path):
